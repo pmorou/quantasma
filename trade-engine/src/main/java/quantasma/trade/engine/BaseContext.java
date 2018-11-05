@@ -69,7 +69,7 @@ public class BaseContext implements Context {
 
         public Context build() {
             if (groupTimeSeriesDefinitionSet.size() > 0) {
-                final List<MultipleTimeSeries> multipleTimeSeries = BaseMultipleTimeSeries.create((GroupTimeSeriesDefinition[]) groupTimeSeriesDefinitionSet.toArray());
+                final List<MultipleTimeSeries> multipleTimeSeries = BaseMultipleTimeSeries.create((groupTimeSeriesDefinitionSet.toArray(new GroupTimeSeriesDefinition[0])));
                 this.dataService = new BaseDataService(multipleTimeSeries);
             }
             return new BaseContext(dataService, orderService, strategyControl);
