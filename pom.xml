@@ -13,6 +13,7 @@
     <modules>
         <module>backtest-engine</module>
         <module>model</module>
+        <module>trade-engine</module>
     </modules>
 
     <properties>
