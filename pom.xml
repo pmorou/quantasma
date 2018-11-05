@@ -12,6 +12,7 @@
 
     <modules>
         <module>backtest-engine</module>
+        <module>model</module>
     </modules>
 
     <properties>
