@@ -59,6 +59,9 @@ public class TradeStrategy extends BaseStrategy {
     }
 
     public void start() {
+    }
 
+    protected OrderService getOrderService() {
+        return context.getOrderService();
     }
 }
