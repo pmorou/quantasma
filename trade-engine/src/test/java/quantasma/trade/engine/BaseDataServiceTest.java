@@ -111,10 +111,6 @@ public class BaseDataServiceTest {
         assertThat(isEqualToOneRule.isSatisfied(targetTimeSeries.getEndIndex())).isTrue();
     }
 
-    private ZonedDateTime addMinutes(ZonedDateTime time, int minutes) {
-        return time.plus(minutes, ChronoUnit.MINUTES);
-    }
-
     @Test
     public void givenNoExplicitDataForTargetSymbolShouldContinueWithinIndicatorsPeriod() {
         // given
@@ -159,6 +155,30 @@ public class BaseDataServiceTest {
         // then
         assertThat(rule1.isSatisfied(referenceTimeSeries.getEndIndex())).isFalse();
         assertThat(rule2.isSatisfied(targetTimeSeries.getEndIndex())).isTrue();
+    }
+
+    @Test
+    public void insertUnspecifiedSymbolShouldFailSilently() {
+        // given
+        final DataService dataService = createTimeSeriesFor("knownSymbol");
+
+        // when
+        dataService.add("unknownSymbol", ZonedDateTime.now(), 1.0);
+    }
+
+
+    @Test(expected = IllegalArgumentException.class)
+    public void getUnspecifiedSymbolShouldThrownAnIllegalArgumentException() {
+        // given
+        final DataService dataService = createTimeSeriesFor("knownSymbol");
+
+        // when
+        dataService.getMultipleTimeSeries("unknownSymbol");
+    }
+
+
+    private ZonedDateTime addMinutes(ZonedDateTime time, int minutes) {
+        return time.plus(minutes, ChronoUnit.MINUTES);
     }
 
     private static DataService createTimeSeriesFor(String... symbols) {

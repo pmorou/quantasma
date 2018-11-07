@@ -22,13 +22,25 @@ public class BaseDataService implements DataService {
 
     @Override
     public MultipleTimeSeries getMultipleTimeSeries(String symbol) {
-        return multipleTimeSeriesMap.get(symbol);
+        final MultipleTimeSeries multipleTimeSeries = multipleTimeSeriesMap.get(symbol);
+        if (isUnknownSymbol(multipleTimeSeries)) {
+            throw new IllegalArgumentException(String.format("[%s] is an unknown symbol", symbol));
+        }
+        return multipleTimeSeries;
     }
 
     @Override
     public void add(String symbol, ZonedDateTime date, double price) {
-        multipleTimeSeriesMap.get(symbol).updateBar(date, price);
+        final MultipleTimeSeries multipleTimeSeries = multipleTimeSeriesMap.get(symbol);
+        if (isUnknownSymbol(multipleTimeSeries)) {
+            return;
+        }
+        multipleTimeSeries.updateBar(date, price);
         ensureSameBarsNumberOverAllTimeSeries(symbol, date);
+    }
+
+    private static boolean isUnknownSymbol(MultipleTimeSeries multipleTimeSeries) {
+        return multipleTimeSeries == null;
     }
 
     private void ensureSameBarsNumberOverAllTimeSeries(String skipSymbol, ZonedDateTime dateToBeCoveredByBar) {
