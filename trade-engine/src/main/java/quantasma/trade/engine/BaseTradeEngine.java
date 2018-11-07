@@ -28,4 +28,14 @@ public class BaseTradeEngine implements TradeEngine {
         });
     }
 
+    @Override
+    public void process(String symbol, ZonedDateTime date, double bid, double ask) {
+        dataService.add(symbol, date, bid, ask);
+        final int latestBarIndex = dataService.lastBarIndex();
+        strategyControl.getActiveStrategies().forEach(strategy -> {
+            if (!strategy.shouldEnter(latestBarIndex))
+                strategy.shouldExit(latestBarIndex);
+        });
+    }
+
 }

@@ -44,10 +44,21 @@ public class BaseMultipleTimeSeries implements MultipleTimeSeries {
     }
 
     @Override
+    public void updateBar(ZonedDateTime priceDate, double bid, double ask) {
+        timeSeriesMap.forEach((candlePeriod, timeSeries) -> {
+            if (empty(timeSeries) || isEqualOrAfter(priceDate, timeSeries.getLastBar().getEndTime())) {
+                insertNewBar(priceDate, candlePeriod, timeSeries);
+            }
+            final BidAskBar lastBar = (BidAskBar) timeSeries.getLastBar();
+            lastBar.addPrice(timeSeries.numOf(bid), timeSeries.numOf(ask));
+        });
+    }
+
+    @Override
     public void updateBar(ZonedDateTime priceDate, double price) {
         timeSeriesMap.forEach((candlePeriod, timeSeries) -> {
             if (empty(timeSeries) || isEqualOrAfter(priceDate, timeSeries.getLastBar().getEndTime())) {
-                insertNewSafeBar(priceDate, candlePeriod, timeSeries);
+                insertNewBar(priceDate, candlePeriod, timeSeries);
             }
             final Bar lastBar = timeSeries.getLastBar();
             lastBar.addPrice(timeSeries.numOf(price));
@@ -58,7 +69,7 @@ public class BaseMultipleTimeSeries implements MultipleTimeSeries {
     public void createBar(ZonedDateTime priceDate) {
         timeSeriesMap.forEach((candlePeriod, timeSeries) -> {
             if (empty(timeSeries)) {
-                insertNewSafeBar(priceDate, candlePeriod, timeSeries);
+                insertNewBar(priceDate, candlePeriod, timeSeries);
             } else if (isEqualOrAfter(priceDate, timeSeries.getLastBar().getEndTime())) {
                 insertNewBarWithLastPrice(priceDate, candlePeriod, timeSeries);
             }
@@ -69,17 +80,17 @@ public class BaseMultipleTimeSeries implements MultipleTimeSeries {
         return timeSeries.getBarCount() == 0;
     }
 
-    private void insertNewSafeBar(ZonedDateTime priceDate, CandlePeriod candlePeriod, TimeSeries timeSeries) {
-        timeSeries.addBar(new NullSafeBaseBar(candlePeriod.getPeriod(),
-                                              DateUtils.createEndDate(priceDate, candlePeriod),
-                                              timeSeries.function()));
+    private void insertNewBar(ZonedDateTime priceDate, CandlePeriod candlePeriod, TimeSeries timeSeries) {
+        timeSeries.addBar(new BaseBidAskBar(candlePeriod.getPeriod(),
+                                            DateUtils.createEndDate(priceDate, candlePeriod),
+                                            timeSeries.function()));
     }
 
     private void insertNewBarWithLastPrice(ZonedDateTime priceDate, CandlePeriod candlePeriod, TimeSeries timeSeries) {
         final Num lastPrice = timeSeries.getLastBar().getClosePrice();
-        timeSeries.addBar(new BaseBar(candlePeriod.getPeriod(),
-                                      DateUtils.createEndDate(priceDate, candlePeriod),
-                                      timeSeries.function()));
+        timeSeries.addBar(new BaseBidAskBar(candlePeriod.getPeriod(),
+                                            DateUtils.createEndDate(priceDate, candlePeriod),
+                                            timeSeries.function()));
         timeSeries.addPrice(lastPrice);
     }
 

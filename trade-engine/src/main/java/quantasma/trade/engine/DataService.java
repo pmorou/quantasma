@@ -7,5 +7,7 @@ public interface DataService {
 
     void add(String symbol, ZonedDateTime date, double price);
 
+    void add(String symbol, ZonedDateTime date, double bid, double ask);
+
     int lastBarIndex();
 }

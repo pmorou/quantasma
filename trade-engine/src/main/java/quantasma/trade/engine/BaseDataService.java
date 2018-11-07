@@ -39,6 +39,16 @@ public class BaseDataService implements DataService {
         ensureSameBarsNumberOverAllTimeSeries(symbol, date);
     }
 
+    @Override
+    public void add(String symbol, ZonedDateTime date, double bid, double ask) {
+        final MultipleTimeSeries multipleTimeSeries = multipleTimeSeriesMap.get(symbol);
+        if (isUnknownSymbol(multipleTimeSeries)) {
+            return;
+        }
+        multipleTimeSeries.updateBar(date, bid, ask);
+        ensureSameBarsNumberOverAllTimeSeries(symbol, date);
+    }
+
     private static boolean isUnknownSymbol(MultipleTimeSeries multipleTimeSeries) {
         return multipleTimeSeries == null;
     }
