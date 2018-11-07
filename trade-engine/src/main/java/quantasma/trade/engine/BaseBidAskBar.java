@@ -219,38 +219,42 @@ public class BaseBidAskBar implements BidAskBar {
 
     @Override
     public void addPrice(Num price) {
-        if (bidOpenPrice == null) {
+        if (isNaN(bidOpenPrice)) {
             bidOpenPrice = price;
         }
 
         bidClosePrice = price;
-        if (bidMaxPrice == null) {
+        if (isNaN(bidMaxPrice)) {
             bidMaxPrice = price;
         } else if (bidMaxPrice.isLessThan(price)) {
             bidMaxPrice = price;
         }
-        if (bidMinPrice == null) {
+        if (isNaN(bidMinPrice)) {
             bidMinPrice = price;
         } else if (bidMinPrice.isGreaterThan(price)) {
             bidMinPrice = price;
         }
     }
 
+    private boolean isNaN(Num bidOpenPrice) {
+        return bidOpenPrice == NaN.NaN;
+    }
+
     @Override
     public void addPrice(Num bid, Num ask) {
         addPrice(bid);
 
-        if (askOpenPrice == null) {
+        if (isNaN(askOpenPrice)) {
             askOpenPrice = ask;
         }
 
         askClosePrice = ask;
-        if (askMaxPrice == null) {
+        if (isNaN(askMaxPrice)) {
             askMaxPrice = ask;
         } else if (askMaxPrice.isLessThan(ask)) {
             askMaxPrice = ask;
         }
-        if (askMinPrice == null) {
+        if (isNaN(askMinPrice)) {
             askMinPrice = ask;
         } else if (askMinPrice.isGreaterThan(ask)) {
             askMinPrice = ask;
