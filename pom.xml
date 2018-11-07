@@ -22,13 +22,14 @@
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <ta4j.version>0.12</ta4j.version>
+        <lombok.version>1.18.4</lombok.version>
     </properties>
 
     <dependencies>
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.18.4</version>
+            <version>${lombok.version}</version>
         </dependency>
         <dependency>
             <groupId>org.ta4j</groupId>
