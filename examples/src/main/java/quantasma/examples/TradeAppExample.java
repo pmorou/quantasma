@@ -26,7 +26,7 @@ public class TradeAppExample {
 
         final TradeEngine tradeEngine = BaseTradeEngine.create(context);
 
-        final Strategy rsiStrategy = RSIStrategy.build(context);
+        final Strategy rsiStrategy = RSIStrategy.buildBullish(context);
         // Only registered strategies are given market data
         context.getStrategyControl().register(rsiStrategy);
 

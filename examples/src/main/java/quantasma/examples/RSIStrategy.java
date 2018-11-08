@@ -55,20 +55,36 @@ public class RSIStrategy extends TradeStrategy {
         return openedPositionsCounter > 0;
     }
 
-    public static Strategy build(Context context) {
-        if (context == null) {
-            throw new IllegalArgumentException("Context cannot be null");
-        }
-
-        final TimeSeries timeSeries = context.getDataService().getMultipleTimeSeries("EURUSD").getTimeSeries(CandlePeriod.M1);
-        final ClosePriceIndicator closePrice = new ClosePriceIndicator(timeSeries);
-        final RSIIndicator rsi = new RSIIndicator(closePrice, 14);
-
+    public static Strategy buildBullish(Context context) {
+        requireContext(context);
+        final RSIIndicator rsi = createRSIIndicator(context);
         return new RSIStrategy(context,
                                "RSI Strategy",
                                new CrossedUpIndicatorRule(rsi, 30),
                                new CrossedDownIndicatorRule(rsi, 70),
                                14);
+    }
+
+    public static Strategy buildBearish(Context context) {
+        requireContext(context);
+        final RSIIndicator rsi = createRSIIndicator(context);
+        return new RSIStrategy(context,
+                               "RSI Strategy",
+                               new CrossedDownIndicatorRule(rsi, 70),
+                               new CrossedUpIndicatorRule(rsi, 30),
+                               14);
+    }
+
+    private static void requireContext(Context context) {
+        if (context == null) {
+            throw new IllegalArgumentException("Context cannot be null");
+        }
+    }
+
+    private static RSIIndicator createRSIIndicator(Context context) {
+        final TimeSeries timeSeries = context.getDataService().getMultipleTimeSeries("EURUSD").getTimeSeries(CandlePeriod.M1);
+        final ClosePriceIndicator closePrice = new ClosePriceIndicator(timeSeries);
+        return new RSIIndicator(closePrice, 14);
     }
 
 }
