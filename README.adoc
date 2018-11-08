@@ -1,1 +1,20 @@
-## Quantasma
+= Quantasma
+
+All-in-one algorithmic trading platform.
+
+== Getting Started
+
+=== Requirements
+
+>= Java 8
+
+=== Example Usage
+
+Creating a trading application is as simple as the following code.
+
+:sourcedir: examples/src/main/java/quantasma/examples
+
+[source,java]
+----
+include::{sourcedir}/TradeAppExample.java[tags=tradeAppExample]
+----
