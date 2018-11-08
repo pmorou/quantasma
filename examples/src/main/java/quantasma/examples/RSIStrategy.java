@@ -12,6 +12,7 @@ import org.ta4j.core.trading.rules.CrossedUpIndicatorRule;
 import quantasma.model.CandlePeriod;
 import quantasma.trade.engine.Context;
 import quantasma.trade.engine.TradeStrategy;
+import quantasma.trade.engine.order.CloseMarkerOrder;
 import quantasma.trade.engine.order.OpenMarketOrder;
 
 @Slf4j
@@ -45,7 +46,7 @@ public class RSIStrategy extends TradeStrategy {
         if (super.shouldExit(index, tradingRecord) && hasOpenedPosition()) {
             openedPositionsCounter--;
             System.out.println("Closing position");
-            getOrderService().closePosition(null);
+            getOrderService().closePosition(new CloseMarkerOrder());
             return true;
         }
         return false;
