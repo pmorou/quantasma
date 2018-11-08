@@ -1,4 +1,4 @@
-package quantasma.backtest.engine.criterion;
+package quantasma.backtest.criterion;
 
 import org.ta4j.core.Order;
 import org.ta4j.core.TimeSeries;

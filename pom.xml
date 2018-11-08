@@ -11,7 +11,7 @@
     <name>Quantasma Project</name>
 
     <modules>
-        <module>backtest-engine</module>
+        <module>backtest</module>
         <module>model</module>
         <module>trade-engine</module>
     </modules>
