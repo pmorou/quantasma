@@ -14,6 +14,7 @@
         <module>backtest</module>
         <module>model</module>
         <module>trade-engine</module>
+        <module>examples</module>
     </modules>
 
     <properties>
