@@ -21,12 +21,14 @@ public class TradeAppExample {
                         GroupTimeSeriesDefinition.of("EURUSD", "EURGBP")
                                                  .add(new TimeSeriesDefinition(CandlePeriod.M1, 100))
                                                  .add(new TimeSeriesDefinition(CandlePeriod.M5, 100)))
-                .withOrderService(new NullOrderService()) // OrderService implementations integrated with external APIs
+                // OrderService implementations integrated with external APIs
+                .withOrderService(new NullOrderService())
                 .build();
 
         final TradeEngine tradeEngine = BaseTradeEngine.create(context);
 
         final Strategy rsiStrategy = RSIStrategy.buildBullish(context);
+
         // Only registered strategies are given market data
         context.getStrategyControl().register(rsiStrategy);
 
