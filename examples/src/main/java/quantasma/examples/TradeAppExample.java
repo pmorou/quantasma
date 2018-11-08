@@ -14,19 +14,26 @@ import java.time.ZonedDateTime;
 
 public class TradeAppExample {
     public static void main(String[] args) {
+        // Any strategy based on TradeStrategy class needs an Context object
         final Context context = new BaseContext.Builder()
                 .withTimeSeries(
+                        // You can define any number of symbols and corresponding time windows.
                         GroupTimeSeriesDefinition.of("EURUSD", "EURGBP")
                                                  .add(new TimeSeriesDefinition(CandlePeriod.M1, 100))
                                                  .add(new TimeSeriesDefinition(CandlePeriod.M5, 100)))
-                .withOrderService(new NullOrderService()) // integration with broker's api
+                .withOrderService(new NullOrderService()) // OrderService implementations integrated with external APIs
                 .build();
 
         final TradeEngine tradeEngine = BaseTradeEngine.create(context);
 
         final Strategy rsiStrategy = RSIStrategy.build(context);
+        // Only registered strategies are given market data
         context.getStrategyControl().register(rsiStrategy);
 
-        tradeEngine.process("EURUSD", ZonedDateTime.now(), 1.14145);
+        // Example call on market price change
+        tradeEngine.process("EURUSD", ZonedDateTime.now(), 1.13757, 1.13767);
+
+        // Will fail silently as the symbol wasn't registered in time series definition
+        tradeEngine.process("EURJPY", ZonedDateTime.now(), 129.653, 129.663);
     }
 }
