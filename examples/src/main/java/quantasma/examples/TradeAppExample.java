@@ -14,6 +14,7 @@ import java.time.ZonedDateTime;
 
 public class TradeAppExample {
     public static void main(String[] args) {
+        // tag::tradeAppExample[]
         // Any strategy based on TradeStrategy class needs an Context object
         final Context context = new BaseContext.Builder()
                 .withTimeSeries(
@@ -37,5 +38,6 @@ public class TradeAppExample {
 
         // Will fail silently as the symbol wasn't registered within time series definitions
         tradeEngine.process("EURJPY", ZonedDateTime.now(), 129.653, 129.663);
+        // end::tradeAppExample[]
     }
 }
