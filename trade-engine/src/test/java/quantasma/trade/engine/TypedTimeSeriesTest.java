@@ -1,9 +1,10 @@
-package quantasma.trade.engine.rule;
+package quantasma.trade.engine;
 
 import org.junit.Test;
 import org.ta4j.core.Bar;
 import org.ta4j.core.BaseTimeSeries;
 import org.ta4j.core.num.Num;
+import quantasma.trade.engine.TypedTimeSeries;
 
 import java.time.Duration;
 import java.time.ZonedDateTime;

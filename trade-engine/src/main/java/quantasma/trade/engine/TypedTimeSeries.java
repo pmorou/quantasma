@@ -1,4 +1,4 @@
-package quantasma.trade.engine.rule;
+package quantasma.trade.engine;
 
 import org.ta4j.core.Bar;
 import org.ta4j.core.TimeSeries;

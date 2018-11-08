@@ -5,7 +5,6 @@ import org.ta4j.core.BaseTimeSeries;
 import org.ta4j.core.TimeSeries;
 import org.ta4j.core.num.Num;
 import quantasma.model.CandlePeriod;
-import quantasma.trade.engine.rule.TypedTimeSeries;
 
 import java.time.ZonedDateTime;
 import java.util.HashMap;
