@@ -17,7 +17,7 @@ import quantasma.trade.engine.order.OpenMarketOrder;
 @Slf4j
 public class RSIStrategy extends TradeStrategy {
 
-    private final int maxNumberOfPositions = 1;
+    private static final int MAX_NUMBER_OF_POSITIONS = 1;
 
     private int openedPositionsCounter = 0;
 
@@ -37,7 +37,7 @@ public class RSIStrategy extends TradeStrategy {
     }
 
     private boolean canOpenPosition() {
-        return openedPositionsCounter < maxNumberOfPositions;
+        return openedPositionsCounter < MAX_NUMBER_OF_POSITIONS;
     }
 
     @Override
