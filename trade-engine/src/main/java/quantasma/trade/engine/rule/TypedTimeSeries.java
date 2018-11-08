@@ -17,11 +17,11 @@ public class TypedTimeSeries<T extends Bar> {
         return new TypedTimeSeries<>(barImplementation, timeSeries);
     }
 
-    T getFirstBar() {
+    public T getFirstBar() {
         return getBar(timeSeries.getBeginIndex());
     }
 
-    T getLastBar() {
+    public T getLastBar() {
         return getBar(timeSeries.getEndIndex());
     }
 
