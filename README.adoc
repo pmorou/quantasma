@@ -2,13 +2,13 @@
 
 All-in-one algorithmic trading platform.
 
-== Getting Started
+= Getting Started
 
-=== Requirements
+== Requirements
 
 >= Java 8
 
-=== Example Usage
+== Example Usage
 
 Creating a trading application is as simple as the following code.
 
