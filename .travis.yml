@@ -1,8 +1,9 @@
 before_install:
-  - sudo apt-get install asciidoctor
+  - sudo apt-get update
   - sudo apt-get install pandoc
+  - sudo apt-get install asciidoctor
 language: java
-script: mvn test -B
 jdk:
   - oraclejdk8
   - openjdk8
+script: mvn test -B
