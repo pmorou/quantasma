@@ -1,11 +1,12 @@
 // README source file
 
+:travisCi: https://travis-ci.com/ww421/quantasma
 :examplesDir: examples/src/main/java/quantasma/examples
 
 // below line solves eating first rendered line by converters
 ***
 
-= Quantasma
+= Quantasma image:{travisCi}.svg?branch=master["Build Status", link="{travisCi}"]
 
 All-in-one algorithmic trading platform.
 

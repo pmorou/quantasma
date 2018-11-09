@@ -1,4 +1,4 @@
-# Quantasma
+# Quantasma ![Build Status](https://travis-ci.com/ww421/quantasma.svg?branch=master)
 
 All-in-one algorithmic trading platform.
 
