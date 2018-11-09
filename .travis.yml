@@ -1,5 +1,5 @@
 before_install:
-  - sudo apt install asciidoc
+  - sudo apt install asciidoctor
   - sudo apt install pandoc
 language: java
 script: mvn test -B
