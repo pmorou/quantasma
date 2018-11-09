@@ -15,7 +15,7 @@ All-in-one algorithmic trading platform.
 
 Creating a trading application is as simple as the following code.
 
-[source,java]
+[source,java,indent=0]
 ----
 include::{examplesDir}/TradeAppExample.java[tags=tradeAppExample]
 ----
