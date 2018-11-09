@@ -1,6 +1,6 @@
 before_install:
-  - sudo apt install asciidoctor
-  - sudo apt install pandoc
+  - sudo apt-get install asciidoctor
+  - sudo apt-get install pandoc
 language: java
 script: mvn test -B
 jdk:
