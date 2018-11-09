@@ -15,6 +15,7 @@
         <module>model</module>
         <module>trade-engine</module>
         <module>examples</module>
+        <module>integrations</module>
     </modules>
 
     <properties>
