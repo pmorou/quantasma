@@ -1,3 +1,6 @@
+
+:examplesDir: examples/src/main/java/quantasma/examples
+
 = Quantasma
 
 All-in-one algorithmic trading platform.
@@ -12,9 +15,7 @@ All-in-one algorithmic trading platform.
 
 Creating a trading application is as simple as the following code.
 
-:sourcedir: examples/src/main/java/quantasma/examples
-
 [source,java]
 ----
-include::{sourcedir}/TradeAppExample.java[tags=tradeAppExample]
+include::{examplesDir}/TradeAppExample.java[tags=tradeAppExample]
 ----
