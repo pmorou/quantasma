@@ -1,5 +1,9 @@
+// README source file
 
 :examplesDir: examples/src/main/java/quantasma/examples
+
+// below line solves eating first rendered line by converters
+***
 
 = Quantasma
 
