@@ -5,9 +5,27 @@ set -o errexit
 main() {
   echo "Setting up dependencies."
 
+  update_packages_list
+  install_asciidoctor
   install_pandoc
 
   echo "Done! Finished setting up dependencies."
+}
+
+update_packages_list() {
+  echo "Updating packages list..."
+
+  sudo apt-get update
+
+  echo "Packages list update."
+}
+
+install_asciidoctor() {
+  echo "Installing AsciiDoctor..."
+
+  sudo apt-get install asciidoctor
+
+  echo "AsciiDoctor installed."
 }
 
 install_pandoc() {

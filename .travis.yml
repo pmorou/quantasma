@@ -1,7 +1,5 @@
 before_install:
-  - sudo apt-get update
-  - sudo apt-get install asciidoctor
-  - ./install_pandoc.sh
+  - ./install_dependencies.sh
 language: java
 jdk:
   - oraclejdk8
