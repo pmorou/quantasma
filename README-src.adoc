@@ -1,6 +1,6 @@
 // README source file
 
-:travisCi: https://travis-ci.com/ww421/quantasma
+:travisCi: https://travis-ci.com/pmorou/quantasma
 :examplesDir: examples/src/main/java/quantasma/examples
 
 // below line solves eating first rendered line by converters
