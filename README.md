@@ -1,6 +1,6 @@
 # Quantasma ![Build Status](https://travis-ci.com/pmorou/quantasma.svg?branch=master)
 
-All-in-one algorithmic trading platform.
+All-in-one algorithmic trading platform. Build your own backtested-strategy using Java, and execute along with support of continuous track and optimization modules.
 
 # Getting Started
 

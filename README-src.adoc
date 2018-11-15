@@ -8,7 +8,7 @@
 
 = Quantasma image:{travisCi}.svg?branch=master["Build Status", link="{travisCi}"]
 
-All-in-one algorithmic trading platform.
+All-in-one algorithmic trading platform. Build your own backtested-strategy using Java, and execute along with support of continuous track and optimization modules.
 
 = Getting Started
 
