@@ -20,7 +20,7 @@ public enum CandlePeriod {
         this.duration = duration;
     }
 
-    public static CandlePeriod map(String periodCode) {
+    public static CandlePeriod get(String periodCode) {
         return Arrays.stream(values())
                      .filter(candlePeriod -> candlePeriod.getPeriodCode().equals(periodCode))
                      .findFirst()
