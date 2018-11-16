@@ -63,7 +63,6 @@ public class BaseDataServiceTest {
         assertThat(timeSeriesForSymbol2.getBarCount()).isEqualTo(2);
     }
 
-
     @Test
     public void given2TimeSeriesWithMaxSizeOf2AddDataToOneOnlyForLengthOf3UnitsShouldHave2BarsBoth() {
         // given
@@ -81,7 +80,6 @@ public class BaseDataServiceTest {
         assertThat(timeSeriesForSymbol1.getBarCount()).isEqualTo(2);
         assertThat(timeSeriesForSymbol2.getBarCount()).isEqualTo(2);
     }
-
 
     @Test
     public void givenNoExplicitDataInsertionForTargetSymbolShouldTakePreviousValue() {
@@ -166,7 +164,6 @@ public class BaseDataServiceTest {
         dataService.add("unknownSymbol", ZonedDateTime.now(), 1.0);
     }
 
-
     @Test(expected = IllegalArgumentException.class)
     public void getUnspecifiedSymbolShouldThrownAnIllegalArgumentException() {
         // given
@@ -175,7 +172,6 @@ public class BaseDataServiceTest {
         // when
         dataService.getMultipleTimeSeries("unknownSymbol");
     }
-
 
     private ZonedDateTime addMinutes(ZonedDateTime time, int minutes) {
         return time.plus(minutes, ChronoUnit.MINUTES);
