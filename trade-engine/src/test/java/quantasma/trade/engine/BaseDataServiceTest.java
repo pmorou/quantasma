@@ -89,8 +89,8 @@ public class BaseDataServiceTest {
         final ZonedDateTime time = ZonedDateTime.now();
         final DataService dataService = createTimeSeriesFor("targetSymbol", "symbol2");
         final TimeSeries targetTimeSeries = dataService.getMultipleTimeSeries("targetSymbol").getTimeSeries(ONE_MINUTE_PERIOD);
-        final ClosePriceIndicator closePriceIndicator1 = new ClosePriceIndicator(targetTimeSeries);
-        final Rule isEqualToOneRule = new IsEqualRule(closePriceIndicator1, 1);
+        final ClosePriceIndicator targetClosePriceIndicator = new ClosePriceIndicator(targetTimeSeries);
+        final Rule isEqualToOneRule = new IsEqualRule(targetClosePriceIndicator, 1);
 
         // when
         dataService.add("targetSymbol", time, 0.5);
