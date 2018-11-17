@@ -124,4 +124,97 @@ public class DateUtilsTest {
         // then
         assertThat(result).isTrue();
     }
+
+    @Test(expected = IllegalArgumentException.class)
+    public void givenInnerLowerBoundIsGreaterThanInnerUpperBoundShouldThrowAnException() {
+        // given
+        final ZonedDateTime now = ZonedDateTime.now();
+
+        // when
+        DateUtils.isInRange(now, now.minus(1, ChronoUnit.SECONDS), now, now.plus(1, ChronoUnit.SECONDS), true);
+    }
+
+    @Test
+    public void givenInnerBoundIsEqualToOuterLowerAndInclusiveUpperBoundShouldReturnTrue() {
+        // given
+        final ZonedDateTime now = ZonedDateTime.now();
+
+        // when
+        final boolean result = DateUtils.isInRange(now, now.plus(1, ChronoUnit.SECONDS), now, now.plus(1, ChronoUnit.SECONDS), true);
+
+        // then
+        assertThat(result).isTrue();
+    }
+
+    @Test
+    public void givenInnerBoundIsEqualToOuterLowerAndExclusiveUpperBoundShouldReturnFalse() {
+        // given
+        final ZonedDateTime now = ZonedDateTime.now();
+
+        // when
+        final boolean result = DateUtils.isInRange(now, now.plus(1, ChronoUnit.SECONDS), now, now.plus(1, ChronoUnit.SECONDS), false);
+
+        // then
+        assertThat(result).isFalse();
+    }
+
+    @Test
+    public void givenInnerBoundIsEqualToOuterLowerAndBeforeUpperBoundShouldReturnTrue() {
+        // given
+        final ZonedDateTime now = ZonedDateTime.now();
+
+        // when
+        final boolean result = DateUtils.isInRange(now, now.plus(1, ChronoUnit.SECONDS), now, now.plus(100, ChronoUnit.SECONDS), false);
+
+        // then
+        assertThat(result).isTrue();
+    }
+
+    @Test
+    public void givenInnerBoundIsAfterOuterLowerAndBeforeUpperBoundShouldReturnTrue() {
+        // given
+        final ZonedDateTime now = ZonedDateTime.now();
+
+        // when
+        final boolean result = DateUtils.isInRange(now.plus(1, ChronoUnit.SECONDS), now.plus(2, ChronoUnit.SECONDS), now, now.plus(100, ChronoUnit.SECONDS), false);
+
+        // then
+        assertThat(result).isTrue();
+    }
+
+    @Test
+    public void givenInnerBoundIsAfterOuterLowerAndEqualToInclusiveUpperBoundShouldReturnTrue() {
+        // given
+        final ZonedDateTime now = ZonedDateTime.now();
+
+        // when
+        final boolean result = DateUtils.isInRange(now.plus(1, ChronoUnit.SECONDS), now.plus(2, ChronoUnit.SECONDS), now, now.plus(2, ChronoUnit.SECONDS), true);
+
+        // then
+        assertThat(result).isTrue();
+    }
+
+    @Test
+    public void givenInnerBoundIsAfterOuterLowerAndEqualToExclusiveUpperBoundShouldReturnFalse() {
+        // given
+        final ZonedDateTime now = ZonedDateTime.now();
+
+        // when
+        final boolean result = DateUtils.isInRange(now.plus(1, ChronoUnit.SECONDS), now.plus(2, ChronoUnit.SECONDS), now, now.plus(2, ChronoUnit.SECONDS), false);
+
+        // then
+        assertThat(result).isFalse();
+    }
+
+    @Test
+    public void givenInnerBoundIsBeforeOuterLowerBoundShouldReturnFalse() {
+        // given
+        final ZonedDateTime now = ZonedDateTime.now();
+
+        // when
+        final boolean result = DateUtils.isInRange(now.minus(1, ChronoUnit.SECONDS), now.plus(2, ChronoUnit.SECONDS), now, now.plus(100, ChronoUnit.SECONDS), false);
+
+        // then
+        assertThat(result).isFalse();
+    }
 }

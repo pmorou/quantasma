@@ -48,4 +48,12 @@ public class DateUtils {
         return (isThis.isEqual(withinThatInclusiveLowerBound) || isThis.isAfter(withinThatInclusiveLowerBound)) &&
                (isThis.isBefore(andThatUpperBound) || (inclusiveUpperBound && isThis.isEqual(andThatUpperBound)));
     }
+
+    public static boolean isInRange(ZonedDateTime isThisInnerLowerBound, ZonedDateTime andThisInnerUpperBound, ZonedDateTime withinThatInclusiveOuterLowerBound, ZonedDateTime andThatOuterUpperBound, boolean inclusiveOuterUpperBound) {
+        if (isThisInnerLowerBound.isAfter(andThisInnerUpperBound)) {
+            throw new IllegalArgumentException();
+        }
+        return isInRange(isThisInnerLowerBound, withinThatInclusiveOuterLowerBound, andThatOuterUpperBound, true) &&
+               isInRange(andThisInnerUpperBound, withinThatInclusiveOuterLowerBound, andThatOuterUpperBound, inclusiveOuterUpperBound);
+    }
 }
