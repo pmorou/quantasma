@@ -78,7 +78,7 @@ public class DateUtilsTest {
     }
 
     @Test
-    public void givenLowerBoundIsEqualAndUpperBoundIsAfterShouldReturnTrue() {
+    public void givenValueIsEqualToLowerBoundAndBeforeUpperBoundShouldReturnTrue() {
         // given
         final ZonedDateTime now = ZonedDateTime.now();
 
@@ -90,7 +90,7 @@ public class DateUtilsTest {
     }
 
     @Test
-    public void givenLowerBoundIsBeforeAndUpperBoundIsAfterShouldReturnTrue() {
+    public void givenValueIsAfterLowerBoundAndBeforeUpperBoundShouldReturnTrue() {
         // given
         final ZonedDateTime now = ZonedDateTime.now();
 
@@ -102,7 +102,7 @@ public class DateUtilsTest {
     }
 
     @Test
-    public void givenLowerBoundIsBeforeAndUpperBoundIsEqualShouldReturnTrue() {
+    public void givenValueAfterLowerBoundAndEqualToUpperBoundShouldReturnTrue() {
         // given
         final ZonedDateTime now = ZonedDateTime.now();
 
@@ -114,7 +114,7 @@ public class DateUtilsTest {
     }
 
     @Test
-    public void givenLowerBoundIsEqualAndUpperBoundIsEqualShouldReturnTrue() {
+    public void givenValueEqualToLowerBoundAndUpperBoundShouldReturnTrue() {
         // given
         final ZonedDateTime now = ZonedDateTime.now();
 
