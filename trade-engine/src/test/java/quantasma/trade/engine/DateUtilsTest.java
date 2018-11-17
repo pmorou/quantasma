@@ -8,6 +8,8 @@ import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 public class DateUtilsTest {
     @Test
     public void forM1PeriodGivenTruncatedMinutesShouldRoundTo1Minutes() {
@@ -15,7 +17,7 @@ public class DateUtilsTest {
 
         final ZonedDateTime result = DateUtils.createEndDate(zonedDateTime, CandlePeriod.M1);
 
-        Assertions.assertThat(result.getMinute()).isEqualTo(1);
+        assertThat(result.getMinute()).isEqualTo(1);
     }
 
     @Test
@@ -24,8 +26,8 @@ public class DateUtilsTest {
 
         final ZonedDateTime result = DateUtils.createEndDate(zonedDateTime, CandlePeriod.M1);
 
-        Assertions.assertThat(result.getMinute()).isEqualTo(0);
-        Assertions.assertThat(result.getHour()).isEqualTo(11);
+        assertThat(result.getMinute()).isEqualTo(0);
+        assertThat(result.getHour()).isEqualTo(11);
     }
 
     @Test
@@ -34,7 +36,7 @@ public class DateUtilsTest {
 
         final ZonedDateTime result = DateUtils.createEndDate(zonedDateTime, CandlePeriod.M5);
 
-        Assertions.assertThat(result.getMinute()).isEqualTo(5);
+        assertThat(result.getMinute()).isEqualTo(5);
     }
 
     @Test
@@ -43,7 +45,7 @@ public class DateUtilsTest {
 
         final ZonedDateTime result = DateUtils.createEndDate(zonedDateTime, CandlePeriod.M5);
 
-        Assertions.assertThat(result.getMinute()).isEqualTo(15);
+        assertThat(result.getMinute()).isEqualTo(15);
     }
 
     @Test
@@ -52,7 +54,7 @@ public class DateUtilsTest {
 
         final ZonedDateTime result = DateUtils.createEndDate(zonedDateTime, CandlePeriod.M5);
 
-        Assertions.assertThat(result.getMinute()).isEqualTo(20);
+        assertThat(result.getMinute()).isEqualTo(20);
     }
 
     @Test
@@ -61,7 +63,7 @@ public class DateUtilsTest {
 
         final ZonedDateTime result = DateUtils.createEndDate(zonedDateTime, CandlePeriod.M5);
 
-        Assertions.assertThat(result.getMinute()).isEqualTo(20);
+        assertThat(result.getMinute()).isEqualTo(20);
     }
 
     @Test
@@ -70,7 +72,7 @@ public class DateUtilsTest {
 
         final ZonedDateTime result = DateUtils.createEndDate(zonedDateTime, CandlePeriod.M5);
 
-        Assertions.assertThat(result.getMinute()).isEqualTo(0);
-        Assertions.assertThat(result.getHour()).isEqualTo(11);
+        assertThat(result.getMinute()).isEqualTo(0);
+        assertThat(result.getHour()).isEqualTo(11);
     }
 }
