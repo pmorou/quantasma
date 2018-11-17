@@ -125,6 +125,30 @@ public class DateUtilsTest {
         assertThat(result).isTrue();
     }
 
+    @Test
+    public void givenValueIsEqualToLowerBoundAndExclusiveUpperBoundShouldReturnFalse() {
+        // given
+        final ZonedDateTime now = ZonedDateTime.now();
+
+        // when
+        final boolean result = DateUtils.isInRange(now, now, now, false);
+
+        // then
+        assertThat(result).isFalse();
+    }
+
+    @Test
+    public void givenValueIsBeforeLowerBoundShouldReturnFalse() {
+        // given
+        final ZonedDateTime now = ZonedDateTime.now();
+
+        // when
+        final boolean result = DateUtils.isInRange(now.minus(1, ChronoUnit.SECONDS), now, now, true);
+
+        // then
+        assertThat(result).isFalse();
+    }
+
     @Test(expected = IllegalArgumentException.class)
     public void givenInnerLowerBoundIsGreaterThanInnerUpperBoundShouldThrowAnException() {
         // given
