@@ -43,4 +43,9 @@ public class DateUtils {
         }
         throw new RuntimeException("Unsupported period: " + candlePeriod.getPeriod());
     }
+
+    public static boolean isInRange(ZonedDateTime isThis, ZonedDateTime equalOrAfter, ZonedDateTime andBefore, boolean inclusiveBefore) {
+        return (isThis.isEqual(equalOrAfter) || isThis.isAfter(equalOrAfter)) &&
+               (isThis.isBefore(andBefore) || (inclusiveBefore && isThis.isEqual(andBefore)));
+    }
 }

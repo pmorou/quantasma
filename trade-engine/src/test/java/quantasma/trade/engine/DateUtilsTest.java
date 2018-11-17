@@ -7,6 +7,7 @@ import quantasma.model.CandlePeriod;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
+import java.time.temporal.ChronoUnit;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -74,5 +75,53 @@ public class DateUtilsTest {
 
         assertThat(result.getMinute()).isEqualTo(0);
         assertThat(result.getHour()).isEqualTo(11);
+    }
+
+    @Test
+    public void givenLowerBoundIsEqualAndUpperBoundIsAfterShouldReturnTrue() {
+        // given
+        final ZonedDateTime now = ZonedDateTime.now();
+
+        // when
+        final boolean result = DateUtils.isInRange(now, now, now.plus(1, ChronoUnit.SECONDS), false);
+
+        // then
+        assertThat(result).isTrue();
+    }
+
+    @Test
+    public void givenLowerBoundIsBeforeAndUpperBoundIsAfterShouldReturnTrue() {
+        // given
+        final ZonedDateTime now = ZonedDateTime.now();
+
+        // when
+        final boolean result = DateUtils.isInRange(now, now.minus(1, ChronoUnit.SECONDS), now.plus(1, ChronoUnit.SECONDS), false);
+
+        // then
+        assertThat(result).isTrue();
+    }
+
+    @Test
+    public void givenLowerBoundIsBeforeAndUpperBoundIsEqualShouldReturnTrue() {
+        // given
+        final ZonedDateTime now = ZonedDateTime.now();
+
+        // when
+        final boolean result = DateUtils.isInRange(now, now.minus(1, ChronoUnit.SECONDS), now, true);
+
+        // then
+        assertThat(result).isTrue();
+    }
+
+    @Test
+    public void givenLowerBoundIsEqualAndUpperBoundIsEqualShouldReturnTrue() {
+        // given
+        final ZonedDateTime now = ZonedDateTime.now();
+
+        // when
+        final boolean result = DateUtils.isInRange(now, now, now, true);
+
+        // then
+        assertThat(result).isTrue();
     }
 }
