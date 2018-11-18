@@ -8,7 +8,7 @@ import java.util.Map;
 public class BaseDataService implements DataService {
     private final Map<String, MultipleTimeSeries> multipleTimeSeriesMap = new HashMap<>();
 
-    public BaseDataService(Collection<MultipleTimeSeries> multipleTimeSeries) {
+    public BaseDataService(Collection<? extends MultipleTimeSeries> multipleTimeSeries) {
         for (MultipleTimeSeries each : multipleTimeSeries) {
             this.multipleTimeSeriesMap.put(each.getInstrument(), each);
         }

@@ -1,8 +1,6 @@
 package quantasma.trade.engine;
 
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import quantasma.model.CandlePeriod;
 
 public class BaseContext implements Context {
     private final DataService dataService;
@@ -34,13 +32,14 @@ public class BaseContext implements Context {
         private DataService dataService;
         private OrderService orderService;
         private StrategyControl strategyControl;
-        private Set<GroupTimeSeriesDefinition> groupTimeSeriesDefinitionSet;
+        private MultipleTimeSeriesBuilder multipleTimeSeriesBuilder;
 
         public Builder() {
             orderService = new NullOrderService();
             strategyControl = new BaseStrategyControl();
             dataService = new BaseDataService();
-            groupTimeSeriesDefinitionSet = new HashSet<>();
+            multipleTimeSeriesBuilder = MultipleTimeSeriesBuilder.basedOn(new TimeSeriesDefinitionImpl(CandlePeriod.M1, 100_000))
+                                                                 .symbols("EURUSD");
         }
 
         public static Builder builder() {
@@ -62,16 +61,13 @@ public class BaseContext implements Context {
             return this;
         }
 
-        public Builder withTimeSeries(GroupTimeSeriesDefinition groupTimeSeriesDefinition) {
-            this.groupTimeSeriesDefinitionSet.add(groupTimeSeriesDefinition);
+        public Builder withTimeSeries(MultipleTimeSeriesBuilder timeSeriesDefinition) {
+            this.multipleTimeSeriesBuilder = timeSeriesDefinition;
             return this;
         }
 
         public Context build() {
-            if (groupTimeSeriesDefinitionSet.size() > 0) {
-                final List<MultipleTimeSeries> multipleTimeSeries = BaseMultipleTimeSeries.create((groupTimeSeriesDefinitionSet.toArray(new GroupTimeSeriesDefinition[0])));
-                this.dataService = new BaseDataService(multipleTimeSeries);
-            }
+            this.dataService = new BaseDataService(multipleTimeSeriesBuilder.build());
             return new BaseContext(dataService, orderService, strategyControl);
         }
     }

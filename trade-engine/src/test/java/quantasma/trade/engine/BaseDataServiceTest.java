@@ -179,8 +179,9 @@ public class BaseDataServiceTest {
 
     private static DataService createTimeSeriesFor(String... symbols) {
         return new BaseDataService(
-                BaseMultipleTimeSeries.create(GroupTimeSeriesDefinition.of(symbols)
-                                                                       .add(new TimeSeriesDefinition(ONE_MINUTE_PERIOD, 2))));
+                MultipleTimeSeriesBuilder.basedOn(new TimeSeriesDefinitionImpl(ONE_MINUTE_PERIOD, 2))
+                                         .symbols(symbols)
+                                         .build());
     }
 
 }

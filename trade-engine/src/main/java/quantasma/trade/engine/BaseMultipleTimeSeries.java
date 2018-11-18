@@ -1,16 +1,14 @@
 package quantasma.trade.engine;
 
 import org.ta4j.core.Bar;
-import org.ta4j.core.BaseTimeSeries;
 import org.ta4j.core.TimeSeries;
 import org.ta4j.core.num.Num;
 import quantasma.model.CandlePeriod;
 
 import java.time.ZonedDateTime;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
+import java.util.Comparator;
 import java.util.Map;
+import java.util.TreeMap;
 
 public class BaseMultipleTimeSeries implements MultipleTimeSeries {
     private static final long serialVersionUID = -8768456438053526527L;
@@ -23,23 +21,26 @@ public class BaseMultipleTimeSeries implements MultipleTimeSeries {
         this.timeSeriesMap = timeSeriesMap;
     }
 
-    public static List<MultipleTimeSeries> create(GroupTimeSeriesDefinition... groupTimeSeriesDefinition) {
-        final List<MultipleTimeSeries> list = new LinkedList<>();
+    public BaseMultipleTimeSeries put(CandlePeriod candlePeriod, TimeSeries timeSeries) {
+        timeSeriesMap.put(candlePeriod, TypedTimeSeries.create(BidAskBar.class, timeSeries));
+        return this;
+    }
 
-        for (GroupTimeSeriesDefinition timeSeriesDefinition : groupTimeSeriesDefinition) {
-            for (String symbol : timeSeriesDefinition.getSymbols()) {
-                Map<CandlePeriod, TypedTimeSeries<BidAskBar>> timeSeriesMap = new HashMap<>();
-                for (TimeSeriesDefinition seriesDefinition : timeSeriesDefinition.getTimeSeriesDefinitions()) {
-                    final TimeSeries timeSeries = new BaseTimeSeries.SeriesBuilder().withName(seriesDefinition.getCandlePeriod().getPeriodCode())
-                                                                                    .withMaxBarCount(seriesDefinition.getPeriod())
-                                                                                    .build();
-                    timeSeriesMap.put(seriesDefinition.getCandlePeriod(), TypedTimeSeries.create(BidAskBar.class, timeSeries));
-                }
-                list.add(new BaseMultipleTimeSeries(symbol, timeSeriesMap));
-            }
+    public BaseMultipleTimeSeries(String instrument, TimeSeriesDefinition timeSeriesDefinition) {
+        this.instrument = instrument;
+        this.timeSeriesMap = createBaseTimeSeries(timeSeriesDefinition);
+    }
 
-        }
-        return list;
+    private Map<CandlePeriod, TypedTimeSeries<BidAskBar>> createBaseTimeSeries(TimeSeriesDefinition timeSeriesDefinition) {
+        final BaseTimeSeriesFactory baseTimeSeriesFactory = new BaseTimeSeriesFactory();
+        final Map<CandlePeriod, TypedTimeSeries<BidAskBar>> timeSeriesMap = new TreeMap<>(Comparator.comparing(CandlePeriod::getPeriod)); // first period should save value first
+        timeSeriesMap.put(timeSeriesDefinition.getCandlePeriod(),
+                          TypedTimeSeries.create(BidAskBar.class, baseTimeSeriesFactory.createInstance(timeSeriesDefinition)));
+        return timeSeriesMap;
+    }
+
+    public static BaseMultipleTimeSeries create(String instrument, TimeSeriesDefinition timeSeriesDefinition) {
+        return new BaseMultipleTimeSeries(instrument, timeSeriesDefinition);
     }
 
     @Override

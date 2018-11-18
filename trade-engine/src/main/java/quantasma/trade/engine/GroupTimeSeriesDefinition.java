@@ -18,11 +18,6 @@ public class GroupTimeSeriesDefinition {
         this.timeSeriesDefinitions = new HashSet<>();
     }
 
-    public static GroupTimeSeriesDefinition of(String symbol) {
-        return new GroupTimeSeriesDefinition(symbol);
-    }
-
-
     public static GroupTimeSeriesDefinition of(String... symbol) {
         return new GroupTimeSeriesDefinition(symbol);
     }
