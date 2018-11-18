@@ -1,9 +1,10 @@
-package quantasma.trade.engine;
+package quantasma.trade.engine.timeseries;
 
 import org.ta4j.core.Bar;
 import org.ta4j.core.BaseTimeSeries;
 import org.ta4j.core.TimeSeries;
 import quantasma.model.CandlePeriod;
+import quantasma.trade.engine.DateUtils;
 
 public class AggregatedTimeSeries extends BaseTimeSeries {
     private final TimeSeries sourceTimeSeries;

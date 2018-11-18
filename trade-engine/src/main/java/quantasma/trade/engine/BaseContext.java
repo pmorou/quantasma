@@ -1,6 +1,8 @@
 package quantasma.trade.engine;
 
 import quantasma.model.CandlePeriod;
+import quantasma.trade.engine.timeseries.MultipleTimeSeriesBuilder;
+import quantasma.trade.engine.timeseries.TimeSeriesDefinitionImpl;
 
 public class BaseContext implements Context {
     private final DataService dataService;

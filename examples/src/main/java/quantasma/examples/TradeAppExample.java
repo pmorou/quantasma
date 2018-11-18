@@ -5,10 +5,10 @@ import quantasma.model.CandlePeriod;
 import quantasma.trade.engine.BaseContext;
 import quantasma.trade.engine.BaseTradeEngine;
 import quantasma.trade.engine.Context;
-import quantasma.trade.engine.GroupTimeSeriesDefinition;
-import quantasma.trade.engine.MultipleTimeSeriesBuilder;
+import quantasma.trade.engine.timeseries.GroupTimeSeriesDefinition;
+import quantasma.trade.engine.timeseries.MultipleTimeSeriesBuilder;
 import quantasma.trade.engine.NullOrderService;
-import quantasma.trade.engine.TimeSeriesDefinitionImpl;
+import quantasma.trade.engine.timeseries.TimeSeriesDefinitionImpl;
 import quantasma.trade.engine.TradeEngine;
 
 import java.time.ZonedDateTime;

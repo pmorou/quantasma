@@ -8,6 +8,8 @@ import org.ta4j.core.indicators.helpers.ClosePriceIndicator;
 import org.ta4j.core.trading.rules.IsEqualRule;
 import org.ta4j.core.trading.rules.OverIndicatorRule;
 import quantasma.model.CandlePeriod;
+import quantasma.trade.engine.timeseries.MultipleTimeSeriesBuilder;
+import quantasma.trade.engine.timeseries.TimeSeriesDefinitionImpl;
 
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;

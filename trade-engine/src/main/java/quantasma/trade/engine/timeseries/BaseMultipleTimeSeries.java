@@ -1,9 +1,12 @@
-package quantasma.trade.engine;
+package quantasma.trade.engine.timeseries;
 
 import org.ta4j.core.Bar;
 import org.ta4j.core.TimeSeries;
 import org.ta4j.core.num.Num;
 import quantasma.model.CandlePeriod;
+import quantasma.trade.engine.BaseBidAskBar;
+import quantasma.trade.engine.BidAskBar;
+import quantasma.trade.engine.DateUtils;
 
 import java.time.ZonedDateTime;
 import java.util.Comparator;

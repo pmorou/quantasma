@@ -1,4 +1,4 @@
-package quantasma.trade.engine;
+package quantasma.trade.engine.timeseries;
 
 import quantasma.model.CandlePeriod;
 
