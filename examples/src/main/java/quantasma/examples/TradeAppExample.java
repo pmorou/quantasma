@@ -5,11 +5,11 @@ import quantasma.model.CandlePeriod;
 import quantasma.trade.engine.BaseContext;
 import quantasma.trade.engine.BaseTradeEngine;
 import quantasma.trade.engine.Context;
+import quantasma.trade.engine.NullOrderService;
+import quantasma.trade.engine.TradeEngine;
 import quantasma.trade.engine.timeseries.GroupTimeSeriesDefinition;
 import quantasma.trade.engine.timeseries.MultipleTimeSeriesBuilder;
-import quantasma.trade.engine.NullOrderService;
 import quantasma.trade.engine.timeseries.TimeSeriesDefinitionImpl;
-import quantasma.trade.engine.TradeEngine;
 
 import java.time.ZonedDateTime;
 
@@ -21,12 +21,11 @@ public class TradeAppExample {
                 .withTimeSeries(
                         // Smallest accessible time window for all defined below symbols
                         MultipleTimeSeriesBuilder.basedOn(new TimeSeriesDefinitionImpl(CandlePeriod.M1, 100))
-                                                 .symbols("EURUSD")
-                                                 // You can define any number of additional time windows for exact symbols
-                                                 .aggregate(GroupTimeSeriesDefinition.of("EURUSD", "EURGBP")
+                                                 .symbols("EURUSD", "EURGBP")
+                                                 // You can define any number of additional time windows for above symbols
+                                                 .aggregate(GroupTimeSeriesDefinition.of("EURUSD")
                                                                                      .add(new TimeSeriesDefinitionImpl(CandlePeriod.M5, 100))
-                                                                                     .add(new TimeSeriesDefinitionImpl(CandlePeriod.M30, 100))
-                                                 )
+                                                                                     .add(new TimeSeriesDefinitionImpl(CandlePeriod.M30, 100)))
                 )
                 // OrderService implementations integrate an app with external APIs
                 .withOrderService(new NullOrderService())
