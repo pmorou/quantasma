@@ -16,10 +16,14 @@ Creating a trading application is as simple as the following code.
 // Any strategy based on TradeStrategy class needs a Context object
 final Context context = new BaseContext.Builder()
         .withTimeSeries(
-                // You can define any number of symbols and corresponding time windows
-                GroupTimeSeriesDefinition.of("EURUSD", "EURGBP")
-                                         .add(new TimeSeriesDefinition(CandlePeriod.M1, 100))
-                                         .add(new TimeSeriesDefinition(CandlePeriod.M5, 100)))
+                // Smallest accessible time window for all defined below symbols
+                MultipleTimeSeriesBuilder.basedOn(new TimeSeriesDefinitionImpl(CandlePeriod.M1, 100))
+                                         .symbols("EURUSD", "EURGBP")
+                                         // You can define any number of additional time windows for above symbols
+                                         .aggregate(GroupTimeSeriesDefinition.of("EURUSD")
+                                                                             .add(new TimeSeriesDefinitionImpl(CandlePeriod.M5, 100))
+                                                                             .add(new TimeSeriesDefinitionImpl(CandlePeriod.M30, 100)))
+        )
         // OrderService implementations integrate an app with external APIs
         .withOrderService(new NullOrderService())
         .build();
