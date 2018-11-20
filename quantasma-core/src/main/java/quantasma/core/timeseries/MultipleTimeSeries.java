@@ -1,7 +1,7 @@
 package quantasma.core.timeseries;
 
 import org.ta4j.core.TimeSeries;
-import quantasma.model.CandlePeriod;
+import quantasma.core.CandlePeriod;
 
 import java.io.Serializable;
 import java.time.ZonedDateTime;

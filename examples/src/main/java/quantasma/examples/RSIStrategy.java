@@ -9,7 +9,7 @@ import org.ta4j.core.indicators.RSIIndicator;
 import org.ta4j.core.indicators.helpers.ClosePriceIndicator;
 import org.ta4j.core.trading.rules.CrossedDownIndicatorRule;
 import org.ta4j.core.trading.rules.CrossedUpIndicatorRule;
-import quantasma.model.CandlePeriod;
+import quantasma.core.CandlePeriod;
 import quantasma.core.Context;
 import quantasma.core.TradeStrategy;
 import quantasma.core.order.CloseMarkerOrder;

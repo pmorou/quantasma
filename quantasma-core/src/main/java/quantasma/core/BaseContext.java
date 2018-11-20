@@ -1,6 +1,5 @@
 package quantasma.core;
 
-import quantasma.model.CandlePeriod;
 import quantasma.core.timeseries.MultipleTimeSeriesBuilder;
 import quantasma.core.timeseries.TimeSeriesDefinitionImpl;
 

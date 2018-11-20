@@ -1,4 +1,4 @@
-package quantasma.model;
+package quantasma.core;
 
 import java.time.Duration;
 import java.util.Arrays;

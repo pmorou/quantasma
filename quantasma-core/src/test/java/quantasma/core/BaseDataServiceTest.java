@@ -11,7 +11,6 @@ import org.ta4j.core.trading.rules.IsEqualRule;
 import org.ta4j.core.trading.rules.OverIndicatorRule;
 import quantasma.core.timeseries.MultipleTimeSeriesBuilder;
 import quantasma.core.timeseries.TimeSeriesDefinitionImpl;
-import quantasma.model.CandlePeriod;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;

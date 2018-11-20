@@ -3,8 +3,8 @@ package quantasma.core.timeseries;
 import org.ta4j.core.Bar;
 import org.ta4j.core.TimeSeries;
 import org.ta4j.core.num.Num;
+import quantasma.core.CandlePeriod;
 import quantasma.core.DateUtils;
-import quantasma.model.CandlePeriod;
 import quantasma.core.BaseBidAskBar;
 import quantasma.core.BidAskBar;
 

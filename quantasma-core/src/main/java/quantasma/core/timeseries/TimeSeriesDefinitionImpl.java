@@ -1,7 +1,7 @@
 package quantasma.core.timeseries;
 
 import lombok.Data;
-import quantasma.model.CandlePeriod;
+import quantasma.core.CandlePeriod;
 
 @Data
 public class TimeSeriesDefinitionImpl implements TimeSeriesDefinition {

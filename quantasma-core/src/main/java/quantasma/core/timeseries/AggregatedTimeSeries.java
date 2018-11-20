@@ -3,7 +3,7 @@ package quantasma.core.timeseries;
 import org.ta4j.core.Bar;
 import org.ta4j.core.BaseTimeSeries;
 import org.ta4j.core.TimeSeries;
-import quantasma.model.CandlePeriod;
+import quantasma.core.CandlePeriod;
 import quantasma.core.NaNBar;
 
 public class AggregatedTimeSeries extends BaseTimeSeries {

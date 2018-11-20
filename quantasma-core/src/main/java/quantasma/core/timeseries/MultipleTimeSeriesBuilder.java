@@ -1,6 +1,6 @@
 package quantasma.core.timeseries;
 
-import quantasma.model.CandlePeriod;
+import quantasma.core.CandlePeriod;
 
 import java.util.Arrays;
 import java.util.Collection;

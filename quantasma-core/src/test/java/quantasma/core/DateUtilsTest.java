@@ -1,7 +1,6 @@
 package quantasma.core;
 
 import org.junit.Test;
-import quantasma.model.CandlePeriod;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;

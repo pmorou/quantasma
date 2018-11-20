@@ -12,7 +12,6 @@
 
     <modules>
         <module>quantasma-core</module>
-        <module>model</module>
         <module>examples</module>
         <module>integrations</module>
     </modules>

@@ -1,7 +1,5 @@
 package quantasma.core;
 
-import quantasma.model.CandlePeriod;
-
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
 

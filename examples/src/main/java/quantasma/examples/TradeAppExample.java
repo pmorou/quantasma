@@ -1,7 +1,7 @@
 package quantasma.examples;
 
 import org.ta4j.core.Strategy;
-import quantasma.model.CandlePeriod;
+import quantasma.core.CandlePeriod;
 import quantasma.core.BaseContext;
 import quantasma.core.BaseTradeEngine;
 import quantasma.core.Context;
