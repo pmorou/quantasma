@@ -4,7 +4,7 @@ import org.ta4j.core.Bar;
 import org.ta4j.core.BaseTimeSeries;
 import org.ta4j.core.TimeSeries;
 import quantasma.core.CandlePeriod;
-import quantasma.core.NaNBar;
+import quantasma.core.timeseries.bar.NaNBar;
 
 public class AggregatedTimeSeries extends BaseTimeSeries {
     private final TimeSeries sourceTimeSeries;

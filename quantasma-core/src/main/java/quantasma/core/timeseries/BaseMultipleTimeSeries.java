@@ -5,8 +5,8 @@ import org.ta4j.core.TimeSeries;
 import org.ta4j.core.num.Num;
 import quantasma.core.CandlePeriod;
 import quantasma.core.DateUtils;
-import quantasma.core.BaseBidAskBar;
-import quantasma.core.BidAskBar;
+import quantasma.core.timeseries.bar.BaseBidAskBar;
+import quantasma.core.timeseries.bar.BidAskBar;
 
 import java.time.ZonedDateTime;
 import java.util.Comparator;

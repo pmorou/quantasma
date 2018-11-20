@@ -1,4 +1,4 @@
-package quantasma.core;
+package quantasma.core.timeseries.bar;
 
 import org.ta4j.core.Order;
 import org.ta4j.core.num.Num;

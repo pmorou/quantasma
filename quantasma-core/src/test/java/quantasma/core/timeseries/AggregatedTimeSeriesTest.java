@@ -9,7 +9,7 @@ import org.ta4j.core.BaseTimeSeries;
 import org.ta4j.core.TimeSeries;
 import quantasma.core.CandlePeriod;
 import quantasma.core.DateUtils;
-import quantasma.core.NaNBar;
+import quantasma.core.timeseries.bar.NaNBar;
 
 import java.time.Duration;
 import java.time.LocalDateTime;
