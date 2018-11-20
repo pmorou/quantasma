@@ -219,39 +219,14 @@ public class BaseDataServiceTest {
         assertThat(m1Symbol1.getBar(9).getClosePrice().doubleValue()).isEqualTo(9);
         assertThat(m1Symbol1.getBar(10).getClosePrice().doubleValue()).isEqualTo(10);
         assertThat(m1Symbol1.getBar(11).getClosePrice().doubleValue()).isEqualTo(11);
-        try {
-            assertThat(m1Symbol1.getBar(12).getClosePrice().doubleValue()).isNull();
-            fail();
-        } catch (IndexOutOfBoundsException expected) {}
 
         assertThat(m5Symbol1.getBarCount()).isEqualTo(3);
-        assertThat(m5Symbol1.getBar(0).getClosePrice().doubleValue()).isEqualTo(4);
-        assertThat(m5Symbol1.getBar(1).getClosePrice().doubleValue()).isEqualTo(4);
-        assertThat(m5Symbol1.getBar(2).getClosePrice().doubleValue()).isEqualTo(4);
-        assertThat(m5Symbol1.getBar(3).getClosePrice().doubleValue()).isEqualTo(4);
-        assertThat(m5Symbol1.getBar(4).getClosePrice().doubleValue()).isEqualTo(4);
-        assertThat(m5Symbol1.getBar(5).getClosePrice().doubleValue()).isEqualTo(9);
-        assertThat(m5Symbol1.getBar(6).getClosePrice().doubleValue()).isEqualTo(9);
-        assertThat(m5Symbol1.getBar(7).getClosePrice().doubleValue()).isEqualTo(9);
-        assertThat(m5Symbol1.getBar(8).getClosePrice().doubleValue()).isEqualTo(9);
-        assertThat(m5Symbol1.getBar(9).getClosePrice().doubleValue()).isEqualTo(9);
-        assertThat(m5Symbol1.getBar(10).getClosePrice().doubleValue()).isEqualTo(11);
+        assertThat(m5Symbol1.getBar(9).getClosePrice().doubleValue()).isEqualTo(4);
+        assertThat(m5Symbol1.getBar(10).getClosePrice().doubleValue()).isEqualTo(9);
         assertThat(m5Symbol1.getBar(11).getClosePrice().doubleValue()).isEqualTo(11);
-        try {
-            assertThat(m5Symbol1.getBar(12).getClosePrice().doubleValue()).isNull();
-            fail();
-        } catch (IndexOutOfBoundsException expected) {}
+        assertNaNBarAtRange(m5Symbol1, 0, 8);
 
-        // fast check
-        assertThat(m1Symbol2.getBarCount()).isEqualTo(12);
-        for (int i = 0; i < 12; i++) {
-            assertThat(m1Symbol2.getBar(i).getClosePrice().doubleValue()).isEqualTo(Double.NaN);
-        }
-
-        assertThat(m5Symbol2.getBarCount()).isEqualTo(3);
-        for (int i = 0; i < 12; i++) {
-            assertThat(m5Symbol2.getBar(i).getClosePrice().doubleValue()).isEqualTo(Double.NaN);
-        }
+        assertNaNClosedPrices(m1Symbol2, 12, m5Symbol2, 3);
     }
 
     @Test
@@ -284,40 +259,14 @@ public class BaseDataServiceTest {
         assertThat(m1Symbol1.getBar(10).getClosePrice().doubleValue()).isEqualTo(10);
         assertThat(m1Symbol1.getBar(11).getClosePrice().doubleValue()).isEqualTo(11);
         assertThat(m1Symbol1.getBar(12).getClosePrice().doubleValue()).isEqualTo(12);
-        try {
-            assertThat(m1Symbol1.getBar(13).getClosePrice().doubleValue()).isNull();
-            fail();
-        } catch (IndexOutOfBoundsException expected) {}
 
         assertThat(m5Symbol1.getBarCount()).isEqualTo(3);
-        assertThat(m5Symbol1.getBar(0).getClosePrice().doubleValue()).isEqualTo(4);
-        assertThat(m5Symbol1.getBar(1).getClosePrice().doubleValue()).isEqualTo(4);
-        assertThat(m5Symbol1.getBar(2).getClosePrice().doubleValue()).isEqualTo(4);
-        assertThat(m5Symbol1.getBar(3).getClosePrice().doubleValue()).isEqualTo(4);
-        assertThat(m5Symbol1.getBar(4).getClosePrice().doubleValue()).isEqualTo(4);
-        assertThat(m5Symbol1.getBar(5).getClosePrice().doubleValue()).isEqualTo(9);
-        assertThat(m5Symbol1.getBar(6).getClosePrice().doubleValue()).isEqualTo(9);
-        assertThat(m5Symbol1.getBar(7).getClosePrice().doubleValue()).isEqualTo(9);
-        assertThat(m5Symbol1.getBar(8).getClosePrice().doubleValue()).isEqualTo(9);
-        assertThat(m5Symbol1.getBar(9).getClosePrice().doubleValue()).isEqualTo(9);
-        assertThat(m5Symbol1.getBar(10).getClosePrice().doubleValue()).isEqualTo(12);
-        assertThat(m5Symbol1.getBar(11).getClosePrice().doubleValue()).isEqualTo(12);
+        assertThat(m5Symbol1.getBar(10).getClosePrice().doubleValue()).isEqualTo(4);
+        assertThat(m5Symbol1.getBar(11).getClosePrice().doubleValue()).isEqualTo(9);
         assertThat(m5Symbol1.getBar(12).getClosePrice().doubleValue()).isEqualTo(12);
-        try {
-            assertThat(m5Symbol1.getBar(13).getClosePrice().doubleValue()).isNull();
-            fail();
-        } catch (IndexOutOfBoundsException expected) {}
+        assertNaNBarAtRange(m5Symbol1, 0, 9);
 
-        // fast check
-        assertThat(m1Symbol2.getBarCount()).isEqualTo(12);
-        for (int i = 0; i < 13; i++) {
-            assertThat(m1Symbol2.getBar(i).getClosePrice().doubleValue()).isEqualTo(Double.NaN);
-        }
-
-        assertThat(m5Symbol2.getBarCount()).isEqualTo(3);
-        for (int i = 0; i < 13; i++) {
-            assertThat(m5Symbol2.getBar(i).getClosePrice().doubleValue()).isEqualTo(Double.NaN);
-        }
+        assertNaNClosedPrices(m1Symbol2, 12, m5Symbol2, 3);
     }
 
     @Test
@@ -354,44 +303,15 @@ public class BaseDataServiceTest {
         assertThat(m1Symbol1.getBar(14).getClosePrice().doubleValue()).isEqualTo(14);
         assertThat(m1Symbol1.getBar(15).getClosePrice().doubleValue()).isEqualTo(15);
         assertThat(m1Symbol1.getBar(16).getClosePrice().doubleValue()).isEqualTo(16);
-        try {
-            assertThat(m1Symbol1.getBar(17).getClosePrice().doubleValue()).isNull();
-            fail();
-        } catch (IndexOutOfBoundsException expected) {}
 
         assertThat(m5Symbol1.getBarCount()).isEqualTo(4);
-        assertThat(m5Symbol1.getBar(0).getClosePrice().doubleValue()).isEqualTo(9); // =>
-        assertThat(m5Symbol1.getBar(1).getClosePrice().doubleValue()).isEqualTo(9);
-        assertThat(m5Symbol1.getBar(2).getClosePrice().doubleValue()).isEqualTo(9);
-        assertThat(m5Symbol1.getBar(3).getClosePrice().doubleValue()).isEqualTo(9);
-        assertThat(m5Symbol1.getBar(4).getClosePrice().doubleValue()).isEqualTo(9); // <= non-existing bars
-        assertThat(m5Symbol1.getBar(5).getClosePrice().doubleValue()).isEqualTo(9);
-        assertThat(m5Symbol1.getBar(6).getClosePrice().doubleValue()).isEqualTo(9);
-        assertThat(m5Symbol1.getBar(7).getClosePrice().doubleValue()).isEqualTo(9);
-        assertThat(m5Symbol1.getBar(8).getClosePrice().doubleValue()).isEqualTo(9);
-        assertThat(m5Symbol1.getBar(9).getClosePrice().doubleValue()).isEqualTo(9);
-        assertThat(m5Symbol1.getBar(10).getClosePrice().doubleValue()).isEqualTo(14);
-        assertThat(m5Symbol1.getBar(11).getClosePrice().doubleValue()).isEqualTo(14);
-        assertThat(m5Symbol1.getBar(12).getClosePrice().doubleValue()).isEqualTo(14);
-        assertThat(m5Symbol1.getBar(13).getClosePrice().doubleValue()).isEqualTo(14);
-        assertThat(m5Symbol1.getBar(14).getClosePrice().doubleValue()).isEqualTo(14);
-        assertThat(m5Symbol1.getBar(15).getClosePrice().doubleValue()).isEqualTo(16);
+        assertThat(m5Symbol1.getBar(13).getClosePrice().doubleValue()).isEqualTo(4);
+        assertThat(m5Symbol1.getBar(14).getClosePrice().doubleValue()).isEqualTo(9);
+        assertThat(m5Symbol1.getBar(15).getClosePrice().doubleValue()).isEqualTo(14);
         assertThat(m5Symbol1.getBar(16).getClosePrice().doubleValue()).isEqualTo(16);
-        try {
-            assertThat(m5Symbol1.getBar(17).getClosePrice().doubleValue()).isNull();
-            fail();
-        } catch (IndexOutOfBoundsException expected) {}
+        assertNaNBarAtRange(m5Symbol1, 0, 12);
 
-        // fast check
-        assertThat(m1Symbol2.getBarCount()).isEqualTo(12);
-        for (int i = 0; i < 17; i++) {
-            assertThat(m1Symbol2.getBar(i).getClosePrice().doubleValue()).isEqualTo(Double.NaN);
-        }
-
-        assertThat(m5Symbol2.getBarCount()).isEqualTo(4);
-        for (int i = 0; i < 17; i++) {
-            assertThat(m5Symbol2.getBar(i).getClosePrice().doubleValue()).isEqualTo(Double.NaN);
-        }
+        assertNaNClosedPrices(m1Symbol2, 12, m5Symbol2, 4);
     }
 
     @Test
@@ -423,39 +343,14 @@ public class BaseDataServiceTest {
         assertThat(m1Symbol1.getBar(9).getClosePrice().doubleValue()).isEqualTo(9);
         assertThat(m1Symbol1.getBar(10).getClosePrice().doubleValue()).isEqualTo(10);
         assertThat(m1Symbol1.getBar(11).getClosePrice().doubleValue()).isEqualTo(11);
-        try {
-            assertThat(m1Symbol1.getBar(12).getClosePrice().doubleValue()).isNull();
-            fail();
-        } catch (IndexOutOfBoundsException expected) {}
 
         assertThat(m5Symbol1.getBarCount()).isEqualTo(3);
-        assertThat(m5Symbol1.getBar(0).getClosePrice().doubleValue()).isEqualTo(4);
-        assertThat(m5Symbol1.getBar(1).getClosePrice().doubleValue()).isEqualTo(4);
-        assertThat(m5Symbol1.getBar(2).getClosePrice().doubleValue()).isEqualTo(4);
-        assertThat(m5Symbol1.getBar(3).getClosePrice().doubleValue()).isEqualTo(4);
-        assertThat(m5Symbol1.getBar(4).getClosePrice().doubleValue()).isEqualTo(4);
-        assertThat(m5Symbol1.getBar(5).getClosePrice().doubleValue()).isEqualTo(9);
-        assertThat(m5Symbol1.getBar(6).getClosePrice().doubleValue()).isEqualTo(9);
-        assertThat(m5Symbol1.getBar(7).getClosePrice().doubleValue()).isEqualTo(9);
-        assertThat(m5Symbol1.getBar(8).getClosePrice().doubleValue()).isEqualTo(9);
-        assertThat(m5Symbol1.getBar(9).getClosePrice().doubleValue()).isEqualTo(9);
-        assertThat(m5Symbol1.getBar(10).getClosePrice().doubleValue()).isEqualTo(11);
+        assertThat(m5Symbol1.getBar(9).getClosePrice().doubleValue()).isEqualTo(4);
+        assertThat(m5Symbol1.getBar(10).getClosePrice().doubleValue()).isEqualTo(9);
         assertThat(m5Symbol1.getBar(11).getClosePrice().doubleValue()).isEqualTo(11);
-        try {
-            assertThat(m5Symbol1.getBar(12).getClosePrice().doubleValue()).isNull();
-            fail();
-        } catch (IndexOutOfBoundsException expected) {}
+        assertNaNBarAtRange(m5Symbol1, 0, 8);
 
-        // fast check
-        assertThat(m1Symbol2.getBarCount()).isEqualTo(11);
-        for (int i = 0; i < 12; i++) {
-            assertThat(m1Symbol2.getBar(i).getClosePrice().doubleValue()).isEqualTo(Double.NaN);
-        }
-
-        assertThat(m5Symbol2.getBarCount()).isEqualTo(3);
-        for (int i = 0; i < 12; i++) {
-            assertThat(m5Symbol2.getBar(i).getClosePrice().doubleValue()).isEqualTo(Double.NaN);
-        }
+        assertNaNClosedPrices(m1Symbol2, 11, m5Symbol2, 3);
     }
 
     @Test
@@ -488,40 +383,14 @@ public class BaseDataServiceTest {
         assertThat(m1Symbol1.getBar(10).getClosePrice().doubleValue()).isEqualTo(10);
         assertThat(m1Symbol1.getBar(11).getClosePrice().doubleValue()).isEqualTo(11);
         assertThat(m1Symbol1.getBar(12).getClosePrice().doubleValue()).isEqualTo(12);
-        try {
-            assertThat(m1Symbol1.getBar(13).getClosePrice().doubleValue()).isNull();
-            fail();
-        } catch (IndexOutOfBoundsException expected) {}
 
         assertThat(m5Symbol1.getBarCount()).isEqualTo(3);
-        assertThat(m5Symbol1.getBar(0).getClosePrice().doubleValue()).isEqualTo(4);
-        assertThat(m5Symbol1.getBar(1).getClosePrice().doubleValue()).isEqualTo(4);
-        assertThat(m5Symbol1.getBar(2).getClosePrice().doubleValue()).isEqualTo(4);
-        assertThat(m5Symbol1.getBar(3).getClosePrice().doubleValue()).isEqualTo(4);
-        assertThat(m5Symbol1.getBar(4).getClosePrice().doubleValue()).isEqualTo(4);
-        assertThat(m5Symbol1.getBar(5).getClosePrice().doubleValue()).isEqualTo(9);
-        assertThat(m5Symbol1.getBar(6).getClosePrice().doubleValue()).isEqualTo(9);
-        assertThat(m5Symbol1.getBar(7).getClosePrice().doubleValue()).isEqualTo(9);
-        assertThat(m5Symbol1.getBar(8).getClosePrice().doubleValue()).isEqualTo(9);
-        assertThat(m5Symbol1.getBar(9).getClosePrice().doubleValue()).isEqualTo(9);
-        assertThat(m5Symbol1.getBar(10).getClosePrice().doubleValue()).isEqualTo(12);
-        assertThat(m5Symbol1.getBar(11).getClosePrice().doubleValue()).isEqualTo(12);
+        assertThat(m5Symbol1.getBar(10).getClosePrice().doubleValue()).isEqualTo(4);
+        assertThat(m5Symbol1.getBar(11).getClosePrice().doubleValue()).isEqualTo(9);
         assertThat(m5Symbol1.getBar(12).getClosePrice().doubleValue()).isEqualTo(12);
-        try {
-            assertThat(m5Symbol1.getBar(13).getClosePrice().doubleValue()).isNull();
-            fail();
-        } catch (IndexOutOfBoundsException expected) {}
+        assertNaNBarAtRange(m5Symbol1, 0, 9);
 
-        // fast check
-        assertThat(m1Symbol2.getBarCount()).isEqualTo(11);
-        for (int i = 0; i < 13; i++) {
-            assertThat(m1Symbol2.getBar(i).getClosePrice().doubleValue()).isEqualTo(Double.NaN);
-        }
-
-        assertThat(m5Symbol2.getBarCount()).isEqualTo(3);
-        for (int i = 0; i < 13; i++) {
-            assertThat(m5Symbol2.getBar(i).getClosePrice().doubleValue()).isEqualTo(Double.NaN);
-        }
+        assertNaNClosedPrices(m1Symbol2, 11, m5Symbol2, 3);
     }
 
     @Test
@@ -558,43 +427,33 @@ public class BaseDataServiceTest {
         assertThat(m1Symbol1.getBar(14).getClosePrice().doubleValue()).isEqualTo(14);
         assertThat(m1Symbol1.getBar(15).getClosePrice().doubleValue()).isEqualTo(15);
         assertThat(m1Symbol1.getBar(16).getClosePrice().doubleValue()).isEqualTo(16);
-        try {
-            assertThat(m1Symbol1.getBar(17).getClosePrice().doubleValue()).isNull();
-            fail();
-        } catch (IndexOutOfBoundsException expected) {}
 
         assertThat(m5Symbol1.getBarCount()).isEqualTo(4);
-        assertThat(m5Symbol1.getBar(0).getClosePrice().doubleValue()).isEqualTo(9);
-        assertThat(m5Symbol1.getBar(1).getClosePrice().doubleValue()).isEqualTo(9);
-        assertThat(m5Symbol1.getBar(2).getClosePrice().doubleValue()).isEqualTo(9);
-        assertThat(m5Symbol1.getBar(3).getClosePrice().doubleValue()).isEqualTo(9);
-        assertThat(m5Symbol1.getBar(4).getClosePrice().doubleValue()).isEqualTo(9);
-        assertThat(m5Symbol1.getBar(5).getClosePrice().doubleValue()).isEqualTo(9);
-        assertThat(m5Symbol1.getBar(6).getClosePrice().doubleValue()).isEqualTo(9);
-        assertThat(m5Symbol1.getBar(7).getClosePrice().doubleValue()).isEqualTo(9);
-        assertThat(m5Symbol1.getBar(8).getClosePrice().doubleValue()).isEqualTo(9);
-        assertThat(m5Symbol1.getBar(9).getClosePrice().doubleValue()).isEqualTo(9);
-        assertThat(m5Symbol1.getBar(10).getClosePrice().doubleValue()).isEqualTo(14);
-        assertThat(m5Symbol1.getBar(11).getClosePrice().doubleValue()).isEqualTo(14);
-        assertThat(m5Symbol1.getBar(12).getClosePrice().doubleValue()).isEqualTo(14);
-        assertThat(m5Symbol1.getBar(13).getClosePrice().doubleValue()).isEqualTo(14);
-        assertThat(m5Symbol1.getBar(14).getClosePrice().doubleValue()).isEqualTo(14);
-        assertThat(m5Symbol1.getBar(15).getClosePrice().doubleValue()).isEqualTo(16);
+        assertThat(m5Symbol1.getBar(13).getClosePrice().doubleValue()).isEqualTo(4);
+        assertThat(m5Symbol1.getBar(14).getClosePrice().doubleValue()).isEqualTo(9);
+        assertThat(m5Symbol1.getBar(15).getClosePrice().doubleValue()).isEqualTo(14);
         assertThat(m5Symbol1.getBar(16).getClosePrice().doubleValue()).isEqualTo(16);
-        try {
-            assertThat(m5Symbol1.getBar(17).getClosePrice().doubleValue()).isNull();
-            fail();
-        } catch (IndexOutOfBoundsException expected) {}
+        assertNaNBarAtRange(m5Symbol1, 0, 12);
 
-        // fast check
-        assertThat(m1Symbol2.getBarCount()).isEqualTo(11);
-        for (int i = 0; i < 17; i++) {
-            assertThat(m1Symbol2.getBar(i).getClosePrice().doubleValue()).isEqualTo(Double.NaN);
+        assertNaNClosedPrices(m1Symbol2, 11, m5Symbol2, 4);
+    }
+
+    private static void assertNaNClosedPrices(TimeSeries m1TimeSeries, int m1BarsCount, TimeSeries m5TimeSeries, int m5BarsCount) {
+        assertThat(m1TimeSeries.getBarCount()).isEqualTo(m1BarsCount);
+        final int latestIndex = m1TimeSeries.getEndIndex();
+        for (int i = 0; i <= latestIndex; i++) {
+            assertThat(m1TimeSeries.getBar(i).getClosePrice().doubleValue()).isEqualTo(Double.NaN);
         }
 
-        assertThat(m5Symbol2.getBarCount()).isEqualTo(4);
-        for (int i = 0; i < 17; i++) {
-            assertThat(m5Symbol2.getBar(i).getClosePrice().doubleValue()).isEqualTo(Double.NaN);
+        assertThat(m5TimeSeries.getBarCount()).isEqualTo(m5BarsCount);
+        for (int i = 0; i <= latestIndex; i++) {
+            assertThat(m5TimeSeries.getBar(i).getClosePrice().doubleValue()).isEqualTo(Double.NaN);
+        }
+    }
+
+    private static void assertNaNBarAtRange(TimeSeries m5Symbol1, int i1, int i2) {
+        for (int i = i1; i1 <= i2; i1++) {
+            assertThat(m5Symbol1.getBar(i)).isEqualTo(NaNBar.NaN);
         }
     }
 
@@ -609,10 +468,6 @@ public class BaseDataServiceTest {
 
     private static ZonedDateTime utc(LocalDateTime localDateTime) {
         return ZonedDateTime.of(localDateTime, ZoneOffset.UTC);
-    }
-
-    private void fail() {
-        throw new AssertionError();
     }
 
 }
