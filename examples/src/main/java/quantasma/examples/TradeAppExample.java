@@ -19,8 +19,9 @@ public class TradeAppExample {
         // Any strategy based on TradeStrategy class needs a Context object
         final Context context = new BaseContext.Builder()
                 .withTimeSeries(
-                        // Smallest accessible time window for all defined below symbols
-                        MultipleTimeSeriesBuilder.basedOn(new TimeSeriesDefinitionImpl(CandlePeriod.M1, 100))
+                        MultipleTimeSeriesBuilder.basedOn(
+                                // Smallest accessible time window for all defined below symbols
+                                new TimeSeriesDefinitionImpl(CandlePeriod.M1, 100))
                                                  .symbols("EURUSD", "EURGBP")
                                                  // You can define any number of additional time windows for above symbols
                                                  .aggregate(GroupTimeSeriesDefinition.of("EURUSD")
