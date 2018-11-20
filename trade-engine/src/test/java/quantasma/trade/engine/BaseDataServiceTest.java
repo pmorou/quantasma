@@ -1,6 +1,8 @@
 package quantasma.trade.engine;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 import org.ta4j.core.Rule;
 import org.ta4j.core.TimeSeries;
 import org.ta4j.core.indicators.RSIIndicator;
@@ -8,15 +10,42 @@ import org.ta4j.core.indicators.helpers.ClosePriceIndicator;
 import org.ta4j.core.trading.rules.IsEqualRule;
 import org.ta4j.core.trading.rules.OverIndicatorRule;
 import quantasma.model.CandlePeriod;
+import quantasma.trade.engine.timeseries.MultipleTimeSeriesBuilder;
+import quantasma.trade.engine.timeseries.TimeSeriesDefinitionImpl;
 
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.time.temporal.ChronoUnit;
+import java.util.Arrays;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@RunWith(Parameterized.class)
 public class BaseDataServiceTest {
 
+    private static final ZonedDateTime MIDNIGHT = utc(LocalDateTime.of(2018, 11, 20, 0, 0));
+
+    @Parameterized.Parameters(name = "{index}: First bar created at {0}")
+    public static Iterable<Object[]> firstBarCreationTimes() {
+        return Arrays.asList(new Object[][] {
+                {MIDNIGHT},
+                {MIDNIGHT.plusMinutes(1)},
+                {MIDNIGHT.plusMinutes(2)},
+                {MIDNIGHT.plusMinutes(3)},
+                {MIDNIGHT.plusMinutes(4)},
+                {MIDNIGHT.plusMinutes(5)}
+        });
+    }
+
+    private final ZonedDateTime time;
+
+    public BaseDataServiceTest(ZonedDateTime time) {
+        this.time = time;
+    }
+
     private static final CandlePeriod ONE_MINUTE_PERIOD = CandlePeriod.M1;
+    private static final CandlePeriod FIVE_MINUTE_PERIOD = CandlePeriod.M5;
 
     @Test
     public void given2TimeSeriesWithMaxSizeOf2ShouldHave0BarsOnStart() {
@@ -33,7 +62,6 @@ public class BaseDataServiceTest {
     @Test
     public void given2TimeSeriesWithMaxSizeOf2AddDataToOneOnlyForLengthOf1UnitShouldHave1BarBoth() {
         // given
-        final ZonedDateTime time = ZonedDateTime.now();
         final DataService dataService = createTimeSeriesFor("symbol1", "symbol2");
         final TimeSeries timeSeriesForSymbol1 = dataService.getMultipleTimeSeries("symbol1").getTimeSeries(ONE_MINUTE_PERIOD);
         final TimeSeries timeSeriesForSymbol2 = dataService.getMultipleTimeSeries("symbol2").getTimeSeries(ONE_MINUTE_PERIOD);
@@ -49,7 +77,6 @@ public class BaseDataServiceTest {
     @Test
     public void given2TimeSeriesWithMaxSizeOf2AddDataToOneOnlyForLengthOf2UnitsShouldHave2BarsBoth() {
         // given
-        final ZonedDateTime time = ZonedDateTime.now();
         final DataService dataService = createTimeSeriesFor("symbol1", "symbol2");
         final TimeSeries timeSeriesForSymbol1 = dataService.getMultipleTimeSeries("symbol1").getTimeSeries(ONE_MINUTE_PERIOD);
         final TimeSeries timeSeriesForSymbol2 = dataService.getMultipleTimeSeries("symbol2").getTimeSeries(ONE_MINUTE_PERIOD);
@@ -66,7 +93,6 @@ public class BaseDataServiceTest {
     @Test
     public void given2TimeSeriesWithMaxSizeOf2AddDataToOneOnlyForLengthOf3UnitsShouldHave2BarsBoth() {
         // given
-        final ZonedDateTime time = ZonedDateTime.now();
         final DataService dataService = createTimeSeriesFor("symbol1", "symbol2");
         final TimeSeries timeSeriesForSymbol1 = dataService.getMultipleTimeSeries("symbol1").getTimeSeries(ONE_MINUTE_PERIOD);
         final TimeSeries timeSeriesForSymbol2 = dataService.getMultipleTimeSeries("symbol2").getTimeSeries(ONE_MINUTE_PERIOD);
@@ -84,7 +110,6 @@ public class BaseDataServiceTest {
     @Test
     public void givenNoExplicitDataInsertionForTargetSymbolShouldTakePreviousValue() {
         // given
-        final ZonedDateTime time = ZonedDateTime.now();
         final DataService dataService = createTimeSeriesFor("targetSymbol", "symbol2");
         final TimeSeries targetTimeSeries = dataService.getMultipleTimeSeries("targetSymbol").getTimeSeries(ONE_MINUTE_PERIOD);
         final ClosePriceIndicator targetClosePriceIndicator = new ClosePriceIndicator(targetTimeSeries);
@@ -112,7 +137,6 @@ public class BaseDataServiceTest {
     @Test
     public void givenNoExplicitDataForTargetSymbolShouldContinueWithinIndicatorsPeriod() {
         // given
-        final ZonedDateTime time = ZonedDateTime.now();
         final DataService dataService = createTimeSeriesFor("referenceSymbol", "targetSymbol");
         final TimeSeries referenceTimeSeries = dataService.getMultipleTimeSeries("referenceSymbol").getTimeSeries(ONE_MINUTE_PERIOD);
         final TimeSeries targetTimeSeries = dataService.getMultipleTimeSeries("targetSymbol").getTimeSeries(ONE_MINUTE_PERIOD);
@@ -179,8 +203,220 @@ public class BaseDataServiceTest {
 
     private static DataService createTimeSeriesFor(String... symbols) {
         return new BaseDataService(
-                BaseMultipleTimeSeries.create(GroupTimeSeriesDefinition.of(symbols)
-                                                                       .add(new TimeSeriesDefinition(ONE_MINUTE_PERIOD, 2))));
+                MultipleTimeSeriesBuilder.basedOn(new TimeSeriesDefinitionImpl(ONE_MINUTE_PERIOD, 2))
+                                         .symbols(symbols)
+                                         .build());
+    }
+
+    @Test
+    public void givenLimitOf12BarsAdd12BarsToSymbol1ShouldReturnCorrectValuesForSymbol1AndNaNsForSymbol2() {
+        // given
+        final DataService dataService = createTwoSymbolDataService(12);
+        final TimeSeries m1Symbol1 = dataService.getMultipleTimeSeries("symbol1").getTimeSeries(ONE_MINUTE_PERIOD);
+        final TimeSeries m1Symbol2 = dataService.getMultipleTimeSeries("symbol2").getTimeSeries(ONE_MINUTE_PERIOD);
+
+        // when
+        for (int i = 0; i < 12; i++) {
+            dataService.add("symbol1", addMinutes(time, i), i);
+        }
+
+        // then
+        assertThat(m1Symbol1.getBarCount()).isEqualTo(12);
+        assertThat(m1Symbol1.getBar(0).getClosePrice().doubleValue()).isEqualTo(0);
+        assertThat(m1Symbol1.getBar(1).getClosePrice().doubleValue()).isEqualTo(1);
+        assertThat(m1Symbol1.getBar(2).getClosePrice().doubleValue()).isEqualTo(2);
+        assertThat(m1Symbol1.getBar(3).getClosePrice().doubleValue()).isEqualTo(3);
+        assertThat(m1Symbol1.getBar(4).getClosePrice().doubleValue()).isEqualTo(4);
+        assertThat(m1Symbol1.getBar(5).getClosePrice().doubleValue()).isEqualTo(5);
+        assertThat(m1Symbol1.getBar(6).getClosePrice().doubleValue()).isEqualTo(6);
+        assertThat(m1Symbol1.getBar(7).getClosePrice().doubleValue()).isEqualTo(7);
+        assertThat(m1Symbol1.getBar(8).getClosePrice().doubleValue()).isEqualTo(8);
+        assertThat(m1Symbol1.getBar(9).getClosePrice().doubleValue()).isEqualTo(9);
+        assertThat(m1Symbol1.getBar(10).getClosePrice().doubleValue()).isEqualTo(10);
+        assertThat(m1Symbol1.getBar(11).getClosePrice().doubleValue()).isEqualTo(11);
+
+        assertNaNClosedPrices(m1Symbol2, 12);
+    }
+
+    @Test
+    public void givenLimitOf12BarsAdd13BarsToSymbol1ShouldReturnCorrectValuesForSymbol1AndNaNsForSymbol2() {
+        // given
+        final DataService dataService = createTwoSymbolDataService(12);
+        final TimeSeries m1Symbol1 = dataService.getMultipleTimeSeries("symbol1").getTimeSeries(ONE_MINUTE_PERIOD);
+        final TimeSeries m1Symbol2 = dataService.getMultipleTimeSeries("symbol2").getTimeSeries(ONE_MINUTE_PERIOD);
+
+        // when
+        for (int i = 0; i < 13; i++) {
+            dataService.add("symbol1", addMinutes(time, i), i);
+        }
+
+        // then
+        assertThat(m1Symbol1.getBarCount()).isEqualTo(12);
+        assertThat(m1Symbol1.getBar(0).getClosePrice().doubleValue()).isEqualTo(1); // 0-value was dropped, now it points to the current last value value
+        assertThat(m1Symbol1.getBar(1).getClosePrice().doubleValue()).isEqualTo(1); // last real value
+        assertThat(m1Symbol1.getBar(2).getClosePrice().doubleValue()).isEqualTo(2);
+        assertThat(m1Symbol1.getBar(3).getClosePrice().doubleValue()).isEqualTo(3);
+        assertThat(m1Symbol1.getBar(4).getClosePrice().doubleValue()).isEqualTo(4);
+        assertThat(m1Symbol1.getBar(5).getClosePrice().doubleValue()).isEqualTo(5);
+        assertThat(m1Symbol1.getBar(6).getClosePrice().doubleValue()).isEqualTo(6);
+        assertThat(m1Symbol1.getBar(7).getClosePrice().doubleValue()).isEqualTo(7);
+        assertThat(m1Symbol1.getBar(8).getClosePrice().doubleValue()).isEqualTo(8);
+        assertThat(m1Symbol1.getBar(9).getClosePrice().doubleValue()).isEqualTo(9);
+        assertThat(m1Symbol1.getBar(10).getClosePrice().doubleValue()).isEqualTo(10);
+        assertThat(m1Symbol1.getBar(11).getClosePrice().doubleValue()).isEqualTo(11);
+        assertThat(m1Symbol1.getBar(12).getClosePrice().doubleValue()).isEqualTo(12);
+
+        assertNaNClosedPrices(m1Symbol2, 12);
+    }
+
+    @Test
+    public void givenLimitOf12BarsAdd17BarsToSymbol1ShouldReturnCorrectValuesForSymbol1AndNaNsForSymbol2() {
+        // given
+        final DataService dataService = createTwoSymbolDataService(12);
+        final TimeSeries m1Symbol1 = dataService.getMultipleTimeSeries("symbol1").getTimeSeries(ONE_MINUTE_PERIOD);
+        final TimeSeries m1Symbol2 = dataService.getMultipleTimeSeries("symbol2").getTimeSeries(ONE_MINUTE_PERIOD);
+
+        // when
+        for (int i = 0; i < 17; i++) {
+            dataService.add("symbol1", addMinutes(time, i), i);
+        }
+
+        // then
+        assertThat(m1Symbol1.getBarCount()).isEqualTo(12);
+        assertThat(m1Symbol1.getBar(0).getClosePrice().doubleValue()).isEqualTo(5); // =>
+        assertThat(m1Symbol1.getBar(1).getClosePrice().doubleValue()).isEqualTo(5);
+        assertThat(m1Symbol1.getBar(2).getClosePrice().doubleValue()).isEqualTo(5);
+        assertThat(m1Symbol1.getBar(3).getClosePrice().doubleValue()).isEqualTo(5);
+        assertThat(m1Symbol1.getBar(4).getClosePrice().doubleValue()).isEqualTo(5); // <= non-existing bars
+        assertThat(m1Symbol1.getBar(5).getClosePrice().doubleValue()).isEqualTo(5);
+        assertThat(m1Symbol1.getBar(6).getClosePrice().doubleValue()).isEqualTo(6);
+        assertThat(m1Symbol1.getBar(7).getClosePrice().doubleValue()).isEqualTo(7);
+        assertThat(m1Symbol1.getBar(8).getClosePrice().doubleValue()).isEqualTo(8);
+        assertThat(m1Symbol1.getBar(9).getClosePrice().doubleValue()).isEqualTo(9);
+        assertThat(m1Symbol1.getBar(10).getClosePrice().doubleValue()).isEqualTo(10);
+        assertThat(m1Symbol1.getBar(11).getClosePrice().doubleValue()).isEqualTo(11);
+        assertThat(m1Symbol1.getBar(12).getClosePrice().doubleValue()).isEqualTo(12);
+        assertThat(m1Symbol1.getBar(13).getClosePrice().doubleValue()).isEqualTo(13);
+        assertThat(m1Symbol1.getBar(14).getClosePrice().doubleValue()).isEqualTo(14);
+        assertThat(m1Symbol1.getBar(15).getClosePrice().doubleValue()).isEqualTo(15);
+        assertThat(m1Symbol1.getBar(16).getClosePrice().doubleValue()).isEqualTo(16);
+
+        assertNaNClosedPrices(m1Symbol2, 12);
+    }
+
+    @Test
+    public void givenLimitOf11BarsAdd12BarsToSymbol1ShouldReturnCorrectValuesForSymbol1AndNaNsForSymbol2() {
+        // given
+        final DataService dataService = createTwoSymbolDataService(11);
+        final TimeSeries m1Symbol1 = dataService.getMultipleTimeSeries("symbol1").getTimeSeries(ONE_MINUTE_PERIOD);
+        final TimeSeries m1Symbol2 = dataService.getMultipleTimeSeries("symbol2").getTimeSeries(ONE_MINUTE_PERIOD);
+
+        // when
+        for (int i = 0; i < 12; i++) {
+            dataService.add("symbol1", addMinutes(time, i), i);
+        }
+
+        // then
+        assertThat(m1Symbol1.getBarCount()).isEqualTo(11);
+        assertThat(m1Symbol1.getBar(0).getClosePrice().doubleValue()).isEqualTo(1); // 0-value was dropped, now it points to the current last value value
+        assertThat(m1Symbol1.getBar(1).getClosePrice().doubleValue()).isEqualTo(1); // last real value
+        assertThat(m1Symbol1.getBar(2).getClosePrice().doubleValue()).isEqualTo(2);
+        assertThat(m1Symbol1.getBar(3).getClosePrice().doubleValue()).isEqualTo(3);
+        assertThat(m1Symbol1.getBar(4).getClosePrice().doubleValue()).isEqualTo(4);
+        assertThat(m1Symbol1.getBar(5).getClosePrice().doubleValue()).isEqualTo(5);
+        assertThat(m1Symbol1.getBar(6).getClosePrice().doubleValue()).isEqualTo(6);
+        assertThat(m1Symbol1.getBar(7).getClosePrice().doubleValue()).isEqualTo(7);
+        assertThat(m1Symbol1.getBar(8).getClosePrice().doubleValue()).isEqualTo(8);
+        assertThat(m1Symbol1.getBar(9).getClosePrice().doubleValue()).isEqualTo(9);
+        assertThat(m1Symbol1.getBar(10).getClosePrice().doubleValue()).isEqualTo(10);
+        assertThat(m1Symbol1.getBar(11).getClosePrice().doubleValue()).isEqualTo(11);
+
+        assertNaNClosedPrices(m1Symbol2, 11);
+    }
+
+    @Test
+    public void givenLimitOf11BarsAdd13BarsToSymbol1ShouldReturnCorrectValuesForSymbol1AndNaNsForSymbol2() {
+        // given
+        final DataService dataService = createTwoSymbolDataService(11);
+        final TimeSeries m1Symbol1 = dataService.getMultipleTimeSeries("symbol1").getTimeSeries(ONE_MINUTE_PERIOD);
+        final TimeSeries m1Symbol2 = dataService.getMultipleTimeSeries("symbol2").getTimeSeries(ONE_MINUTE_PERIOD);
+
+        // when
+        for (int i = 0; i < 13; i++) {
+            dataService.add("symbol1", addMinutes(time, i), i);
+        }
+
+        // then
+        assertThat(m1Symbol1.getBarCount()).isEqualTo(11);
+        assertThat(m1Symbol1.getBar(0).getClosePrice().doubleValue()).isEqualTo(2); // 0-value was dropped, now it points to the current last value value
+        assertThat(m1Symbol1.getBar(1).getClosePrice().doubleValue()).isEqualTo(2);
+        assertThat(m1Symbol1.getBar(2).getClosePrice().doubleValue()).isEqualTo(2); // last real value
+        assertThat(m1Symbol1.getBar(3).getClosePrice().doubleValue()).isEqualTo(3);
+        assertThat(m1Symbol1.getBar(4).getClosePrice().doubleValue()).isEqualTo(4);
+        assertThat(m1Symbol1.getBar(5).getClosePrice().doubleValue()).isEqualTo(5);
+        assertThat(m1Symbol1.getBar(6).getClosePrice().doubleValue()).isEqualTo(6);
+        assertThat(m1Symbol1.getBar(7).getClosePrice().doubleValue()).isEqualTo(7);
+        assertThat(m1Symbol1.getBar(8).getClosePrice().doubleValue()).isEqualTo(8);
+        assertThat(m1Symbol1.getBar(9).getClosePrice().doubleValue()).isEqualTo(9);
+        assertThat(m1Symbol1.getBar(10).getClosePrice().doubleValue()).isEqualTo(10);
+        assertThat(m1Symbol1.getBar(11).getClosePrice().doubleValue()).isEqualTo(11);
+        assertThat(m1Symbol1.getBar(12).getClosePrice().doubleValue()).isEqualTo(12);
+
+        assertNaNClosedPrices(m1Symbol2, 11);
+    }
+
+    @Test
+    public void givenLimitOf11BarsAdd17BarsToSymbol1ShouldReturnCorrectValuesForSymbol1AndNaNsForSymbol2() {
+        // given
+        final DataService dataService = createTwoSymbolDataService(11);
+        final TimeSeries m1Symbol1 = dataService.getMultipleTimeSeries("symbol1").getTimeSeries(ONE_MINUTE_PERIOD);
+        final TimeSeries m1Symbol2 = dataService.getMultipleTimeSeries("symbol2").getTimeSeries(ONE_MINUTE_PERIOD);
+
+        // when
+        for (int i = 0; i < 17; i++) {
+            dataService.add("symbol1", addMinutes(time, i), i);
+        }
+
+        // then
+        assertThat(m1Symbol1.getBarCount()).isEqualTo(11);
+        assertThat(m1Symbol1.getBar(0).getClosePrice().doubleValue()).isEqualTo(6); // 0-value was dropped, now it points to the current last value value
+        assertThat(m1Symbol1.getBar(1).getClosePrice().doubleValue()).isEqualTo(6);
+        assertThat(m1Symbol1.getBar(2).getClosePrice().doubleValue()).isEqualTo(6);
+        assertThat(m1Symbol1.getBar(3).getClosePrice().doubleValue()).isEqualTo(6);
+        assertThat(m1Symbol1.getBar(4).getClosePrice().doubleValue()).isEqualTo(6);
+        assertThat(m1Symbol1.getBar(5).getClosePrice().doubleValue()).isEqualTo(6);
+        assertThat(m1Symbol1.getBar(6).getClosePrice().doubleValue()).isEqualTo(6); // last real value
+        assertThat(m1Symbol1.getBar(7).getClosePrice().doubleValue()).isEqualTo(7);
+        assertThat(m1Symbol1.getBar(8).getClosePrice().doubleValue()).isEqualTo(8);
+        assertThat(m1Symbol1.getBar(9).getClosePrice().doubleValue()).isEqualTo(9);
+        assertThat(m1Symbol1.getBar(10).getClosePrice().doubleValue()).isEqualTo(10);
+        assertThat(m1Symbol1.getBar(11).getClosePrice().doubleValue()).isEqualTo(11);
+        assertThat(m1Symbol1.getBar(12).getClosePrice().doubleValue()).isEqualTo(12);
+        assertThat(m1Symbol1.getBar(13).getClosePrice().doubleValue()).isEqualTo(13);
+        assertThat(m1Symbol1.getBar(14).getClosePrice().doubleValue()).isEqualTo(14);
+        assertThat(m1Symbol1.getBar(15).getClosePrice().doubleValue()).isEqualTo(15);
+        assertThat(m1Symbol1.getBar(16).getClosePrice().doubleValue()).isEqualTo(16);
+
+        assertNaNClosedPrices(m1Symbol2, 11);
+    }
+
+    private static void assertNaNClosedPrices(TimeSeries m1TimeSeries, int m1BarsCount) {
+        assertThat(m1TimeSeries.getBarCount()).isEqualTo(m1BarsCount);
+        final int latestIndex = m1TimeSeries.getEndIndex();
+        for (int i = 0; i <= latestIndex; i++) {
+            assertThat(m1TimeSeries.getBar(i).getClosePrice().doubleValue()).isEqualTo(Double.NaN);
+        }
+    }
+
+    private BaseDataService createTwoSymbolDataService(int oneMinutePeriod) {
+        return new BaseDataService(
+                MultipleTimeSeriesBuilder.basedOn(new TimeSeriesDefinitionImpl(ONE_MINUTE_PERIOD, oneMinutePeriod))
+                                         .symbols("symbol1", "symbol2")
+                                         .build());
+    }
+
+    private static ZonedDateTime utc(LocalDateTime localDateTime) {
+        return ZonedDateTime.of(localDateTime, ZoneOffset.UTC);
     }
 
 }

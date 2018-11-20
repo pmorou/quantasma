@@ -1,5 +1,7 @@
 package quantasma.trade.engine;
 
+import quantasma.trade.engine.timeseries.MultipleTimeSeries;
+
 import java.time.ZonedDateTime;
 import java.util.Collection;
 import java.util.HashMap;
@@ -8,7 +10,7 @@ import java.util.Map;
 public class BaseDataService implements DataService {
     private final Map<String, MultipleTimeSeries> multipleTimeSeriesMap = new HashMap<>();
 
-    public BaseDataService(Collection<MultipleTimeSeries> multipleTimeSeries) {
+    public BaseDataService(Collection<? extends MultipleTimeSeries> multipleTimeSeries) {
         for (MultipleTimeSeries each : multipleTimeSeries) {
             this.multipleTimeSeriesMap.put(each.getInstrument(), each);
         }

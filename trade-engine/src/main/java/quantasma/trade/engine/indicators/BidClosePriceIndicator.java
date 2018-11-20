@@ -3,7 +3,7 @@ package quantasma.trade.engine.indicators;
 import org.ta4j.core.indicators.CachedIndicator;
 import org.ta4j.core.num.Num;
 import quantasma.trade.engine.BidAskBar;
-import quantasma.trade.engine.TypedTimeSeries;
+import quantasma.trade.engine.timeseries.TypedTimeSeries;
 
 public class BidClosePriceIndicator extends CachedIndicator<Num> {
 

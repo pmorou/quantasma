@@ -1,16 +1,17 @@
-package quantasma.trade.engine;
+package quantasma.trade.engine.timeseries;
 
 import lombok.Data;
 import quantasma.model.CandlePeriod;
 
 @Data
-public class TimeSeriesDefinition {
+public class TimeSeriesDefinitionImpl implements TimeSeriesDefinition {
 
     private final CandlePeriod candlePeriod;
     private final int period;
 
-    public TimeSeriesDefinition(CandlePeriod candlePeriod, int period) {
+    public TimeSeriesDefinitionImpl(CandlePeriod candlePeriod, int period) {
         this.candlePeriod = candlePeriod;
         this.period = period;
     }
+
 }

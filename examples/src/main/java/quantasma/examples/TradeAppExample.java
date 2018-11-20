@@ -5,10 +5,11 @@ import quantasma.model.CandlePeriod;
 import quantasma.trade.engine.BaseContext;
 import quantasma.trade.engine.BaseTradeEngine;
 import quantasma.trade.engine.Context;
-import quantasma.trade.engine.GroupTimeSeriesDefinition;
 import quantasma.trade.engine.NullOrderService;
-import quantasma.trade.engine.TimeSeriesDefinition;
 import quantasma.trade.engine.TradeEngine;
+import quantasma.trade.engine.timeseries.GroupTimeSeriesDefinition;
+import quantasma.trade.engine.timeseries.MultipleTimeSeriesBuilder;
+import quantasma.trade.engine.timeseries.TimeSeriesDefinitionImpl;
 
 import java.time.ZonedDateTime;
 
@@ -18,10 +19,15 @@ public class TradeAppExample {
         // Any strategy based on TradeStrategy class needs a Context object
         final Context context = new BaseContext.Builder()
                 .withTimeSeries(
-                        // You can define any number of symbols and corresponding time windows
-                        GroupTimeSeriesDefinition.of("EURUSD", "EURGBP")
-                                                 .add(new TimeSeriesDefinition(CandlePeriod.M1, 100))
-                                                 .add(new TimeSeriesDefinition(CandlePeriod.M5, 100)))
+                        MultipleTimeSeriesBuilder.basedOn(
+                                // Smallest accessible time window for all defined below symbols
+                                new TimeSeriesDefinitionImpl(CandlePeriod.M1, 100))
+                                                 .symbols("EURUSD", "EURGBP")
+                                                 // You can define any number of additional time windows for above symbols
+                                                 .aggregate(GroupTimeSeriesDefinition.of("EURUSD")
+                                                                                     .add(new TimeSeriesDefinitionImpl(CandlePeriod.M5, 100))
+                                                                                     .add(new TimeSeriesDefinitionImpl(CandlePeriod.M30, 100)))
+                )
                 // OrderService implementations integrate an app with external APIs
                 .withOrderService(new NullOrderService())
                 .build();

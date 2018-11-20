@@ -1,4 +1,4 @@
-package quantasma.trade.engine;
+package quantasma.trade.engine.timeseries;
 
 import org.ta4j.core.Bar;
 import org.ta4j.core.TimeSeries;
@@ -18,11 +18,11 @@ public class TypedTimeSeries<T extends Bar> {
     }
 
     public T getFirstBar() {
-        return getBar(timeSeries.getBeginIndex());
+        return (T) timeSeries.getFirstBar();
     }
 
     public T getLastBar() {
-        return getBar(timeSeries.getEndIndex());
+        return (T) timeSeries.getLastBar();
     }
 
     public void addBar(T bar) {

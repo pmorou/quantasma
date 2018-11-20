@@ -1,4 +1,4 @@
-package quantasma.trade.engine;
+package quantasma.trade.engine.timeseries;
 
 import lombok.Data;
 
@@ -17,11 +17,6 @@ public class GroupTimeSeriesDefinition {
         this.symbols = Arrays.stream(symbol).collect(Collectors.toSet());
         this.timeSeriesDefinitions = new HashSet<>();
     }
-
-    public static GroupTimeSeriesDefinition of(String symbol) {
-        return new GroupTimeSeriesDefinition(symbol);
-    }
-
 
     public static GroupTimeSeriesDefinition of(String... symbol) {
         return new GroupTimeSeriesDefinition(symbol);
