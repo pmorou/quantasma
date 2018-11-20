@@ -2,14 +2,14 @@ package quantasma.examples;
 
 import org.ta4j.core.Strategy;
 import quantasma.model.CandlePeriod;
-import quantasma.trade.engine.BaseContext;
-import quantasma.trade.engine.BaseTradeEngine;
-import quantasma.trade.engine.Context;
-import quantasma.trade.engine.NullOrderService;
-import quantasma.trade.engine.TradeEngine;
-import quantasma.trade.engine.timeseries.GroupTimeSeriesDefinition;
-import quantasma.trade.engine.timeseries.MultipleTimeSeriesBuilder;
-import quantasma.trade.engine.timeseries.TimeSeriesDefinitionImpl;
+import quantasma.core.BaseContext;
+import quantasma.core.BaseTradeEngine;
+import quantasma.core.Context;
+import quantasma.core.NullOrderService;
+import quantasma.core.TradeEngine;
+import quantasma.core.timeseries.GroupTimeSeriesDefinition;
+import quantasma.core.timeseries.MultipleTimeSeriesBuilder;
+import quantasma.core.timeseries.TimeSeriesDefinitionImpl;
 
 import java.time.ZonedDateTime;
 

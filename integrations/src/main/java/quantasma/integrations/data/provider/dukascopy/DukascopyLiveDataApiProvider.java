@@ -2,7 +2,7 @@ package quantasma.integrations.data.provider.dukascopy;
 
 import lombok.extern.slf4j.Slf4j;
 import quantasma.integrations.data.provider.AbstractLiveDataProvider;
-import quantasma.trade.engine.TradeEngine;
+import quantasma.core.TradeEngine;
 
 @Slf4j
 public class DukascopyLiveDataApiProvider extends AbstractLiveDataProvider {

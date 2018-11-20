@@ -9,7 +9,7 @@ import com.oanda.v20.pricing.PricingGetResponse;
 import com.oanda.v20.primitives.DateTime;
 import lombok.extern.slf4j.Slf4j;
 import quantasma.integrations.data.provider.AbstractLiveDataProvider;
-import quantasma.trade.engine.TradeEngine;
+import quantasma.core.TradeEngine;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;

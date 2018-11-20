@@ -23,7 +23,7 @@
     <dependencies>
         <dependency>
             <groupId>quantasma</groupId>
-            <artifactId>trade-engine</artifactId>
+            <artifactId>quantasma-core</artifactId>
             <version>0.0.1-SNAPSHOT</version>
             <scope>compile</scope>
         </dependency>

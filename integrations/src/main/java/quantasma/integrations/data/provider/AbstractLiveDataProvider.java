@@ -1,6 +1,6 @@
 package quantasma.integrations.data.provider;
 
-import quantasma.trade.engine.TradeEngine;
+import quantasma.core.TradeEngine;
 
 public abstract class AbstractLiveDataProvider implements LiveDataProvider {
 

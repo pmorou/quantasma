@@ -10,7 +10,7 @@ import com.dukascopy.api.Instrument;
 import com.dukascopy.api.JFException;
 import com.dukascopy.api.Period;
 import lombok.extern.slf4j.Slf4j;
-import quantasma.trade.engine.TradeEngine;
+import quantasma.core.TradeEngine;
 
 import java.time.Instant;
 import java.time.ZoneOffset;

@@ -5,20 +5,14 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>quantasma</groupId>
         <artifactId>root</artifactId>
+        <groupId>quantasma</groupId>
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>examples</artifactId>
+    <artifactId>quantasma-core</artifactId>
 
     <dependencies>
-        <dependency>
-            <groupId>quantasma</groupId>
-            <artifactId>quantasma-core</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
-            <scope>compile</scope>
-        </dependency>
         <dependency>
             <groupId>quantasma</groupId>
             <artifactId>model</artifactId>
@@ -26,5 +20,4 @@
             <scope>compile</scope>
         </dependency>
     </dependencies>
-
 </project>
