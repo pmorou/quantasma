@@ -12,7 +12,6 @@
 
     <modules>
         <module>quantasma-core</module>
-        <module>backtest</module>
         <module>model</module>
         <module>examples</module>
         <module>integrations</module>
