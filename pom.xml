@@ -13,7 +13,7 @@
     <modules>
         <module>quantasma-core</module>
         <module>examples</module>
-        <module>integrations</module>
+        <module>quantasma-integrations</module>
     </modules>
 
     <properties>
