@@ -11,11 +11,9 @@
     <name>Quantasma Project</name>
 
     <modules>
-        <module>backtest</module>
-        <module>model</module>
-        <module>trade-engine</module>
-        <module>examples</module>
-        <module>integrations</module>
+        <module>quantasma-core</module>
+        <module>quantasma-examples</module>
+        <module>quantasma-integrations</module>
     </modules>
 
     <properties>
