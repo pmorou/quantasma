@@ -11,7 +11,6 @@ import quantasma.core.CandlePeriod;
 import quantasma.core.DateUtils;
 import quantasma.core.timeseries.bar.NaNBar;
 
-import java.time.Duration;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
@@ -114,12 +113,50 @@ public class AggregatedTimeSeriesTest {
         assertThat(resultAtIndex5.getClosePrice().doubleValue()).isEqualTo(5);
     }
 
+    @Test
+    public void given3M5BarsShouldReturnCorrectFirstAndLastCreatedBar() {
+        // given
+        final TimeSeries referenceTimeSeries = new BaseTimeSeries.SeriesBuilder().build();
+        final AggregatedTimeSeries aggregatedTimeSeries = new AggregatedTimeSeries(referenceTimeSeries, "aggregated", CandlePeriod.M5);
+        Bar firstM5Bar = null, secondM5Bar = null, thirdM5Bar = null;
+
+        for (int i = 0; i < 14; i++) {
+            createM1Bar(i, referenceTimeSeries);
+            if (i == 0) {
+                firstM5Bar = createBar(i, aggregatedTimeSeries, CandlePeriod.M5);
+                aggregatedTimeSeries.addBar(firstM5Bar);
+            }
+            if (i == 5) {
+                secondM5Bar = createBar(i, aggregatedTimeSeries, CandlePeriod.M5);
+                aggregatedTimeSeries.addBar(secondM5Bar);
+            }
+            if (i == 10) {
+                thirdM5Bar = createBar(i, aggregatedTimeSeries, CandlePeriod.M5);
+                aggregatedTimeSeries.addBar(thirdM5Bar);
+            }
+            referenceTimeSeries.addPrice(i);
+            aggregatedTimeSeries.addPrice(i);
+        }
+
+        // when
+        final Bar actualFirstBar = aggregatedTimeSeries.getFirstBar();
+        final Bar actualLastBar = aggregatedTimeSeries.getLastBar();
+
+        // then
+        assertThat(actualFirstBar).isEqualTo(firstM5Bar);
+        assertThat(actualLastBar).isEqualTo(thirdM5Bar);
+    }
+
     private void createM1Bar(int minutesOffset, TimeSeries timeSeries) {
-        timeSeries.addBar(new BaseBar(Duration.ofMinutes(1), DateUtils.createEndDate(time.plus(minutesOffset, ChronoUnit.MINUTES), CandlePeriod.M1), timeSeries.function()));
+        timeSeries.addBar(createBar(minutesOffset, timeSeries, CandlePeriod.M1));
     }
 
     private void createM5Bar(int minutesOffset, TimeSeries timeSeries) {
-        timeSeries.addBar(new BaseBar(Duration.ofMinutes(5), DateUtils.createEndDate(time.plus(minutesOffset, ChronoUnit.MINUTES), CandlePeriod.M5), timeSeries.function()));
+        timeSeries.addBar(createBar(minutesOffset, timeSeries, CandlePeriod.M5));
+    }
+
+    private BaseBar createBar(int minutesOffset, TimeSeries timeSeries, CandlePeriod period) {
+        return new BaseBar(period.getPeriod(), DateUtils.createEndDate(time.plus(minutesOffset, ChronoUnit.MINUTES), period), timeSeries.function());
     }
 
     private static ZonedDateTime utc(LocalDateTime localDateTime) {
