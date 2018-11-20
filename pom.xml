@@ -12,7 +12,7 @@
 
     <modules>
         <module>quantasma-core</module>
-        <module>examples</module>
+        <module>quantasma-examples</module>
         <module>quantasma-integrations</module>
     </modules>
 

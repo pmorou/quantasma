@@ -10,7 +10,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>examples</artifactId>
+    <artifactId>quantasma-examples</artifactId>
 
     <dependencies>
         <dependency>
