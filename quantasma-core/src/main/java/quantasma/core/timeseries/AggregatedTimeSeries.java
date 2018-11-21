@@ -36,7 +36,7 @@ public class AggregatedTimeSeries extends BaseTimeSeries {
     @Override
     public Bar getBar(int index) {
         if (index == sourceTimeSeries.getEndIndex()) {
-            return super.getBar(getEndIndex());
+            return getLastBar();
         }
 
         final int nthOldElement = sourceTimeSeries.getEndIndex() - index;
