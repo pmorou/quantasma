@@ -82,17 +82,17 @@ public class NaNBar implements BidAskBar {
 
     @Override
     public Duration getTimePeriod() {
-        return Duration.ZERO;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public ZonedDateTime getBeginTime() {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public ZonedDateTime getEndTime() {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
