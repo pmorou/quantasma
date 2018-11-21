@@ -16,39 +16,35 @@ import java.util.TreeMap;
 public class BaseMultipleTimeSeries implements MultipleTimeSeries {
     private static final long serialVersionUID = -8768456438053526527L;
 
-    private final Map<CandlePeriod, TypedTimeSeries<BidAskBar>> timeSeriesMap;
     private final String instrument;
+    private final ReferenceTimeSeries referenceTimeSeries;
+    private final Map<CandlePeriod, TypedTimeSeries<BidAskBar>> periodTimeSeriesMap;
 
-    private BaseMultipleTimeSeries(String instrument, Map<CandlePeriod, TypedTimeSeries<BidAskBar>> timeSeriesMap) {
+    private BaseMultipleTimeSeries(String instrument, TimeSeriesDefinition timeSeriesDefinition) {
         this.instrument = instrument;
-        this.timeSeriesMap = timeSeriesMap;
-    }
-
-    public BaseMultipleTimeSeries put(CandlePeriod candlePeriod, TimeSeries timeSeries) {
-        timeSeriesMap.put(candlePeriod, TypedTimeSeries.create(BidAskBar.class, timeSeries));
-        return this;
-    }
-
-    public BaseMultipleTimeSeries(String instrument, TimeSeriesDefinition timeSeriesDefinition) {
-        this.instrument = instrument;
-        this.timeSeriesMap = createBaseTimeSeries(timeSeriesDefinition);
-    }
-
-    private Map<CandlePeriod, TypedTimeSeries<BidAskBar>> createBaseTimeSeries(TimeSeriesDefinition timeSeriesDefinition) {
-        final BaseTimeSeriesFactory baseTimeSeriesFactory = new BaseTimeSeriesFactory();
-        final Map<CandlePeriod, TypedTimeSeries<BidAskBar>> timeSeriesMap = new TreeMap<>(Comparator.comparing(CandlePeriod::getPeriod)); // first period should save value first
-        timeSeriesMap.put(timeSeriesDefinition.getCandlePeriod(),
-                          TypedTimeSeries.create(BidAskBar.class, baseTimeSeriesFactory.createInstance(timeSeriesDefinition)));
-        return timeSeriesMap;
+        this.referenceTimeSeries = BaseReferenceTimeSeries.create(timeSeriesDefinition);
+        this.periodTimeSeriesMap = createPeriodTimeSeriesMap(timeSeriesDefinition.getCandlePeriod());
     }
 
     public static BaseMultipleTimeSeries create(String instrument, TimeSeriesDefinition timeSeriesDefinition) {
         return new BaseMultipleTimeSeries(instrument, timeSeriesDefinition);
     }
 
+    private Map<CandlePeriod, TypedTimeSeries<BidAskBar>> createPeriodTimeSeriesMap(CandlePeriod candlePeriod) {
+        final Map<CandlePeriod, TypedTimeSeries<BidAskBar>> timeSeriesMap = new TreeMap<>(Comparator.comparing(CandlePeriod::getPeriod)); // first period should save value first
+        timeSeriesMap.put(candlePeriod, TypedTimeSeries.create(BidAskBar.class, referenceTimeSeries.source()));
+        return timeSeriesMap;
+    }
+
+    public MultipleTimeSeries aggregate(TimeSeriesDefinition timeSeriesDefinition) {
+        final TimeSeries timeSeries = referenceTimeSeries.aggregate(timeSeriesDefinition);
+        periodTimeSeriesMap.put(timeSeriesDefinition.getCandlePeriod(), TypedTimeSeries.create(BidAskBar.class, timeSeries));
+        return this;
+    }
+
     @Override
     public void updateBar(ZonedDateTime priceDate, double bid, double ask) {
-        timeSeriesMap.forEach((candlePeriod, typedTimeSeries) -> {
+        periodTimeSeriesMap.forEach((candlePeriod, typedTimeSeries) -> {
             if (empty(typedTimeSeries) || isEqualOrAfter(priceDate, typedTimeSeries.getLastBar().getEndTime())) {
                 insertNewBar(priceDate, candlePeriod, typedTimeSeries);
             }
@@ -59,7 +55,7 @@ public class BaseMultipleTimeSeries implements MultipleTimeSeries {
 
     @Override
     public void updateBar(ZonedDateTime priceDate, double price) {
-        timeSeriesMap.forEach((candlePeriod, typedTimeSeries) -> {
+        periodTimeSeriesMap.forEach((candlePeriod, typedTimeSeries) -> {
             if (empty(typedTimeSeries) || isEqualOrAfter(priceDate, typedTimeSeries.getLastBar().getEndTime())) {
                 insertNewBar(priceDate, candlePeriod, typedTimeSeries);
             }
@@ -70,7 +66,7 @@ public class BaseMultipleTimeSeries implements MultipleTimeSeries {
 
     @Override
     public void createBar(ZonedDateTime priceDate) {
-        timeSeriesMap.forEach((candlePeriod, typedTimeSeries) -> {
+        periodTimeSeriesMap.forEach((candlePeriod, typedTimeSeries) -> {
             if (empty(typedTimeSeries)) {
                 insertNewBar(priceDate, candlePeriod, typedTimeSeries);
             } else if (isEqualOrAfter(priceDate, typedTimeSeries.getLastBar().getEndTime())) {
@@ -104,13 +100,13 @@ public class BaseMultipleTimeSeries implements MultipleTimeSeries {
 
     @Override
     public int lastBarIndex() {
-        return timeSeriesMap.entrySet()
-                            .stream()
-                            .findFirst()
-                            .map(entry -> entry.getValue()
-                                               .getTimeSeries()
-                                               .getEndIndex())
-                            .orElse(-1);
+        return periodTimeSeriesMap.entrySet()
+                                  .stream()
+                                  .findFirst()
+                                  .map(entry -> entry.getValue()
+                                                     .getTimeSeries()
+                                                     .getEndIndex())
+                                  .orElse(-1);
     }
 
     @Override
@@ -120,6 +116,6 @@ public class BaseMultipleTimeSeries implements MultipleTimeSeries {
 
     @Override
     public TimeSeries getTimeSeries(CandlePeriod period) {
-        return timeSeriesMap.get(period).getTimeSeries();
+        return periodTimeSeriesMap.get(period).getTimeSeries();
     }
 }
