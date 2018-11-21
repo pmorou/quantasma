@@ -18,12 +18,12 @@ final Context context = new BaseContext.Builder()
         .withTimeSeries(
                 MultipleTimeSeriesBuilder.basedOn(
                         // Smallest accessible time window for all defined below symbols
-                        new TimeSeriesDefinitionImpl(CandlePeriod.M1, 100))
+                        new TimeSeriesDefinitionImpl(BarPeriod.M1, 100))
                                          .symbols("EURUSD", "EURGBP")
                                          // You can define any number of additional time windows for above symbols
                                          .aggregate(GroupTimeSeriesDefinition.of("EURUSD")
-                                                                             .add(new TimeSeriesDefinitionImpl(CandlePeriod.M5, 100))
-                                                                             .add(new TimeSeriesDefinitionImpl(CandlePeriod.M30, 100)))
+                                                                             .add(new TimeSeriesDefinitionImpl(BarPeriod.M5, 100))
+                                                                             .add(new TimeSeriesDefinitionImpl(BarPeriod.M30, 100)))
         )
         // OrderService implementations integrate an app with external APIs
         .withOrderService(new NullOrderService())
