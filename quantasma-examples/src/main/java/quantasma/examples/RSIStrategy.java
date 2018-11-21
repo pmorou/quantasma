@@ -9,7 +9,7 @@ import org.ta4j.core.indicators.RSIIndicator;
 import org.ta4j.core.indicators.helpers.ClosePriceIndicator;
 import org.ta4j.core.trading.rules.CrossedDownIndicatorRule;
 import org.ta4j.core.trading.rules.CrossedUpIndicatorRule;
-import quantasma.core.CandlePeriod;
+import quantasma.core.BarPeriod;
 import quantasma.core.Context;
 import quantasma.core.TradeStrategy;
 import quantasma.core.order.CloseMarkerOrder;
@@ -83,7 +83,7 @@ public class RSIStrategy extends TradeStrategy {
     }
 
     private static RSIIndicator createRSIIndicator(Context context) {
-        final TimeSeries timeSeries = context.getDataService().getMultipleTimeSeries("EURUSD").getTimeSeries(CandlePeriod.M1);
+        final TimeSeries timeSeries = context.getDataService().getMultipleTimeSeries("EURUSD").getTimeSeries(BarPeriod.M1);
         final ClosePriceIndicator closePrice = new ClosePriceIndicator(timeSeries);
         return new RSIIndicator(closePrice, 14);
     }

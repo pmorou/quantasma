@@ -12,6 +12,6 @@ public class AggregableTimeSeriesImpl implements AggregableTimeSeries {
 
     @Override
     public TimeSeries aggregate(TimeSeriesDefinition timeSeriesDefinition) {
-        return new AggregatedTimeSeries(baseTimeSeries, timeSeriesDefinition.getCandlePeriod().getPeriodCode(), timeSeriesDefinition.getCandlePeriod());
+        return new AggregatedTimeSeries(baseTimeSeries, timeSeriesDefinition.getBarPeriod().getPeriodCode(), timeSeriesDefinition.getBarPeriod());
     }
 }

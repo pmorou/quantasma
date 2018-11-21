@@ -21,6 +21,6 @@ public class AggregatedTimeSeriesFactory implements TimeSeriesFactory {
 
     @Override
     public Function<TimeSeriesDefinition, TimeSeries> function() {
-        return timeSeriesDefinition -> new AggregatedTimeSeries(timeSeries, timeSeriesDefinition.getCandlePeriod().getPeriodCode(), timeSeriesDefinition.getCandlePeriod());
+        return timeSeriesDefinition -> new AggregatedTimeSeries(timeSeries, timeSeriesDefinition.getBarPeriod().getPeriodCode(), timeSeriesDefinition.getBarPeriod());
     }
 }

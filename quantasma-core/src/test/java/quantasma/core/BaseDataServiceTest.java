@@ -43,8 +43,8 @@ public class BaseDataServiceTest {
         this.time = time;
     }
 
-    private static final CandlePeriod ONE_MINUTE_PERIOD = CandlePeriod.M1;
-    private static final CandlePeriod FIVE_MINUTE_PERIOD = CandlePeriod.M5;
+    private static final BarPeriod ONE_MINUTE_PERIOD = BarPeriod.M1;
+    private static final BarPeriod FIVE_MINUTE_PERIOD = BarPeriod.M5;
 
     @Test
     public void given2TimeSeriesWithMaxSizeOf2ShouldHave0BarsOnStart() {

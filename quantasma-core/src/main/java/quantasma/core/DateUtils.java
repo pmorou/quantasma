@@ -5,10 +5,10 @@ import java.time.temporal.ChronoUnit;
 
 public class DateUtils {
 
-    public static ZonedDateTime createEndDate(ZonedDateTime date, CandlePeriod candlePeriod) {
+    public static ZonedDateTime createEndDate(ZonedDateTime date, BarPeriod barPeriod) {
         final int minute = date.getMinute();
         final int hour = date.getHour();
-        switch (candlePeriod) {
+        switch (barPeriod) {
             case M1:
                 return date.truncatedTo(ChronoUnit.MINUTES)
                            .withMinute(minute)
@@ -39,7 +39,7 @@ public class DateUtils {
                            .withDayOfMonth(day)
                            .plus(1, ChronoUnit.DAYS);
         }
-        throw new RuntimeException("Unsupported period: " + candlePeriod.getPeriod());
+        throw new RuntimeException("Unsupported period: " + barPeriod.getPeriod());
     }
 
     public static boolean isInRange(ZonedDateTime isThis, ZonedDateTime withinThatInclusiveLowerBound, ZonedDateTime andThatUpperBound, boolean inclusiveUpperBound) {

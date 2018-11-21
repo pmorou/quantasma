@@ -1,7 +1,7 @@
 package quantasma.core.timeseries;
 
 import org.ta4j.core.TimeSeries;
-import quantasma.core.CandlePeriod;
+import quantasma.core.BarPeriod;
 
 import java.io.Serializable;
 import java.time.ZonedDateTime;
@@ -19,5 +19,5 @@ public interface MultipleTimeSeries extends Serializable {
 
     String getInstrument();
 
-    TimeSeries getTimeSeries(CandlePeriod period);
+    TimeSeries getTimeSeries(BarPeriod period);
 }

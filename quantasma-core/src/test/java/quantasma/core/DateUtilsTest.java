@@ -14,7 +14,7 @@ public class DateUtilsTest {
     public void forM1PeriodGivenTruncatedMinutesShouldRoundTo1Minutes() {
         final ZonedDateTime zonedDateTime = ZonedDateTime.of(LocalDateTime.of(2010, 1, 1, 10, 0, 0), ZoneOffset.UTC);
 
-        final ZonedDateTime result = DateUtils.createEndDate(zonedDateTime, CandlePeriod.M1);
+        final ZonedDateTime result = DateUtils.createEndDate(zonedDateTime, BarPeriod.M1);
 
         assertThat(result.getMinute()).isEqualTo(1);
     }
@@ -23,7 +23,7 @@ public class DateUtilsTest {
     public void forM1PeriodGiven59MinutesShouldTruncateMinutesAndAdd1Hour() {
         final ZonedDateTime zonedDateTime = ZonedDateTime.of(LocalDateTime.of(2010, 1, 1, 10, 59, 0), ZoneOffset.UTC);
 
-        final ZonedDateTime result = DateUtils.createEndDate(zonedDateTime, CandlePeriod.M1);
+        final ZonedDateTime result = DateUtils.createEndDate(zonedDateTime, BarPeriod.M1);
 
         assertThat(result.getMinute()).isEqualTo(0);
         assertThat(result.getHour()).isEqualTo(11);
@@ -33,7 +33,7 @@ public class DateUtilsTest {
     public void forM5PeriodGivenTruncatedMinutesShouldRoundTo5Minutes() {
         final ZonedDateTime zonedDateTime = ZonedDateTime.of(LocalDateTime.of(2010, 1, 1, 10, 0, 0), ZoneOffset.UTC);
 
-        final ZonedDateTime result = DateUtils.createEndDate(zonedDateTime, CandlePeriod.M5);
+        final ZonedDateTime result = DateUtils.createEndDate(zonedDateTime, BarPeriod.M5);
 
         assertThat(result.getMinute()).isEqualTo(5);
     }
@@ -42,7 +42,7 @@ public class DateUtilsTest {
     public void forM5PeriodGiven13minutesShouldRoundTo15Minutes() {
         final ZonedDateTime zonedDateTime = ZonedDateTime.of(LocalDateTime.of(2010, 1, 1, 10, 13, 0), ZoneOffset.UTC);
 
-        final ZonedDateTime result = DateUtils.createEndDate(zonedDateTime, CandlePeriod.M5);
+        final ZonedDateTime result = DateUtils.createEndDate(zonedDateTime, BarPeriod.M5);
 
         assertThat(result.getMinute()).isEqualTo(15);
     }
@@ -51,7 +51,7 @@ public class DateUtilsTest {
     public void forM5PeriodGiven15minutesShouldRoundTo20Minutes() {
         final ZonedDateTime zonedDateTime = ZonedDateTime.of(LocalDateTime.of(2010, 1, 1, 10, 15, 0), ZoneOffset.UTC);
 
-        final ZonedDateTime result = DateUtils.createEndDate(zonedDateTime, CandlePeriod.M5);
+        final ZonedDateTime result = DateUtils.createEndDate(zonedDateTime, BarPeriod.M5);
 
         assertThat(result.getMinute()).isEqualTo(20);
     }
@@ -60,7 +60,7 @@ public class DateUtilsTest {
     public void forM5PeriodGiven16minutesShouldRoundTo20Minutes() {
         final ZonedDateTime zonedDateTime = ZonedDateTime.of(LocalDateTime.of(2010, 1, 1, 10, 16, 0), ZoneOffset.UTC);
 
-        final ZonedDateTime result = DateUtils.createEndDate(zonedDateTime, CandlePeriod.M5);
+        final ZonedDateTime result = DateUtils.createEndDate(zonedDateTime, BarPeriod.M5);
 
         assertThat(result.getMinute()).isEqualTo(20);
     }
@@ -69,7 +69,7 @@ public class DateUtilsTest {
     public void forM5PeriodGiven55minutesShouldTruncateMinutesAndAdd1Hour() {
         final ZonedDateTime zonedDateTime = ZonedDateTime.of(LocalDateTime.of(2010, 1, 1, 10, 55, 0), ZoneOffset.UTC);
 
-        final ZonedDateTime result = DateUtils.createEndDate(zonedDateTime, CandlePeriod.M5);
+        final ZonedDateTime result = DateUtils.createEndDate(zonedDateTime, BarPeriod.M5);
 
         assertThat(result.getMinute()).isEqualTo(0);
         assertThat(result.getHour()).isEqualTo(11);
