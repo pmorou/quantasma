@@ -11,11 +11,11 @@ public class AggregatedTimeSeriesFactory implements TimeSeriesFactory {
 
     private final TimeSeries timeSeries;
 
-    public AggregatedTimeSeriesFactory(TimeSeries timeSeries) {
+    private AggregatedTimeSeriesFactory(TimeSeries timeSeries) {
         this.timeSeries = timeSeries;
     }
 
-    public static AggregatedTimeSeriesFactory timeSeriesSource(TimeSeries timeSeries) {
+    public static AggregatedTimeSeriesFactory from(TimeSeries timeSeries) {
         return new AggregatedTimeSeriesFactory(timeSeries);
     }
 

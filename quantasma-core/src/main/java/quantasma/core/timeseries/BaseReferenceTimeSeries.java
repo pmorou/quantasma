@@ -23,6 +23,6 @@ public class BaseReferenceTimeSeries implements ReferenceTimeSeries {
 
     @Override
     public TimeSeries aggregate(TimeSeriesDefinition timeSeriesDefinition) {
-        return new AggregatedTimeSeriesFactory(source).createInstance(timeSeriesDefinition);
+        return AggregatedTimeSeriesFactory.from(source).createInstance(timeSeriesDefinition);
     }
 }
