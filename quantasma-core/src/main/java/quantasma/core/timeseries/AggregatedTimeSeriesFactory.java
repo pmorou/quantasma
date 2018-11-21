@@ -1,9 +1,6 @@
 package quantasma.core.timeseries;
 
 import org.ta4j.core.TimeSeries;
-import quantasma.core.timeseries.AggregatedTimeSeries;
-import quantasma.core.timeseries.TimeSeriesDefinition;
-import quantasma.core.timeseries.TimeSeriesFactory;
 
 import java.util.function.Function;
 
