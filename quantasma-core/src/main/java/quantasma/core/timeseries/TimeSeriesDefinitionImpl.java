@@ -1,16 +1,16 @@
 package quantasma.core.timeseries;
 
 import lombok.Data;
-import quantasma.core.CandlePeriod;
+import quantasma.core.BarPeriod;
 
 @Data
 public class TimeSeriesDefinitionImpl implements TimeSeriesDefinition {
 
-    private final CandlePeriod candlePeriod;
+    private final BarPeriod barPeriod;
     private final int period;
 
-    public TimeSeriesDefinitionImpl(CandlePeriod candlePeriod, int period) {
-        this.candlePeriod = candlePeriod;
+    public TimeSeriesDefinitionImpl(BarPeriod barPeriod, int period) {
+        this.barPeriod = barPeriod;
         this.period = period;
     }
 

@@ -39,7 +39,7 @@ public class BaseContext implements Context {
             orderService = new NullOrderService();
             strategyControl = new BaseStrategyControl();
             dataService = new BaseDataService();
-            multipleTimeSeriesBuilder = MultipleTimeSeriesBuilder.basedOn(new TimeSeriesDefinitionImpl(CandlePeriod.M1, 100_000))
+            multipleTimeSeriesBuilder = MultipleTimeSeriesBuilder.basedOn(new TimeSeriesDefinitionImpl(BarPeriod.M1, 100_000))
                                                                  .symbols("EURUSD");
         }
 

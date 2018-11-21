@@ -8,7 +8,7 @@ import java.util.function.Function;
 public class BaseTimeSeriesFactory implements TimeSeriesFactory {
     @Override
     public Function<TimeSeriesDefinition, TimeSeries> function() {
-        return timeSeriesDefinition -> new BaseTimeSeries.SeriesBuilder().withName(timeSeriesDefinition.getCandlePeriod().getPeriodCode())
+        return timeSeriesDefinition -> new BaseTimeSeries.SeriesBuilder().withName(timeSeriesDefinition.getBarPeriod().getPeriodCode())
                                                                          .withMaxBarCount(timeSeriesDefinition.getPeriod())
                                                                          .build();
     }

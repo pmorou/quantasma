@@ -1,10 +1,10 @@
 package quantasma.core.timeseries;
 
-import quantasma.core.CandlePeriod;
+import quantasma.core.BarPeriod;
 
 public interface TimeSeriesDefinition {
 
-    CandlePeriod getCandlePeriod();
+    BarPeriod getBarPeriod();
 
     int getPeriod();
 }

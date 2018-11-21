@@ -1,4 +1,4 @@
-package quantasma.core;
+package quantasma.core.timeseries.bar;
 
 import org.ta4j.core.Order;
 import org.ta4j.core.num.Num;
@@ -82,17 +82,17 @@ public class NaNBar implements BidAskBar {
 
     @Override
     public Duration getTimePeriod() {
-        return Duration.ZERO;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public ZonedDateTime getBeginTime() {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override
     public ZonedDateTime getEndTime() {
-        return null;
+        throw new UnsupportedOperationException();
     }
 
     @Override

@@ -3,6 +3,7 @@ package quantasma.core;
 import org.junit.Test;
 import org.ta4j.core.num.Num;
 import org.ta4j.core.num.PrecisionNum;
+import quantasma.core.timeseries.bar.BaseBidAskBar;
 
 import java.time.Duration;
 import java.time.ZonedDateTime;

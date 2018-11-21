@@ -3,7 +3,7 @@ package quantasma.core;
 import java.time.Duration;
 import java.util.Arrays;
 
-public enum CandlePeriod {
+public enum BarPeriod {
     M1("m1", Duration.ofMinutes(1)),
     M5("m5", Duration.ofMinutes(5)),
     M15("m15", Duration.ofMinutes(15)),
@@ -15,14 +15,14 @@ public enum CandlePeriod {
     private final String periodCode;
     private final Duration duration;
 
-    CandlePeriod(String periodCode, Duration duration) {
+    BarPeriod(String periodCode, Duration duration) {
         this.periodCode = periodCode;
         this.duration = duration;
     }
 
-    public static CandlePeriod get(String periodCode) {
+    public static BarPeriod get(String periodCode) {
         return Arrays.stream(values())
-                     .filter(candlePeriod -> candlePeriod.getPeriodCode().equals(periodCode))
+                     .filter(barPeriod -> barPeriod.getPeriodCode().equals(periodCode))
                      .findFirst()
                      .orElseThrow(RuntimeException::new);
     }

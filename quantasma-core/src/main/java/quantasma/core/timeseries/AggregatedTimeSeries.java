@@ -3,17 +3,17 @@ package quantasma.core.timeseries;
 import org.ta4j.core.Bar;
 import org.ta4j.core.BaseTimeSeries;
 import org.ta4j.core.TimeSeries;
-import quantasma.core.CandlePeriod;
-import quantasma.core.NaNBar;
+import quantasma.core.BarPeriod;
+import quantasma.core.timeseries.bar.NaNBar;
 
 public class AggregatedTimeSeries extends BaseTimeSeries {
     private final TimeSeries sourceTimeSeries;
-    private final CandlePeriod candlePeriod;
+    private final BarPeriod barPeriod;
 
-    public AggregatedTimeSeries(TimeSeries sourceTimeSeries, String name, CandlePeriod candlePeriod) {
+    public AggregatedTimeSeries(TimeSeries sourceTimeSeries, String name, BarPeriod barPeriod) {
         super(name);
         this.sourceTimeSeries = sourceTimeSeries;
-        this.candlePeriod = candlePeriod;
+        this.barPeriod = barPeriod;
     }
 
     @Override
