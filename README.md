@@ -2,6 +2,16 @@
 
 All-in-one algorithmic trading platform. Build your own backtested-strategy using Java, and execute along with support of continuous track and optimization modules.
 
+Library stands on top of [ta4j](https://github.com/ta4j/ta4j) providing additional features as:
+
+-   bid and ask prices
+
+-   multi-period time series
+
+-   unlimited number of symbols
+
+The aim is to provide any needed functionality to follow the ever-changing markets in the most efficient way.
+
 # Getting Started
 
 ## Requirements
