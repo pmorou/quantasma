@@ -18,14 +18,14 @@ public class ManualTimeSeries extends BaseTimeSeries {
     }
 
     public void resetIndexes() {
-        if (getSuperEndIndex() < 1) {
+        if (getSuperBeginIndex() < 0) {
             return;
         }
 
         ensureIndexesManipulated();
 
         setSuperBeginIndex(0);
-        setSuperEndIndex(0);
+        setSuperEndIndex(-1);
     }
 
     private void ensureIndexesManipulated() {

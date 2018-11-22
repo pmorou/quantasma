@@ -60,7 +60,7 @@ public class ManualTimeSeriesTest {
     }
 
     @Test
-    public void given3BarsWhenResetIndexesShouldReturnBeginIndexAt0AndEndIndexAt0() {
+    public void given3BarsWhenResetIndexesShouldReturnBeginIndexAt0AndEndIndexAtNeg1() {
         // given
         final ManualTimeSeries manualTimeSeries = createManualTimeSeries(3);
 
@@ -69,11 +69,12 @@ public class ManualTimeSeriesTest {
 
         // then
         assertThat(manualTimeSeries.getBeginIndex()).isEqualTo(0);
-        assertThat(manualTimeSeries.getEndIndex()).isEqualTo(0);
+        assertThat(manualTimeSeries.getEndIndex()).isEqualTo(-1);
+        // in real scenario resetIndexes() is gonna be followed by nextIndex() which will set the value to 0
     }
 
     @Test
-    public void given3BarsAndResetedIndexesWhenNextIndexShouldReturnBeginIndexAt0AndEndIndexAt1() {
+    public void given3BarsAndResetedIndexesWhenNextIndexShouldReturnBeginIndexAt0AndEndIndexAt0() {
         // given
         final ManualTimeSeries manualTimeSeries = createManualTimeSeries(3);
         manualTimeSeries.resetIndexes();
@@ -83,7 +84,7 @@ public class ManualTimeSeriesTest {
 
         // then
         assertThat(manualTimeSeries.getBeginIndex()).isEqualTo(0);
-        assertThat(manualTimeSeries.getEndIndex()).isEqualTo(1);
+        assertThat(manualTimeSeries.getEndIndex()).isEqualTo(0);
     }
 
     @Test(expected = RuntimeException.class)
