@@ -83,7 +83,7 @@ public class RSIStrategy extends TradeStrategy {
     }
 
     private static RSIIndicator createRSIIndicator(Context context) {
-        final TimeSeries timeSeries = context.getDataService().getMultipleTimeSeries("EURUSD").getTimeSeries(BarPeriod.M1);
+        final TimeSeries timeSeries = context.getDataService().getMarketData().of("EURUSD").getTimeSeries(BarPeriod.M1);
         final ClosePriceIndicator closePrice = new ClosePriceIndicator(timeSeries);
         return new RSIIndicator(closePrice, 14);
     }

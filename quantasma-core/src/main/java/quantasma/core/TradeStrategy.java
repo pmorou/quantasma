@@ -45,4 +45,8 @@ public class TradeStrategy extends BaseStrategy {
     protected OrderService getOrderService() {
         return context.getOrderService();
     }
+
+    protected MarketData getMarketData() {
+        return context.getDataService().getMarketData();
+    }
 }

@@ -20,8 +20,8 @@ public class BaseTradeEngine implements TradeEngine {
 
     @Override
     public void process(String symbol, ZonedDateTime date, double price) {
-        dataService.add(symbol, date, price);
-        final int latestBarIndex = dataService.lastBarIndex();
+        dataService.getMarketData().add(symbol, date, price);
+        final int latestBarIndex = dataService.getMarketData().lastBarIndex();
         strategyControl.getActiveStrategies().forEach(strategy -> {
             if (!strategy.shouldEnter(latestBarIndex))
                 strategy.shouldExit(latestBarIndex);
@@ -30,8 +30,8 @@ public class BaseTradeEngine implements TradeEngine {
 
     @Override
     public void process(String symbol, ZonedDateTime date, double bid, double ask) {
-        dataService.add(symbol, date, bid, ask);
-        final int latestBarIndex = dataService.lastBarIndex();
+        dataService.getMarketData().add(symbol, date, bid, ask);
+        final int latestBarIndex = dataService.getMarketData().lastBarIndex();
         strategyControl.getActiveStrategies().forEach(strategy -> {
             if (!strategy.shouldEnter(latestBarIndex))
                 strategy.shouldExit(latestBarIndex);

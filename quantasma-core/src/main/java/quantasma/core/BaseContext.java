@@ -38,7 +38,7 @@ public class BaseContext implements Context {
         public Builder() {
             orderService = new NullOrderService();
             strategyControl = new BaseStrategyControl();
-            dataService = new BaseDataService();
+            dataService = new BaseDataService(new MarketData());
             multipleTimeSeriesBuilder = MultipleTimeSeriesBuilder.basedOn(new TimeSeriesDefinitionImpl(BarPeriod.M1, 100_000))
                                                                  .symbols("EURUSD");
         }
@@ -68,7 +68,7 @@ public class BaseContext implements Context {
         }
 
         public Context build() {
-            this.dataService = new BaseDataService(multipleTimeSeriesBuilder.build());
+            this.dataService = new BaseDataService(new MarketData(multipleTimeSeriesBuilder.build()));
             return new BaseContext(dataService, orderService, strategyControl);
         }
     }

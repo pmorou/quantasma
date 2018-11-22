@@ -21,7 +21,7 @@ import java.util.Arrays;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(Parameterized.class)
-public class BaseDataServiceTest {
+public class MarketDataTest {
 
     private static final ZonedDateTime MIDNIGHT = utc(LocalDateTime.of(2018, 11, 20, 0, 0));
 
@@ -39,19 +39,18 @@ public class BaseDataServiceTest {
 
     private final ZonedDateTime time;
 
-    public BaseDataServiceTest(ZonedDateTime time) {
+    public MarketDataTest(ZonedDateTime time) {
         this.time = time;
     }
 
     private static final BarPeriod ONE_MINUTE_PERIOD = BarPeriod.M1;
-    private static final BarPeriod FIVE_MINUTE_PERIOD = BarPeriod.M5;
 
     @Test
     public void given2TimeSeriesWithMaxSizeOf2ShouldHave0BarsOnStart() {
         // given
-        final DataService dataService = createTimeSeriesFor("symbol1", "symbol2");
-        final TimeSeries timeSeriesForSymbol1 = dataService.getMultipleTimeSeries("symbol1").getTimeSeries(ONE_MINUTE_PERIOD);
-        final TimeSeries timeSeriesForSymbol2 = dataService.getMultipleTimeSeries("symbol2").getTimeSeries(ONE_MINUTE_PERIOD);
+        final MarketData marketData = createTimeSeriesFor("symbol1", "symbol2");
+        final TimeSeries timeSeriesForSymbol1 = marketData.of("symbol1").getTimeSeries(ONE_MINUTE_PERIOD);
+        final TimeSeries timeSeriesForSymbol2 = marketData.of("symbol2").getTimeSeries(ONE_MINUTE_PERIOD);
 
         // then
         assertThat(timeSeriesForSymbol1.getBarCount()).isEqualTo(0);
@@ -61,12 +60,12 @@ public class BaseDataServiceTest {
     @Test
     public void given2TimeSeriesWithMaxSizeOf2AddDataToOneOnlyForLengthOf1UnitShouldHave1BarBoth() {
         // given
-        final DataService dataService = createTimeSeriesFor("symbol1", "symbol2");
-        final TimeSeries timeSeriesForSymbol1 = dataService.getMultipleTimeSeries("symbol1").getTimeSeries(ONE_MINUTE_PERIOD);
-        final TimeSeries timeSeriesForSymbol2 = dataService.getMultipleTimeSeries("symbol2").getTimeSeries(ONE_MINUTE_PERIOD);
+        final MarketData marketData = createTimeSeriesFor("symbol1", "symbol2");
+        final TimeSeries timeSeriesForSymbol1 = marketData.of("symbol1").getTimeSeries(ONE_MINUTE_PERIOD);
+        final TimeSeries timeSeriesForSymbol2 = marketData.of("symbol2").getTimeSeries(ONE_MINUTE_PERIOD);
 
         // when
-        dataService.add("symbol1", time, 1.0);
+        marketData.add("symbol1", time, 1.0);
 
         // then
         assertThat(timeSeriesForSymbol1.getBarCount()).isEqualTo(1);
@@ -76,13 +75,13 @@ public class BaseDataServiceTest {
     @Test
     public void given2TimeSeriesWithMaxSizeOf2AddDataToOneOnlyForLengthOf2UnitsShouldHave2BarsBoth() {
         // given
-        final DataService dataService = createTimeSeriesFor("symbol1", "symbol2");
-        final TimeSeries timeSeriesForSymbol1 = dataService.getMultipleTimeSeries("symbol1").getTimeSeries(ONE_MINUTE_PERIOD);
-        final TimeSeries timeSeriesForSymbol2 = dataService.getMultipleTimeSeries("symbol2").getTimeSeries(ONE_MINUTE_PERIOD);
+        final MarketData marketData = createTimeSeriesFor("symbol1", "symbol2");
+        final TimeSeries timeSeriesForSymbol1 = marketData.of("symbol1").getTimeSeries(ONE_MINUTE_PERIOD);
+        final TimeSeries timeSeriesForSymbol2 = marketData.of("symbol2").getTimeSeries(ONE_MINUTE_PERIOD);
 
         // when
-        dataService.add("symbol1", time, 1.0);
-        dataService.add("symbol1", addMinutes(time, 1), 2.0);
+        marketData.add("symbol1", time, 1.0);
+        marketData.add("symbol1", addMinutes(time, 1), 2.0);
 
         // then
         assertThat(timeSeriesForSymbol1.getBarCount()).isEqualTo(2);
@@ -92,14 +91,14 @@ public class BaseDataServiceTest {
     @Test
     public void given2TimeSeriesWithMaxSizeOf2AddDataToOneOnlyForLengthOf3UnitsShouldHave2BarsBoth() {
         // given
-        final DataService dataService = createTimeSeriesFor("symbol1", "symbol2");
-        final TimeSeries timeSeriesForSymbol1 = dataService.getMultipleTimeSeries("symbol1").getTimeSeries(ONE_MINUTE_PERIOD);
-        final TimeSeries timeSeriesForSymbol2 = dataService.getMultipleTimeSeries("symbol2").getTimeSeries(ONE_MINUTE_PERIOD);
+        final MarketData marketData = createTimeSeriesFor("symbol1", "symbol2");
+        final TimeSeries timeSeriesForSymbol1 = marketData.of("symbol1").getTimeSeries(ONE_MINUTE_PERIOD);
+        final TimeSeries timeSeriesForSymbol2 = marketData.of("symbol2").getTimeSeries(ONE_MINUTE_PERIOD);
 
         // when
-        dataService.add("symbol1", time, 1.0);
-        dataService.add("symbol1", addMinutes(time, 1), 2.0);
-        dataService.add("symbol1", addMinutes(time, 2), 3.0);
+        marketData.add("symbol1", time, 1.0);
+        marketData.add("symbol1", addMinutes(time, 1), 2.0);
+        marketData.add("symbol1", addMinutes(time, 2), 3.0);
 
         // then
         assertThat(timeSeriesForSymbol1.getBarCount()).isEqualTo(2);
@@ -109,25 +108,25 @@ public class BaseDataServiceTest {
     @Test
     public void givenNoExplicitDataInsertionForTargetSymbolShouldTakePreviousValue() {
         // given
-        final DataService dataService = createTimeSeriesFor("targetSymbol", "symbol2");
-        final TimeSeries targetTimeSeries = dataService.getMultipleTimeSeries("targetSymbol").getTimeSeries(ONE_MINUTE_PERIOD);
+        final MarketData marketData = createTimeSeriesFor("targetSymbol", "symbol2");
+        final TimeSeries targetTimeSeries = marketData.of("targetSymbol").getTimeSeries(ONE_MINUTE_PERIOD);
         final ClosePriceIndicator targetClosePriceIndicator = new ClosePriceIndicator(targetTimeSeries);
         final Rule isEqualToOneRule = new IsEqualRule(targetClosePriceIndicator, 1);
 
         // when
-        dataService.add("targetSymbol", time, 0.5);
+        marketData.add("targetSymbol", time, 0.5);
 
         // then
         assertThat(isEqualToOneRule.isSatisfied(targetTimeSeries.getEndIndex())).isFalse();
 
         // when
-        dataService.add("targetSymbol", addMinutes(time, 1), 1);
+        marketData.add("targetSymbol", addMinutes(time, 1), 1);
 
         // then
         assertThat(isEqualToOneRule.isSatisfied(targetTimeSeries.getEndIndex())).isTrue();
 
         // when
-        dataService.add("symbol2", addMinutes(time, 2), 0);
+        marketData.add("symbol2", addMinutes(time, 2), 0);
 
         // then
         assertThat(isEqualToOneRule.isSatisfied(targetTimeSeries.getEndIndex())).isTrue();
@@ -136,9 +135,9 @@ public class BaseDataServiceTest {
     @Test
     public void givenNoExplicitDataForTargetSymbolShouldContinueWithinIndicatorsPeriod() {
         // given
-        final DataService dataService = createTimeSeriesFor("referenceSymbol", "targetSymbol");
-        final TimeSeries referenceTimeSeries = dataService.getMultipleTimeSeries("referenceSymbol").getTimeSeries(ONE_MINUTE_PERIOD);
-        final TimeSeries targetTimeSeries = dataService.getMultipleTimeSeries("targetSymbol").getTimeSeries(ONE_MINUTE_PERIOD);
+        final MarketData marketData = createTimeSeriesFor("referenceSymbol", "targetSymbol");
+        final TimeSeries referenceTimeSeries = marketData.of("referenceSymbol").getTimeSeries(ONE_MINUTE_PERIOD);
+        final TimeSeries targetTimeSeries = marketData.of("targetSymbol").getTimeSeries(ONE_MINUTE_PERIOD);
         final ClosePriceIndicator closePrice1 = new ClosePriceIndicator(referenceTimeSeries);
         final ClosePriceIndicator closePrice2 = new ClosePriceIndicator(targetTimeSeries);
         final RSIIndicator rsi1 = new RSIIndicator(closePrice1, 2);
@@ -147,31 +146,31 @@ public class BaseDataServiceTest {
         final Rule rule2 = new OverIndicatorRule(rsi2, 70);
 
         // when
-        dataService.add("referenceSymbol", time, 0);
-        dataService.add("targetSymbol", time, 0);
+        marketData.add("referenceSymbol", time, 0);
+        marketData.add("targetSymbol", time, 0);
 
         // then
         assertThat(rule1.isSatisfied(referenceTimeSeries.getEndIndex())).isFalse();
         assertThat(rule2.isSatisfied(targetTimeSeries.getEndIndex())).isFalse();
 
         // when
-        dataService.add("referenceSymbol", addMinutes(time, 1), 1);
+        marketData.add("referenceSymbol", addMinutes(time, 1), 1);
 
         // then
         assertThat(rule1.isSatisfied(referenceTimeSeries.getEndIndex())).isTrue();
         assertThat(rule2.isSatisfied(targetTimeSeries.getEndIndex())).isFalse();
 
         // when
-        dataService.add("referenceSymbol", addMinutes(time, 2), 0.9);
-        dataService.add("targetSymbol", addMinutes(time, 2), 1);
+        marketData.add("referenceSymbol", addMinutes(time, 2), 0.9);
+        marketData.add("targetSymbol", addMinutes(time, 2), 1);
 
         // then
         assertThat(rule1.isSatisfied(referenceTimeSeries.getEndIndex())).isTrue();
         assertThat(rule2.isSatisfied(targetTimeSeries.getEndIndex())).isTrue();
 
         // when
-        dataService.add("referenceSymbol", addMinutes(time, 3), 0.8);
-        dataService.add("targetSymbol", addMinutes(time, 3), 0.9);
+        marketData.add("referenceSymbol", addMinutes(time, 3), 0.8);
+        marketData.add("targetSymbol", addMinutes(time, 3), 0.9);
 
         // then
         assertThat(rule1.isSatisfied(referenceTimeSeries.getEndIndex())).isFalse();
@@ -181,27 +180,27 @@ public class BaseDataServiceTest {
     @Test
     public void insertUnspecifiedSymbolShouldFailSilently() {
         // given
-        final DataService dataService = createTimeSeriesFor("knownSymbol");
+        final MarketData marketData = createTimeSeriesFor("knownSymbol");
 
         // when
-        dataService.add("unknownSymbol", ZonedDateTime.now(), 1.0);
+        marketData.add("unknownSymbol", ZonedDateTime.now(), 1.0);
     }
 
     @Test(expected = IllegalArgumentException.class)
     public void getUnspecifiedSymbolShouldThrownAnIllegalArgumentException() {
         // given
-        final DataService dataService = createTimeSeriesFor("knownSymbol");
+        final MarketData marketData = createTimeSeriesFor("knownSymbol");
 
         // when
-        dataService.getMultipleTimeSeries("unknownSymbol");
+        marketData.of("unknownSymbol");
     }
 
     private ZonedDateTime addMinutes(ZonedDateTime time, int minutes) {
         return time.plus(minutes, ChronoUnit.MINUTES);
     }
 
-    private static DataService createTimeSeriesFor(String... symbols) {
-        return new BaseDataService(
+    private static MarketData createTimeSeriesFor(String... symbols) {
+        return new MarketData(
                 MultipleTimeSeriesBuilder.basedOn(new TimeSeriesDefinitionImpl(ONE_MINUTE_PERIOD, 2))
                                          .symbols(symbols)
                                          .build());
@@ -210,13 +209,13 @@ public class BaseDataServiceTest {
     @Test
     public void givenLimitOf12BarsAdd12BarsToSymbol1ShouldReturnCorrectValuesForSymbol1AndNaNsForSymbol2() {
         // given
-        final DataService dataService = createTwoSymbolDataService(12);
-        final TimeSeries m1Symbol1 = dataService.getMultipleTimeSeries("symbol1").getTimeSeries(ONE_MINUTE_PERIOD);
-        final TimeSeries m1Symbol2 = dataService.getMultipleTimeSeries("symbol2").getTimeSeries(ONE_MINUTE_PERIOD);
+        final MarketData marketData = createTwoSymbolMarketData(12);
+        final TimeSeries m1Symbol1 = marketData.of("symbol1").getTimeSeries(ONE_MINUTE_PERIOD);
+        final TimeSeries m1Symbol2 = marketData.of("symbol2").getTimeSeries(ONE_MINUTE_PERIOD);
 
         // when
         for (int i = 0; i < 12; i++) {
-            dataService.add("symbol1", addMinutes(time, i), i);
+            marketData.add("symbol1", addMinutes(time, i), i);
         }
 
         // then
@@ -240,13 +239,13 @@ public class BaseDataServiceTest {
     @Test
     public void givenLimitOf12BarsAdd13BarsToSymbol1ShouldReturnCorrectValuesForSymbol1AndNaNsForSymbol2() {
         // given
-        final DataService dataService = createTwoSymbolDataService(12);
-        final TimeSeries m1Symbol1 = dataService.getMultipleTimeSeries("symbol1").getTimeSeries(ONE_MINUTE_PERIOD);
-        final TimeSeries m1Symbol2 = dataService.getMultipleTimeSeries("symbol2").getTimeSeries(ONE_MINUTE_PERIOD);
+        final MarketData marketData = createTwoSymbolMarketData(12);
+        final TimeSeries m1Symbol1 = marketData.of("symbol1").getTimeSeries(ONE_MINUTE_PERIOD);
+        final TimeSeries m1Symbol2 = marketData.of("symbol2").getTimeSeries(ONE_MINUTE_PERIOD);
 
         // when
         for (int i = 0; i < 13; i++) {
-            dataService.add("symbol1", addMinutes(time, i), i);
+            marketData.add("symbol1", addMinutes(time, i), i);
         }
 
         // then
@@ -271,13 +270,13 @@ public class BaseDataServiceTest {
     @Test
     public void givenLimitOf12BarsAdd17BarsToSymbol1ShouldReturnCorrectValuesForSymbol1AndNaNsForSymbol2() {
         // given
-        final DataService dataService = createTwoSymbolDataService(12);
-        final TimeSeries m1Symbol1 = dataService.getMultipleTimeSeries("symbol1").getTimeSeries(ONE_MINUTE_PERIOD);
-        final TimeSeries m1Symbol2 = dataService.getMultipleTimeSeries("symbol2").getTimeSeries(ONE_MINUTE_PERIOD);
+        final MarketData marketData = createTwoSymbolMarketData(12);
+        final TimeSeries m1Symbol1 = marketData.of("symbol1").getTimeSeries(ONE_MINUTE_PERIOD);
+        final TimeSeries m1Symbol2 = marketData.of("symbol2").getTimeSeries(ONE_MINUTE_PERIOD);
 
         // when
         for (int i = 0; i < 17; i++) {
-            dataService.add("symbol1", addMinutes(time, i), i);
+            marketData.add("symbol1", addMinutes(time, i), i);
         }
 
         // then
@@ -306,13 +305,13 @@ public class BaseDataServiceTest {
     @Test
     public void givenLimitOf11BarsAdd12BarsToSymbol1ShouldReturnCorrectValuesForSymbol1AndNaNsForSymbol2() {
         // given
-        final DataService dataService = createTwoSymbolDataService(11);
-        final TimeSeries m1Symbol1 = dataService.getMultipleTimeSeries("symbol1").getTimeSeries(ONE_MINUTE_PERIOD);
-        final TimeSeries m1Symbol2 = dataService.getMultipleTimeSeries("symbol2").getTimeSeries(ONE_MINUTE_PERIOD);
+        final MarketData marketData = createTwoSymbolMarketData(11);
+        final TimeSeries m1Symbol1 = marketData.of("symbol1").getTimeSeries(ONE_MINUTE_PERIOD);
+        final TimeSeries m1Symbol2 = marketData.of("symbol2").getTimeSeries(ONE_MINUTE_PERIOD);
 
         // when
         for (int i = 0; i < 12; i++) {
-            dataService.add("symbol1", addMinutes(time, i), i);
+            marketData.add("symbol1", addMinutes(time, i), i);
         }
 
         // then
@@ -336,13 +335,13 @@ public class BaseDataServiceTest {
     @Test
     public void givenLimitOf11BarsAdd13BarsToSymbol1ShouldReturnCorrectValuesForSymbol1AndNaNsForSymbol2() {
         // given
-        final DataService dataService = createTwoSymbolDataService(11);
-        final TimeSeries m1Symbol1 = dataService.getMultipleTimeSeries("symbol1").getTimeSeries(ONE_MINUTE_PERIOD);
-        final TimeSeries m1Symbol2 = dataService.getMultipleTimeSeries("symbol2").getTimeSeries(ONE_MINUTE_PERIOD);
+        final MarketData marketData = createTwoSymbolMarketData(11);
+        final TimeSeries m1Symbol1 = marketData.of("symbol1").getTimeSeries(ONE_MINUTE_PERIOD);
+        final TimeSeries m1Symbol2 = marketData.of("symbol2").getTimeSeries(ONE_MINUTE_PERIOD);
 
         // when
         for (int i = 0; i < 13; i++) {
-            dataService.add("symbol1", addMinutes(time, i), i);
+            marketData.add("symbol1", addMinutes(time, i), i);
         }
 
         // then
@@ -367,13 +366,13 @@ public class BaseDataServiceTest {
     @Test
     public void givenLimitOf11BarsAdd17BarsToSymbol1ShouldReturnCorrectValuesForSymbol1AndNaNsForSymbol2() {
         // given
-        final DataService dataService = createTwoSymbolDataService(11);
-        final TimeSeries m1Symbol1 = dataService.getMultipleTimeSeries("symbol1").getTimeSeries(ONE_MINUTE_PERIOD);
-        final TimeSeries m1Symbol2 = dataService.getMultipleTimeSeries("symbol2").getTimeSeries(ONE_MINUTE_PERIOD);
+        final MarketData marketData = createTwoSymbolMarketData(11);
+        final TimeSeries m1Symbol1 = marketData.of("symbol1").getTimeSeries(ONE_MINUTE_PERIOD);
+        final TimeSeries m1Symbol2 = marketData.of("symbol2").getTimeSeries(ONE_MINUTE_PERIOD);
 
         // when
         for (int i = 0; i < 17; i++) {
-            dataService.add("symbol1", addMinutes(time, i), i);
+            marketData.add("symbol1", addMinutes(time, i), i);
         }
 
         // then
@@ -407,8 +406,8 @@ public class BaseDataServiceTest {
         }
     }
 
-    private BaseDataService createTwoSymbolDataService(int oneMinutePeriod) {
-        return new BaseDataService(
+    private MarketData createTwoSymbolMarketData(int oneMinutePeriod) {
+        return new MarketData(
                 MultipleTimeSeriesBuilder.basedOn(new TimeSeriesDefinitionImpl(ONE_MINUTE_PERIOD, oneMinutePeriod))
                                          .symbols("symbol1", "symbol2")
                                          .build());
