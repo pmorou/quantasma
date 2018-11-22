@@ -33,13 +33,13 @@ public class ManualIndexTimeSeries implements TimeSeries {
             return;
         }
 
-        ensureIndexesManipulated();
+        setIndexModified();
 
         injectBeginIndex(0);
         injectEndIndex(-1);
     }
 
-    private void ensureIndexesManipulated() {
+    private void setIndexModified() {
         if (!isIndexModified) {
             isIndexModified = true;
         }
