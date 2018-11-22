@@ -79,7 +79,7 @@ public class ManualIndexTimeSeries implements TimeSeries {
             field.setAccessible(true);
             return field.get(timeSeries);
         } catch (NoSuchFieldException | IllegalAccessException e) {
-            throw new RuntimeException("Caught checked exception", e);
+            throw new RuntimeException("Checked exception", e);
         }
     }
 
@@ -90,7 +90,7 @@ public class ManualIndexTimeSeries implements TimeSeries {
             field.setAccessible(true);
             field.set(timeSeries, value);
         } catch (NoSuchFieldException | IllegalAccessException e) {
-            throw new RuntimeException("Caught checked exception", e);
+            throw new RuntimeException("Checked exception", e);
         }
     }
 
