@@ -1,16 +1,45 @@
 package quantasma.core.timeseries;
 
 import org.junit.Test;
+import org.junit.runner.RunWith;
+import org.junit.runners.Parameterized;
 import org.ta4j.core.BaseBar;
 import org.ta4j.core.BaseTimeSeries;
 import org.ta4j.core.TimeSeries;
 
 import java.time.Duration;
 import java.time.ZonedDateTime;
+import java.util.Arrays;
+import java.util.function.Function;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@RunWith(Parameterized.class)
 public class ManualIndexTimeSeriesTest {
+
+    private final static Function<Integer, ManualIndexTimeSeries> useBaseTimeSeries = (barsCount) -> {
+        final ZonedDateTime time = ZonedDateTime.now();
+        final BaseTimeSeries timeSeries = new BaseTimeSeries();
+        for (int i = 0; i < barsCount; i++) {
+            timeSeries.addBar(createBar(time, timeSeries, i));
+            timeSeries.addPrice(i);
+        }
+        return new ManualIndexTimeSeries(timeSeries);
+    };
+
+    @Parameterized.Parameters(name = "{index}: Using implementation {0}")
+    public static Iterable<Object[]> firstBarCreationTimes() {
+        return Arrays.asList(new Object[][] {
+                {BaseTimeSeries.class, useBaseTimeSeries}
+        });
+    }
+
+    private final Function<Integer, ManualIndexTimeSeries> manualIndexTimeSeriesFunction;
+
+    public ManualIndexTimeSeriesTest(Class<?> clazz, Function<Integer, ManualIndexTimeSeries> manualIndexTimeSeriesFunction) {
+        this.manualIndexTimeSeriesFunction = manualIndexTimeSeriesFunction;
+    }
+
     @Test
     public void givenNoBarsShouldReturnBeginIndexAtNeg1AndEndIndexAtNeg1() {
         // given
@@ -110,14 +139,9 @@ public class ManualIndexTimeSeriesTest {
         manualTimeSeries.addBar(bar);
     }
 
-    private static ManualIndexTimeSeries createManualTimeSeries(int barsCount) {
-        final ZonedDateTime time = ZonedDateTime.now();
-        final BaseTimeSeries timeSeries = new BaseTimeSeries();
-        for (int i = 0; i < barsCount; i++) {
-            timeSeries.addBar(createBar(time, timeSeries, i));
-            timeSeries.addPrice(i);
-        }
-        return new ManualIndexTimeSeries(timeSeries);
+
+    private ManualIndexTimeSeries createManualTimeSeries(int barsCount) {
+        return manualIndexTimeSeriesFunction.apply(barsCount);
     }
 
     private static BaseBar createBar(ZonedDateTime time, TimeSeries timeSeries, int i) {
