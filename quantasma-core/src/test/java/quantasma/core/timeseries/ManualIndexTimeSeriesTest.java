@@ -149,7 +149,7 @@ public class ManualIndexTimeSeriesTest {
             return function().apply(barsCount);
         }
 
-        ManualIndexTimeSeriesFactory BASE_TIME_SERIES = () -> (Integer barsCount) -> {
+        ManualIndexTimeSeriesFactory BASE_TIME_SERIES = () -> barsCount -> {
             final ZonedDateTime time = ZonedDateTime.now();
             final BaseTimeSeries timeSeries = new BaseTimeSeries();
             for (int i = 0; i < barsCount; i++) {
@@ -159,7 +159,7 @@ public class ManualIndexTimeSeriesTest {
             return new ManualIndexTimeSeries(timeSeries);
         };
 
-        ManualIndexTimeSeriesFactory AGGREGATED_TIME_SERIES = () -> (Integer barsCount) -> {
+        ManualIndexTimeSeriesFactory AGGREGATED_TIME_SERIES = () -> barsCount -> {
             final ZonedDateTime time = ZonedDateTime.now();
             final BaseTimeSeries sourceTimeSeries = new BaseTimeSeries();
             final AggregatedTimeSeries aggregatedTimeSeries = new AggregatedTimeSeries(sourceTimeSeries, "test", BarPeriod.M5);
