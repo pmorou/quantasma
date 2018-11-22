@@ -21,15 +21,19 @@ public class ManualIndexTimeSeriesTest {
     @Parameterized.Parameters(name = "{index}: Using implementation {0}")
     public static Iterable<Object[]> firstBarCreationTimes() {
         return Arrays.asList(new Object[][] {
-                {BaseTimeSeries.class, ManualIndexTimeSeriesFactory.BASE_TIME_SERIES},
-                {AggregatedTimeSeries.class, ManualIndexTimeSeriesFactory.AGGREGATED_TIME_SERIES}
+                {BaseTimeSeries.class, ManualIndexTimeSeriesFactory.BASE_TIME_SERIES, 2},
+                {AggregatedTimeSeries.class, ManualIndexTimeSeriesFactory.AGGREGATED_TIME_SERIES, 0}
         });
     }
 
     private final ManualIndexTimeSeriesFactory factory;
+    private final int expectedBarsCountAfter3Mins;
 
-    public ManualIndexTimeSeriesTest(Class<?> forMessageOnly, ManualIndexTimeSeriesFactory factory) {
+    public ManualIndexTimeSeriesTest(Class<?> forMessageOnly,
+                                     ManualIndexTimeSeriesFactory factory,
+                                     int expectedBarsCountAfter3Mins) {
         this.factory = factory;
+        this.expectedBarsCountAfter3Mins = expectedBarsCountAfter3Mins;
     }
 
     @Test
@@ -79,7 +83,7 @@ public class ManualIndexTimeSeriesTest {
 
         // then
         assertThat(beginIndex).isEqualTo(0);
-        assertThat(endIndex).isEqualTo(2);
+        assertThat(endIndex).isEqualTo(expectedBarsCountAfter3Mins);
     }
 
     @Test
@@ -163,12 +167,14 @@ public class ManualIndexTimeSeriesTest {
             final ZonedDateTime time = ZonedDateTime.now();
             final BaseTimeSeries sourceTimeSeries = new BaseTimeSeries();
             final AggregatedTimeSeries aggregatedTimeSeries = new AggregatedTimeSeries(sourceTimeSeries, "test", BarPeriod.M5);
-            aggregatedTimeSeries.addBar(createBar(time, aggregatedTimeSeries, 0, BarPeriod.M5.getPeriod()));
             for (int i = 0; i < barsCount; i++) {
+                if (i % 5 == 0) {
+                    aggregatedTimeSeries.addBar(createBar(time, aggregatedTimeSeries, 0, BarPeriod.M5.getPeriod()));
+                }
                 sourceTimeSeries.addBar(createBar(time, sourceTimeSeries, i, BarPeriod.M1.getPeriod()));
                 sourceTimeSeries.addPrice(i);
             }
-            return new ManualIndexTimeSeries(sourceTimeSeries);
+            return new ManualIndexTimeSeries(aggregatedTimeSeries);
         };
     }
 }

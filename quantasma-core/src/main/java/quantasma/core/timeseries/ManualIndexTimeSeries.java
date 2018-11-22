@@ -1,6 +1,7 @@
 package quantasma.core.timeseries;
 
 import org.ta4j.core.Bar;
+import org.ta4j.core.BaseTimeSeries;
 import org.ta4j.core.TimeSeries;
 import org.ta4j.core.num.Num;
 
@@ -73,9 +74,10 @@ public class ManualIndexTimeSeries implements TimeSeries {
 
     private Object getField(String fieldName) {
         try {
-            final Field seriesEndIndex = timeSeries.getClass().getDeclaredField(fieldName);
-            seriesEndIndex.setAccessible(true);
-            return seriesEndIndex.get(timeSeries);
+            Class<?> clazz = getBaseTimeSeriesClassRef();
+            final Field field = clazz.getDeclaredField(fieldName);
+            field.setAccessible(true);
+            return field.get(timeSeries);
         } catch (NoSuchFieldException | IllegalAccessException e) {
             throw new RuntimeException("Caught checked exception", e);
         }
@@ -83,12 +85,24 @@ public class ManualIndexTimeSeries implements TimeSeries {
 
     private void setField(String fieldName, Object value) {
         try {
-            final Field seriesEndIndex = timeSeries.getClass().getDeclaredField(fieldName);
-            seriesEndIndex.setAccessible(true);
-            seriesEndIndex.set(timeSeries, value);
+            Class<?> clazz = getBaseTimeSeriesClassRef();
+            final Field field = clazz.getDeclaredField(fieldName);
+            field.setAccessible(true);
+            field.set(timeSeries, value);
         } catch (NoSuchFieldException | IllegalAccessException e) {
             throw new RuntimeException("Caught checked exception", e);
         }
+    }
+
+    private Class<?> getBaseTimeSeriesClassRef() {
+        Class<?> clazz = timeSeries.getClass();
+        while (clazz != BaseTimeSeries.class) {
+            clazz = clazz.getSuperclass();
+            if (clazz == Object.class) {
+                throw new RuntimeException();
+            }
+        }
+        return clazz;
     }
 
     // methods below do not modify delegate's logic
