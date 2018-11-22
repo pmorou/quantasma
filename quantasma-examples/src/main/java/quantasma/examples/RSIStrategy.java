@@ -15,6 +15,8 @@ import quantasma.core.TradeStrategy;
 import quantasma.core.order.CloseMarkerOrder;
 import quantasma.core.order.OpenMarketOrder;
 
+import java.util.Objects;
+
 @Slf4j
 public class RSIStrategy extends TradeStrategy {
 
@@ -23,7 +25,7 @@ public class RSIStrategy extends TradeStrategy {
     private int openedPositionsCounter = 0;
 
     public RSIStrategy(Context context, String name, Rule entryRule, Rule exitRule, int unstablePeriod) {
-        super(context, name, entryRule, exitRule, unstablePeriod);
+        super(Objects.requireNonNull(context), name, entryRule, exitRule, unstablePeriod);
     }
 
     @Override
@@ -57,7 +59,6 @@ public class RSIStrategy extends TradeStrategy {
     }
 
     public static Strategy buildBullish(Context context) {
-        requireContext(context);
         final RSIIndicator rsi = createRSIIndicator(context);
         return new RSIStrategy(context,
                                "RSI Strategy",
@@ -67,7 +68,6 @@ public class RSIStrategy extends TradeStrategy {
     }
 
     public static Strategy buildBearish(Context context) {
-        requireContext(context);
         final RSIIndicator rsi = createRSIIndicator(context);
         return new RSIStrategy(context,
                                "RSI Strategy",
