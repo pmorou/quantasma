@@ -36,7 +36,7 @@ public class ManualTimeSeries extends BaseTimeSeries {
 
     public void nextIndex() {
         if (getSuperEndIndex() == addedBarsCount() - 1) {
-            throw new RuntimeException(String.format("No next bar available at index [%s] - bars count [%s]", getSuperBeginIndex() + 1, getBarCount()));
+            throw new RuntimeException(String.format("No next bar available at index [%s] - bars count [%s]", getSuperBeginIndex() + 1, addedBarsCount()));
         }
         setSuperEndIndex(getSuperEndIndex() + 1);
     }
