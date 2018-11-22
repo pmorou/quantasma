@@ -2,17 +2,19 @@ package quantasma.core.timeseries;
 
 import org.junit.Test;
 import org.ta4j.core.BaseBar;
+import org.ta4j.core.BaseTimeSeries;
+import org.ta4j.core.TimeSeries;
 
 import java.time.Duration;
 import java.time.ZonedDateTime;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class ManualTimeSeriesTest {
+public class ManualIndexTimeSeriesTest {
     @Test
     public void givenNoBarsShouldReturnBeginIndexAtNeg1AndEndIndexAtNeg1() {
         // given
-        final ManualTimeSeries manualTimeSeries = createManualTimeSeries(0);
+        final ManualIndexTimeSeries manualTimeSeries = createManualTimeSeries(0);
 
         // when
         final int beginIndex = manualTimeSeries.getBeginIndex();
@@ -26,7 +28,7 @@ public class ManualTimeSeriesTest {
     @Test
     public void givenNoBarsWhenResetIndexesShouldReturnBeginIndexAtNeg1AndEndIndexAtNeg1() {
         // given
-        final ManualTimeSeries manualTimeSeries = createManualTimeSeries(0);
+        final ManualIndexTimeSeries manualTimeSeries = createManualTimeSeries(0);
 
         // when
         manualTimeSeries.resetIndexes();
@@ -39,7 +41,7 @@ public class ManualTimeSeriesTest {
     @Test(expected = RuntimeException.class)
     public void givenNoBarsWhenNextIndexShouldThrowAnException() {
         // given
-        final ManualTimeSeries manualTimeSeries = createManualTimeSeries(0);
+        final ManualIndexTimeSeries manualTimeSeries = createManualTimeSeries(0);
 
         // when
         manualTimeSeries.nextIndex();
@@ -48,7 +50,7 @@ public class ManualTimeSeriesTest {
     @Test
     public void given3BarsShouldReturnBeginIndexAt0AndEndIndexAt2() {
         // given
-        final ManualTimeSeries manualTimeSeries = createManualTimeSeries(3);
+        final ManualIndexTimeSeries manualTimeSeries = createManualTimeSeries(3);
 
         // when
         final int beginIndex = manualTimeSeries.getBeginIndex();
@@ -62,7 +64,7 @@ public class ManualTimeSeriesTest {
     @Test
     public void given3BarsWhenResetIndexesShouldReturnBeginIndexAt0AndEndIndexAtNeg1() {
         // given
-        final ManualTimeSeries manualTimeSeries = createManualTimeSeries(3);
+        final ManualIndexTimeSeries manualTimeSeries = createManualTimeSeries(3);
 
         // when
         manualTimeSeries.resetIndexes();
@@ -76,7 +78,7 @@ public class ManualTimeSeriesTest {
     @Test
     public void given3BarsAndResetedIndexesWhenNextIndexShouldReturnBeginIndexAt0AndEndIndexAt0() {
         // given
-        final ManualTimeSeries manualTimeSeries = createManualTimeSeries(3);
+        final ManualIndexTimeSeries manualTimeSeries = createManualTimeSeries(3);
         manualTimeSeries.resetIndexes();
 
         // when
@@ -90,7 +92,7 @@ public class ManualTimeSeriesTest {
     @Test(expected = RuntimeException.class)
     public void given3BarsAndSecondIndexWhenNextIndexShouldReturnThrownAnException() {
         // given
-        final ManualTimeSeries manualTimeSeries = createManualTimeSeries(3);
+        final ManualIndexTimeSeries manualTimeSeries = createManualTimeSeries(3);
 
         // when
         manualTimeSeries.nextIndex();
@@ -100,7 +102,7 @@ public class ManualTimeSeriesTest {
     public void given3BarsAndResetedIndexWhenAddingNewBarShouldReturnThrownAnException() {
         // given
         final int barsCount = 3;
-        final ManualTimeSeries manualTimeSeries = createManualTimeSeries(barsCount);
+        final ManualIndexTimeSeries manualTimeSeries = createManualTimeSeries(barsCount);
         manualTimeSeries.resetIndexes();
         final BaseBar bar = createBar(ZonedDateTime.now().plusMinutes(barsCount + 1), manualTimeSeries, 0);
 
@@ -108,17 +110,17 @@ public class ManualTimeSeriesTest {
         manualTimeSeries.addBar(bar);
     }
 
-    private static ManualTimeSeries createManualTimeSeries(int barsCount) {
+    private static ManualIndexTimeSeries createManualTimeSeries(int barsCount) {
         final ZonedDateTime time = ZonedDateTime.now();
-        final ManualTimeSeries manualTimeSeries = new ManualTimeSeries();
+        final BaseTimeSeries timeSeries = new BaseTimeSeries();
         for (int i = 0; i < barsCount; i++) {
-            manualTimeSeries.addBar(createBar(time, manualTimeSeries, i));
-            manualTimeSeries.addPrice(i);
+            timeSeries.addBar(createBar(time, timeSeries, i));
+            timeSeries.addPrice(i);
         }
-        return manualTimeSeries;
+        return new ManualIndexTimeSeries(timeSeries);
     }
 
-    private static BaseBar createBar(ZonedDateTime time, ManualTimeSeries manualTimeSeries, int i) {
-        return new BaseBar(Duration.ofMinutes(i), time.plusMinutes(i), manualTimeSeries.function());
+    private static BaseBar createBar(ZonedDateTime time, TimeSeries timeSeries, int i) {
+        return new BaseBar(Duration.ofMinutes(i), time.plusMinutes(i), timeSeries.function());
     }
 }
