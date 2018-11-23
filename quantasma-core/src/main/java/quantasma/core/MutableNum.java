@@ -49,7 +49,7 @@ public class MutableNum implements Num {
 
     @Override
     public String getName() {
-        return "VariableAmount";
+        return "MutableNum";
     }
 
     @Override
