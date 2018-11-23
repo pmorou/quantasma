@@ -41,6 +41,7 @@ public class BaseMultipleTimeSeries implements MultipleTimeSeries {
         return timeSeriesMap;
     }
 
+    @Override
     public MultipleTimeSeries aggregate(TimeSeriesDefinition timeSeriesDefinition) {
         final AggregatedTimeSeries timeSeries = mainTimeSeries.aggregate(timeSeriesDefinition);
         periodTimeSeriesMap.put(timeSeriesDefinition.getBarPeriod(), TypedTimeSeries.create(BidAskBar.class, timeSeries));
