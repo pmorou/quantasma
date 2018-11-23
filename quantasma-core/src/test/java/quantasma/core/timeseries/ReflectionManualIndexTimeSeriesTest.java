@@ -16,7 +16,7 @@ import java.util.function.Function;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(Parameterized.class)
-public class ManualIndexTimeSeriesTest {
+public class ReflectionManualIndexTimeSeriesTest {
 
     @Parameterized.Parameters(name = "{index}: Using implementation {0}")
     public static Iterable<Object[]> firstBarCreationTimes() {
@@ -28,12 +28,12 @@ public class ManualIndexTimeSeriesTest {
         });
     }
 
-    private final ManualIndexTimeSeriesFactory factory;
+    private final ManualIndexTimeSeriesFactory<ReflectionManualIndexTimeSeries> factory;
     private final int expectedBarsCountAfter3Mins;
 
-    public ManualIndexTimeSeriesTest(Class<?> forMessageOnly,
-                                     ManualIndexTimeSeriesFactory factory,
-                                     int expectedBarsCountAfter3Mins) {
+    public ReflectionManualIndexTimeSeriesTest(Class<?> forMessageOnly,
+                                               ManualIndexTimeSeriesFactory<ReflectionManualIndexTimeSeries> factory,
+                                               int expectedBarsCountAfter3Mins) {
         this.factory = factory;
         this.expectedBarsCountAfter3Mins = expectedBarsCountAfter3Mins;
     }
@@ -41,7 +41,7 @@ public class ManualIndexTimeSeriesTest {
     @Test
     public void givenNoBarsShouldReturnBeginIndexAtNeg1AndEndIndexAtNeg1() {
         // given
-        final ManualIndexTimeSeries manualTimeSeries = createManualTimeSeries(0);
+        final ReflectionManualIndexTimeSeries manualTimeSeries = createManualTimeSeries(0);
 
         // when
         final int beginIndex = manualTimeSeries.getBeginIndex();
@@ -55,7 +55,7 @@ public class ManualIndexTimeSeriesTest {
     @Test
     public void givenNoBarsWhenResetIndexesShouldReturnBeginIndexAtNeg1AndEndIndexAtNeg1() {
         // given
-        final ManualIndexTimeSeries manualTimeSeries = createManualTimeSeries(0);
+        final ReflectionManualIndexTimeSeries manualTimeSeries = createManualTimeSeries(0);
 
         // when
         manualTimeSeries.resetIndexes();
@@ -77,7 +77,7 @@ public class ManualIndexTimeSeriesTest {
     @Test
     public void given3BarsShouldReturnBeginIndexAt0AndEndIndexAt2() {
         // given
-        final ManualIndexTimeSeries manualTimeSeries = createManualTimeSeries(3);
+        final ReflectionManualIndexTimeSeries manualTimeSeries = createManualTimeSeries(3);
 
         // when
         final int beginIndex = manualTimeSeries.getBeginIndex();
@@ -91,7 +91,7 @@ public class ManualIndexTimeSeriesTest {
     @Test
     public void given3BarsWhenResetIndexesShouldReturnBeginIndexAt0AndEndIndexAtNeg1() {
         // given
-        final ManualIndexTimeSeries manualTimeSeries = createManualTimeSeries(3);
+        final ReflectionManualIndexTimeSeries manualTimeSeries = createManualTimeSeries(3);
 
         // when
         manualTimeSeries.resetIndexes();
@@ -105,7 +105,7 @@ public class ManualIndexTimeSeriesTest {
     @Test
     public void given3BarsAndResetedIndexesWhenNextIndexShouldReturnBeginIndexAt0AndEndIndexAt0() {
         // given
-        final ManualIndexTimeSeries manualTimeSeries = createManualTimeSeries(3);
+        final ReflectionManualIndexTimeSeries manualTimeSeries = createManualTimeSeries(3);
         manualTimeSeries.resetIndexes();
 
         // when
@@ -129,7 +129,7 @@ public class ManualIndexTimeSeriesTest {
     public void given3BarsAndResetedIndexWhenAddingNewBarShouldReturnThrownAnException() {
         // given
         final int barsCount = 3;
-        final ManualIndexTimeSeries manualTimeSeries = createManualTimeSeries(barsCount);
+        final ReflectionManualIndexTimeSeries manualTimeSeries = createManualTimeSeries(barsCount);
         manualTimeSeries.resetIndexes();
         final BaseBar bar = createBar(ZonedDateTime.now().plusMinutes(barsCount + 1), manualTimeSeries, 0, Duration.ofMinutes(0));
 
@@ -138,7 +138,7 @@ public class ManualIndexTimeSeriesTest {
     }
 
 
-    private ManualIndexTimeSeries createManualTimeSeries(int barsCount) {
+    private ReflectionManualIndexTimeSeries createManualTimeSeries(int barsCount) {
         return factory.create(barsCount);
     }
 
@@ -147,56 +147,60 @@ public class ManualIndexTimeSeriesTest {
     }
 
     @FunctionalInterface
-    private interface ManualIndexTimeSeriesFactory {
+    private interface ManualIndexTimeSeriesFactory<T extends ManualIndexTimeSeries> {
 
-        Function<Integer, ManualIndexTimeSeries> function();
+        Function<Integer, T> function();
 
-        default ManualIndexTimeSeries create(int barsCount) {
+        default T create(int barsCount) {
             return function().apply(barsCount);
         }
 
-        ManualIndexTimeSeriesFactory BASE_TIME_SERIES = () -> barsCount -> {
-            final ZonedDateTime time = ZonedDateTime.now();
-            final BaseTimeSeries timeSeries = new BaseTimeSeries();
-            for (int i = 0; i < barsCount; i++) {
-                timeSeries.addBar(createBar(time, timeSeries, i, Duration.ofMinutes(i)));
-                timeSeries.addPrice(i);
-            }
-            return new ManualIndexTimeSeries(timeSeries);
-        };
+        ManualIndexTimeSeriesFactory<ReflectionManualIndexTimeSeries> BASE_TIME_SERIES = () ->
+                (Integer barsCount) -> {
+                    final ZonedDateTime time = ZonedDateTime.now();
+                    final TimeSeries timeSeries = new BaseTimeSeries();
+                    for (int i = 0; i < barsCount; i++) {
+                        timeSeries.addBar(createBar(time, timeSeries, i, Duration.ofMinutes(i)));
+                        timeSeries.addPrice(i);
+                    }
+                    return ReflectionManualIndexTimeSeries.wrap(timeSeries);
+                };
 
-        ManualIndexTimeSeriesFactory BASE_DESCRIBED_TIME_SERIES = () -> barsCount -> {
-            final ZonedDateTime time = ZonedDateTime.now();
-            final BaseTimeSeries timeSeries = new BaseDescribedTimeSeries("test", "test", BarPeriod.M1);
-            for (int i = 0; i < barsCount; i++) {
-                timeSeries.addBar(createBar(time, timeSeries, i, Duration.ofMinutes(i)));
-                timeSeries.addPrice(i);
-            }
-            return new ManualIndexTimeSeries(timeSeries);
-        };
+        ManualIndexTimeSeriesFactory<ReflectionManualIndexTimeSeries> BASE_DESCRIBED_TIME_SERIES = () ->
+                (Integer barsCount) -> {
+                    final ZonedDateTime time = ZonedDateTime.now();
+                    final DescribedTimeSeries timeSeries = new BaseDescribedTimeSeries("test", "test", BarPeriod.M1);
+                    for (int i = 0; i < barsCount; i++) {
+                        timeSeries.addBar(createBar(time, timeSeries, i, Duration.ofMinutes(i)));
+                        timeSeries.addPrice(i);
+                    }
+                    return ReflectionManualIndexTimeSeries.wrap(timeSeries);
+                };
 
-        ManualIndexTimeSeriesFactory BASE_MAIN_TIME_SERIES = () -> barsCount -> {
-            final ZonedDateTime time = ZonedDateTime.now();
-            final BaseTimeSeries timeSeries = new BaseMainTimeSeries("test", "test", BarPeriod.M1);
-            for (int i = 0; i < barsCount; i++) {
-                timeSeries.addBar(createBar(time, timeSeries, i, Duration.ofMinutes(i)));
-                timeSeries.addPrice(i);
-            }
-            return new ManualIndexTimeSeries(timeSeries);
-        };
+        ManualIndexTimeSeriesFactory<ReflectionManualIndexTimeSeries> BASE_MAIN_TIME_SERIES = () ->
+                (Integer barsCount) -> {
+                    final ZonedDateTime time = ZonedDateTime.now();
+                    final MainTimeSeries timeSeries = new BaseMainTimeSeries("test", "test", BarPeriod.M1);
+                    for (int i = 0; i < barsCount; i++) {
+                        timeSeries.addBar(createBar(time, timeSeries, i, Duration.ofMinutes(i)));
+                        timeSeries.addPrice(i);
+                    }
+                    return ReflectionManualIndexTimeSeries.wrap(timeSeries);
+                };
 
-        ManualIndexTimeSeriesFactory BASE_AGGREGATED_TIME_SERIES = () -> barsCount -> {
-            final ZonedDateTime time = ZonedDateTime.now();
-            final MainTimeSeries mainTimeSeries = BaseMainTimeSeries.create(new TimeSeriesDefinitionImpl(BarPeriod.M1), "symbol");
-            final BaseAggregatedTimeSeries aggregatedTimeSeries = new BaseAggregatedTimeSeries(mainTimeSeries, "test", "symbol", BarPeriod.M5);
-            for (int i = 0; i < barsCount; i++) {
-                if (i % 5 == 0) {
-                    aggregatedTimeSeries.addBar(createBar(time, aggregatedTimeSeries, 0, BarPeriod.M5.getPeriod()));
-                }
-                mainTimeSeries.addBar(createBar(time, mainTimeSeries, i, BarPeriod.M1.getPeriod()));
-                mainTimeSeries.addPrice(i);
-            }
-            return new ManualIndexTimeSeries(aggregatedTimeSeries);
-        };
+        ManualIndexTimeSeriesFactory<ReflectionManualIndexTimeSeries> BASE_AGGREGATED_TIME_SERIES = () ->
+                (Integer barsCount) -> {
+                    final ZonedDateTime time = ZonedDateTime.now();
+                    final MainTimeSeries mainTimeSeries = BaseMainTimeSeries.create(new TimeSeriesDefinitionImpl(BarPeriod.M1), "symbol");
+                    final AggregatedTimeSeries aggregatedTimeSeries = new BaseAggregatedTimeSeries(mainTimeSeries, "test", "symbol", BarPeriod.M5);
+                    for (int i = 0; i < barsCount; i++) {
+                        if (i % 5 == 0) {
+                            aggregatedTimeSeries.addBar(createBar(time, aggregatedTimeSeries, 0, BarPeriod.M5.getPeriod()));
+                        }
+                        mainTimeSeries.addBar(createBar(time, mainTimeSeries, i, BarPeriod.M1.getPeriod()));
+                        mainTimeSeries.addPrice(i);
+                    }
+                    return ReflectionManualIndexTimeSeries.wrap(aggregatedTimeSeries);
+                };
     }
 }
