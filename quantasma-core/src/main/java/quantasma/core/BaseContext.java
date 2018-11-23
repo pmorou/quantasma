@@ -33,15 +33,14 @@ public class BaseContext implements Context {
         private DataService dataService;
         private OrderService orderService;
         private StrategyControl strategyControl;
-        private MultipleTimeSeriesBuilder multipleTimeSeriesBuilder;
 
         public Builder() {
             orderService = new NullOrderService();
             strategyControl = new BaseStrategyControl();
-            multipleTimeSeriesBuilder = MultipleTimeSeriesBuilder
-                    .basedOn(new TimeSeriesDefinitionImpl(BarPeriod.M1, 100_000))
-                    .symbols("EURUSD");
-            dataService = new BaseDataService(new MarketData(multipleTimeSeriesBuilder.build()));
+            dataService = new BaseDataService(new MarketData(MultipleTimeSeriesBuilder
+                                                                     .basedOn(new TimeSeriesDefinitionImpl(BarPeriod.M1))
+                                                                     .symbols("EURUSD")
+                                                                     .build()));
         }
 
         public static Builder builder() {
@@ -63,13 +62,17 @@ public class BaseContext implements Context {
             return this;
         }
 
-        public Builder withTimeSeries(MultipleTimeSeriesBuilder timeSeriesDefinition) {
-            this.multipleTimeSeriesBuilder = timeSeriesDefinition;
+        public Builder withTimeSeries(MultipleTimeSeriesBuilder multipleTimeSeriesBuilder) {
+            this.dataService = new BaseDataService(new MarketData(multipleTimeSeriesBuilder.build()));
+            return this;
+        }
+
+        public Builder withMarketData(MarketData marketData) {
+            this.dataService = new BaseDataService(marketData);
             return this;
         }
 
         public Context build() {
-            this.dataService = new BaseDataService(new MarketData(multipleTimeSeriesBuilder.build()));
             return new BaseContext(dataService, orderService, strategyControl);
         }
     }
