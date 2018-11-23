@@ -7,11 +7,12 @@ import java.util.function.Function;
 import static org.ta4j.core.num.NaN.NaN;
 
 /**
- * WARNING! Might be removed in future releases.
+ * WARNING! Might be removed in future releases.<p><p>
  *
- * The class is equivalent to {@code DoubleNum} with additional method {@code mutate()} to change the inner value.
+ * The class is equivalent to {@code DoubleNum} with additional method {@code mutate()} to change the inner value.<p><p>
  *
- * Avoid using this implementation, prefer immutable ones. Use in special cases only.
+ * Avoid using this implementation, prefer immutable ones. Use in special cases only.<p>
+ * Use case: passing strategy-controlled order amount to {@code TimeSeriesManager} while keeping API untouched.
  */
 public class MutableNum implements Num {
 
@@ -31,9 +32,9 @@ public class MutableNum implements Num {
     }
 
     /**
-     * Mutate inner value.
+     * Mutate inner value.<p><p>
      *
-     * Be cautions, it will complicate the data flow.
+     * Beware, it will complicate the data flow.
      *
      * @param newValue
      */
