@@ -22,6 +22,7 @@ public class ManualIndexTimeSeriesTest {
     public static Iterable<Object[]> firstBarCreationTimes() {
         return Arrays.asList(new Object[][] {
                 {BaseTimeSeries.class, ManualIndexTimeSeriesFactory.BASE_TIME_SERIES, 2},
+                {BaseMainTimeSeries.class, ManualIndexTimeSeriesFactory.BASE_MAIN_TIME_SERIES, 2},
                 {BaseAggregatedTimeSeries.class, ManualIndexTimeSeriesFactory.AGGREGATED_TIME_SERIES, 0}
         });
     }
@@ -156,6 +157,16 @@ public class ManualIndexTimeSeriesTest {
         ManualIndexTimeSeriesFactory BASE_TIME_SERIES = () -> barsCount -> {
             final ZonedDateTime time = ZonedDateTime.now();
             final BaseTimeSeries timeSeries = new BaseTimeSeries();
+            for (int i = 0; i < barsCount; i++) {
+                timeSeries.addBar(createBar(time, timeSeries, i, Duration.ofMinutes(i)));
+                timeSeries.addPrice(i);
+            }
+            return new ManualIndexTimeSeries(timeSeries);
+        };
+
+        ManualIndexTimeSeriesFactory BASE_MAIN_TIME_SERIES = () -> barsCount -> {
+            final ZonedDateTime time = ZonedDateTime.now();
+            final BaseTimeSeries timeSeries = new BaseMainTimeSeries("test", "test", BarPeriod.M1);
             for (int i = 0; i < barsCount; i++) {
                 timeSeries.addBar(createBar(time, timeSeries, i, Duration.ofMinutes(i)));
                 timeSeries.addPrice(i);
