@@ -38,9 +38,10 @@ public class BaseContext implements Context {
         public Builder() {
             orderService = new NullOrderService();
             strategyControl = new BaseStrategyControl();
-            dataService = new BaseDataService(new MarketData());
-            multipleTimeSeriesBuilder = MultipleTimeSeriesBuilder.basedOn(new TimeSeriesDefinitionImpl(BarPeriod.M1, 100_000))
-                                                                 .symbols("EURUSD");
+            multipleTimeSeriesBuilder = MultipleTimeSeriesBuilder
+                    .basedOn(new TimeSeriesDefinitionImpl(BarPeriod.M1, 100_000))
+                    .symbols("EURUSD");
+            dataService = new BaseDataService(new MarketData(multipleTimeSeriesBuilder.build()));
         }
 
         public static Builder builder() {

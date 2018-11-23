@@ -17,12 +17,6 @@ public class MarketData {
         }
     }
 
-    public MarketData(MultipleTimeSeries... multipleTimeSeries) {
-        for (MultipleTimeSeries each : multipleTimeSeries) {
-            this.multipleTimeSeriesMap.put(each.getInstrument(), each);
-        }
-    }
-
     public MultipleTimeSeries of(String symbol) {
         final MultipleTimeSeries multipleTimeSeries = multipleTimeSeriesMap.get(symbol);
         if (isUnknownSymbol(multipleTimeSeries)) {
