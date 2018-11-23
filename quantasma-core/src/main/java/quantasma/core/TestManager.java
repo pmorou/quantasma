@@ -16,10 +16,10 @@ public class TestManager {
 
     private final org.ta4j.core.TimeSeriesManager timeSeriesManager;
     private final Set<ManualIndexTimeSeries> manualIndexTimeSeriesSet;
-    private final MutableNum orderAmountRef;
+    private final OrderAmountRef orderAmountRef;
     private final TimeSeries sourceTimeSeries;
 
-    public TestManager(TestMarketData testMarketData, String mainSymbol, MutableNum orderAmountRef) {
+    public TestManager(TestMarketData testMarketData, String mainSymbol, OrderAmountRef orderAmountRef) {
         this.sourceTimeSeries = testMarketData.of(mainSymbol).getReferenceTimeSeries().source();
         this.timeSeriesManager = new org.ta4j.core.TimeSeriesManager(sourceTimeSeries);
         this.manualIndexTimeSeriesSet = testMarketData.manualIndexTimeSeres();
@@ -27,12 +27,8 @@ public class TestManager {
     }
 
     public TradingRecord run(Strategy strategy, Order.OrderType orderType) {
-        resetOrderAmount();
+        orderAmountRef.resetValue();
         return timeSeriesManager.run(new IterateOverTimeSeries(strategy), orderType, orderAmountRef, sourceTimeSeries.getBeginIndex(), sourceTimeSeries.getEndIndex());
-    }
-
-    private void resetOrderAmount() {
-        orderAmountRef.mutate(0);
     }
 
     /**

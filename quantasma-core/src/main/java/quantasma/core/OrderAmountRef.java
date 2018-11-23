@@ -6,15 +6,7 @@ import java.util.function.Function;
 
 import static org.ta4j.core.num.NaN.NaN;
 
-/**
- * WARNING! Might be removed in future releases.<p><p>
- *
- * The class is equivalent to {@code DoubleNum} with additional method {@code mutate()} to change the inner value.<p><p>
- *
- * Avoid using this implementation, prefer immutable ones. Use in special cases only.<p>
- * Use case: passing strategy-controlled order amount to {@code TimeSeriesManager} while keeping API untouched.
- */
-public class MutableNum implements Num {
+public class OrderAmountRef implements Num {
 
     private static final long serialVersionUID = -2611177221813615071L;
 
@@ -24,22 +16,19 @@ public class MutableNum implements Num {
 
     @Override
     public Function<Number, Num> function() {
-        return MutableNum::valueOf;
+        return OrderAmountRef::valueOf;
     }
 
-    private MutableNum(double val) {
+    private OrderAmountRef(double val) {
         delegate = val;
     }
 
-    /**
-     * Mutate inner value.<p><p>
-     *
-     * Beware, it will complicate the data flow.
-     *
-     * @param newValue
-     */
-    public void mutate(double newValue) {
+    public void setValue(double newValue) {
         this.delegate = newValue;
+    }
+
+    public void resetValue() {
+        this.delegate = 0;
     }
 
     @Override
@@ -49,22 +38,22 @@ public class MutableNum implements Num {
 
     @Override
     public String getName() {
-        return "MutableNum";
+        return "OrderAmountRef";
     }
 
     @Override
     public Num plus(Num augend) {
-        return augend.isNaN() ? NaN : new MutableNum(delegate + ((MutableNum) augend).delegate);
+        return augend.isNaN() ? NaN : new OrderAmountRef(delegate + ((OrderAmountRef) augend).delegate);
     }
 
     @Override
     public Num minus(Num subtrahend) {
-        return subtrahend.isNaN() ? NaN : new MutableNum(delegate - ((MutableNum) subtrahend).delegate);
+        return subtrahend.isNaN() ? NaN : new OrderAmountRef(delegate - ((OrderAmountRef) subtrahend).delegate);
     }
 
     @Override
     public Num multipliedBy(Num multiplicand) {
-        return multiplicand.isNaN() ? NaN : new MutableNum(delegate * ((MutableNum) multiplicand).delegate);
+        return multiplicand.isNaN() ? NaN : new OrderAmountRef(delegate * ((OrderAmountRef) multiplicand).delegate);
     }
 
     @Override
@@ -72,23 +61,23 @@ public class MutableNum implements Num {
         if (divisor.isNaN() || divisor.isZero()) {
             return NaN;
         }
-        MutableNum divisorD = (MutableNum) divisor;
-        return new MutableNum(delegate / divisorD.delegate);
+        OrderAmountRef divisorD = (OrderAmountRef) divisor;
+        return new OrderAmountRef(delegate / divisorD.delegate);
     }
 
     @Override
     public Num remainder(Num divisor) {
-        return divisor.isNaN() ? NaN : new MutableNum(delegate % ((MutableNum) divisor).delegate);
+        return divisor.isNaN() ? NaN : new OrderAmountRef(delegate % ((OrderAmountRef) divisor).delegate);
     }
 
     @Override
     public Num pow(int n) {
-        return new MutableNum(Math.pow(delegate, n));
+        return new OrderAmountRef(Math.pow(delegate, n));
     }
 
     @Override
     public Num pow(Num n) {
-        return new MutableNum(Math.pow(delegate, n.doubleValue()));
+        return new OrderAmountRef(Math.pow(delegate, n.doubleValue()));
     }
 
     @Override
@@ -96,7 +85,7 @@ public class MutableNum implements Num {
         if (delegate < 0) {
             return NaN;
         }
-        return new MutableNum(Math.sqrt(delegate));
+        return new OrderAmountRef(Math.sqrt(delegate));
     }
 
     @Override
@@ -106,7 +95,7 @@ public class MutableNum implements Num {
 
     @Override
     public Num abs() {
-        return new MutableNum(Math.abs(delegate));
+        return new OrderAmountRef(Math.abs(delegate));
     }
 
     @Override
@@ -136,7 +125,7 @@ public class MutableNum implements Num {
 
     @Override
     public boolean isEqual(Num other) {
-        return !other.isNaN() && delegate == ((MutableNum) other).delegate;
+        return !other.isNaN() && delegate == ((OrderAmountRef) other).delegate;
     }
 
     public boolean isGreaterThan(Num other) {
@@ -158,12 +147,12 @@ public class MutableNum implements Num {
 
     @Override
     public Num min(Num other) {
-        return other.isNaN() ? NaN : new MutableNum(Math.min(delegate, ((MutableNum) other).delegate));
+        return other.isNaN() ? NaN : new OrderAmountRef(Math.min(delegate, ((OrderAmountRef) other).delegate));
     }
 
     @Override
     public Num max(Num other) {
-        return other.isNaN() ? NaN : new MutableNum(Math.max(delegate, ((MutableNum) other).delegate));
+        return other.isNaN() ? NaN : new OrderAmountRef(Math.max(delegate, ((OrderAmountRef) other).delegate));
     }
 
     @Override
@@ -184,7 +173,7 @@ public class MutableNum implements Num {
         if (obj == NaN) {
             return false;
         }
-        MutableNum VariableAmountObj = (MutableNum) obj;
+        OrderAmountRef VariableAmountObj = (OrderAmountRef) obj;
         return Math.abs(delegate - VariableAmountObj.delegate) < EPS;
     }
 
@@ -193,19 +182,15 @@ public class MutableNum implements Num {
         if (this == NaN || o == NaN) {
             return 0;
         }
-        MutableNum VariableAmountO = (MutableNum) o;
+        OrderAmountRef VariableAmountO = (OrderAmountRef) o;
         return Double.compare(delegate, VariableAmountO.delegate);
     }
 
-    public static MutableNum valueOf(int i) {
-        return new MutableNum((double) i);
+    public static OrderAmountRef instance() {
+        return new OrderAmountRef(0);
     }
 
-    public static MutableNum valueOf(float i) {
-        return new MutableNum((double) i);
-    }
-
-    public static MutableNum valueOf(Number i) {
-        return new MutableNum(Double.parseDouble(i.toString()));
+    private static OrderAmountRef valueOf(Number number) {
+        return new OrderAmountRef(Double.parseDouble(number.toString()));
     }
 }

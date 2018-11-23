@@ -7,7 +7,7 @@ import quantasma.core.BarPeriod;
 import quantasma.core.BaseContext;
 import quantasma.core.Context;
 import quantasma.core.TestOrderService;
-import quantasma.core.MutableNum;
+import quantasma.core.OrderAmountRef;
 import quantasma.core.TestMarketData;
 import quantasma.core.TestManager;
 import quantasma.core.timeseries.GroupTimeSeriesDefinition;
@@ -20,11 +20,10 @@ public class BacktestExample {
         final TestMarketData testMarketData = new TestMarketData(
                 MultipleTimeSeriesBuilder.basedOn(new TimeSeriesDefinitionImpl(BarPeriod.M1))
                                          .symbols("EURUSD")
-                                         .aggregate(GroupTimeSeriesDefinition.of("EURUSD")
-                                                                             .add(new TimeSeriesDefinitionImpl(BarPeriod.M5)))
+                                         .aggregate(GroupTimeSeriesDefinition.of("EURUSD").add(new TimeSeriesDefinitionImpl(BarPeriod.M5)))
                                          .build());
 
-        final MutableNum orderAmountRef = MutableNum.valueOf(0);
+        final OrderAmountRef orderAmountRef = OrderAmountRef.instance();
 
         final Context context = new BaseContext.Builder()
                 .withMarketData(testMarketData)
