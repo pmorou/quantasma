@@ -35,7 +35,7 @@ public class MultipleTimeSeriesBuilder {
     public Collection<? extends MultipleTimeSeries> build() {
         final Map<String, MultipleTimeSeries> baseTimeSeries = symbols.stream()
                                                                       .map(symbol -> BaseMultipleTimeSeries.create(symbol, baseTimeSeriesDefinition))
-                                                                      .collect(Collectors.toMap(BaseMultipleTimeSeries::getInstrument, Function.identity()));
+                                                                      .collect(Collectors.toMap(BaseMultipleTimeSeries::getSymbol, Function.identity()));
 
         for (GroupTimeSeriesDefinition aggrDefinition : aggregatedTimeSeriesDefinitions) {
             for (String symbol : aggrDefinition.getSymbols()) {

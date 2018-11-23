@@ -22,7 +22,7 @@ public class ManualIndexTimeSeriesTest {
     public static Iterable<Object[]> firstBarCreationTimes() {
         return Arrays.asList(new Object[][] {
                 {BaseTimeSeries.class, ManualIndexTimeSeriesFactory.BASE_TIME_SERIES, 2},
-                {AggregatedTimeSeries.class, ManualIndexTimeSeriesFactory.AGGREGATED_TIME_SERIES, 0}
+                {BaseAggregatedTimeSeries.class, ManualIndexTimeSeriesFactory.AGGREGATED_TIME_SERIES, 0}
         });
     }
 
@@ -165,14 +165,14 @@ public class ManualIndexTimeSeriesTest {
 
         ManualIndexTimeSeriesFactory AGGREGATED_TIME_SERIES = () -> barsCount -> {
             final ZonedDateTime time = ZonedDateTime.now();
-            final BaseTimeSeries sourceTimeSeries = new BaseTimeSeries();
-            final AggregatedTimeSeries aggregatedTimeSeries = new AggregatedTimeSeries(sourceTimeSeries, "test", BarPeriod.M5);
+            final MainTimeSeries mainTimeSeries = BaseMainTimeSeries.create(new TimeSeriesDefinitionImpl(BarPeriod.M1), "symbol");
+            final BaseAggregatedTimeSeries aggregatedTimeSeries = new BaseAggregatedTimeSeries(mainTimeSeries, "test", "symbol", BarPeriod.M5);
             for (int i = 0; i < barsCount; i++) {
                 if (i % 5 == 0) {
                     aggregatedTimeSeries.addBar(createBar(time, aggregatedTimeSeries, 0, BarPeriod.M5.getPeriod()));
                 }
-                sourceTimeSeries.addBar(createBar(time, sourceTimeSeries, i, BarPeriod.M1.getPeriod()));
-                sourceTimeSeries.addPrice(i);
+                mainTimeSeries.addBar(createBar(time, mainTimeSeries, i, BarPeriod.M1.getPeriod()));
+                mainTimeSeries.addPrice(i);
             }
             return new ManualIndexTimeSeries(aggregatedTimeSeries);
         };

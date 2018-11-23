@@ -13,7 +13,7 @@ public class MarketData {
 
     public MarketData(Collection<? extends MultipleTimeSeries> multipleTimeSeries) {
         for (MultipleTimeSeries each : multipleTimeSeries) {
-            this.multipleTimeSeriesMap.put(each.getInstrument(), each);
+            this.multipleTimeSeriesMap.put(each.getSymbol(), each);
         }
     }
 

@@ -18,11 +18,11 @@ public interface MultipleTimeSeries extends Serializable {
 
     int lastBarIndex();
 
-    String getInstrument();
+    String getSymbol();
 
     TimeSeries getTimeSeries(BarPeriod period);
 
     List<TimeSeries> getTimeSeries();
 
-    ReferenceTimeSeries getReferenceTimeSeries();
+    MainTimeSeries getMainTimeSeries();
 }

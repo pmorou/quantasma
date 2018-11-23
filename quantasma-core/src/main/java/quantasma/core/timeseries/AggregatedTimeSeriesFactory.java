@@ -1,23 +1,27 @@
 package quantasma.core.timeseries;
 
-import org.ta4j.core.TimeSeries;
-
 import java.util.function.Function;
 
-public class AggregatedTimeSeriesFactory implements TimeSeriesFactory {
+public class AggregatedTimeSeriesFactory implements TimeSeriesFactory<AggregatedTimeSeries> {
 
-    private final TimeSeries timeSeries;
+    private final MainTimeSeries mainTimeSeries;
+    private final String symbol;
 
-    private AggregatedTimeSeriesFactory(TimeSeries timeSeries) {
-        this.timeSeries = timeSeries;
+    private AggregatedTimeSeriesFactory(MainTimeSeries mainTimeSeries, String symbol) {
+        this.mainTimeSeries = mainTimeSeries;
+        this.symbol = symbol;
     }
 
-    public static AggregatedTimeSeriesFactory from(TimeSeries timeSeries) {
-        return new AggregatedTimeSeriesFactory(timeSeries);
+    public static AggregatedTimeSeriesFactory from(MainTimeSeries timeSeries, String symbol) {
+        return new AggregatedTimeSeriesFactory(timeSeries, symbol);
     }
 
     @Override
-    public Function<TimeSeriesDefinition, TimeSeries> function() {
-        return timeSeriesDefinition -> new AggregatedTimeSeries(timeSeries, timeSeriesDefinition.getBarPeriod().getPeriodCode(), timeSeriesDefinition.getBarPeriod());
+    public Function<TimeSeriesDefinition, AggregatedTimeSeries> function() {
+        return timeSeriesDefinition -> new BaseAggregatedTimeSeries(mainTimeSeries,
+                                                                    timeSeriesDefinition.getBarPeriod().getPeriodCode(),
+                                                                    symbol,
+                                                                    timeSeriesDefinition.getBarPeriod(),
+                                                                    timeSeriesDefinition.getPeriod());
     }
 }
