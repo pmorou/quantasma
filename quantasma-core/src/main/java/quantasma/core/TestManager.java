@@ -20,7 +20,7 @@ public class TestManager {
     private final TimeSeries sourceTimeSeries;
 
     public TestManager(TestMarketData testMarketData, String mainSymbol, OrderAmountRef orderAmountRef) {
-        this.sourceTimeSeries = testMarketData.of(mainSymbol).getMainTimeSeries().source();
+        this.sourceTimeSeries = testMarketData.of(mainSymbol).getMainTimeSeries().getTimeSeries();
         this.timeSeriesManager = new org.ta4j.core.TimeSeriesManager(sourceTimeSeries);
         this.manualIndexTimeSeriesSet = testMarketData.manualIndexTimeSeres();
         this.orderAmountRef = orderAmountRef;

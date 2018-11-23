@@ -37,7 +37,7 @@ public class BaseMultipleTimeSeries implements MultipleTimeSeries {
 
     private Map<BarPeriod, TypedTimeSeries<BidAskBar>> createPeriodTimeSeriesMap(BarPeriod barPeriod) {
         final Map<BarPeriod, TypedTimeSeries<BidAskBar>> timeSeriesMap = new TreeMap<>(Comparator.comparing(BarPeriod::getPeriod)); // first period should save value first
-        timeSeriesMap.put(barPeriod, TypedTimeSeries.create(BidAskBar.class, mainTimeSeries.source()));
+        timeSeriesMap.put(barPeriod, TypedTimeSeries.create(BidAskBar.class, mainTimeSeries.getTimeSeries()));
         return timeSeriesMap;
     }
 

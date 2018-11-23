@@ -4,7 +4,7 @@ import org.ta4j.core.TimeSeries;
 
 public interface MainTimeSeries extends TimeSeries {
 
-    TimeSeries source();
+    TimeSeries getTimeSeries();
 
     AggregatedTimeSeries aggregate(TimeSeriesDefinition timeSeriesDefinition);
 }

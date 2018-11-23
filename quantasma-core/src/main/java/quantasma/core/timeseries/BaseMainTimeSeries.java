@@ -21,7 +21,7 @@ public class BaseMainTimeSeries extends BaseDescribedTimeSeries implements MainT
     }
 
     @Override
-    public TimeSeries source() {
+    public TimeSeries getTimeSeries() {
         return this;
     }
 
