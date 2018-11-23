@@ -1,10 +1,12 @@
 package quantasma.core.timeseries;
 
+import lombok.Getter;
 import org.ta4j.core.Bar;
 import quantasma.core.BarPeriod;
 import quantasma.core.timeseries.bar.NaNBar;
 
 public class BaseAggregatedTimeSeries extends BaseDescribedTimeSeries implements AggregatedTimeSeries {
+    @Getter
     private final MainTimeSeries mainTimeSeries;
 
     protected BaseAggregatedTimeSeries(MainTimeSeries mainTimeSeries, String name, String symbol, BarPeriod barPeriod) {
@@ -47,11 +49,6 @@ public class BaseAggregatedTimeSeries extends BaseDescribedTimeSeries implements
         }
 
         return NaNBar.NaN;
-    }
-
-    @Override
-    public MainTimeSeries getMainTimeSeries() {
-        return mainTimeSeries;
     }
 
 }

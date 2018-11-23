@@ -1,5 +1,7 @@
 package quantasma.core;
 
+import lombok.Getter;
+
 import java.time.Duration;
 import java.util.Arrays;
 
@@ -12,6 +14,7 @@ public enum BarPeriod {
     H4("h4", Duration.ofHours(4)),
     D("d", Duration.ofDays(1));
 
+    @Getter
     private final String periodCode;
     private final Duration duration;
 
@@ -25,10 +28,6 @@ public enum BarPeriod {
                      .filter(barPeriod -> barPeriod.getPeriodCode().equals(periodCode))
                      .findFirst()
                      .orElseThrow(RuntimeException::new);
-    }
-
-    public String getPeriodCode() {
-        return periodCode;
     }
 
     public Duration getPeriod() {

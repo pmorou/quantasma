@@ -1,8 +1,10 @@
 package quantasma.core;
 
+import lombok.Getter;
 import quantasma.core.timeseries.MultipleTimeSeriesBuilder;
 import quantasma.core.timeseries.TimeSeriesDefinitionImpl;
 
+@Getter
 public class BaseContext implements Context {
     private final DataService dataService;
     private final OrderService orderService;
@@ -12,21 +14,6 @@ public class BaseContext implements Context {
         this.dataService = dataService;
         this.orderService = orderService;
         this.strategyControl = strategyControl;
-    }
-
-    @Override
-    public DataService getDataService() {
-        return dataService;
-    }
-
-    @Override
-    public OrderService getOrderService() {
-        return orderService;
-    }
-
-    @Override
-    public StrategyControl getStrategyControl() {
-        return strategyControl;
     }
 
     public static class Builder {

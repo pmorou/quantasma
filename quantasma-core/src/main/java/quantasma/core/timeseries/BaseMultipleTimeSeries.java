@@ -1,5 +1,6 @@
 package quantasma.core.timeseries;
 
+import lombok.Getter;
 import org.ta4j.core.Bar;
 import org.ta4j.core.TimeSeries;
 import org.ta4j.core.num.Num;
@@ -18,7 +19,9 @@ import java.util.stream.Collectors;
 public class BaseMultipleTimeSeries implements MultipleTimeSeries {
     private static final long serialVersionUID = -8768456438053526527L;
 
+    @Getter
     private final String symbol;
+    @Getter
     private final MainTimeSeries mainTimeSeries;
     private final Map<BarPeriod, TypedTimeSeries<BidAskBar>> periodTimeSeriesMap;
 
@@ -112,11 +115,6 @@ public class BaseMultipleTimeSeries implements MultipleTimeSeries {
     }
 
     @Override
-    public String getSymbol() {
-        return symbol;
-    }
-
-    @Override
     public TimeSeries getTimeSeries(BarPeriod period) {
         return periodTimeSeriesMap.get(period).getTimeSeries();
     }
@@ -128,8 +126,4 @@ public class BaseMultipleTimeSeries implements MultipleTimeSeries {
                                   .collect(Collectors.toList());
     }
 
-    @Override
-    public MainTimeSeries getMainTimeSeries() {
-        return mainTimeSeries;
-    }
 }
