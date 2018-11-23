@@ -14,4 +14,9 @@ public class TimeSeriesDefinitionImpl implements TimeSeriesDefinition {
         this.period = period;
     }
 
+    public TimeSeriesDefinitionImpl(BarPeriod barPeriod) {
+        this.barPeriod = barPeriod;
+        this.period = Integer.MAX_VALUE;
+    }
+
 }
