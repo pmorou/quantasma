@@ -9,7 +9,7 @@ import java.util.Map;
 
 public class MarketData {
 
-    private final Map<String, MultipleTimeSeries> multipleTimeSeriesMap = new HashMap<>();
+    protected final Map<String, MultipleTimeSeries> multipleTimeSeriesMap = new HashMap<>();
 
     public MarketData(Collection<? extends MultipleTimeSeries> multipleTimeSeries) {
         for (MultipleTimeSeries each : multipleTimeSeries) {

@@ -10,8 +10,10 @@ import quantasma.core.timeseries.bar.BidAskBar;
 
 import java.time.ZonedDateTime;
 import java.util.Comparator;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.stream.Collectors;
 
 public class BaseMultipleTimeSeries implements MultipleTimeSeries {
     private static final long serialVersionUID = -8768456438053526527L;
@@ -117,5 +119,17 @@ public class BaseMultipleTimeSeries implements MultipleTimeSeries {
     @Override
     public TimeSeries getTimeSeries(BarPeriod period) {
         return periodTimeSeriesMap.get(period).getTimeSeries();
+    }
+
+    @Override
+    public List<TimeSeries> getTimeSeries() {
+        return periodTimeSeriesMap.entrySet().stream()
+                                  .map(barPeriodTypedTimeSeriesEntry -> barPeriodTypedTimeSeriesEntry.getValue().getTimeSeries())
+                                  .collect(Collectors.toList());
+    }
+
+    @Override
+    public ReferenceTimeSeries getReferenceTimeSeries() {
+        return referenceTimeSeries;
     }
 }

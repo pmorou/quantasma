@@ -5,6 +5,7 @@ import quantasma.core.BarPeriod;
 
 import java.io.Serializable;
 import java.time.ZonedDateTime;
+import java.util.List;
 
 public interface MultipleTimeSeries extends Serializable {
     MultipleTimeSeries aggregate(TimeSeriesDefinition timeSeriesDefinition);
@@ -20,4 +21,8 @@ public interface MultipleTimeSeries extends Serializable {
     String getInstrument();
 
     TimeSeries getTimeSeries(BarPeriod period);
+
+    List<TimeSeries> getTimeSeries();
+
+    ReferenceTimeSeries getReferenceTimeSeries();
 }
