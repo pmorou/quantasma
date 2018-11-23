@@ -23,7 +23,7 @@ public class ManualIndexTimeSeriesTest {
         return Arrays.asList(new Object[][] {
                 {BaseTimeSeries.class, ManualIndexTimeSeriesFactory.BASE_TIME_SERIES, 2},
                 {BaseMainTimeSeries.class, ManualIndexTimeSeriesFactory.BASE_MAIN_TIME_SERIES, 2},
-                {BaseAggregatedTimeSeries.class, ManualIndexTimeSeriesFactory.AGGREGATED_TIME_SERIES, 0}
+                {BaseAggregatedTimeSeries.class, ManualIndexTimeSeriesFactory.BASE_AGGREGATED_TIME_SERIES, 0}
         });
     }
 
@@ -174,7 +174,7 @@ public class ManualIndexTimeSeriesTest {
             return new ManualIndexTimeSeries(timeSeries);
         };
 
-        ManualIndexTimeSeriesFactory AGGREGATED_TIME_SERIES = () -> barsCount -> {
+        ManualIndexTimeSeriesFactory BASE_AGGREGATED_TIME_SERIES = () -> barsCount -> {
             final ZonedDateTime time = ZonedDateTime.now();
             final MainTimeSeries mainTimeSeries = BaseMainTimeSeries.create(new TimeSeriesDefinitionImpl(BarPeriod.M1), "symbol");
             final BaseAggregatedTimeSeries aggregatedTimeSeries = new BaseAggregatedTimeSeries(mainTimeSeries, "test", "symbol", BarPeriod.M5);
