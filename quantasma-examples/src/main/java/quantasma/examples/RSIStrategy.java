@@ -30,7 +30,7 @@ public class RSIStrategy extends TradeStrategy {
 
     @Override
     public boolean shouldEnter(int index, TradingRecord tradingRecord) {
-        if (super.shouldEnter(index, tradingRecord) && canOpenPosition()) {
+        if (super.shouldEnter(index, tradingRecord) && shouldOpenPosition()) {
             openedPositionsCounter++;
             log.info("Opening position");
             getOrderService().openPosition(new OpenMarketOrder(1, "EURUSD"));
@@ -39,7 +39,7 @@ public class RSIStrategy extends TradeStrategy {
         return false;
     }
 
-    private boolean canOpenPosition() {
+    private boolean shouldOpenPosition() {
         return openedPositionsCounter < MAX_NUMBER_OF_POSITIONS;
     }
 
