@@ -15,7 +15,6 @@ import java.util.Set;
 
 @Slf4j
 public class TestManager {
-
     private final Set<ManualIndexTimeSeries> manualIndexTimeSeriesSet;
     private final TestMarketData testMarketData;
 
@@ -36,24 +35,24 @@ public class TestManager {
         return runTest(new IterateOverTimeSeries(tradeStrategy), orderType, startIndex, finishIndex);
     }
 
-    private TradingRecord runTest(TradeStrategy strategy, Order.OrderType orderType, int startIndex, int finishIndex) {
-        final MainTimeSeries mainTimeSeries = getMainTimeSeries(strategy);
-        int runBeginIndex = Math.max(startIndex, mainTimeSeries.getBeginIndex());
-        int runEndIndex = Math.min(finishIndex, mainTimeSeries.getEndIndex());
+    private TradingRecord runTest(TradeStrategy tradeStrategy, Order.OrderType orderType, int startIndex, int finishIndex) {
+        final MainTimeSeries mainTimeSeries = getMainTimeSeries(tradeStrategy);
+        final int runBeginIndex = Math.max(startIndex, mainTimeSeries.getBeginIndex());
+        final int runEndIndex = Math.min(finishIndex, mainTimeSeries.getEndIndex());
 
-        log.trace("Running strategy (indexes: {} -> {}): {} (starting with {})", runBeginIndex, runEndIndex, strategy, orderType);
-        TradingRecord tradingRecord = new BaseTradingRecord(orderType);
+        log.trace("Running trade strategy (indexes: {} -> {}): {} (starting with {})", runBeginIndex, runEndIndex, tradeStrategy, orderType);
+        final TradingRecord tradingRecord = new BaseTradingRecord(orderType);
         for (int i = runBeginIndex; i <= runEndIndex; i++) {
-            if (strategy.shouldOperate(i, tradingRecord)) {
-                tradingRecord.operate(i, mainTimeSeries.getBar(i).getClosePrice(), strategy.getAmount());
+            if (tradeStrategy.shouldOperate(i, tradingRecord)) {
+                tradingRecord.operate(i, mainTimeSeries.getBar(i).getClosePrice(), tradeStrategy.getAmount());
             }
         }
 
         if (!tradingRecord.isClosed()) {
-            int seriesMaxSize = Math.max(mainTimeSeries.getEndIndex() + 1, mainTimeSeries.getBarData().size());
+            final int seriesMaxSize = Math.max(mainTimeSeries.getEndIndex() + 1, mainTimeSeries.getBarData().size());
             for (int i = runEndIndex + 1; i < seriesMaxSize; i++) {
-                if (strategy.shouldOperate(i, tradingRecord)) {
-                    tradingRecord.operate(i, mainTimeSeries.getBar(i).getClosePrice(), strategy.getAmount());
+                if (tradeStrategy.shouldOperate(i, tradingRecord)) {
+                    tradingRecord.operate(i, mainTimeSeries.getBar(i).getClosePrice(), tradeStrategy.getAmount());
                     break;
                 }
             }
