@@ -5,6 +5,8 @@ import org.ta4j.core.Rule;
 import org.ta4j.core.Strategy;
 import org.ta4j.core.num.Num;
 
+import java.util.Objects;
+
 public class BaseTradeStrategy extends BaseStrategy implements TradeStrategy {
     private final Context context;
 
@@ -12,7 +14,7 @@ public class BaseTradeStrategy extends BaseStrategy implements TradeStrategy {
     private String tradeSymbol;
 
     public BaseTradeStrategy(Context context, String name, String tradeSymbol, Rule entryRule, Rule exitRule) {
-        this(context, name, tradeSymbol, entryRule, exitRule, 0);
+        this(Objects.requireNonNull(context), name, tradeSymbol, entryRule, exitRule, 0);
     }
 
     public BaseTradeStrategy(Context context, String name, String tradeSymbol, Rule entryRule, Rule exitRule, int unstablePeriod) {
