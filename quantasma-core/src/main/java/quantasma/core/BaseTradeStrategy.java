@@ -24,17 +24,31 @@ public class BaseTradeStrategy extends BaseStrategy implements TradeStrategy {
     }
 
     @Override
-    public Strategy opposite() {
+    public TradeStrategy opposite() {
         return new BaseTradeStrategy(context, "opposite(" + getName() + ")", getTradeSymbol(), getExitRule(), getEntryRule(), getUnstablePeriod());
     }
 
     @Override
-    public Strategy and(String name, Strategy strategy, int unstablePeriod) {
+    public TradeStrategy and(Strategy strategy) {
+        String andName = "and(" + getName() + "," + strategy.getName() + ")";
+        int unstable = Math.max(getUnstablePeriod(), strategy.getUnstablePeriod());
+        return and(andName, strategy, unstable);
+    }
+
+    @Override
+    public TradeStrategy and(String name, Strategy strategy, int unstablePeriod) {
         return new BaseTradeStrategy(context, name, getTradeSymbol(), getEntryRule().and(strategy.getEntryRule()), getExitRule().and(strategy.getExitRule()), unstablePeriod);
     }
 
     @Override
-    public Strategy or(String name, Strategy strategy, int unstablePeriod) {
+    public TradeStrategy or(Strategy strategy) {
+        String orName = "or(" + getName() + "," + strategy.getName() + ")";
+        int unstable = Math.max(getUnstablePeriod(), strategy.getUnstablePeriod());
+        return or(orName, strategy, unstable);
+    }
+
+    @Override
+    public TradeStrategy or(String name, Strategy strategy, int unstablePeriod) {
         return new BaseTradeStrategy(context, name, getTradeSymbol(), getEntryRule().or(strategy.getEntryRule()), getExitRule().or(strategy.getExitRule()), unstablePeriod);
     }
 
