@@ -18,20 +18,24 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(Parameterized.class)
 public class ReflectionManualIndexTimeSeriesTest {
 
-    @Parameterized.Parameters(name = "{index}: Using implementation {0}")
+    @Parameterized.Parameters(name = "{index} - bar period: {1}, implementation: {0}")
     public static Iterable<Object[]> firstBarCreationTimes() {
         return Arrays.asList(new Object[][] {
-                {BaseTimeSeries.class, ManualIndexTimeSeriesFactory.BASE_TIME_SERIES, 2},
-                {BaseDescribedTimeSeries.class, ManualIndexTimeSeriesFactory.BASE_DESCRIBED_TIME_SERIES, 2},
-                {BaseMainTimeSeries.class, ManualIndexTimeSeriesFactory.BASE_MAIN_TIME_SERIES, 2},
-                {BaseAggregatedTimeSeries.class, ManualIndexTimeSeriesFactory.BASE_AGGREGATED_TIME_SERIES, 0}
+                {BaseTimeSeries.class.getName(), BarPeriod.M1, ManualIndexTimeSeriesFactory.BASE_TIME_SERIES, 2},
+                {BaseDescribedTimeSeries.class.getName(), BarPeriod.M1, ManualIndexTimeSeriesFactory.BASE_DESCRIBED_TIME_SERIES_M1, 2},
+                {BaseDescribedTimeSeries.class.getName(), BarPeriod.M5, ManualIndexTimeSeriesFactory.BASE_DESCRIBED_TIME_SERIES_M5, 0},
+                {BaseMainTimeSeries.class.getName(), BarPeriod.M1, ManualIndexTimeSeriesFactory.BASE_MAIN_TIME_SERIES_M1, 2},
+                {BaseMainTimeSeries.class.getName(), BarPeriod.M5, ManualIndexTimeSeriesFactory.BASE_MAIN_TIME_SERIES_M5, 0},
+                {BaseAggregatedTimeSeries.class.getName(), BarPeriod.M1, ManualIndexTimeSeriesFactory.BASE_AGGREGATED_TIME_SERIES_M1, 2},
+                {BaseAggregatedTimeSeries.class.getName(), BarPeriod.M5, ManualIndexTimeSeriesFactory.BASE_AGGREGATED_TIME_SERIES_M5, 0}
         });
     }
 
     private final ManualIndexTimeSeriesFactory<ReflectionManualIndexTimeSeries> factory;
     private final int expectedBarsCountAfter3Mins;
 
-    public ReflectionManualIndexTimeSeriesTest(Class<?> forMessageOnly,
+    public ReflectionManualIndexTimeSeriesTest(String classNameMessageOnly,
+                                               BarPeriod barPeriodMessageOnly,
                                                ManualIndexTimeSeriesFactory<ReflectionManualIndexTimeSeries> factory,
                                                int expectedBarsCountAfter3Mins) {
         this.factory = factory;
@@ -166,7 +170,7 @@ public class ReflectionManualIndexTimeSeriesTest {
                     return ReflectionManualIndexTimeSeries.wrap(timeSeries);
                 };
 
-        ManualIndexTimeSeriesFactory<ReflectionManualIndexTimeSeries> BASE_DESCRIBED_TIME_SERIES = () ->
+        ManualIndexTimeSeriesFactory<ReflectionManualIndexTimeSeries> BASE_DESCRIBED_TIME_SERIES_M1 = () ->
                 (Integer barsCount) -> {
                     final ZonedDateTime time = ZonedDateTime.now();
                     final DescribedTimeSeries timeSeries = new BaseDescribedTimeSeries("test", "test", BarPeriod.M1);
@@ -177,7 +181,20 @@ public class ReflectionManualIndexTimeSeriesTest {
                     return ReflectionManualIndexTimeSeries.wrap(timeSeries);
                 };
 
-        ManualIndexTimeSeriesFactory<ReflectionManualIndexTimeSeries> BASE_MAIN_TIME_SERIES = () ->
+        ManualIndexTimeSeriesFactory<ReflectionManualIndexTimeSeries> BASE_DESCRIBED_TIME_SERIES_M5 = () ->
+                (Integer barsCount) -> {
+                    final ZonedDateTime time = ZonedDateTime.now();
+                    final DescribedTimeSeries timeSeries = new BaseDescribedTimeSeries("test", "test", BarPeriod.M5);
+                    for (int i = 0; i < barsCount; i++) {
+                        if (i % 5 == 0) {
+                            timeSeries.addBar(createBar(time, timeSeries, i, Duration.ofMinutes(i)));
+                        }
+                        timeSeries.addPrice(i);
+                    }
+                    return ReflectionManualIndexTimeSeries.wrap(timeSeries);
+                };
+
+        ManualIndexTimeSeriesFactory<ReflectionManualIndexTimeSeries> BASE_MAIN_TIME_SERIES_M1 = () ->
                 (Integer barsCount) -> {
                     final ZonedDateTime time = ZonedDateTime.now();
                     final MainTimeSeries timeSeries = new BaseMainTimeSeries("test", "test", BarPeriod.M1);
@@ -188,14 +205,40 @@ public class ReflectionManualIndexTimeSeriesTest {
                     return ReflectionManualIndexTimeSeries.wrap(timeSeries);
                 };
 
-        ManualIndexTimeSeriesFactory<ReflectionManualIndexTimeSeries> BASE_AGGREGATED_TIME_SERIES = () ->
+        ManualIndexTimeSeriesFactory<ReflectionManualIndexTimeSeries> BASE_MAIN_TIME_SERIES_M5 = () ->
+                (Integer barsCount) -> {
+                    final ZonedDateTime time = ZonedDateTime.now();
+                    final MainTimeSeries timeSeries = new BaseMainTimeSeries("test", "test", BarPeriod.M5);
+                    for (int i = 0; i < barsCount; i++) {
+                        if (i % 5 == 0) {
+                            timeSeries.addBar(createBar(time, timeSeries, i, Duration.ofMinutes(i)));
+                        }
+                        timeSeries.addPrice(i);
+                    }
+                    return ReflectionManualIndexTimeSeries.wrap(timeSeries);
+                };
+
+        ManualIndexTimeSeriesFactory<ReflectionManualIndexTimeSeries> BASE_AGGREGATED_TIME_SERIES_M1 = () ->
                 (Integer barsCount) -> {
                     final ZonedDateTime time = ZonedDateTime.now();
                     final MainTimeSeries mainTimeSeries = BaseMainTimeSeries.create(new TimeSeriesDefinitionImpl(BarPeriod.M1), "symbol");
-                    final AggregatedTimeSeries aggregatedTimeSeries = new BaseAggregatedTimeSeries(mainTimeSeries, "test", "symbol", BarPeriod.M5);
+                    final AggregatedTimeSeries aggregatedTimeSeries = new BaseAggregatedTimeSeries(mainTimeSeries, "test", "symbol", BarPeriod.M1);
+                    for (int i = 0; i < barsCount; i++) {
+                        aggregatedTimeSeries.addBar(createBar(time, aggregatedTimeSeries, i, BarPeriod.M1.getPeriod()));
+                        mainTimeSeries.addBar(createBar(time, mainTimeSeries, i, BarPeriod.M1.getPeriod()));
+                        mainTimeSeries.addPrice(i);
+                    }
+                    return ReflectionManualIndexTimeSeries.wrap(aggregatedTimeSeries);
+                };
+
+        ManualIndexTimeSeriesFactory<ReflectionManualIndexTimeSeries> BASE_AGGREGATED_TIME_SERIES_M5 = () ->
+                (Integer barsCount) -> {
+                    final ZonedDateTime time = ZonedDateTime.now();
+                    final MainTimeSeries mainTimeSeries = BaseMainTimeSeries.create(new TimeSeriesDefinitionImpl(BarPeriod.M1), "symbol");
+                    final AggregatedTimeSeries aggregatedTimeSeries = new BaseAggregatedTimeSeries(mainTimeSeries, "test", "symbol", BarPeriod.M1);
                     for (int i = 0; i < barsCount; i++) {
                         if (i % 5 == 0) {
-                            aggregatedTimeSeries.addBar(createBar(time, aggregatedTimeSeries, 0, BarPeriod.M5.getPeriod()));
+                            aggregatedTimeSeries.addBar(createBar(time, aggregatedTimeSeries, i, BarPeriod.M5.getPeriod()));
                         }
                         mainTimeSeries.addBar(createBar(time, mainTimeSeries, i, BarPeriod.M1.getPeriod()));
                         mainTimeSeries.addPrice(i);
