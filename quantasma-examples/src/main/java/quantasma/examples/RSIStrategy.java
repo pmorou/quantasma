@@ -10,6 +10,7 @@ import org.ta4j.core.indicators.helpers.ClosePriceIndicator;
 import org.ta4j.core.trading.rules.CrossedDownIndicatorRule;
 import org.ta4j.core.trading.rules.CrossedUpIndicatorRule;
 import quantasma.core.BarPeriod;
+import quantasma.core.BaseTradeStrategy;
 import quantasma.core.Context;
 import quantasma.core.TradeStrategy;
 import quantasma.core.order.CloseMarkerOrder;
@@ -18,7 +19,7 @@ import quantasma.core.order.OpenMarketOrder;
 import java.util.Objects;
 
 @Slf4j
-public class RSIStrategy extends TradeStrategy {
+public class RSIStrategy extends BaseTradeStrategy {
 
     private static final int MAX_NUMBER_OF_POSITIONS = 1;
 
@@ -58,7 +59,7 @@ public class RSIStrategy extends TradeStrategy {
         return openedPositionsCounter > 0;
     }
 
-    public static Strategy buildBullish(Context context) {
+    public static TradeStrategy buildBullish(Context context) {
         final RSIIndicator rsi = createRSIIndicator(context);
         return new RSIStrategy(context,
                                "RSI Strategy",

@@ -1,7 +1,6 @@
 package quantasma.examples;
 
 import org.ta4j.core.Order;
-import org.ta4j.core.Strategy;
 import org.ta4j.core.TradingRecord;
 import quantasma.core.BarPeriod;
 import quantasma.core.BaseContext;
@@ -10,6 +9,7 @@ import quantasma.core.OrderAmountRef;
 import quantasma.core.TestManager;
 import quantasma.core.TestMarketData;
 import quantasma.core.TestOrderService;
+import quantasma.core.TradeStrategy;
 import quantasma.core.timeseries.MultipleTimeSeriesBuilder;
 import quantasma.core.timeseries.ReflectionManualIndexTimeSeries;
 import quantasma.core.timeseries.TimeSeriesDefinition;
@@ -32,11 +32,11 @@ public class BacktestExample {
                 .withOrderService(new TestOrderService(orderAmountRef))
                 .build();
 
-        final Strategy rsiStrategy = RSIStrategy.buildBullish(context);
+        final TradeStrategy rsiStrategy = RSIStrategy.buildBullish(context);
 
         // Feed historical data by calling testMarketData.add()
 
-        final TestManager manager = new TestManager(testMarketData, "EURUSD", orderAmountRef);
+        final TestManager manager = new TestManager(testMarketData, "EURUSD");
         final TradingRecord result = manager.run(rsiStrategy, Order.OrderType.BUY);
         // Proper criterion can be used now on the result
         // end::BacktestExample[]

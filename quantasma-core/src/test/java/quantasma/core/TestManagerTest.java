@@ -6,7 +6,6 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 import org.ta4j.core.Bar;
 import org.ta4j.core.Order;
-import org.ta4j.core.Strategy;
 import org.ta4j.core.TradingRecord;
 import org.ta4j.core.num.DoubleNum;
 import org.ta4j.core.num.Num;
@@ -34,16 +33,13 @@ import static org.mockito.Mockito.when;
 public class TestManagerTest {
 
     @Mock
-    private Strategy strategy;
+    private TradeStrategy tradeStrategy;
 
     @Mock
     private TestMarketData testMarketData;
 
     @Mock
     private MultipleTimeSeries multipleTimeSeries;
-
-    @Mock
-    private OrderAmountRef orderAmountRef;
 
     @Mock
     private MainTimeSeries mainTimeSeries;
@@ -62,16 +58,16 @@ public class TestManagerTest {
         when(testMarketData.manualIndexTimeSeres()).thenReturn(Collections.singleton(manualIndexTimeSeries));
         when(mainTimeSeries.getBeginIndex()).thenReturn(0);
         when(mainTimeSeries.getEndIndex()).thenReturn(2);
-        when(strategy.shouldOperate(intThat(anyOf(asList(is(0), is(1), is(2)))), anyObject())).thenReturn(true);
+        when(tradeStrategy.shouldOperate(intThat(anyOf(asList(is(0), is(1), is(2)))), anyObject())).thenReturn(true);
         when(mainTimeSeries.getBar(intThat(anyOf(asList(is(0), is(1), is(2)))))).thenReturn(bar);
         when(bar.getClosePrice()).thenReturn(DoubleNum.valueOf(0), DoubleNum.valueOf(1), DoubleNum.valueOf(2));
-        final TestManager testManager = new TestManager(testMarketData, "symbol", orderAmountRef);
+        final TestManager testManager = new TestManager(testMarketData, "symbol");
 
         // when
-        final TradingRecord result = testManager.run(strategy, Order.OrderType.BUY);
+        final TradingRecord result = testManager.run(tradeStrategy, Order.OrderType.BUY);
 
         // then
-        verify(strategy, times(3)).shouldOperate(anyInt(), anyObject());
+        verify(tradeStrategy, times(3)).shouldOperate(anyInt(), anyObject());
         assertThat(result.getTrades()).hasSize(1); // 1 finished trade
         assertThat(result.getCurrentTrade().isOpened()).isTrue(); // 1 unfinished trade
         assertThat(uniqueAmountRefs(result)).hasSize(2); // 2 unique values collected from above trades
