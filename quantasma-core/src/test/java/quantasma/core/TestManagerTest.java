@@ -53,6 +53,7 @@ public class TestManagerTest {
     @Test
     public void given3BarsShouldCheckStrategy3TimesAndHaveBothFinishAndUnfinishedTradesWithDifferentAmountObjects() {
         // given
+        when(tradeStrategy.getTradeSymbol()).thenReturn("symbol");
         when(testMarketData.of("symbol")).thenReturn(multipleTimeSeries);
         when(multipleTimeSeries.getMainTimeSeries()).thenReturn(mainTimeSeries);
         when(testMarketData.manualIndexTimeSeres()).thenReturn(Collections.singleton(manualIndexTimeSeries));
@@ -61,7 +62,7 @@ public class TestManagerTest {
         when(tradeStrategy.shouldOperate(intThat(anyOf(asList(is(0), is(1), is(2)))), anyObject())).thenReturn(true);
         when(mainTimeSeries.getBar(intThat(anyOf(asList(is(0), is(1), is(2)))))).thenReturn(bar);
         when(bar.getClosePrice()).thenReturn(DoubleNum.valueOf(0), DoubleNum.valueOf(1), DoubleNum.valueOf(2));
-        final TestManager testManager = new TestManager(testMarketData, "symbol");
+        final TestManager testManager = new TestManager(testMarketData);
 
         // when
         final TradingRecord result = testManager.run(tradeStrategy, Order.OrderType.BUY);

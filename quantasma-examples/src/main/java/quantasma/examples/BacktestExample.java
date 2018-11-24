@@ -31,7 +31,7 @@ public class BacktestExample {
 
         // Feed historical data by calling testMarketData.add()
 
-        final TestManager manager = new TestManager(testMarketData, "EURUSD");
+        final TestManager manager = new TestManager(testMarketData);
         final TradingRecord result = manager.run(rsiStrategy, Order.OrderType.BUY);
         // Proper criterion can be used now on the result
         // end::BacktestExample[]
