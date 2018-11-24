@@ -20,7 +20,8 @@ public class BacktestExample {
         final TestMarketData testMarketData = new TestMarketData(
                 MultipleTimeSeriesBuilder.basedOn(TimeSeriesDefinition.unlimited(BarPeriod.M1))
                                          .symbols("EURUSD")
-                                         .aggregate(TimeSeriesDefinition.Group.of("EURUSD").add(TimeSeriesDefinition.unlimited(BarPeriod.M5)))
+                                         .aggregate(TimeSeriesDefinition.Group.of("EURUSD")
+                                                                              .add(TimeSeriesDefinition.unlimited(BarPeriod.M5)))
                                          .wrap(ReflectionManualIndexTimeSeries::wrap)
                                          .build());
 
