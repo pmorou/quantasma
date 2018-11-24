@@ -4,10 +4,8 @@ import quantasma.core.order.CloseMarkerOrder;
 import quantasma.core.order.OpenMarketOrder;
 
 public class TestOrderService implements OrderService {
-    private final OrderAmountRef orderAmountRef;
 
-    public TestOrderService(OrderAmountRef orderAmountRef) {
-        this.orderAmountRef = orderAmountRef;
+    public TestOrderService() {
     }
 
     @Override

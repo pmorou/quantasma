@@ -5,7 +5,6 @@ import org.ta4j.core.TradingRecord;
 import quantasma.core.BarPeriod;
 import quantasma.core.BaseContext;
 import quantasma.core.Context;
-import quantasma.core.OrderAmountRef;
 import quantasma.core.TestManager;
 import quantasma.core.TestMarketData;
 import quantasma.core.TestOrderService;
@@ -25,11 +24,9 @@ public class BacktestExample {
                                          .wrap(ReflectionManualIndexTimeSeries::wrap)
                                          .build());
 
-        final OrderAmountRef orderAmountRef = OrderAmountRef.instance();
-
         final Context context = new BaseContext.Builder()
                 .withMarketData(testMarketData)
-                .withOrderService(new TestOrderService(orderAmountRef))
+                .withOrderService(new TestOrderService())
                 .build();
 
         final TradeStrategy rsiStrategy = RSIStrategy.buildBullish(context);
