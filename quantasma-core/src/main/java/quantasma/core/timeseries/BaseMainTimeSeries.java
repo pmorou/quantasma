@@ -1,6 +1,5 @@
 package quantasma.core.timeseries;
 
-import org.ta4j.core.TimeSeries;
 import quantasma.core.BarPeriod;
 
 public class BaseMainTimeSeries extends BaseDescribedTimeSeries implements MainTimeSeries {
@@ -18,11 +17,6 @@ public class BaseMainTimeSeries extends BaseDescribedTimeSeries implements MainT
                                       symbol,
                                       timeSeriesDefinition.getBarPeriod(),
                                       timeSeriesDefinition.getPeriod());
-    }
-
-    @Override
-    public TimeSeries getTimeSeries() {
-        return this;
     }
 
     @Override

@@ -5,6 +5,7 @@ import org.ta4j.core.Rule;
 import org.ta4j.core.Strategy;
 import org.ta4j.core.TimeSeries;
 import org.ta4j.core.TradingRecord;
+import quantasma.core.timeseries.MainTimeSeries;
 import quantasma.core.timeseries.ManualIndexTimeSeries;
 
 import java.util.Set;
@@ -17,10 +18,10 @@ public class TestManager {
     private final org.ta4j.core.TimeSeriesManager timeSeriesManager;
     private final Set<ManualIndexTimeSeries> manualIndexTimeSeriesSet;
     private final OrderAmountRef orderAmountRef;
-    private final TimeSeries sourceTimeSeries;
+    private final MainTimeSeries sourceTimeSeries;
 
     public TestManager(TestMarketData testMarketData, String mainSymbol, OrderAmountRef orderAmountRef) {
-        this.sourceTimeSeries = testMarketData.of(mainSymbol).getMainTimeSeries().getTimeSeries();
+        this.sourceTimeSeries = testMarketData.of(mainSymbol).getMainTimeSeries();
         this.timeSeriesManager = new org.ta4j.core.TimeSeriesManager(sourceTimeSeries);
         this.manualIndexTimeSeriesSet = testMarketData.manualIndexTimeSeres();
         this.orderAmountRef = orderAmountRef;
