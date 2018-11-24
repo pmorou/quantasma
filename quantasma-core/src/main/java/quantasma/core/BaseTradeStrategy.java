@@ -9,29 +9,31 @@ public class BaseTradeStrategy extends BaseStrategy implements TradeStrategy {
     private final Context context;
 
     private Num amount;
+    private String tradeSymbol;
 
-    public BaseTradeStrategy(Context context, String name, Rule entryRule, Rule exitRule) {
-        this(context, name, entryRule, exitRule, 0);
+    public BaseTradeStrategy(Context context, String name, String tradeSymbol, Rule entryRule, Rule exitRule) {
+        this(context, name, tradeSymbol, entryRule, exitRule, 0);
     }
 
-    public BaseTradeStrategy(Context context, String name, Rule entryRule, Rule exitRule, int unstablePeriod) {
+    public BaseTradeStrategy(Context context, String name, String tradeSymbol, Rule entryRule, Rule exitRule, int unstablePeriod) {
         super(name, entryRule, exitRule, unstablePeriod);
         this.context = context;
+        this.tradeSymbol = tradeSymbol;
     }
 
     @Override
     public Strategy opposite() {
-        return new BaseTradeStrategy(context, "opposite(" + getName() + ")", getExitRule(), getEntryRule(), getUnstablePeriod());
+        return new BaseTradeStrategy(context, "opposite(" + getName() + ")", getTradeSymbol(), getExitRule(), getEntryRule(), getUnstablePeriod());
     }
 
     @Override
     public Strategy and(String name, Strategy strategy, int unstablePeriod) {
-        return new BaseTradeStrategy(context, name, getEntryRule().and(strategy.getEntryRule()), getExitRule().and(strategy.getExitRule()), unstablePeriod);
+        return new BaseTradeStrategy(context, name, getTradeSymbol(), getEntryRule().and(strategy.getEntryRule()), getExitRule().and(strategy.getExitRule()), unstablePeriod);
     }
 
     @Override
     public Strategy or(String name, Strategy strategy, int unstablePeriod) {
-        return new BaseTradeStrategy(context, name, getEntryRule().or(strategy.getEntryRule()), getExitRule().or(strategy.getExitRule()), unstablePeriod);
+        return new BaseTradeStrategy(context, name, getTradeSymbol(), getEntryRule().or(strategy.getEntryRule()), getExitRule().or(strategy.getExitRule()), unstablePeriod);
     }
 
     @Override
@@ -56,6 +58,11 @@ public class BaseTradeStrategy extends BaseStrategy implements TradeStrategy {
     @Override
     public Num getAmount() {
         return amount;
+    }
+
+    @Override
+    public String getTradeSymbol() {
+        throw new UnsupportedOperationException();
     }
 
     protected void setAmount(Num amount) {

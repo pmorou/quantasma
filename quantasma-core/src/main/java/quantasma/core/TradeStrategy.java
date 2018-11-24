@@ -5,4 +5,6 @@ import org.ta4j.core.num.Num;
 
 public interface TradeStrategy extends Strategy {
     Num getAmount();
+
+    String getTradeSymbol();
 }

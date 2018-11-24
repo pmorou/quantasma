@@ -25,8 +25,8 @@ public class RSIStrategy extends BaseTradeStrategy {
 
     private int openedPositionsCounter = 0;
 
-    public RSIStrategy(Context context, String name, Rule entryRule, Rule exitRule, int unstablePeriod) {
-        super(Objects.requireNonNull(context), name, entryRule, exitRule, unstablePeriod);
+    public RSIStrategy(Context context, String name, String tradeSymbol, Rule entryRule, Rule exitRule, int unstablePeriod) {
+        super(Objects.requireNonNull(context), name, tradeSymbol, entryRule, exitRule, unstablePeriod);
     }
 
     @Override
@@ -34,7 +34,7 @@ public class RSIStrategy extends BaseTradeStrategy {
         if (super.shouldEnter(index, tradingRecord) && shouldOpenPosition()) {
             openedPositionsCounter++;
             log.info("Opening position");
-            getOrderService().openPosition(new OpenMarketOrder(1, "EURUSD"));
+            getOrderService().openPosition(new OpenMarketOrder(1, getTradeSymbol()));
             return true;
         }
         return false;
@@ -60,25 +60,29 @@ public class RSIStrategy extends BaseTradeStrategy {
     }
 
     public static TradeStrategy buildBullish(Context context) {
-        final RSIIndicator rsi = createRSIIndicator(context);
+        final String tradeSymbol = "EURUSD";
+        final RSIIndicator rsi = createRSIIndicator(context, tradeSymbol);
         return new RSIStrategy(context,
                                "RSI Strategy",
+                               tradeSymbol,
                                new CrossedUpIndicatorRule(rsi, 30),
                                new CrossedDownIndicatorRule(rsi, 70),
                                14);
     }
 
     public static Strategy buildBearish(Context context) {
-        final RSIIndicator rsi = createRSIIndicator(context);
+        final String tradeSymbol = "EURUSD";
+        final RSIIndicator rsi = createRSIIndicator(context, tradeSymbol);
         return new RSIStrategy(context,
                                "RSI Strategy",
+                               tradeSymbol,
                                new CrossedDownIndicatorRule(rsi, 70),
                                new CrossedUpIndicatorRule(rsi, 30),
                                14);
     }
 
-    private static RSIIndicator createRSIIndicator(Context context) {
-        final TimeSeries timeSeries = context.getDataService().getMarketData().of("EURUSD").getTimeSeries(BarPeriod.M1);
+    private static RSIIndicator createRSIIndicator(Context context, String tradeSymbol) {
+        final TimeSeries timeSeries = context.getDataService().getMarketData().of(tradeSymbol).getTimeSeries(BarPeriod.M1);
         final ClosePriceIndicator closePrice = new ClosePriceIndicator(timeSeries);
         return new RSIIndicator(closePrice, 14);
     }

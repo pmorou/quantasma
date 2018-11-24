@@ -102,6 +102,11 @@ public class TestManager {
         }
 
         @Override
+        public String getTradeSymbol() {
+            return strategy.getTradeSymbol();
+        }
+
+        @Override
         public Rule getEntryRule() {
             return strategy.getEntryRule();
         }
