@@ -77,12 +77,6 @@ public class RSIStrategy extends BaseTradeStrategy {
                                14);
     }
 
-    private static void requireContext(Context context) {
-        if (context == null) {
-            throw new IllegalArgumentException("Context cannot be null");
-        }
-    }
-
     private static RSIIndicator createRSIIndicator(Context context) {
         final TimeSeries timeSeries = context.getDataService().getMarketData().of("EURUSD").getTimeSeries(BarPeriod.M1);
         final ClosePriceIndicator closePrice = new ClosePriceIndicator(timeSeries);
