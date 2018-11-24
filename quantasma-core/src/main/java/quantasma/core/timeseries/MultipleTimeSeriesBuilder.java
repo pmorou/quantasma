@@ -1,11 +1,14 @@
 package quantasma.core.timeseries;
 
+import org.ta4j.core.TimeSeries;
+
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.HashSet;
 import java.util.Map;
 import java.util.Set;
 import java.util.function.Function;
+import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
 public class MultipleTimeSeriesBuilder {
@@ -13,6 +16,8 @@ public class MultipleTimeSeriesBuilder {
     private final TimeSeriesDefinition baseTimeSeriesDefinition;
     private final Set<GroupTimeSeriesDefinition> aggregatedTimeSeriesDefinitions = new HashSet<>();
     private final Set<String> symbols = new HashSet<>();
+
+    private UnaryOperator<TimeSeries> wrapper = timeSeries -> timeSeries;
 
     private MultipleTimeSeriesBuilder(TimeSeriesDefinition baseTimeSeriesDefinition) {
         this.baseTimeSeriesDefinition = baseTimeSeriesDefinition;
@@ -32,9 +37,14 @@ public class MultipleTimeSeriesBuilder {
         return this;
     }
 
+    public MultipleTimeSeriesBuilder wrap(UnaryOperator<TimeSeries> wrapper) {
+        this.wrapper = wrapper;
+        return this;
+    }
+
     public Collection<? extends MultipleTimeSeries> build() {
         final Map<String, MultipleTimeSeries> baseTimeSeries = symbols.stream()
-                                                                      .map(symbol -> BaseMultipleTimeSeries.create(symbol, baseTimeSeriesDefinition))
+                                                                      .map(symbol -> BaseMultipleTimeSeries.create(symbol, baseTimeSeriesDefinition, wrapper))
                                                                       .collect(Collectors.toMap(BaseMultipleTimeSeries::getSymbol, Function.identity()));
 
         for (GroupTimeSeriesDefinition aggrDefinition : aggregatedTimeSeriesDefinitions) {

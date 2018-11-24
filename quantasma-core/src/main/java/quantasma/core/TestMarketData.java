@@ -1,7 +1,6 @@
 package quantasma.core;
 
 import quantasma.core.timeseries.ManualIndexTimeSeries;
-import quantasma.core.timeseries.ReflectionManualIndexTimeSeries;
 import quantasma.core.timeseries.MultipleTimeSeries;
 
 import java.util.Collection;
@@ -17,7 +16,7 @@ public class TestMarketData extends MarketData {
     public Set<ManualIndexTimeSeries> manualIndexTimeSeres() {
         return multipleTimeSeriesMap.entrySet().stream()
                                     .flatMap(entry -> entry.getValue().getTimeSeries().stream())
-                                    .map(ReflectionManualIndexTimeSeries::wrap)
+                                    .map(timeSeries -> (ManualIndexTimeSeries) timeSeries)
                                     .collect(Collectors.toSet());
     }
 }

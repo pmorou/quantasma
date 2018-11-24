@@ -12,6 +12,7 @@ import quantasma.core.TestMarketData;
 import quantasma.core.TestManager;
 import quantasma.core.timeseries.GroupTimeSeriesDefinition;
 import quantasma.core.timeseries.MultipleTimeSeriesBuilder;
+import quantasma.core.timeseries.ReflectionManualIndexTimeSeries;
 import quantasma.core.timeseries.TimeSeriesDefinitionImpl;
 
 public class BacktestExample {
@@ -21,6 +22,7 @@ public class BacktestExample {
                 MultipleTimeSeriesBuilder.basedOn(new TimeSeriesDefinitionImpl(BarPeriod.M1))
                                          .symbols("EURUSD")
                                          .aggregate(GroupTimeSeriesDefinition.of("EURUSD").add(new TimeSeriesDefinitionImpl(BarPeriod.M5)))
+                                         .wrap(ReflectionManualIndexTimeSeries::wrap)
                                          .build());
 
         final OrderAmountRef orderAmountRef = OrderAmountRef.instance();

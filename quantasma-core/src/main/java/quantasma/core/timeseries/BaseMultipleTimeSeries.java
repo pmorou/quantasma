@@ -14,6 +14,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
+import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
 public class BaseMultipleTimeSeries implements MultipleTimeSeries {
@@ -24,28 +25,38 @@ public class BaseMultipleTimeSeries implements MultipleTimeSeries {
     @Getter
     private final MainTimeSeries mainTimeSeries;
     private final Map<BarPeriod, TypedTimeSeries<BidAskBar>> periodTimeSeriesMap;
+    private final UnaryOperator<TimeSeries> wrapper;
 
-    private BaseMultipleTimeSeries(String symbol, TimeSeriesDefinition timeSeriesDefinition) {
+    private BaseMultipleTimeSeries(String symbol, TimeSeriesDefinition timeSeriesDefinition, UnaryOperator<TimeSeries> wrapper) {
         this.symbol = symbol;
+        this.wrapper = wrapper;
         this.mainTimeSeries = BaseMainTimeSeries.create(timeSeriesDefinition, symbol);
         this.periodTimeSeriesMap = createPeriodTimeSeriesMap(timeSeriesDefinition.getBarPeriod());
     }
 
+    public static BaseMultipleTimeSeries create(String symbol, TimeSeriesDefinition timeSeriesDefinition, UnaryOperator<TimeSeries> wrapper) {
+        return new BaseMultipleTimeSeries(symbol, timeSeriesDefinition, wrapper);
+    }
+
     public static BaseMultipleTimeSeries create(String symbol, TimeSeriesDefinition timeSeriesDefinition) {
-        return new BaseMultipleTimeSeries(symbol, timeSeriesDefinition);
+        return new BaseMultipleTimeSeries(symbol, timeSeriesDefinition, UnaryOperator.identity());
     }
 
     private Map<BarPeriod, TypedTimeSeries<BidAskBar>> createPeriodTimeSeriesMap(BarPeriod barPeriod) {
         final Map<BarPeriod, TypedTimeSeries<BidAskBar>> timeSeriesMap = new TreeMap<>(Comparator.comparing(BarPeriod::getPeriod)); // first period should save value first
-        timeSeriesMap.put(barPeriod, TypedTimeSeries.create(BidAskBar.class, mainTimeSeries.getTimeSeries()));
+        timeSeriesMap.put(barPeriod, TypedTimeSeries.create(BidAskBar.class, wrap(mainTimeSeries.getTimeSeries())));
         return timeSeriesMap;
     }
 
     @Override
     public MultipleTimeSeries aggregate(TimeSeriesDefinition timeSeriesDefinition) {
         final AggregatedTimeSeries timeSeries = mainTimeSeries.aggregate(timeSeriesDefinition);
-        periodTimeSeriesMap.put(timeSeriesDefinition.getBarPeriod(), TypedTimeSeries.create(BidAskBar.class, timeSeries));
+        periodTimeSeriesMap.put(timeSeriesDefinition.getBarPeriod(), TypedTimeSeries.create(BidAskBar.class, wrap(timeSeries)));
         return this;
+    }
+
+    private TimeSeries wrap(TimeSeries timeSeries) {
+        return wrapper.apply(timeSeries);
     }
 
     @Override
