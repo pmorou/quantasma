@@ -7,7 +7,6 @@ import quantasma.core.BaseContext;
 import quantasma.core.Context;
 import quantasma.core.TestManager;
 import quantasma.core.TestMarketData;
-import quantasma.core.TestOrderService;
 import quantasma.core.TradeStrategy;
 import quantasma.core.timeseries.MultipleTimeSeriesBuilder;
 import quantasma.core.timeseries.ReflectionManualIndexTimeSeries;
@@ -26,7 +25,6 @@ public class BacktestExample {
 
         final Context context = new BaseContext.Builder()
                 .withMarketData(testMarketData)
-                .withOrderService(new TestOrderService())
                 .build();
 
         final TradeStrategy rsiStrategy = RSIStrategy.buildBullish(context);
