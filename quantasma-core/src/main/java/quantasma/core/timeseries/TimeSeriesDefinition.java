@@ -1,7 +1,6 @@
 package quantasma.core.timeseries;
 
 import lombok.Data;
-import lombok.Getter;
 import quantasma.core.BarPeriod;
 
 import java.util.Arrays;
@@ -27,7 +26,7 @@ public class TimeSeriesDefinition {
         return limited(barPeriod, Integer.MAX_VALUE);
     }
 
-    @Getter
+    @Data
     public static class Group {
         private final Set<String> symbols;
         private final Set<TimeSeriesDefinition> timeSeriesDefinitions;
