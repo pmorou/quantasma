@@ -44,7 +44,7 @@ public class AggregatedTimeSeriesTest {
     @Test
     public void given1M5And1M1BarsShouldReturnUniqueBarAtIndex0() {
         // given
-        final MainTimeSeries mainTimeSeries = BaseMainTimeSeries.create(new TimeSeriesDefinitionImpl(BarPeriod.M1), "symbol");
+        final MainTimeSeries mainTimeSeries = BaseMainTimeSeries.create(TimeSeriesDefinition.unlimited(BarPeriod.M1), "symbol");
         final BaseAggregatedTimeSeries aggregatedTimeSeries = new BaseAggregatedTimeSeries(mainTimeSeries, "aggregated", "symbol", BarPeriod.M5);
         createM1Bar(0, mainTimeSeries);
         mainTimeSeries.addPrice(1);
@@ -61,7 +61,7 @@ public class AggregatedTimeSeriesTest {
     @Test
     public void given1M5And2M1BarsShouldReturnUniqueBarAtIndex1() {
         // given
-        final MainTimeSeries mainTimeSeries = BaseMainTimeSeries.create(new TimeSeriesDefinitionImpl(BarPeriod.M1), "symbol");
+        final MainTimeSeries mainTimeSeries = BaseMainTimeSeries.create(TimeSeriesDefinition.unlimited(BarPeriod.M1), "symbol");
         final BaseAggregatedTimeSeries aggregatedTimeSeries = new BaseAggregatedTimeSeries(mainTimeSeries, "aggregated", "symbol", BarPeriod.M5);
         for (int i = 0; i < 2; i++) {
             createM1Bar(i, mainTimeSeries);
@@ -84,7 +84,7 @@ public class AggregatedTimeSeriesTest {
     @Test
     public void given2M5BarsShouldReturnUniqueBarsFromIndex1To0() {
         // given
-        final MainTimeSeries mainTimeSeries = BaseMainTimeSeries.create(new TimeSeriesDefinitionImpl(BarPeriod.M1), "symbol");
+        final MainTimeSeries mainTimeSeries = BaseMainTimeSeries.create(TimeSeriesDefinition.unlimited(BarPeriod.M1), "symbol");
         final BaseAggregatedTimeSeries aggregatedTimeSeries = new BaseAggregatedTimeSeries(mainTimeSeries, "aggregated", "symbol", BarPeriod.M5);
         for (int i = 0; i < 6; i++) {
             createM1Bar(i, mainTimeSeries);
@@ -115,7 +115,7 @@ public class AggregatedTimeSeriesTest {
     @Test
     public void given3M5BarsShouldReturnCorrectFirstAndLastCreatedBar() {
         // given
-        final MainTimeSeries mainTimeSeries = BaseMainTimeSeries.create(new TimeSeriesDefinitionImpl(BarPeriod.M1), "symbol");
+        final MainTimeSeries mainTimeSeries = BaseMainTimeSeries.create(TimeSeriesDefinition.unlimited(BarPeriod.M1), "symbol");
         final BaseAggregatedTimeSeries aggregatedTimeSeries = new BaseAggregatedTimeSeries(mainTimeSeries, "aggregated", "symbol", BarPeriod.M5);
         Bar firstM5Bar = null, secondM5Bar = null, thirdM5Bar = null;
 

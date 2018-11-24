@@ -2,7 +2,7 @@ package quantasma.core;
 
 import lombok.Getter;
 import quantasma.core.timeseries.MultipleTimeSeriesBuilder;
-import quantasma.core.timeseries.TimeSeriesDefinitionImpl;
+import quantasma.core.timeseries.TimeSeriesDefinition;
 
 @Getter
 public class BaseContext implements Context {
@@ -25,7 +25,7 @@ public class BaseContext implements Context {
             orderService = new NullOrderService();
             strategyControl = new BaseStrategyControl();
             dataService = new BaseDataService(new MarketData(MultipleTimeSeriesBuilder
-                                                                     .basedOn(new TimeSeriesDefinitionImpl(BarPeriod.M1))
+                                                                     .basedOn(TimeSeriesDefinition.unlimited(BarPeriod.M1))
                                                                      .symbols("EURUSD")
                                                                      .build()));
         }

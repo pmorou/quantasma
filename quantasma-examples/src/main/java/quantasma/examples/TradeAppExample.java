@@ -7,9 +7,8 @@ import quantasma.core.BaseTradeEngine;
 import quantasma.core.Context;
 import quantasma.core.NullOrderService;
 import quantasma.core.TradeEngine;
-import quantasma.core.timeseries.GroupTimeSeriesDefinition;
 import quantasma.core.timeseries.MultipleTimeSeriesBuilder;
-import quantasma.core.timeseries.TimeSeriesDefinitionImpl;
+import quantasma.core.timeseries.TimeSeriesDefinition;
 
 import java.time.ZonedDateTime;
 
@@ -21,12 +20,12 @@ public class TradeAppExample {
                 .withTimeSeries(
                         MultipleTimeSeriesBuilder.basedOn(
                                 // Smallest accessible time window for all defined below symbols
-                                new TimeSeriesDefinitionImpl(BarPeriod.M1, 100))
+                                TimeSeriesDefinition.limited(BarPeriod.M1, 100))
                                                  .symbols("EURUSD", "EURGBP")
                                                  // You can define any number of additional time windows for above symbols
-                                                 .aggregate(GroupTimeSeriesDefinition.of("EURUSD")
-                                                                                     .add(new TimeSeriesDefinitionImpl(BarPeriod.M5, 100))
-                                                                                     .add(new TimeSeriesDefinitionImpl(BarPeriod.M30, 100)))
+                                                 .aggregate(TimeSeriesDefinition.Group.of("EURUSD")
+                                                                                      .add(TimeSeriesDefinition.limited(BarPeriod.M5, 100))
+                                                                                      .add(TimeSeriesDefinition.limited(BarPeriod.M30, 100)))
                 )
                 // OrderService implementations integrate an app with external APIs
                 .withOrderService(new NullOrderService())

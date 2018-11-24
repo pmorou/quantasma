@@ -10,7 +10,7 @@ import org.ta4j.core.indicators.helpers.ClosePriceIndicator;
 import org.ta4j.core.trading.rules.IsEqualRule;
 import org.ta4j.core.trading.rules.OverIndicatorRule;
 import quantasma.core.timeseries.MultipleTimeSeriesBuilder;
-import quantasma.core.timeseries.TimeSeriesDefinitionImpl;
+import quantasma.core.timeseries.TimeSeriesDefinition;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -201,7 +201,7 @@ public class MarketDataTest {
 
     private static MarketData createTimeSeriesFor(String... symbols) {
         return new MarketData(
-                MultipleTimeSeriesBuilder.basedOn(new TimeSeriesDefinitionImpl(ONE_MINUTE_PERIOD, 2))
+                MultipleTimeSeriesBuilder.basedOn(TimeSeriesDefinition.limited(ONE_MINUTE_PERIOD, 2))
                                          .symbols(symbols)
                                          .build());
     }
@@ -408,7 +408,7 @@ public class MarketDataTest {
 
     private MarketData createTwoSymbolMarketData(int oneMinutePeriod) {
         return new MarketData(
-                MultipleTimeSeriesBuilder.basedOn(new TimeSeriesDefinitionImpl(ONE_MINUTE_PERIOD, oneMinutePeriod))
+                MultipleTimeSeriesBuilder.basedOn(TimeSeriesDefinition.limited(ONE_MINUTE_PERIOD, oneMinutePeriod))
                                          .symbols("symbol1", "symbol2")
                                          .build());
     }

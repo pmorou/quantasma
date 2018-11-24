@@ -22,6 +22,6 @@ public class AggregatedTimeSeriesFactory implements TimeSeriesFactory<Aggregated
                                                                     timeSeriesDefinition.getBarPeriod().getPeriodCode(),
                                                                     symbol,
                                                                     timeSeriesDefinition.getBarPeriod(),
-                                                                    timeSeriesDefinition.getPeriod());
+                                                                    timeSeriesDefinition.getMaxBarCount());
     }
 }

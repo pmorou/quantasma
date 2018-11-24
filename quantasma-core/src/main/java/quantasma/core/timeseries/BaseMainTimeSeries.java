@@ -16,7 +16,7 @@ public class BaseMainTimeSeries extends BaseDescribedTimeSeries implements MainT
         return new BaseMainTimeSeries(timeSeriesDefinition.getBarPeriod().getPeriodCode(),
                                       symbol,
                                       timeSeriesDefinition.getBarPeriod(),
-                                      timeSeriesDefinition.getPeriod());
+                                      timeSeriesDefinition.getMaxBarCount());
     }
 
     @Override
