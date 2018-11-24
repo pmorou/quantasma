@@ -19,8 +19,6 @@ public class TestManager {
     private final Set<ManualIndexTimeSeries> manualIndexTimeSeriesSet;
     private final MainTimeSeries sourceTimeSeries;
 
-    private TradeStrategy strategy;
-
     public TestManager(TestMarketData testMarketData, String mainSymbol) {
         this.sourceTimeSeries = testMarketData.of(mainSymbol).getMainTimeSeries();
         this.manualIndexTimeSeriesSet = testMarketData.manualIndexTimeSeres();
