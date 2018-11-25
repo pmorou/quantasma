@@ -2,7 +2,6 @@ package quantasma.examples;
 
 import lombok.extern.slf4j.Slf4j;
 import org.ta4j.core.Rule;
-import org.ta4j.core.Strategy;
 import org.ta4j.core.TimeSeries;
 import org.ta4j.core.TradingRecord;
 import org.ta4j.core.indicators.RSIIndicator;
@@ -71,7 +70,7 @@ public class RSIStrategy extends BaseTradeStrategy {
                 .build();
     }
 
-    public static Strategy buildBearish(Context context, String tradeSymbol, BarPeriod barPeriod) {
+    public static TradeStrategy buildBearish(Context context, String tradeSymbol, BarPeriod barPeriod) {
         final RSIIndicator rsi = createRSIIndicator(context, tradeSymbol, barPeriod);
         return new Builder(context, tradeSymbol, new CrossedDownIndicatorRule(rsi, 70), new CrossedUpIndicatorRule(rsi, 30))
                 .withName("bearish_rsi_strategy_30-70")
