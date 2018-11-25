@@ -1,15 +1,13 @@
 package quantasma.core;
 
-import org.ta4j.core.Strategy;
-
 import java.util.Set;
 
 public interface StrategyControl {
-    void register(Strategy strategy);
+    void register(TradeStrategy tradeStrategy);
 
-    Set<Strategy> getActiveStrategies();
+    Set<TradeStrategy> getActiveStrategies();
 
-    void disable(Strategy strategy);
+    void disable(TradeStrategy tradeStrategy);
 
-    void enable(Strategy strategy);
+    void enable(TradeStrategy tradeStrategy);
 }

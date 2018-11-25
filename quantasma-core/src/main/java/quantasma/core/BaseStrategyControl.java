@@ -1,7 +1,5 @@
 package quantasma.core;
 
-import org.ta4j.core.Strategy;
-
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -9,10 +7,10 @@ import java.util.stream.Collectors;
 
 public class BaseStrategyControl implements StrategyControl {
 
-    private final Map<Strategy, Boolean> strategies = new HashMap<>();
+    private final Map<TradeStrategy, Boolean> strategies = new HashMap<>();
 
     @Override
-    public void register(Strategy strategy) {
+    public void register(TradeStrategy strategy) {
         if (strategies.get(strategy) != null) {
             throw new RuntimeException("Strategy already registered.");
         }
@@ -20,17 +18,17 @@ public class BaseStrategyControl implements StrategyControl {
     }
 
     @Override
-    public Set<Strategy> getActiveStrategies() {
+    public Set<TradeStrategy> getActiveStrategies() {
         return strategies.entrySet().stream().filter(Map.Entry::getValue).map(Map.Entry::getKey).collect(Collectors.toSet());
     }
 
     @Override
-    public void disable(Strategy strategy) {
+    public void disable(TradeStrategy strategy) {
         strategies.put(strategy, false);
     }
 
     @Override
-    public void enable(Strategy strategy) {
+    public void enable(TradeStrategy strategy) {
         strategies.put(strategy, true);
     }
 }
