@@ -114,7 +114,9 @@ public class BaseTradeStrategy extends BaseStrategy implements TradeStrategy {
             this.exitRule = Objects.requireNonNull(exitRule);
         }
 
-        // every subclass has to implement it
+        /**
+         * Every builder subclass should implement this method, simply copy-paste it
+         */
         protected T self() {
             return (T) this;
         }
