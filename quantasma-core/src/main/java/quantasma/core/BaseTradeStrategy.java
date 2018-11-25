@@ -5,6 +5,7 @@ import lombok.Getter;
 import org.ta4j.core.BaseStrategy;
 import org.ta4j.core.Rule;
 import org.ta4j.core.Strategy;
+import org.ta4j.core.num.DoubleNum;
 import org.ta4j.core.num.Num;
 
 import java.util.Objects;
@@ -12,8 +13,8 @@ import java.util.Objects;
 public class BaseTradeStrategy extends BaseStrategy implements TradeStrategy {
     private final Context context;
 
-    private Num amount;
     private String tradeSymbol;
+    private Num amount;
 
     public BaseTradeStrategy(Context context, String name, String tradeSymbol, Rule entryRule, Rule exitRule, int unstablePeriod) {
         super(name, entryRule, exitRule, unstablePeriod);
@@ -25,6 +26,7 @@ public class BaseTradeStrategy extends BaseStrategy implements TradeStrategy {
         super(builder.getName(), builder.getEntryRule(), builder.getExitRule(), builder.getUnstablePeriod());
         this.context = builder.getContext();
         this.tradeSymbol = builder.getTradeSymbol();
+        this.amount = DoubleNum.valueOf(0);
     }
 
     @Override
