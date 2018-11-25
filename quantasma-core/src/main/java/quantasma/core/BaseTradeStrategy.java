@@ -15,10 +15,6 @@ public class BaseTradeStrategy extends BaseStrategy implements TradeStrategy {
     private Num amount;
     private String tradeSymbol;
 
-    public BaseTradeStrategy(Context context, String name, String tradeSymbol, Rule entryRule, Rule exitRule) {
-        this(Objects.requireNonNull(context), name, tradeSymbol, entryRule, exitRule, 0);
-    }
-
     public BaseTradeStrategy(Context context, String name, String tradeSymbol, Rule entryRule, Rule exitRule, int unstablePeriod) {
         super(name, entryRule, exitRule, unstablePeriod);
         this.context = context;
