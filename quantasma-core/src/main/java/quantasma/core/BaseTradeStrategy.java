@@ -69,11 +69,6 @@ public class BaseTradeStrategy extends BaseStrategy implements TradeStrategy {
                 .build();
     }
 
-    @Override
-    public Rule getExitRule() {
-        return super.getExitRule();
-    }
-
     public void stop() {
     }
 
