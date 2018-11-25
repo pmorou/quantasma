@@ -49,11 +49,13 @@ public class FinishDepositCriterion extends AbstractAnalysisCriterion {
                 Num entryClosePrice = hasPrice(trade.getEntry()) ?
                         trade.getEntry().getPrice() : series.getBar(trade.getEntry().getIndex()).getClosePrice();
 
+                final Num pips;
                 if (trade.getEntry().isBuy()) {
-                    return exitClosePrice.minus(entryClosePrice).dividedBy(series.numOf(pipResolution));
+                    pips = exitClosePrice.minus(entryClosePrice).dividedBy(series.numOf(pipResolution));
                 } else {
-                    return entryClosePrice.minus(exitClosePrice).dividedBy(series.numOf(pipResolution));
+                    pips = entryClosePrice.minus(exitClosePrice).dividedBy(series.numOf(pipResolution));
                 }
+                return realUnitProfit(series, trade, pips);
             }
             return series.numOf(0);
         }
@@ -62,5 +64,14 @@ public class FinishDepositCriterion extends AbstractAnalysisCriterion {
             return !exit.getPrice().isNaN();
         }
 
+        private final static int STANDARD_LOT_SIZE = 100_000;
+        private final static int STANDARD_LOT_PROFIT = 10;
+
+        private static Num realUnitProfit(TimeSeries timeSeries, Trade trade, Num pips) {
+            return timeSeries.numOf(trade.getExit().getAmount().doubleValue())
+                             .dividedBy(timeSeries.numOf(STANDARD_LOT_SIZE))
+                             .multipliedBy(timeSeries.numOf(STANDARD_LOT_PROFIT))
+                             .multipliedBy(pips);
+        }
     }
 }
