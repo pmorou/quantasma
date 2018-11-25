@@ -55,8 +55,13 @@ public class BaseSymbolTimeSeries extends BaseTimeSeries implements SymbolTimeSe
             return self();
         }
 
-        public T withNumFunction(Function<Number, Num> numFunction) {
+        public T withNumTypeOf(Function<Number, Num> numFunction) {
             this.numFunction = numFunction;
+            return self();
+        }
+
+        public T withNumTypeOf(Num type) {
+            this.numFunction = type.function();
             return self();
         }
 
