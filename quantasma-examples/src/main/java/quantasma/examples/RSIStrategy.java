@@ -25,8 +25,12 @@ public class RSIStrategy extends BaseTradeStrategy {
 
     private int openedPositionsCounter = 0;
 
-    public RSIStrategy(Context context, String name, String tradeSymbol, Rule entryRule, Rule exitRule, int unstablePeriod) {
+    protected RSIStrategy(Context context, String name, String tradeSymbol, Rule entryRule, Rule exitRule, int unstablePeriod) {
         super(Objects.requireNonNull(context), name, tradeSymbol, entryRule, exitRule, unstablePeriod);
+    }
+
+    private RSIStrategy(Builder builder) {
+        super(builder);
     }
 
     @Override
@@ -59,32 +63,45 @@ public class RSIStrategy extends BaseTradeStrategy {
         return openedPositionsCounter > 0;
     }
 
-    public static TradeStrategy buildBullish(Context context) {
-        final String tradeSymbol = "EURUSD";
-        final RSIIndicator rsi = createRSIIndicator(context, tradeSymbol);
-        return new RSIStrategy(context,
-                               "RSI Strategy",
-                               tradeSymbol,
-                               new CrossedUpIndicatorRule(rsi, 30),
-                               new CrossedDownIndicatorRule(rsi, 70),
-                               14);
+    public static TradeStrategy buildBullish(Context context, String tradeSymbol, BarPeriod barPeriod) {
+        final RSIIndicator rsi = createRSIIndicator(context, tradeSymbol, barPeriod);
+        return new Builder(context, tradeSymbol, new CrossedUpIndicatorRule(rsi, 30), new CrossedDownIndicatorRule(rsi, 70))
+                .withName("bullish_rsi_strategy_30-70")
+                .withUnstablePeriod(14)
+                .build();
     }
 
-    public static Strategy buildBearish(Context context) {
-        final String tradeSymbol = "EURUSD";
-        final RSIIndicator rsi = createRSIIndicator(context, tradeSymbol);
-        return new RSIStrategy(context,
-                               "RSI Strategy",
-                               tradeSymbol,
-                               new CrossedDownIndicatorRule(rsi, 70),
-                               new CrossedUpIndicatorRule(rsi, 30),
-                               14);
+    public static Strategy buildBearish(Context context, String tradeSymbol, BarPeriod barPeriod) {
+        final RSIIndicator rsi = createRSIIndicator(context, tradeSymbol, barPeriod);
+        return new Builder(context, tradeSymbol, new CrossedDownIndicatorRule(rsi, 70), new CrossedUpIndicatorRule(rsi, 30))
+                .withName("bearish_rsi_strategy_30-70")
+                .withUnstablePeriod(14)
+                .build();
     }
 
-    private static RSIIndicator createRSIIndicator(Context context, String tradeSymbol) {
-        final TimeSeries timeSeries = context.getDataService().getMarketData().of(tradeSymbol).getTimeSeries(BarPeriod.M1);
+    private static RSIIndicator createRSIIndicator(Context context, String tradeSymbol, BarPeriod barPeriod) {
+        final TimeSeries timeSeries = context.getDataService().getMarketData().of(tradeSymbol).getTimeSeries(barPeriod);
         final ClosePriceIndicator closePrice = new ClosePriceIndicator(timeSeries);
         return new RSIIndicator(closePrice, 14);
     }
 
+    // Example of properly extended builder
+    public static class Builder extends BaseTradeStrategy.Builder {
+
+        public Builder(Context context, String tradeSymbol, Rule entryRule, Rule exitRule) {
+            super(context, tradeSymbol, entryRule, exitRule);
+        }
+
+        // New methods can be added here
+
+        @Override
+        protected RSIStrategy.Builder self() {
+            return this;
+        }
+
+        @Override
+        public RSIStrategy build() {
+            return new RSIStrategy(this);
+        }
+    }
 }

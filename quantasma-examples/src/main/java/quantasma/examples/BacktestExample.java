@@ -27,7 +27,7 @@ public class BacktestExample {
                 .withMarketData(testMarketData)
                 .build();
 
-        final TradeStrategy rsiStrategy = RSIStrategy.buildBullish(context);
+        final TradeStrategy rsiStrategy = RSIStrategy.buildBullish(context, "EURUSD", BarPeriod.M1);
 
         // Feed historical data by calling testMarketData.add()
 
