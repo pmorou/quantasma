@@ -12,6 +12,10 @@ public class BaseMainTimeSeries extends BaseSymbolTimeSeries implements MainTime
         super(name, symbol, barPeriod, maxBarCount);
     }
 
+    protected BaseMainTimeSeries(Builder builder) {
+        super(builder);
+    }
+
     public static MainTimeSeries create(TimeSeriesDefinition timeSeriesDefinition, String symbol) {
         return new BaseMainTimeSeries(timeSeriesDefinition.getBarPeriod().getPeriodCode(),
                                       symbol,
@@ -24,4 +28,17 @@ public class BaseMainTimeSeries extends BaseSymbolTimeSeries implements MainTime
         return AggregatedTimeSeriesFactory.from(this, getSymbol()).createInstance(timeSeriesDefinition);
     }
 
+    public static final class Builder extends BaseSymbolTimeSeries.Builder {
+
+        public Builder(String symbol, BarPeriod barPeriod) {
+            super(symbol, barPeriod);
+        }
+
+        @Override
+        protected Builder self() {
+            return this;
+        }
+
+        public BaseMainTimeSeries build() { return new BaseMainTimeSeries(this); }
+    }
 }
