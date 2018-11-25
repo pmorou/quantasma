@@ -23,17 +23,17 @@ The aim is to provide any needed functionality to follow the ever-changing marke
 Creating a trading application is as simple as the following code.
 
 ``` java
-// Any strategy based on TradeStrategy class needs a Context object
+// Any strategy based on TradeStrategy interface needs a Context object
 final Context context = new BaseContext.Builder()
         .withTimeSeries(
                 MultipleTimeSeriesBuilder.basedOn(
                         // Smallest accessible time window for all defined below symbols
-                        new TimeSeriesDefinitionImpl(BarPeriod.M1, 100))
+                        TimeSeriesDefinition.limited(BarPeriod.M1, 100))
                                          .symbols("EURUSD", "EURGBP")
                                          // You can define any number of additional time windows for above symbols
-                                         .aggregate(GroupTimeSeriesDefinition.of("EURUSD")
-                                                                             .add(new TimeSeriesDefinitionImpl(BarPeriod.M5, 100))
-                                                                             .add(new TimeSeriesDefinitionImpl(BarPeriod.M30, 100)))
+                                         .aggregate(TimeSeriesDefinition.Group.of("EURUSD")
+                                                                              .add(TimeSeriesDefinition.limited(BarPeriod.M5, 100))
+                                                                              .add(TimeSeriesDefinition.limited(BarPeriod.M30, 100)))
         )
         // OrderService implementations integrate an app with external APIs
         .withOrderService(new NullOrderService())
@@ -41,7 +41,7 @@ final Context context = new BaseContext.Builder()
 
 final TradeEngine tradeEngine = BaseTradeEngine.create(context);
 
-final Strategy rsiStrategy = RSIStrategy.buildBullish(context);
+final TradeStrategy rsiStrategy = RSIStrategy.buildBullish(context, "EURUSD", BarPeriod.M1);
 
 // Only registered strategies are given market data
 context.getStrategyControl().register(rsiStrategy);

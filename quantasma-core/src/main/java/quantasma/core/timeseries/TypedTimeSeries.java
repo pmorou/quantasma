@@ -1,11 +1,13 @@
 package quantasma.core.timeseries;
 
+import lombok.Getter;
 import org.ta4j.core.Bar;
 import org.ta4j.core.TimeSeries;
 
 public class TypedTimeSeries<T extends Bar> {
 
     private final Class<T> barImplementation;
+    @Getter
     private final TimeSeries timeSeries;
 
     private TypedTimeSeries(Class<T> barImplementation, TimeSeries timeSeries) {
@@ -33,7 +35,4 @@ public class TypedTimeSeries<T extends Bar> {
         return (T) timeSeries.getBar(index);
     }
 
-    public TimeSeries getTimeSeries() {
-        return timeSeries;
-    }
 }

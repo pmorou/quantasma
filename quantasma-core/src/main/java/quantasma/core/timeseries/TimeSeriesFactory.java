@@ -5,11 +5,11 @@ import org.ta4j.core.TimeSeries;
 import java.util.function.Function;
 
 @FunctionalInterface
-public interface TimeSeriesFactory {
+public interface TimeSeriesFactory<T extends TimeSeries> {
 
-    Function<TimeSeriesDefinition, TimeSeries> function();
+    Function<TimeSeriesDefinition, T> function();
 
-    default TimeSeries createInstance(TimeSeriesDefinition timeSeriesDefinition) {
+    default T createInstance(TimeSeriesDefinition timeSeriesDefinition) {
         return function().apply(timeSeriesDefinition);
     }
 }

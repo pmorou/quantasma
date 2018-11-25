@@ -2,7 +2,6 @@ package quantasma.examples;
 
 import lombok.extern.slf4j.Slf4j;
 import org.ta4j.core.Rule;
-import org.ta4j.core.Strategy;
 import org.ta4j.core.TimeSeries;
 import org.ta4j.core.TradingRecord;
 import org.ta4j.core.indicators.RSIIndicator;
@@ -10,34 +9,41 @@ import org.ta4j.core.indicators.helpers.ClosePriceIndicator;
 import org.ta4j.core.trading.rules.CrossedDownIndicatorRule;
 import org.ta4j.core.trading.rules.CrossedUpIndicatorRule;
 import quantasma.core.BarPeriod;
+import quantasma.core.BaseTradeStrategy;
 import quantasma.core.Context;
 import quantasma.core.TradeStrategy;
 import quantasma.core.order.CloseMarkerOrder;
 import quantasma.core.order.OpenMarketOrder;
 
+import java.util.Objects;
+
 @Slf4j
-public class RSIStrategy extends TradeStrategy {
+public class RSIStrategy extends BaseTradeStrategy {
 
     private static final int MAX_NUMBER_OF_POSITIONS = 1;
 
     private int openedPositionsCounter = 0;
 
-    public RSIStrategy(Context context, String name, Rule entryRule, Rule exitRule, int unstablePeriod) {
-        super(context, name, entryRule, exitRule, unstablePeriod);
+    protected RSIStrategy(Context context, String name, String tradeSymbol, Rule entryRule, Rule exitRule, int unstablePeriod) {
+        super(Objects.requireNonNull(context), name, tradeSymbol, entryRule, exitRule, unstablePeriod);
+    }
+
+    private RSIStrategy(Builder builder) {
+        super(builder);
     }
 
     @Override
     public boolean shouldEnter(int index, TradingRecord tradingRecord) {
-        if (super.shouldEnter(index, tradingRecord) && canOpenPosition()) {
+        if (super.shouldEnter(index, tradingRecord) && shouldOpenPosition()) {
             openedPositionsCounter++;
             log.info("Opening position");
-            getOrderService().openPosition(new OpenMarketOrder(1, "EURUSD"));
+            getOrderService().openPosition(new OpenMarketOrder(1, getTradeSymbol()));
             return true;
         }
         return false;
     }
 
-    private boolean canOpenPosition() {
+    private boolean shouldOpenPosition() {
         return openedPositionsCounter < MAX_NUMBER_OF_POSITIONS;
     }
 
@@ -45,7 +51,7 @@ public class RSIStrategy extends TradeStrategy {
     public boolean shouldExit(int index, TradingRecord tradingRecord) {
         if (super.shouldExit(index, tradingRecord) && hasOpenedPosition()) {
             openedPositionsCounter--;
-            System.out.println("Closing position");
+            log.info("Closing position");
             getOrderService().closePosition(new CloseMarkerOrder());
             return true;
         }
@@ -56,36 +62,45 @@ public class RSIStrategy extends TradeStrategy {
         return openedPositionsCounter > 0;
     }
 
-    public static Strategy buildBullish(Context context) {
-        requireContext(context);
-        final RSIIndicator rsi = createRSIIndicator(context);
-        return new RSIStrategy(context,
-                               "RSI Strategy",
-                               new CrossedUpIndicatorRule(rsi, 30),
-                               new CrossedDownIndicatorRule(rsi, 70),
-                               14);
+    public static TradeStrategy buildBullish(Context context, String tradeSymbol, BarPeriod barPeriod) {
+        final RSIIndicator rsi = createRSIIndicator(context, tradeSymbol, barPeriod);
+        return new Builder(context, tradeSymbol, new CrossedUpIndicatorRule(rsi, 30), new CrossedDownIndicatorRule(rsi, 70))
+                .withName("bullish_rsi_strategy_30-70")
+                .withUnstablePeriod(14)
+                .build();
     }
 
-    public static Strategy buildBearish(Context context) {
-        requireContext(context);
-        final RSIIndicator rsi = createRSIIndicator(context);
-        return new RSIStrategy(context,
-                               "RSI Strategy",
-                               new CrossedDownIndicatorRule(rsi, 70),
-                               new CrossedUpIndicatorRule(rsi, 30),
-                               14);
+    public static TradeStrategy buildBearish(Context context, String tradeSymbol, BarPeriod barPeriod) {
+        final RSIIndicator rsi = createRSIIndicator(context, tradeSymbol, barPeriod);
+        return new Builder(context, tradeSymbol, new CrossedDownIndicatorRule(rsi, 70), new CrossedUpIndicatorRule(rsi, 30))
+                .withName("bearish_rsi_strategy_30-70")
+                .withUnstablePeriod(14)
+                .build();
     }
 
-    private static void requireContext(Context context) {
-        if (context == null) {
-            throw new IllegalArgumentException("Context cannot be null");
-        }
-    }
-
-    private static RSIIndicator createRSIIndicator(Context context) {
-        final TimeSeries timeSeries = context.getDataService().getMultipleTimeSeries("EURUSD").getTimeSeries(BarPeriod.M1);
+    private static RSIIndicator createRSIIndicator(Context context, String tradeSymbol, BarPeriod barPeriod) {
+        final TimeSeries timeSeries = context.getDataService().getMarketData().of(tradeSymbol).getTimeSeries(barPeriod);
         final ClosePriceIndicator closePrice = new ClosePriceIndicator(timeSeries);
         return new RSIIndicator(closePrice, 14);
     }
 
+    // Example of properly extended builder
+    public static class Builder extends BaseTradeStrategy.Builder {
+
+        public Builder(Context context, String tradeSymbol, Rule entryRule, Rule exitRule) {
+            super(context, tradeSymbol, entryRule, exitRule);
+        }
+
+        // New methods can be added here
+
+        @Override
+        protected RSIStrategy.Builder self() {
+            return this;
+        }
+
+        @Override
+        public RSIStrategy build() {
+            return new RSIStrategy(this);
+        }
+    }
 }

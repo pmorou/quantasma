@@ -5,7 +5,6 @@ import org.junit.runner.RunWith;
 import org.junit.runners.Parameterized;
 import org.ta4j.core.Bar;
 import org.ta4j.core.BaseBar;
-import org.ta4j.core.BaseTimeSeries;
 import org.ta4j.core.TimeSeries;
 import quantasma.core.BarPeriod;
 import quantasma.core.DateUtils;
@@ -45,10 +44,10 @@ public class AggregatedTimeSeriesTest {
     @Test
     public void given1M5And1M1BarsShouldReturnUniqueBarAtIndex0() {
         // given
-        final TimeSeries referenceTimeSeries = new BaseTimeSeries.SeriesBuilder().build();
-        final AggregatedTimeSeries aggregatedTimeSeries = new AggregatedTimeSeries(referenceTimeSeries, "aggregated", BarPeriod.M5);
-        createM1Bar(0, referenceTimeSeries);
-        referenceTimeSeries.addPrice(1);
+        final MainTimeSeries mainTimeSeries = BaseMainTimeSeries.create(TimeSeriesDefinition.unlimited(BarPeriod.M1), "symbol");
+        final BaseAggregatedTimeSeries aggregatedTimeSeries = new BaseAggregatedTimeSeries(mainTimeSeries, "aggregated", "symbol", BarPeriod.M5);
+        createM1Bar(0, mainTimeSeries);
+        mainTimeSeries.addPrice(1);
         createM5Bar(0, aggregatedTimeSeries);
         aggregatedTimeSeries.addPrice(1);
 
@@ -62,11 +61,11 @@ public class AggregatedTimeSeriesTest {
     @Test
     public void given1M5And2M1BarsShouldReturnUniqueBarAtIndex1() {
         // given
-        final TimeSeries referenceTimeSeries = new BaseTimeSeries.SeriesBuilder().build();
-        final AggregatedTimeSeries aggregatedTimeSeries = new AggregatedTimeSeries(referenceTimeSeries, "aggregated", BarPeriod.M5);
+        final MainTimeSeries mainTimeSeries = BaseMainTimeSeries.create(TimeSeriesDefinition.unlimited(BarPeriod.M1), "symbol");
+        final BaseAggregatedTimeSeries aggregatedTimeSeries = new BaseAggregatedTimeSeries(mainTimeSeries, "aggregated", "symbol", BarPeriod.M5);
         for (int i = 0; i < 2; i++) {
-            createM1Bar(i, referenceTimeSeries);
-            referenceTimeSeries.addPrice(i);
+            createM1Bar(i, mainTimeSeries);
+            mainTimeSeries.addPrice(i);
             if (i % 5 == 0) {
                 createM5Bar(i, aggregatedTimeSeries);
             }
@@ -85,14 +84,14 @@ public class AggregatedTimeSeriesTest {
     @Test
     public void given2M5BarsShouldReturnUniqueBarsFromIndex1To0() {
         // given
-        final TimeSeries referenceTimeSeries = new BaseTimeSeries.SeriesBuilder().build();
-        final AggregatedTimeSeries aggregatedTimeSeries = new AggregatedTimeSeries(referenceTimeSeries, "aggregated", BarPeriod.M5);
+        final MainTimeSeries mainTimeSeries = BaseMainTimeSeries.create(TimeSeriesDefinition.unlimited(BarPeriod.M1), "symbol");
+        final BaseAggregatedTimeSeries aggregatedTimeSeries = new BaseAggregatedTimeSeries(mainTimeSeries, "aggregated", "symbol", BarPeriod.M5);
         for (int i = 0; i < 6; i++) {
-            createM1Bar(i, referenceTimeSeries);
+            createM1Bar(i, mainTimeSeries);
             if (i % 5 == 0) {
                 createM5Bar(i, aggregatedTimeSeries);
             }
-            referenceTimeSeries.addPrice(i);
+            mainTimeSeries.addPrice(i);
             aggregatedTimeSeries.addPrice(i);
         }
 
@@ -116,12 +115,12 @@ public class AggregatedTimeSeriesTest {
     @Test
     public void given3M5BarsShouldReturnCorrectFirstAndLastCreatedBar() {
         // given
-        final TimeSeries referenceTimeSeries = new BaseTimeSeries.SeriesBuilder().build();
-        final AggregatedTimeSeries aggregatedTimeSeries = new AggregatedTimeSeries(referenceTimeSeries, "aggregated", BarPeriod.M5);
+        final MainTimeSeries mainTimeSeries = BaseMainTimeSeries.create(TimeSeriesDefinition.unlimited(BarPeriod.M1), "symbol");
+        final BaseAggregatedTimeSeries aggregatedTimeSeries = new BaseAggregatedTimeSeries(mainTimeSeries, "aggregated", "symbol", BarPeriod.M5);
         Bar firstM5Bar = null, secondM5Bar = null, thirdM5Bar = null;
 
         for (int i = 0; i < 14; i++) {
-            createM1Bar(i, referenceTimeSeries);
+            createM1Bar(i, mainTimeSeries);
             if (i == 0) {
                 firstM5Bar = createBar(i, aggregatedTimeSeries, BarPeriod.M5);
                 aggregatedTimeSeries.addBar(firstM5Bar);
@@ -134,7 +133,7 @@ public class AggregatedTimeSeriesTest {
                 thirdM5Bar = createBar(i, aggregatedTimeSeries, BarPeriod.M5);
                 aggregatedTimeSeries.addBar(thirdM5Bar);
             }
-            referenceTimeSeries.addPrice(i);
+            mainTimeSeries.addPrice(i);
             aggregatedTimeSeries.addPrice(i);
         }
 

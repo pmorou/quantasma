@@ -1,8 +1,10 @@
 package quantasma.core;
 
+import lombok.Getter;
 import quantasma.core.timeseries.MultipleTimeSeriesBuilder;
-import quantasma.core.timeseries.TimeSeriesDefinitionImpl;
+import quantasma.core.timeseries.TimeSeriesDefinition;
 
+@Getter
 public class BaseContext implements Context {
     private final DataService dataService;
     private final OrderService orderService;
@@ -14,33 +16,18 @@ public class BaseContext implements Context {
         this.strategyControl = strategyControl;
     }
 
-    @Override
-    public DataService getDataService() {
-        return dataService;
-    }
-
-    @Override
-    public OrderService getOrderService() {
-        return orderService;
-    }
-
-    @Override
-    public StrategyControl getStrategyControl() {
-        return strategyControl;
-    }
-
     public static class Builder {
         private DataService dataService;
         private OrderService orderService;
         private StrategyControl strategyControl;
-        private MultipleTimeSeriesBuilder multipleTimeSeriesBuilder;
 
         public Builder() {
             orderService = new NullOrderService();
             strategyControl = new BaseStrategyControl();
-            dataService = new BaseDataService();
-            multipleTimeSeriesBuilder = MultipleTimeSeriesBuilder.basedOn(new TimeSeriesDefinitionImpl(BarPeriod.M1, 100_000))
-                                                                 .symbols("EURUSD");
+            dataService = new BaseDataService(new MarketData(MultipleTimeSeriesBuilder
+                                                                     .basedOn(TimeSeriesDefinition.unlimited(BarPeriod.M1))
+                                                                     .symbols("EURUSD")
+                                                                     .build()));
         }
 
         public static Builder builder() {
@@ -62,13 +49,17 @@ public class BaseContext implements Context {
             return this;
         }
 
-        public Builder withTimeSeries(MultipleTimeSeriesBuilder timeSeriesDefinition) {
-            this.multipleTimeSeriesBuilder = timeSeriesDefinition;
+        public Builder withTimeSeries(MultipleTimeSeriesBuilder multipleTimeSeriesBuilder) {
+            this.dataService = new BaseDataService(new MarketData(multipleTimeSeriesBuilder.build()));
+            return this;
+        }
+
+        public Builder withMarketData(MarketData marketData) {
+            this.dataService = new BaseDataService(marketData);
             return this;
         }
 
         public Context build() {
-            this.dataService = new BaseDataService(multipleTimeSeriesBuilder.build());
             return new BaseContext(dataService, orderService, strategyControl);
         }
     }
