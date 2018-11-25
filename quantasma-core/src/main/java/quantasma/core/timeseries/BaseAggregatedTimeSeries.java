@@ -58,7 +58,7 @@ public class BaseAggregatedTimeSeries extends BaseSymbolTimeSeries implements Ag
     }
 
     @Getter(value = AccessLevel.PROTECTED)
-    public static final class Builder extends BaseSymbolTimeSeries.Builder {
+    public static final class Builder<T> extends BaseSymbolTimeSeries.Builder {
         private final MainTimeSeries mainTimeSeries;
 
         public Builder(String symbol, BarPeriod barPeriod, MainTimeSeries mainTimeSeries) {
@@ -67,7 +67,7 @@ public class BaseAggregatedTimeSeries extends BaseSymbolTimeSeries implements Ag
         }
 
         @Override
-        protected Builder self() {
+        protected Builder<T> self() {
             return this;
         }
 

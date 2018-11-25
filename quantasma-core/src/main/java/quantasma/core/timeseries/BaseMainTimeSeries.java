@@ -28,14 +28,14 @@ public class BaseMainTimeSeries extends BaseSymbolTimeSeries implements MainTime
         return AggregatedTimeSeriesFactory.from(this, getSymbol()).createInstance(timeSeriesDefinition);
     }
 
-    public static final class Builder extends BaseSymbolTimeSeries.Builder {
+    public static final class Builder<T> extends BaseSymbolTimeSeries.Builder {
 
         public Builder(String symbol, BarPeriod barPeriod) {
             super(symbol, barPeriod);
         }
 
         @Override
-        protected Builder self() {
+        protected Builder<T> self() {
             return this;
         }
 
