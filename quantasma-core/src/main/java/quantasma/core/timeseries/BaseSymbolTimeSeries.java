@@ -28,7 +28,7 @@ public class BaseSymbolTimeSeries extends BaseTimeSeries implements SymbolTimeSe
         this(name, symbol, barPeriod, Integer.MAX_VALUE);
     }
 
-    public BaseSymbolTimeSeries(Builder<?> builder) {
+    protected BaseSymbolTimeSeries(Builder<?> builder) {
         super(builder.getName(), builder.getBars(), builder.getNumFunction());
         this.symbol = builder.getSymbol();
         this.barPeriod = builder.getBarPeriod();
