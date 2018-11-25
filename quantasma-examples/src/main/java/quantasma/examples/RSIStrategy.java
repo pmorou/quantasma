@@ -48,7 +48,7 @@ public class RSIStrategy extends BaseTradeStrategy {
     public boolean shouldExit(int index, TradingRecord tradingRecord) {
         if (super.shouldExit(index, tradingRecord) && hasOpenedPosition()) {
             openedPositionsCounter--;
-            System.out.println("Closing position");
+            log.info("Closing position");
             getOrderService().closePosition(new CloseMarkerOrder());
             return true;
         }
