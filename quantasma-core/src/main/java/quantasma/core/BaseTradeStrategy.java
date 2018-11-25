@@ -1,5 +1,7 @@
 package quantasma.core;
 
+import lombok.AccessLevel;
+import lombok.Getter;
 import org.ta4j.core.BaseStrategy;
 import org.ta4j.core.Rule;
 import org.ta4j.core.Strategy;
@@ -21,6 +23,12 @@ public class BaseTradeStrategy extends BaseStrategy implements TradeStrategy {
         super(name, entryRule, exitRule, unstablePeriod);
         this.context = context;
         this.tradeSymbol = tradeSymbol;
+    }
+
+    protected BaseTradeStrategy(Builder builder) {
+        super(builder.getName(), builder.getEntryRule(), builder.getExitRule(), builder.getUnstablePeriod());
+        this.context = builder.getContext();
+        this.tradeSymbol = builder.getTradeSymbol();
     }
 
     @Override
@@ -83,5 +91,42 @@ public class BaseTradeStrategy extends BaseStrategy implements TradeStrategy {
 
     protected void setAmount(Num amount) {
         this.amount = amount;
+    }
+
+    @Getter(value = AccessLevel.PROTECTED)
+    public static class Builder<T extends Builder<T>> {
+        private final Context context;
+        private final String tradeSymbol;
+        private final Rule entryRule;
+        private final Rule exitRule;
+
+        private String name = "unamed_series";
+        private int unstablePeriod;
+
+        protected Builder(Context context, String tradeSymbol, Rule entryRule, Rule exitRule) {
+            this.context = Objects.requireNonNull(context);
+            this.tradeSymbol = Objects.requireNonNull(tradeSymbol);
+            this.entryRule = Objects.requireNonNull(entryRule);
+            this.exitRule = Objects.requireNonNull(exitRule);
+        }
+
+        // every subclass has to implement it
+        protected T self() {
+            return (T) this;
+        }
+
+        public T withName(String name) {
+            this.name = Objects.requireNonNull(name);
+            return self();
+        }
+
+        public T withUnstablePeriod(int unstablePeriod) {
+            this.unstablePeriod = unstablePeriod;
+            return self();
+        }
+
+        public BaseTradeStrategy build() {
+            return new BaseTradeStrategy(this);
+        }
     }
 }
