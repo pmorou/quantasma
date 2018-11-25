@@ -101,7 +101,7 @@ public class BaseTradeStrategy extends BaseStrategy implements TradeStrategy {
         private String name = "unamed_series";
         private int unstablePeriod;
 
-        protected Builder(Context context, String tradeSymbol, Rule entryRule, Rule exitRule) {
+        public Builder(Context context, String tradeSymbol, Rule entryRule, Rule exitRule) {
             this.context = Objects.requireNonNull(context);
             this.tradeSymbol = Objects.requireNonNull(tradeSymbol);
             this.entryRule = Objects.requireNonNull(entryRule);
