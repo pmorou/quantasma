@@ -5,7 +5,7 @@ import org.ta4j.core.Bar;
 import quantasma.core.BarPeriod;
 import quantasma.core.timeseries.bar.NaNBar;
 
-public class BaseAggregatedTimeSeries extends BaseDescribedTimeSeries implements AggregatedTimeSeries {
+public class BaseAggregatedTimeSeries extends BaseSymbolTimeSeries implements AggregatedTimeSeries {
     @Getter
     private final MainTimeSeries mainTimeSeries;
 

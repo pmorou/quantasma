@@ -2,7 +2,7 @@ package quantasma.core.timeseries;
 
 import quantasma.core.BarPeriod;
 
-public class BaseMainTimeSeries extends BaseDescribedTimeSeries implements MainTimeSeries {
+public class BaseMainTimeSeries extends BaseSymbolTimeSeries implements MainTimeSeries {
 
     protected BaseMainTimeSeries(String name, String symbol, BarPeriod barPeriod) {
         super(name, symbol, barPeriod);

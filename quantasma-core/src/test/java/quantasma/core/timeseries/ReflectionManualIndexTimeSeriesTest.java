@@ -22,8 +22,8 @@ public class ReflectionManualIndexTimeSeriesTest {
     public static Iterable<Object[]> firstBarCreationTimes() {
         return Arrays.asList(new Object[][] {
                 {BaseTimeSeries.class.getName(), BarPeriod.M1, ManualIndexTimeSeriesFactory.BASE_TIME_SERIES, 2},
-                {BaseDescribedTimeSeries.class.getName(), BarPeriod.M1, ManualIndexTimeSeriesFactory.BASE_DESCRIBED_TIME_SERIES, 2},
-                {BaseDescribedTimeSeries.class.getName(), BarPeriod.M5, ManualIndexTimeSeriesFactory.BASE_DESCRIBED_TIME_SERIES, 0},
+                {BaseSymbolTimeSeries.class.getName(), BarPeriod.M1, ManualIndexTimeSeriesFactory.BASE_SYMBOL_TIME_SERIES, 2},
+                {BaseSymbolTimeSeries.class.getName(), BarPeriod.M5, ManualIndexTimeSeriesFactory.BASE_SYMBOL_TIME_SERIES, 0},
                 {BaseMainTimeSeries.class.getName(), BarPeriod.M1, ManualIndexTimeSeriesFactory.BASE_MAIN_TIME_SERIES, 2},
                 {BaseMainTimeSeries.class.getName(), BarPeriod.M5, ManualIndexTimeSeriesFactory.BASE_MAIN_TIME_SERIES, 0},
                 {BaseAggregatedTimeSeries.class.getName(), BarPeriod.M1, ManualIndexTimeSeriesFactory.BASE_AGGREGATED_TIME_SERIES, 2},
@@ -185,10 +185,10 @@ public class ReflectionManualIndexTimeSeriesTest {
                     return ReflectionManualIndexTimeSeries.wrap(timeSeries);
                 };
 
-        ManualIndexTimeSeriesFactory<ReflectionManualIndexTimeSeries> BASE_DESCRIBED_TIME_SERIES = () ->
+        ManualIndexTimeSeriesFactory<ReflectionManualIndexTimeSeries> BASE_SYMBOL_TIME_SERIES = () ->
                 (Integer barsCount) -> {
                     final BarPeriod barPeriod = getBarPeriod();
-                    final DescribedTimeSeries timeSeries = new BaseDescribedTimeSeries("test", "test", BarPeriod.M5);
+                    final SymbolTimeSeries timeSeries = new BaseSymbolTimeSeries("test", "test", BarPeriod.M5);
                     for (int i = 0; i < barsCount; i++) {
                         if (i % barPeriod.getPeriod().toMinutes() == 0) {
                             timeSeries.addBar(createBar(timeSeries, i, Duration.ofMinutes(i)));
