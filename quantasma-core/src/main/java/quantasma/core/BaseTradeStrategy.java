@@ -16,7 +16,7 @@ public class BaseTradeStrategy extends BaseStrategy implements TradeStrategy {
     private String tradeSymbol;
     private Num amount;
 
-    public BaseTradeStrategy(Context context, String name, String tradeSymbol, Rule entryRule, Rule exitRule, int unstablePeriod) {
+    protected BaseTradeStrategy(Context context, String name, String tradeSymbol, Rule entryRule, Rule exitRule, int unstablePeriod) {
         super(name, entryRule, exitRule, unstablePeriod);
         this.context = context;
         this.tradeSymbol = tradeSymbol;
