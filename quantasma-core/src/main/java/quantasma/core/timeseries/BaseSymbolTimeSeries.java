@@ -28,7 +28,7 @@ public class BaseSymbolTimeSeries extends BaseTimeSeries implements SymbolTimeSe
         this(name, symbol, barPeriod, Integer.MAX_VALUE);
     }
 
-    public BaseSymbolTimeSeries(Builder builder) {
+    public BaseSymbolTimeSeries(Builder<?> builder) {
         super(builder.getName(), builder.getBars(), builder.getNumFunction());
         this.symbol = builder.getSymbol();
         this.barPeriod = builder.getBarPeriod();
@@ -43,7 +43,7 @@ public class BaseSymbolTimeSeries extends BaseTimeSeries implements SymbolTimeSe
         private String name = "unamed_series";
         private List<Bar> bars = new ArrayList<>();
         private int maxBarCount = Integer.MAX_VALUE;
-        private Function<Number, ? extends Num> numFunction = PrecisionNum::valueOf;
+        private Function<Number, Num> numFunction = PrecisionNum::valueOf;
 
         public Builder(String symbol, BarPeriod barPeriod) {
             this.symbol = symbol;
@@ -55,7 +55,7 @@ public class BaseSymbolTimeSeries extends BaseTimeSeries implements SymbolTimeSe
             return self();
         }
 
-        public T withNumFunction(Function<Number, ? extends Num> numFunction) {
+        public T withNumFunction(Function<Number, Num> numFunction) {
             this.numFunction = numFunction;
             return self();
         }
