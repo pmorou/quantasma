@@ -1,8 +1,6 @@
 package quantasma.core.timeseries;
 
-import org.ta4j.core.TimeSeries;
-
-public interface MainTimeSeries extends TimeSeries {
+public interface MainTimeSeries extends SymbolTimeSeries {
 
     AggregatedTimeSeries aggregate(TimeSeriesDefinition timeSeriesDefinition);
 }

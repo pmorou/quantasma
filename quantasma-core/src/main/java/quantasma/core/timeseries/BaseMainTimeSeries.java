@@ -25,7 +25,7 @@ public class BaseMainTimeSeries extends BaseSymbolTimeSeries implements MainTime
 
     @Override
     public AggregatedTimeSeries aggregate(TimeSeriesDefinition timeSeriesDefinition) {
-        return AggregatedTimeSeriesFactory.from(this, getSymbol()).createInstance(timeSeriesDefinition);
+        return AggregatedTimeSeriesFactory.from(this).createInstance(timeSeriesDefinition);
     }
 
     public static final class Builder<T> extends BaseSymbolTimeSeries.Builder {
