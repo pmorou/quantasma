@@ -10,16 +10,6 @@ public class BaseAggregatedTimeSeries extends BaseSymbolTimeSeries implements Ag
     @Getter
     private final MainTimeSeries mainTimeSeries;
 
-    protected BaseAggregatedTimeSeries(MainTimeSeries mainTimeSeries, String name, String symbol, BarPeriod barPeriod) {
-        super(name, symbol, barPeriod);
-        this.mainTimeSeries = mainTimeSeries;
-    }
-
-    protected BaseAggregatedTimeSeries(MainTimeSeries mainTimeSeries, String name, String symbol, BarPeriod barPeriod, int maxBarCount) {
-        super(name, symbol, barPeriod, maxBarCount);
-        this.mainTimeSeries = mainTimeSeries;
-    }
-
     protected BaseAggregatedTimeSeries(Builder builder) {
         super(builder);
         this.mainTimeSeries = builder.mainTimeSeries;

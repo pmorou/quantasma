@@ -19,7 +19,7 @@ import java.util.Arrays;
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(Parameterized.class)
-public class AggregatedTimeSeriesTest {
+public class BaseAggregatedTimeSeriesTest {
 
     private static final ZonedDateTime MIDNIGHT = utc(LocalDateTime.of(2018, 11, 20, 0, 0));
 
@@ -37,7 +37,7 @@ public class AggregatedTimeSeriesTest {
 
     private final ZonedDateTime time;
 
-    public AggregatedTimeSeriesTest(ZonedDateTime time) {
+    public BaseAggregatedTimeSeriesTest(ZonedDateTime time) {
         this.time = time;
     }
 
@@ -45,7 +45,7 @@ public class AggregatedTimeSeriesTest {
     public void given1M5And1M1BarsShouldReturnUniqueBarAtIndex0() {
         // given
         final MainTimeSeries mainTimeSeries = BaseMainTimeSeries.create(TimeSeriesDefinition.unlimited(BarPeriod.M1), "symbol");
-        final BaseAggregatedTimeSeries aggregatedTimeSeries = new BaseAggregatedTimeSeries(mainTimeSeries, "aggregated", "symbol", BarPeriod.M5);
+        final BaseAggregatedTimeSeries aggregatedTimeSeries = createBaseAggregatedTimeSeries(mainTimeSeries);
         createM1Bar(0, mainTimeSeries);
         mainTimeSeries.addPrice(1);
         createM5Bar(0, aggregatedTimeSeries);
@@ -62,7 +62,7 @@ public class AggregatedTimeSeriesTest {
     public void given1M5And2M1BarsShouldReturnUniqueBarAtIndex1() {
         // given
         final MainTimeSeries mainTimeSeries = BaseMainTimeSeries.create(TimeSeriesDefinition.unlimited(BarPeriod.M1), "symbol");
-        final BaseAggregatedTimeSeries aggregatedTimeSeries = new BaseAggregatedTimeSeries(mainTimeSeries, "aggregated", "symbol", BarPeriod.M5);
+        final BaseAggregatedTimeSeries aggregatedTimeSeries = createBaseAggregatedTimeSeries(mainTimeSeries);
         for (int i = 0; i < 2; i++) {
             createM1Bar(i, mainTimeSeries);
             mainTimeSeries.addPrice(i);
@@ -85,7 +85,7 @@ public class AggregatedTimeSeriesTest {
     public void given2M5BarsShouldReturnUniqueBarsFromIndex1To0() {
         // given
         final MainTimeSeries mainTimeSeries = BaseMainTimeSeries.create(TimeSeriesDefinition.unlimited(BarPeriod.M1), "symbol");
-        final BaseAggregatedTimeSeries aggregatedTimeSeries = new BaseAggregatedTimeSeries(mainTimeSeries, "aggregated", "symbol", BarPeriod.M5);
+        final BaseAggregatedTimeSeries aggregatedTimeSeries = createBaseAggregatedTimeSeries(mainTimeSeries);
         for (int i = 0; i < 6; i++) {
             createM1Bar(i, mainTimeSeries);
             if (i % 5 == 0) {
@@ -116,7 +116,7 @@ public class AggregatedTimeSeriesTest {
     public void given3M5BarsShouldReturnCorrectFirstAndLastCreatedBar() {
         // given
         final MainTimeSeries mainTimeSeries = BaseMainTimeSeries.create(TimeSeriesDefinition.unlimited(BarPeriod.M1), "symbol");
-        final BaseAggregatedTimeSeries aggregatedTimeSeries = new BaseAggregatedTimeSeries(mainTimeSeries, "aggregated", "symbol", BarPeriod.M5);
+        final BaseAggregatedTimeSeries aggregatedTimeSeries = createBaseAggregatedTimeSeries(mainTimeSeries);
         Bar firstM5Bar = null, secondM5Bar = null, thirdM5Bar = null;
 
         for (int i = 0; i < 14; i++) {
@@ -144,6 +144,10 @@ public class AggregatedTimeSeriesTest {
         // then
         assertThat(actualFirstBar).isEqualTo(firstM5Bar);
         assertThat(actualLastBar).isEqualTo(thirdM5Bar);
+    }
+
+    private static BaseAggregatedTimeSeries createBaseAggregatedTimeSeries(MainTimeSeries mainTimeSeries) {
+        return new BaseAggregatedTimeSeries.Builder<>("symbol", BarPeriod.M5, mainTimeSeries).build();
     }
 
     private void createM1Bar(int minutesOffset, TimeSeries timeSeries) {

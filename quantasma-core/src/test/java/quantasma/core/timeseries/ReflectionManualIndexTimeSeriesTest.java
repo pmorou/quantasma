@@ -146,7 +146,6 @@ public class ReflectionManualIndexTimeSeriesTest {
         manualTimeSeries.addBar(bar);
     }
 
-
     private ReflectionManualIndexTimeSeries createManualTimeSeries(int barsCount) {
         return factory.create(barsCount);
     }
@@ -158,12 +157,11 @@ public class ReflectionManualIndexTimeSeriesTest {
     private static final ZonedDateTime TIME_REF = ZonedDateTime.now();
 
     private static BaseMainTimeSeries createMainTimeSeries(BarPeriod barPeriod) {
-        return new BaseMainTimeSeries("test", "test", barPeriod);
+        return new BaseMainTimeSeries.Builder<>("test", barPeriod).build();
     }
 
     @FunctionalInterface
     private interface ManualIndexTimeSeriesFactory<T extends ManualIndexTimeSeries> {
-
 
         Function<Integer, T> function();
 
@@ -188,7 +186,7 @@ public class ReflectionManualIndexTimeSeriesTest {
         ManualIndexTimeSeriesFactory<ReflectionManualIndexTimeSeries> BASE_SYMBOL_TIME_SERIES = () ->
                 (Integer barsCount) -> {
                     final BarPeriod barPeriod = getBarPeriod();
-                    final SymbolTimeSeries timeSeries = new BaseSymbolTimeSeries("test", "test", BarPeriod.M5);
+                    final SymbolTimeSeries timeSeries = new BaseSymbolTimeSeries.Builder<>("symbol", BarPeriod.M5).build();
                     for (int i = 0; i < barsCount; i++) {
                         if (i % barPeriod.getPeriod().toMinutes() == 0) {
                             timeSeries.addBar(createBar(timeSeries, i, Duration.ofMinutes(i)));
@@ -210,11 +208,12 @@ public class ReflectionManualIndexTimeSeriesTest {
                     }
                     return ReflectionManualIndexTimeSeries.wrap(timeSeries);
                 };
+
         ManualIndexTimeSeriesFactory<ReflectionManualIndexTimeSeries> BASE_AGGREGATED_TIME_SERIES = () ->
                 (Integer barsCount) -> {
                     final BarPeriod barPeriod = getBarPeriod();
                     final MainTimeSeries mainTimeSeries = createMainTimeSeries(BarPeriod.M1);
-                    final AggregatedTimeSeries aggregatedTimeSeries = new BaseAggregatedTimeSeries(mainTimeSeries, "test", "symbol", BarPeriod.M1);
+                    final AggregatedTimeSeries aggregatedTimeSeries = new BaseAggregatedTimeSeries.Builder<>("symbol", BarPeriod.M1, mainTimeSeries).build();
                     for (int i = 0; i < barsCount; i++) {
                         if (i % barPeriod.getPeriod().toMinutes() == 0) {
                             aggregatedTimeSeries.addBar(createBar(aggregatedTimeSeries, i, barPeriod.getPeriod()));

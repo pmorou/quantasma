@@ -16,10 +16,9 @@ public class AggregatedTimeSeriesFactory implements TimeSeriesFactory<Aggregated
 
     @Override
     public Function<TimeSeriesDefinition, AggregatedTimeSeries> function() {
-        return timeSeriesDefinition -> new BaseAggregatedTimeSeries(mainTimeSeries,
-                                                                    timeSeriesDefinition.getBarPeriod().getPeriodCode(),
-                                                                    mainTimeSeries.getSymbol(),
-                                                                    timeSeriesDefinition.getBarPeriod(),
-                                                                    timeSeriesDefinition.getMaxBarCount());
+        return timeSeriesDefinition -> new BaseAggregatedTimeSeries.Builder<>(mainTimeSeries.getSymbol(), timeSeriesDefinition.getBarPeriod(), mainTimeSeries)
+                .withMaxBarCount(timeSeriesDefinition.getMaxBarCount())
+                .withName(timeSeriesDefinition.getBarPeriod().getPeriodCode())
+                .build();
     }
 }

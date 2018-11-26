@@ -17,17 +17,6 @@ public class BaseSymbolTimeSeries extends BaseTimeSeries implements SymbolTimeSe
     private final String symbol;
     private final BarPeriod barPeriod;
 
-    protected BaseSymbolTimeSeries(String name, String symbol, BarPeriod barPeriod, int maxBarCount) {
-        super(name);
-        this.barPeriod = barPeriod;
-        this.symbol = symbol;
-        setMaximumBarCount(maxBarCount);
-    }
-
-    protected BaseSymbolTimeSeries(String name, String symbol, BarPeriod barPeriod) {
-        this(name, symbol, barPeriod, Integer.MAX_VALUE);
-    }
-
     protected BaseSymbolTimeSeries(Builder<?, ?> builder) {
         super(builder.getName(), builder.getBars(), builder.getNumFunction());
         this.symbol = builder.getSymbol();

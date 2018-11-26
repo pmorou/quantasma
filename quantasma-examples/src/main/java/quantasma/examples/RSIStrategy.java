@@ -11,11 +11,8 @@ import org.ta4j.core.trading.rules.CrossedUpIndicatorRule;
 import quantasma.core.BarPeriod;
 import quantasma.core.BaseTradeStrategy;
 import quantasma.core.Context;
-import quantasma.core.TradeStrategy;
 import quantasma.core.order.CloseMarkerOrder;
 import quantasma.core.order.OpenMarketOrder;
-
-import java.util.Objects;
 
 @Slf4j
 public class RSIStrategy extends BaseTradeStrategy {
@@ -23,10 +20,6 @@ public class RSIStrategy extends BaseTradeStrategy {
     private static final int MAX_NUMBER_OF_POSITIONS = 1;
 
     private int openedPositionsCounter = 0;
-
-    protected RSIStrategy(Context context, String name, String tradeSymbol, Rule entryRule, Rule exitRule, int unstablePeriod) {
-        super(Objects.requireNonNull(context), name, tradeSymbol, entryRule, exitRule, unstablePeriod);
-    }
 
     protected RSIStrategy(Builder builder) {
         super(builder);
