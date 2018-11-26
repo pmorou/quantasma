@@ -90,7 +90,7 @@ public class BaseTradeStrategy extends BaseStrategy implements TradeStrategy {
 
     @Override
     public String getTradeSymbol() {
-        throw new UnsupportedOperationException();
+        return tradeSymbol;
     }
 
     protected void setAmount(Num amount) {
