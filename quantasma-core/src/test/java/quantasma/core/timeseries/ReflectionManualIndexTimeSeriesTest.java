@@ -210,11 +210,12 @@ public class ReflectionManualIndexTimeSeriesTest {
                     }
                     return ReflectionManualIndexTimeSeries.wrap(timeSeries);
                 };
+
         ManualIndexTimeSeriesFactory<ReflectionManualIndexTimeSeries> BASE_AGGREGATED_TIME_SERIES = () ->
                 (Integer barsCount) -> {
                     final BarPeriod barPeriod = getBarPeriod();
                     final MainTimeSeries mainTimeSeries = createMainTimeSeries(BarPeriod.M1);
-                    final AggregatedTimeSeries aggregatedTimeSeries = new BaseAggregatedTimeSeries(mainTimeSeries, "test", "symbol", BarPeriod.M1);
+                    final AggregatedTimeSeries aggregatedTimeSeries = new BaseAggregatedTimeSeries.Builder<>("symbol", BarPeriod.M1, mainTimeSeries).build();
                     for (int i = 0; i < barsCount; i++) {
                         if (i % barPeriod.getPeriod().toMinutes() == 0) {
                             aggregatedTimeSeries.addBar(createBar(aggregatedTimeSeries, i, barPeriod.getPeriod()));
