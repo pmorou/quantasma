@@ -97,8 +97,14 @@ public class BaseTradeStrategy extends BaseStrategy implements TradeStrategy {
         this.amount = amount;
     }
 
+    /**
+     * Example of builder which preserves all methods of its parents<p>
+     *
+     * @param <T> Builder type
+     * @param <R> {@code build()} return type
+     */
     @Getter(value = AccessLevel.PROTECTED)
-    public static class Builder<T extends Builder<T>> {
+    public static class Builder<T extends Builder<T, R>, R extends BaseTradeStrategy> {
         private final Context context;
         private final String tradeSymbol;
         private final Rule entryRule;
@@ -114,13 +120,6 @@ public class BaseTradeStrategy extends BaseStrategy implements TradeStrategy {
             this.exitRule = Objects.requireNonNull(exitRule);
         }
 
-        /**
-         * Every builder subclass should implement this method with the right return type
-         */
-        protected T self() {
-            return (T) this;
-        }
-
         public T withName(String name) {
             this.name = Objects.requireNonNull(name);
             return self();
@@ -131,8 +130,18 @@ public class BaseTradeStrategy extends BaseStrategy implements TradeStrategy {
             return self();
         }
 
-        public BaseTradeStrategy build() {
-            return new BaseTradeStrategy(this);
+        /**
+         * Every builder subclass should implement this method
+         */
+        protected T self() {
+            return (T) this;
+        }
+
+        /**
+         * Every builder subclass should implement this method
+         */
+        public R build() {
+            return (R) new BaseTradeStrategy(this);
         }
     }
 }

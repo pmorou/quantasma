@@ -28,15 +28,21 @@ public class BaseSymbolTimeSeries extends BaseTimeSeries implements SymbolTimeSe
         this(name, symbol, barPeriod, Integer.MAX_VALUE);
     }
 
-    protected BaseSymbolTimeSeries(Builder<?> builder) {
+    protected BaseSymbolTimeSeries(Builder<?, ?> builder) {
         super(builder.getName(), builder.getBars(), builder.getNumFunction());
         this.symbol = builder.getSymbol();
         this.barPeriod = builder.getBarPeriod();
         setMaximumBarCount(builder.getMaxBarCount());
     }
 
+    /**
+     * Example of builder which preserves all methods of its parents<p>
+     *
+     * @param <T> Builder type
+     * @param <R> {@code build()} return type
+     */
     @Getter(value = AccessLevel.PROTECTED)
-    public static class Builder<T extends Builder<T>> {
+    public static class Builder<T extends Builder<T, R>, R extends BaseSymbolTimeSeries> {
         private final String symbol;
         private final BarPeriod barPeriod;
 
@@ -75,12 +81,18 @@ public class BaseSymbolTimeSeries extends BaseTimeSeries implements SymbolTimeSe
             return self();
         }
 
+        /**
+         * Every builder subclass should implement this method
+         */
         protected T self() {
             return (T) this;
         }
 
-        public BaseSymbolTimeSeries build() {
-            return new BaseSymbolTimeSeries(this);
+        /**
+         * Every builder subclass should implement this method
+         */
+        public R build() {
+            return (R) new BaseSymbolTimeSeries(this);
         }
 
     }

@@ -28,7 +28,7 @@ public class RSIStrategy extends BaseTradeStrategy {
         super(Objects.requireNonNull(context), name, tradeSymbol, entryRule, exitRule, unstablePeriod);
     }
 
-    private RSIStrategy(Builder builder) {
+    protected RSIStrategy(Builder builder) {
         super(builder);
     }
 
@@ -62,17 +62,17 @@ public class RSIStrategy extends BaseTradeStrategy {
         return openedPositionsCounter > 0;
     }
 
-    public static TradeStrategy buildBullish(Context context, String tradeSymbol, BarPeriod barPeriod) {
+    public static RSIStrategy buildBullish(Context context, String tradeSymbol, BarPeriod barPeriod) {
         final RSIIndicator rsi = createRSIIndicator(context, tradeSymbol, barPeriod);
-        return new Builder(context, tradeSymbol, new CrossedUpIndicatorRule(rsi, 30), new CrossedDownIndicatorRule(rsi, 70))
+        return new Builder<>(context, tradeSymbol, new CrossedUpIndicatorRule(rsi, 30), new CrossedDownIndicatorRule(rsi, 70))
                 .withName("bullish_rsi_strategy_30-70")
                 .withUnstablePeriod(14)
                 .build();
     }
 
-    public static TradeStrategy buildBearish(Context context, String tradeSymbol, BarPeriod barPeriod) {
+    public static RSIStrategy buildBearish(Context context, String tradeSymbol, BarPeriod barPeriod) {
         final RSIIndicator rsi = createRSIIndicator(context, tradeSymbol, barPeriod);
-        return new Builder(context, tradeSymbol, new CrossedDownIndicatorRule(rsi, 70), new CrossedUpIndicatorRule(rsi, 30))
+        return new Builder<>(context, tradeSymbol, new CrossedDownIndicatorRule(rsi, 70), new CrossedUpIndicatorRule(rsi, 30))
                 .withName("bearish_rsi_strategy_30-70")
                 .withUnstablePeriod(14)
                 .build();
@@ -84,8 +84,10 @@ public class RSIStrategy extends BaseTradeStrategy {
         return new RSIIndicator(closePrice, 14);
     }
 
-    // Example of properly extended builder
-    public static class Builder extends BaseTradeStrategy.Builder {
+    /**
+     * @see quantasma.core.BaseTradeStrategy.Builder
+     */
+    public static class Builder<T extends Builder<T, R>, R extends RSIStrategy> extends BaseTradeStrategy.Builder<T, R> {
 
         public Builder(Context context, String tradeSymbol, Rule entryRule, Rule exitRule) {
             super(context, tradeSymbol, entryRule, exitRule);
@@ -94,13 +96,13 @@ public class RSIStrategy extends BaseTradeStrategy {
         // New methods can be added here
 
         @Override
-        protected RSIStrategy.Builder self() {
-            return this;
+        protected T self() {
+            return (T) this;
         }
 
         @Override
-        public RSIStrategy build() {
-            return new RSIStrategy(this);
+        public R build() {
+            return (R) new RSIStrategy(this);
         }
     }
 }

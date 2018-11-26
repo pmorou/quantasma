@@ -28,17 +28,25 @@ public class BaseMainTimeSeries extends BaseSymbolTimeSeries implements MainTime
         return AggregatedTimeSeriesFactory.from(this).createInstance(timeSeriesDefinition);
     }
 
-    public static final class Builder<T> extends BaseSymbolTimeSeries.Builder {
+    /**
+     * Example of builder which preserves all methods of its parents<p>
+     *
+     * @param <T> Builder type
+     * @param <R> {@code build()} return type
+     */
+    public static class Builder<T extends Builder<T, R>, R extends BaseMainTimeSeries> extends BaseSymbolTimeSeries.Builder<T, R> {
 
         public Builder(String symbol, BarPeriod barPeriod) {
             super(symbol, barPeriod);
         }
 
         @Override
-        protected Builder<T> self() {
-            return this;
+        protected T self() {
+            return (T) this;
         }
 
-        public BaseMainTimeSeries build() { return new BaseMainTimeSeries(this); }
+        public R build() {
+            return (R) new BaseMainTimeSeries(this);
+        }
     }
 }

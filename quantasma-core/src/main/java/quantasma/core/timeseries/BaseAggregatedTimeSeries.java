@@ -57,8 +57,8 @@ public class BaseAggregatedTimeSeries extends BaseSymbolTimeSeries implements Ag
         return NaNBar.NaN;
     }
 
-    @Getter(value = AccessLevel.PROTECTED)
-    public static final class Builder<T> extends BaseSymbolTimeSeries.Builder {
+    public static class Builder<T extends Builder<T, R>, R extends BaseAggregatedTimeSeries> extends BaseSymbolTimeSeries.Builder<T, R> {
+        @Getter(value = AccessLevel.PROTECTED)
         private final MainTimeSeries mainTimeSeries;
 
         public Builder(String symbol, BarPeriod barPeriod, MainTimeSeries mainTimeSeries) {
@@ -67,11 +67,14 @@ public class BaseAggregatedTimeSeries extends BaseSymbolTimeSeries implements Ag
         }
 
         @Override
-        protected Builder<T> self() {
-            return this;
+        protected T self() {
+            return (T) this;
         }
 
-        public BaseAggregatedTimeSeries build() { return new BaseAggregatedTimeSeries(this); }
+        @Override
+        public R build() {
+            return (R) new BaseAggregatedTimeSeries(this);
+        }
     }
 
 }
