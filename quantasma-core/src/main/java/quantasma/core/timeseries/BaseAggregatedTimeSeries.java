@@ -1,5 +1,6 @@
 package quantasma.core.timeseries;
 
+import lombok.AccessLevel;
 import lombok.Getter;
 import org.ta4j.core.Bar;
 import quantasma.core.BarPeriod;
@@ -17,6 +18,11 @@ public class BaseAggregatedTimeSeries extends BaseSymbolTimeSeries implements Ag
     protected BaseAggregatedTimeSeries(MainTimeSeries mainTimeSeries, String name, String symbol, BarPeriod barPeriod, int maxBarCount) {
         super(name, symbol, barPeriod, maxBarCount);
         this.mainTimeSeries = mainTimeSeries;
+    }
+
+    protected BaseAggregatedTimeSeries(Builder builder) {
+        super(builder);
+        this.mainTimeSeries = builder.mainTimeSeries;
     }
 
     @Override
@@ -49,6 +55,26 @@ public class BaseAggregatedTimeSeries extends BaseSymbolTimeSeries implements Ag
         }
 
         return NaNBar.NaN;
+    }
+
+    public static class Builder<T extends Builder<T, R>, R extends BaseAggregatedTimeSeries> extends BaseSymbolTimeSeries.Builder<T, R> {
+        @Getter(value = AccessLevel.PROTECTED)
+        private final MainTimeSeries mainTimeSeries;
+
+        public Builder(String symbol, BarPeriod barPeriod, MainTimeSeries mainTimeSeries) {
+            super(symbol, barPeriod);
+            this.mainTimeSeries = mainTimeSeries;
+        }
+
+        @Override
+        protected T self() {
+            return (T) this;
+        }
+
+        @Override
+        public R build() {
+            return (R) new BaseAggregatedTimeSeries(this);
+        }
     }
 
 }
