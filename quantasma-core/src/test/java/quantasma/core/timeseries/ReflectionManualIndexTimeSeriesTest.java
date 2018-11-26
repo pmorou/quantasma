@@ -158,7 +158,7 @@ public class ReflectionManualIndexTimeSeriesTest {
     private static final ZonedDateTime TIME_REF = ZonedDateTime.now();
 
     private static BaseMainTimeSeries createMainTimeSeries(BarPeriod barPeriod) {
-        return new BaseMainTimeSeries("test", "test", barPeriod);
+        return new BaseMainTimeSeries.Builder<>("test", barPeriod).build();
     }
 
     @FunctionalInterface
