@@ -146,7 +146,6 @@ public class ReflectionManualIndexTimeSeriesTest {
         manualTimeSeries.addBar(bar);
     }
 
-
     private ReflectionManualIndexTimeSeries createManualTimeSeries(int barsCount) {
         return factory.create(barsCount);
     }
@@ -163,7 +162,6 @@ public class ReflectionManualIndexTimeSeriesTest {
 
     @FunctionalInterface
     private interface ManualIndexTimeSeriesFactory<T extends ManualIndexTimeSeries> {
-
 
         Function<Integer, T> function();
 
@@ -188,7 +186,7 @@ public class ReflectionManualIndexTimeSeriesTest {
         ManualIndexTimeSeriesFactory<ReflectionManualIndexTimeSeries> BASE_SYMBOL_TIME_SERIES = () ->
                 (Integer barsCount) -> {
                     final BarPeriod barPeriod = getBarPeriod();
-                    final SymbolTimeSeries timeSeries = new BaseSymbolTimeSeries("test", "test", BarPeriod.M5);
+                    final SymbolTimeSeries timeSeries = new BaseSymbolTimeSeries.Builder<>("symbol", BarPeriod.M5).build();
                     for (int i = 0; i < barsCount; i++) {
                         if (i % barPeriod.getPeriod().toMinutes() == 0) {
                             timeSeries.addBar(createBar(timeSeries, i, Duration.ofMinutes(i)));
