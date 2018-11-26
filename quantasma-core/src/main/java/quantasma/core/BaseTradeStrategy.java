@@ -16,16 +16,10 @@ public class BaseTradeStrategy extends BaseStrategy implements TradeStrategy {
     private String tradeSymbol;
     private Num amount;
 
-    protected BaseTradeStrategy(Context context, String name, String tradeSymbol, Rule entryRule, Rule exitRule, int unstablePeriod) {
-        super(name, entryRule, exitRule, unstablePeriod);
-        this.context = context;
-        this.tradeSymbol = tradeSymbol;
-    }
-
     protected BaseTradeStrategy(Builder builder) {
         super(builder.getName(), builder.getEntryRule(), builder.getExitRule(), builder.getUnstablePeriod());
-        this.context = builder.getContext();
-        this.tradeSymbol = builder.getTradeSymbol();
+        this.context = Objects.requireNonNull(builder.getContext());
+        this.tradeSymbol = Objects.requireNonNull(builder.getTradeSymbol());
         this.amount = DoubleNum.valueOf(0);
     }
 

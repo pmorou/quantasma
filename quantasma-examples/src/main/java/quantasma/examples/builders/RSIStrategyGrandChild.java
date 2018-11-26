@@ -5,10 +5,6 @@ import quantasma.core.BaseContext;
 import quantasma.core.Context;
 
 public class RSIStrategyGrandChild extends RSIStrategyChild {
-    protected RSIStrategyGrandChild(Context context, String name, String tradeSymbol, Rule entryRule, Rule exitRule, int unstablePeriod) {
-        super(context, name, tradeSymbol, entryRule, exitRule, unstablePeriod);
-    }
-
     protected RSIStrategyGrandChild(Builder builder) {
         super(builder);
     }
