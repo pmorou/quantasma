@@ -19,10 +19,12 @@ public class TypedTimeSeries<T extends Bar> {
         return new TypedTimeSeries<>(barImplementation, timeSeries);
     }
 
+    @SuppressWarnings("unchecked")
     public T getFirstBar() {
         return (T) timeSeries.getFirstBar();
     }
 
+    @SuppressWarnings("unchecked")
     public T getLastBar() {
         return (T) timeSeries.getLastBar();
     }
@@ -31,6 +33,7 @@ public class TypedTimeSeries<T extends Bar> {
         timeSeries.addBar(bar);
     }
 
+    @SuppressWarnings("unchecked")
     public T getBar(int index) {
         return (T) timeSeries.getBar(index);
     }
