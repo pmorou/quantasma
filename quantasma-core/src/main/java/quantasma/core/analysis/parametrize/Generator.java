@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.function.Supplier;
 
 public class Generator {
-    Map<String, Parameter<?>> stateMap = new LinkedHashMap<>();
+    private final Map<String, Parameter<?>> parametersByLabel = new LinkedHashMap<>();
 
     private Generator() {
     }
@@ -15,49 +15,63 @@ public class Generator {
     }
 
     public Parameter<Integer> _int(String label) {
-        final Parameter<Integer> value = new Parameter<>();
-        if (!stateMap.isEmpty() && !stateMap.containsKey(label)) {
-            lastAddedParameter().nextParameter(value);
-        }
-        stateMap.putIfAbsent(label, value);
-        return (Parameter<Integer>) stateMap.get(label);
+        final Parameter<Integer> param = new Parameter<>();
+        linkLastElementWith(label, param);
+        return saveGet(label, param);
     }
 
     public Parameter<String> _String(String label) {
-        final Parameter<String> value = new Parameter<>();
-        if (!stateMap.isEmpty() && !stateMap.containsKey(label)) {
-            lastAddedParameter().nextParameter(value);
+        final Parameter<String> param = new Parameter<>();
+        linkLastElementWith(label, param);
+        return saveGet(label, param);
+    }
+
+    private <T> Parameter<T> saveGet(String label, Parameter<T> parameter) {
+        parametersByLabel.putIfAbsent(label, parameter);
+        return (Parameter<T>) parametersByLabel.get(label);
+    }
+
+    private <T> void linkLastElementWith(String label, Parameter<T> parameter) {
+        if (hasElements() && !isDefined(label)) {
+            lastParameter().getNextParameter(parameter);
         }
-        stateMap.putIfAbsent(label, value);
-        return (Parameter<String>) stateMap.get(label);
+    }
+
+    private boolean hasElements() {
+        return !parametersByLabel.isEmpty();
+    }
+
+    private boolean isDefined(String label) {
+        return parametersByLabel.containsKey(label);
     }
 
     public <T> T next(Supplier<T> supplier) {
-        if (stateMap.isEmpty()) {
+        if (parametersByLabel.isEmpty()) {
             return supplier.get();
         }
 
-        final Parameter<?> value = firstAddedParameter();
+        final Parameter<?> parameter = firstParameter();
 
-        if (!value.next()) {
+        if (!parameter.iterate()) {
             throw new RuntimeException("No more options");
         }
 
         return supplier.get();
     }
 
-    private Parameter<?> lastAddedParameter() {
-        Parameter<?> values = firstAddedParameter();
-        while (values.hasNextParameter()) {
-            values = values.nextParameter();
+    private Parameter<?> lastParameter() {
+        Parameter<?> parameter = firstParameter();
+        while (parameter.hasNextParameter()) {
+            parameter = parameter.getNextParameter();
         }
-        return values;
+        return parameter;
     }
 
-    private Parameter<?> firstAddedParameter() {
-        return stateMap.entrySet().iterator()
-                       .next()
-                       .getValue();
+    private Parameter<?> firstParameter() {
+        return parametersByLabel.entrySet()
+                                .iterator()
+                                .next()
+                                .getValue();
     }
 
 }

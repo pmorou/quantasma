@@ -9,68 +9,60 @@ public class Parameter<T> {
     private T currentValue;
     private Parameter<?> nextParameter;
 
-    public boolean hasNextParameter() {
-        return nextParameter != null;
-    }
-
-    public Parameter<?> nextParameter() {
+    public Parameter<?> getNextParameter() {
         return nextParameter;
     }
 
-    public boolean loadedNextParametersValue() {
-        if (!hasNextParameter()) {
-            return false;
-        }
-        return nextParameter.next();
-    }
-
-    public boolean hasNext() {
-        return reusableIterator.hasNext();
-    }
-
-    public void reset() {
-        reusableIterator.reuse();
-    }
-
-    public void nextParameter(Parameter<?> parameter) {
+    public void getNextParameter(Parameter<?> parameter) {
         this.nextParameter = parameter;
     }
 
     public Parameter<T> values(T... values) {
-        if (isAlreadyRunning()) {
+        if (isAlreadyUsed()) {
             return this;
         }
         reusableIterator = Iterables.reusableIterator(values);
         return this;
     }
 
-    private boolean isAlreadyRunning() {
+    private boolean isAlreadyUsed() {
         return currentValue != null;
     }
 
-    boolean next() {
-        return loadedNextValue() || loadedNextParametersValue();
+    boolean iterate() {
+        return overThisParameter() || overNextParameter();
     }
 
-    public boolean loadedNextValue() {
-        if (hasNext()) {
-            getNext();
+    public boolean overThisParameter() {
+        if (reusableIterator.hasNext()) {
+            updateCurrentValue();
             return true;
         }
-        reset();
-        getNext();
+        reusableIterator.reuse();
+        updateCurrentValue();
         return false;
+    }
+
+    private void updateCurrentValue() {
+        currentValue = reusableIterator.next();
+    }
+
+    public boolean overNextParameter() {
+        if (!hasNextParameter()) {
+            return false;
+        }
+        return nextParameter.iterate();
+    }
+
+    public boolean hasNextParameter() {
+        return nextParameter != null;
     }
 
     public T $() {
         if (currentValue == null) {
-            getNext();
+            updateCurrentValue();
         }
         return currentValue;
-    }
-
-    private void getNext() {
-        currentValue = reusableIterator.next();
     }
 
 }
