@@ -10,7 +10,7 @@ public class Iterables {
         return new ReusableIteratorImpl<>(values);
     }
 
-    interface ReusableIterator<T> extends Iterator<T> {
+    public interface ReusableIterator<T> extends Iterator<T> {
         void reuse();
     }
 
