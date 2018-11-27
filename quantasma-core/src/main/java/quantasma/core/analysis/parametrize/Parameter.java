@@ -2,18 +2,18 @@ package quantasma.core.analysis.parametrize;
 
 import quantasma.core.analysis.parametrize.Iterables.ReusableIterator;
 
-public class Values<T> {
+public class Parameter<T> {
 
     private ReusableIterator<T> reusableIterator;
     private T value;
 
-    private Values<?> nestedValue;
+    private Parameter<?> nestedValue;
 
     public boolean hasNested() {
         return nestedValue != null;
     }
 
-    public Values<?> nested() {
+    public Parameter<?> nested() {
         return nestedValue;
     }
 
@@ -38,11 +38,11 @@ public class Values<T> {
         reusableIterator.reuse();
     }
 
-    public void nest(Values<?> nestedValues) {
+    public void nest(Parameter<?> nestedValues) {
         this.nestedValue = nestedValues;
     }
 
-    public Values<T> values(T... values) {
+    public Parameter<T> values(T... values) {
         if (isAlreadyRunning()) {
             return this;
         }
