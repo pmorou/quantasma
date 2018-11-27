@@ -13,7 +13,7 @@ public class Parameter<T> {
         return nextParameter;
     }
 
-    public void getNextParameter(Parameter<?> parameter) {
+    public void setNextParameter(Parameter<?> parameter) {
         this.nextParameter = parameter;
     }
 

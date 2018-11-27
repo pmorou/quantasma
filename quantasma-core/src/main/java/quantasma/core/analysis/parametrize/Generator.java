@@ -33,7 +33,7 @@ public class Generator {
 
     private <T> void linkLastElementWith(String label, Parameter<T> parameter) {
         if (hasElements() && !isDefined(label)) {
-            lastParameter().getNextParameter(parameter);
+            lastParameter().setNextParameter(parameter);
         }
     }
 
