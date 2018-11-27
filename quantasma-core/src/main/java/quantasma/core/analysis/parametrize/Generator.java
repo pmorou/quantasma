@@ -17,7 +17,7 @@ public class Generator {
     public Parameter<Integer> _int(String label) {
         final Parameter<Integer> value = new Parameter<>();
         if (!stateMap.isEmpty() && !stateMap.containsKey(label)) {
-            lastValuesObject().nest(value);
+            lastAddedParameter().nextParameter(value);
         }
         stateMap.putIfAbsent(label, value);
         return (Parameter<Integer>) stateMap.get(label);
@@ -26,7 +26,7 @@ public class Generator {
     public Parameter<String> _String(String label) {
         final Parameter<String> value = new Parameter<>();
         if (!stateMap.isEmpty() && !stateMap.containsKey(label)) {
-            lastValuesObject().nest(value);
+            lastAddedParameter().nextParameter(value);
         }
         stateMap.putIfAbsent(label, value);
         return (Parameter<String>) stateMap.get(label);
@@ -37,7 +37,7 @@ public class Generator {
             return supplier.get();
         }
 
-        final Parameter<?> value = firstValuesObject();
+        final Parameter<?> value = firstAddedParameter();
 
         if (!value.next()) {
             throw new RuntimeException("No more options");
@@ -46,15 +46,15 @@ public class Generator {
         return supplier.get();
     }
 
-    private Parameter<?> lastValuesObject() {
-        Parameter<?> values = firstValuesObject();
-        while (values.hasNested()) {
-            values = values.nested();
+    private Parameter<?> lastAddedParameter() {
+        Parameter<?> values = firstAddedParameter();
+        while (values.hasNextParameter()) {
+            values = values.nextParameter();
         }
         return values;
     }
 
-    private Parameter<?> firstValuesObject() {
+    private Parameter<?> firstAddedParameter() {
         return stateMap.entrySet().iterator()
                        .next()
                        .getValue();

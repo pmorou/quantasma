@@ -5,28 +5,27 @@ import quantasma.core.analysis.parametrize.Iterables.ReusableIterator;
 public class Parameter<T> {
 
     private ReusableIterator<T> reusableIterator;
-    private T value;
+    private T currentValue;
+    private Parameter<?> nextParameter;
 
-    private Parameter<?> nestedValue;
-
-    public boolean hasNested() {
-        return nestedValue != null;
+    public boolean hasNextParameter() {
+        return nextParameter != null;
     }
 
-    public Parameter<?> nested() {
-        return nestedValue;
+    public Parameter<?> nextParameter() {
+        return nextParameter;
     }
 
-    public boolean loadedNestedNext() {
-        if (!hasNested()) {
+    public boolean loadedNextParametersValue() {
+        if (!hasNextParameter()) {
             return false;
         }
-        if (nestedValue.hasNext()) {
-            nestedValue.next();
+        if (nextParameter.hasNext()) {
+            nextParameter.next();
             return true;
         }
-        nestedValue.reset();
-        nestedValue.next();
+        nextParameter.reset();
+        nextParameter.next();
         return false;
     }
 
@@ -38,8 +37,8 @@ public class Parameter<T> {
         reusableIterator.reuse();
     }
 
-    public void nest(Parameter<?> nestedValues) {
-        this.nestedValue = nestedValues;
+    public void nextParameter(Parameter<?> parameter) {
+        this.nextParameter = parameter;
     }
 
     public Parameter<T> values(T... values) {
@@ -51,14 +50,14 @@ public class Parameter<T> {
     }
 
     private boolean isAlreadyRunning() {
-        return value != null;
+        return currentValue != null;
     }
 
     boolean next() {
-        return loadedNestedNext() || loadedNext();
+        return loadedNextParametersValue() || loadedNextValue();
     }
 
-    public boolean loadedNext() {
+    public boolean loadedNextValue() {
         if (hasNext()) {
             getNext();
             return true;
@@ -67,14 +66,14 @@ public class Parameter<T> {
     }
 
     public T $() {
-        if (value == null) {
+        if (currentValue == null) {
             getNext();
         }
-        return value;
+        return currentValue;
     }
 
     private void getNext() {
-        value = reusableIterator.next();
+        currentValue = reusableIterator.next();
     }
 
 }
