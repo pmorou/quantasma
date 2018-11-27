@@ -1,10 +1,11 @@
-package quantasma.core.analysis.parametrize;
+package quantasma.core;
 
 import java.util.Arrays;
 import java.util.Iterator;
 
 public class Iterables {
 
+    @SafeVarargs
     public static <T> ReusableIterator<T> reusableIterator(T... values) {
         return new ReusableIteratorImpl<>(values);
     }
@@ -13,7 +14,7 @@ public class Iterables {
         void reuse();
     }
 
-    static class ReusableIteratorImpl<T> implements ReusableIterator<T> {
+    private static class ReusableIteratorImpl<T> implements ReusableIterator<T> {
         private final T[] values;
 
         private Iterator<T> iterator;

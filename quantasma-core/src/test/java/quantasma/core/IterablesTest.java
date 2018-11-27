@@ -1,7 +1,8 @@
-package quantasma.core.analysis.parametrize;
+package quantasma.core;
 
 import org.junit.Test;
-import quantasma.core.analysis.parametrize.Iterables.ReusableIterator;
+import quantasma.core.Iterables;
+import quantasma.core.Iterables.ReusableIterator;
 
 import java.util.ArrayList;
 import java.util.List;

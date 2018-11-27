@@ -1,6 +1,7 @@
 package quantasma.core.analysis.parametrize;
 
-import quantasma.core.analysis.parametrize.Iterables.ReusableIterator;
+import quantasma.core.Iterables;
+import quantasma.core.Iterables.ReusableIterator;
 
 public class Parameter<T> {
 
@@ -45,7 +46,7 @@ public class Parameter<T> {
         if (isAlreadyRunning()) {
             return this;
         }
-        reusableIterator = quantasma.core.analysis.parametrize.Iterables.reusableIterator(values);
+        reusableIterator = Iterables.reusableIterator(values);
         return this;
     }
 
