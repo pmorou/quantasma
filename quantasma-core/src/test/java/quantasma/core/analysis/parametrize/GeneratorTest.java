@@ -33,7 +33,7 @@ public class GeneratorTest {
         // given
         final Generator g = Generator.instance();
         Supplier<TestObject> supplier = () -> new TestObject(g._int("param1").values(1, 3, 5).$(),
-                                                        g._String("param2").values("a", "b", "c").$());
+                                                             g._String("param2").values("a", "b", "c").$());
 
         // then
         final TestObject _1thCall = g.next(supplier);
@@ -41,32 +41,32 @@ public class GeneratorTest {
         assertThat(_1thCall.param2).isEqualTo("a");
 
         final TestObject _2thCall = g.next(supplier);
-        assertThat(_2thCall.param1).isEqualTo(1);
-        assertThat(_2thCall.param2).isEqualTo("b");
+        assertThat(_2thCall.param1).isEqualTo(3);
+        assertThat(_2thCall.param2).isEqualTo("a");
 
         final TestObject _3thCall = g.next(supplier);
-        assertThat(_3thCall.param1).isEqualTo(1);
-        assertThat(_3thCall.param2).isEqualTo("c");
+        assertThat(_3thCall.param1).isEqualTo(5);
+        assertThat(_3thCall.param2).isEqualTo("a");
 
         final TestObject _4thCall = g.next(supplier);
-        assertThat(_4thCall.param1).isEqualTo(3);
-        assertThat(_4thCall.param2).isEqualTo("a");
+        assertThat(_4thCall.param1).isEqualTo(1);
+        assertThat(_4thCall.param2).isEqualTo("b");
 
         final TestObject _5thCall = g.next(supplier);
         assertThat(_5thCall.param1).isEqualTo(3);
         assertThat(_5thCall.param2).isEqualTo("b");
 
         final TestObject _6thCall = g.next(supplier);
-        assertThat(_6thCall.param1).isEqualTo(3);
-        assertThat(_6thCall.param2).isEqualTo("c");
+        assertThat(_6thCall.param1).isEqualTo(5);
+        assertThat(_6thCall.param2).isEqualTo("b");
 
         final TestObject _7thCall = g.next(supplier);
-        assertThat(_7thCall.param1).isEqualTo(5);
-        assertThat(_7thCall.param2).isEqualTo("a");
+        assertThat(_7thCall.param1).isEqualTo(1);
+        assertThat(_7thCall.param2).isEqualTo("c");
 
         final TestObject _8thCall = g.next(supplier);
-        assertThat(_8thCall.param1).isEqualTo(5);
-        assertThat(_8thCall.param2).isEqualTo("b");
+        assertThat(_8thCall.param1).isEqualTo(3);
+        assertThat(_8thCall.param2).isEqualTo("c");
 
         final TestObject _9thCall = g.next(supplier);
         assertThat(_9thCall.param1).isEqualTo(5);
@@ -85,8 +85,8 @@ public class GeneratorTest {
         // given
         final Generator g = Generator.instance();
         Supplier<TestObject> supplier = () -> new TestObject(g._int("param1").values(1, 3).$(),
-                                                        g._String("param2").values("a", "b", "c").$(),
-                                                        g._int("param3").values(7, 9).$());
+                                                             g._String("param2").values("a", "b", "c").$(),
+                                                             g._int("param3").values(7, 9).$());
 
         // then
         final TestObject _1thCall = g.next(supplier);
@@ -95,9 +95,9 @@ public class GeneratorTest {
         assertThat(_1thCall.param3).isEqualTo(7);
 
         final TestObject _2thCall = g.next(supplier);
-        assertThat(_2thCall.param1).isEqualTo(1);
+        assertThat(_2thCall.param1).isEqualTo(3);
         assertThat(_2thCall.param2).isEqualTo("a");
-        assertThat(_2thCall.param3).isEqualTo(9);
+        assertThat(_2thCall.param3).isEqualTo(7);
 
         final TestObject _3thCall = g.next(supplier);
         assertThat(_3thCall.param1).isEqualTo(1);
@@ -105,9 +105,9 @@ public class GeneratorTest {
         assertThat(_3thCall.param3).isEqualTo(7);
 
         final TestObject _4thCall = g.next(supplier);
-        assertThat(_4thCall.param1).isEqualTo(1);
+        assertThat(_4thCall.param1).isEqualTo(3);
         assertThat(_4thCall.param2).isEqualTo("b");
-        assertThat(_4thCall.param3).isEqualTo(9);
+        assertThat(_4thCall.param3).isEqualTo(7);
 
         final TestObject _5thCall = g.next(supplier);
         assertThat(_5thCall.param1).isEqualTo(1);
@@ -115,14 +115,39 @@ public class GeneratorTest {
         assertThat(_5thCall.param3).isEqualTo(7);
 
         final TestObject _6thCall = g.next(supplier);
-        assertThat(_6thCall.param1).isEqualTo(1);
+        assertThat(_6thCall.param1).isEqualTo(3);
         assertThat(_6thCall.param2).isEqualTo("c");
-        assertThat(_6thCall.param3).isEqualTo(9);
+        assertThat(_6thCall.param3).isEqualTo(7);
 
         final TestObject _7thCall = g.next(supplier);
-        assertThat(_7thCall.param1).isEqualTo(3);
+        assertThat(_7thCall.param1).isEqualTo(1);
         assertThat(_7thCall.param2).isEqualTo("a");
-        assertThat(_7thCall.param3).isEqualTo(7);
+        assertThat(_7thCall.param3).isEqualTo(9);
+
+        final TestObject _8thCall = g.next(supplier);
+        assertThat(_8thCall.param1).isEqualTo(3);
+        assertThat(_8thCall.param2).isEqualTo("a");
+        assertThat(_8thCall.param3).isEqualTo(9);
+
+        final TestObject _9thCall = g.next(supplier);
+        assertThat(_9thCall.param1).isEqualTo(1);
+        assertThat(_9thCall.param2).isEqualTo("b");
+        assertThat(_9thCall.param3).isEqualTo(9);
+
+        final TestObject _10thCall = g.next(supplier);
+        assertThat(_10thCall.param1).isEqualTo(3);
+        assertThat(_10thCall.param2).isEqualTo("b");
+        assertThat(_10thCall.param3).isEqualTo(9);
+
+        final TestObject _11thCall = g.next(supplier);
+        assertThat(_11thCall.param1).isEqualTo(1);
+        assertThat(_11thCall.param2).isEqualTo("c");
+        assertThat(_11thCall.param3).isEqualTo(9);
+
+        final TestObject _12thCall = g.next(supplier);
+        assertThat(_12thCall.param1).isEqualTo(3);
+        assertThat(_12thCall.param2).isEqualTo("c");
+        assertThat(_12thCall.param3).isEqualTo(9);
 
         try {
             g.next(supplier);

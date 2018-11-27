@@ -21,13 +21,7 @@ public class Parameter<T> {
         if (!hasNextParameter()) {
             return false;
         }
-        if (nextParameter.hasNext()) {
-            nextParameter.next();
-            return true;
-        }
-        nextParameter.reset();
-        nextParameter.next();
-        return false;
+        return nextParameter.next();
     }
 
     public boolean hasNext() {
@@ -55,7 +49,7 @@ public class Parameter<T> {
     }
 
     boolean next() {
-        return loadedNextParametersValue() || loadedNextValue();
+        return loadedNextValue() || loadedNextParametersValue();
     }
 
     public boolean loadedNextValue() {
@@ -63,6 +57,8 @@ public class Parameter<T> {
             getNext();
             return true;
         }
+        reset();
+        getNext();
         return false;
     }
 
