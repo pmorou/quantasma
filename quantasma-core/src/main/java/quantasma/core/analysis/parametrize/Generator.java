@@ -47,48 +47,7 @@ public class Generator {
         return parametersByLabel.containsKey(label);
     }
 
-    public <T> Iterator<T> iterator(Supplier<T> supplier) {
-        supplier.get();
-
-        return new Iterator<T>() {
-            private boolean firstRun = true;
-
-            @Override
-            public boolean hasNext() {
-                if (firstRun) {
-                    return true;
-                }
-                if (parametersByLabel.isEmpty()) {
-                    return false;
-                }
-                Parameter<?> parameter = firstParameter();
-                boolean hasNext = parameter.hasNext();
-                while (!hasNext) {
-                    parameter = parameter.getNextParameter();
-                    if (parameter == null) {
-                        return false;
-                    }
-                    hasNext = parameter.hasNext();
-                }
-                return hasNext;
-            }
-
-            @Override
-            public T next() {
-                if (firstRun) {
-                    firstRun = false;
-                    return supplier.get();
-                }
-                return generate(supplier);
-            }
-        };
-    }
-
     private <T> T generate(Supplier<T> supplier) {
-        if (parametersByLabel.isEmpty()) {
-            return supplier.get();
-        }
-
         final Parameter<?> parameter = firstParameter();
 
         if (!parameter.iterate()) {
@@ -113,4 +72,39 @@ public class Generator {
                                 .getValue();
     }
 
+    public <T> Iterator<T> iterator(Supplier<T> supplier) {
+        return new Iterator<T>() {
+            private boolean isIterating;
+
+            {
+                supplier.get(); // initialize values
+            }
+
+            @Override
+            public boolean hasNext() {
+                if (parametersByLabel.isEmpty()) {
+                    return false;
+                }
+                if (!isIterating) {
+                    return true;
+                }
+
+                Parameter<?> parameter = firstParameter();
+                boolean iterationFinished = false;
+                while (parameter != null && (iterationFinished = !parameter.hasNext())) {
+                    parameter = parameter.getNextParameter();
+                }
+                return !iterationFinished;
+            }
+
+            @Override
+            public T next() {
+                if (!isIterating) {
+                    isIterating = true;
+                    return supplier.get();
+                }
+                return generate(supplier);
+            }
+        };
+    }
 }
