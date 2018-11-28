@@ -35,10 +35,13 @@ public class ProducerTest {
 
     @Test
     public void givenOrderedValuesShouldProduceObjectsInTheSameOrder() {
+        // given
         final Function<Variables, TestObject> recipe = (var) -> new TestObject(var._int("var1").with(3, 1, 7, 9).$());
 
+        // when
         final Producer<TestObject> producer = Producer.from(recipe);
 
+        // then
         assertThat(producer.next().var1).isEqualTo(3);
         assertThat(producer.next().var1).isEqualTo(1);
         assertThat(producer.next().var1).isEqualTo(7);
@@ -48,14 +51,17 @@ public class ProducerTest {
 
     @Test
     public void givenReusedVariablesShouldKeepTheSameValueForBoth() {
+        // given
         final Function<Variables, TestObject> recipe = (var) -> {
             final Variable<Integer> var1 = var._int("var1").with(1, 2);
             final Variable<String> var2 = var._String("var2").with("9", "8");
             return new TestObject(var1.$(), var2.$(), var1.$());
         };
 
+        // when
         final Producer<TestObject> producer = Producer.from(recipe);
 
+        // then
         final TestObject _1stCall = producer.next();
         assertThat(_1stCall.var1).isEqualTo(1);
         assertThat(_1stCall.var2).isEqualTo("9");
@@ -81,10 +87,13 @@ public class ProducerTest {
 
     @Test
     public void givenDuplicatedValuesShouldProduceObjectsWithoutDuplicates() {
+        // given
         final Function<Variables, TestObject> recipe = (var) -> new TestObject(var._int("var1").with(1, 2, 3, 2).$());
 
+        // when
         final Producer<TestObject> producer = Producer.from(recipe);
 
+        // then
         assertThat(producer.next().var1).isEqualTo(1);
         assertThat(producer.next().var1).isEqualTo(2);
         assertThat(producer.next().var1).isEqualTo(3);
