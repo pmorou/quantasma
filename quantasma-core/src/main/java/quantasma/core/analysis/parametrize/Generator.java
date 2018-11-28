@@ -7,7 +7,7 @@ import java.util.NoSuchElementException;
 import java.util.function.Supplier;
 
 public class Generator {
-    private final Map<String, Parameter<?>> parametersByLabel = new LinkedHashMap<>();
+    private final Map<String, Variable<?>> variablesByLabel = new LinkedHashMap<>();
 
     private Generator() {
     }
@@ -16,60 +16,60 @@ public class Generator {
         return new Generator();
     }
 
-    public Parameter<Integer> _int(String label) {
-        final Parameter<Integer> param = new Parameter<>();
-        linkLastElementWith(label, param);
+    public Variable<Integer> _int(String label) {
+        final Variable<Integer> param = new Variable<>();
+        linkToLastVariable(label, param);
         return saveGet(label, param);
     }
 
-    public Parameter<String> _String(String label) {
-        final Parameter<String> param = new Parameter<>();
-        linkLastElementWith(label, param);
+    public Variable<String> _String(String label) {
+        final Variable<String> param = new Variable<>();
+        linkToLastVariable(label, param);
         return saveGet(label, param);
     }
 
-    private <T> Parameter<T> saveGet(String label, Parameter<T> parameter) {
-        parametersByLabel.putIfAbsent(label, parameter);
-        return (Parameter<T>) parametersByLabel.get(label);
+    private <T> Variable<T> saveGet(String label, Variable<T> variable) {
+        variablesByLabel.putIfAbsent(label, variable);
+        return (Variable<T>) variablesByLabel.get(label);
     }
 
-    private <T> void linkLastElementWith(String label, Parameter<T> parameter) {
-        if (hasElements() && !isDefined(label)) {
-            lastParameter().setNextParameter(parameter);
+    private <T> void linkToLastVariable(String label, Variable<T> variable) {
+        if (hasVariables() && !isDefined(label)) {
+            lastVariable().setNextVariable(variable);
         }
     }
 
-    private boolean hasElements() {
-        return !parametersByLabel.isEmpty();
+    private boolean hasVariables() {
+        return !variablesByLabel.isEmpty();
     }
 
     private boolean isDefined(String label) {
-        return parametersByLabel.containsKey(label);
+        return variablesByLabel.containsKey(label);
     }
 
     private <T> T generate(Supplier<T> supplier) {
-        final Parameter<?> parameter = firstParameter();
+        final Variable<?> variable = firstVariable();
 
-        if (!parameter.iterate()) {
+        if (!variable.iterate()) {
             throw new NoSuchElementException();
         }
 
         return supplier.get();
     }
 
-    private Parameter<?> lastParameter() {
-        Parameter<?> parameter = firstParameter();
-        while (parameter.hasNextParameter()) {
-            parameter = parameter.getNextParameter();
+    private Variable<?> lastVariable() {
+        Variable<?> variable = firstVariable();
+        while (variable.hasNextVariable()) {
+            variable = variable.getNextVariable();
         }
-        return parameter;
+        return variable;
     }
 
-    private Parameter<?> firstParameter() {
-        return parametersByLabel.entrySet()
-                                .iterator()
-                                .next()
-                                .getValue();
+    private Variable<?> firstVariable() {
+        return variablesByLabel.entrySet()
+                               .iterator()
+                               .next()
+                               .getValue();
     }
 
     public <T> Iterator<T> iterator(Supplier<T> supplier) {
@@ -82,17 +82,17 @@ public class Generator {
 
             @Override
             public boolean hasNext() {
-                if (parametersByLabel.isEmpty()) {
+                if (variablesByLabel.isEmpty()) {
                     return false;
                 }
                 if (!isIterating) {
                     return true;
                 }
 
-                Parameter<?> parameter = firstParameter();
+                Variable<?> variable = firstVariable();
                 boolean iterationFinished = false;
-                while (parameter != null && (iterationFinished = !parameter.hasNext())) {
-                    parameter = parameter.getNextParameter();
+                while (variable != null && (iterationFinished = !variable.hasNext())) {
+                    variable = variable.getNextVariable();
                 }
                 return !iterationFinished;
             }

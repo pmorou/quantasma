@@ -3,21 +3,21 @@ package quantasma.core.analysis.parametrize;
 import quantasma.core.Iterables;
 import quantasma.core.Iterables.ReusableIterator;
 
-public class Parameter<T> {
+public class Variable<T> {
 
     private ReusableIterator<T> reusableIterator;
     private T currentValue;
-    private Parameter<?> nextParameter;
+    private Variable<?> nextVariable;
 
-    Parameter<?> getNextParameter() {
-        return nextParameter;
+    Variable<?> getNextVariable() {
+        return nextVariable;
     }
 
-    void setNextParameter(Parameter<?> parameter) {
-        this.nextParameter = parameter;
+    void setNextVariable(Variable<?> variable) {
+        this.nextVariable = variable;
     }
 
-    public Parameter<T> values(T... values) {
+    public Variable<T> values(T... values) {
         if (isAlreadyGenerated()) {
             return this;
         }
@@ -30,10 +30,10 @@ public class Parameter<T> {
     }
 
     boolean iterate() {
-        return overThisParameter() || overNextParameter();
+        return iterateOverThisVariable() || iterateOverNextVariable();
     }
 
-    private boolean overThisParameter() {
+    private boolean iterateOverThisVariable() {
         if (hasNext()) {
             updateCurrentValue();
             return true;
@@ -51,15 +51,15 @@ public class Parameter<T> {
         currentValue = reusableIterator.next();
     }
 
-    private boolean overNextParameter() {
-        if (!hasNextParameter()) {
+    private boolean iterateOverNextVariable() {
+        if (!hasNextVariable()) {
             return false;
         }
-        return nextParameter.iterate();
+        return nextVariable.iterate();
     }
 
-    boolean hasNextParameter() {
-        return nextParameter != null;
+    boolean hasNextVariable() {
+        return nextVariable != null;
     }
 
     public T $() {
