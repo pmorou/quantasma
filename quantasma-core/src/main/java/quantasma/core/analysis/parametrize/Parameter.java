@@ -59,6 +59,10 @@ public class Parameter<T> {
     }
 
     public T $() {
+        return value();
+    }
+
+    public T value() {
         if (currentValue == null) {
             updateCurrentValue();
         }
