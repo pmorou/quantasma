@@ -22,6 +22,29 @@ public class ProducerTest {
     }
 
     @Test
+    public void givenSecondIteratorCallShouldReturnNewIterator() {
+        // given
+        final Producer producer = Producer.instance();
+        final Function<Producer, TestObject> recipe = (p) -> new TestObject(p._int("var1").values(1, 3).$());
+        final Iterator<TestObject> iterator = producer.iterator(recipe);
+        for (int i = 0; i < 2; i++) {
+            assertThat(iterator.hasNext()).isTrue();
+            iterator.next();
+        }
+        assertThat(iterator.hasNext()).isFalse();
+
+        // when
+        final Iterator<TestObject> nextIterator = producer.iterator(recipe);
+
+        // then
+        for (int i = 0; i < 2; i++) {
+            assertThat(nextIterator.hasNext()).isTrue();
+            nextIterator.next();
+        }
+        assertThat(nextIterator.hasNext()).isFalse();
+    }
+
+    @Test
     public void given1VariablesShouldProduce4CorrectObjects() {
         // given
         final Producer producer = Producer.instance();

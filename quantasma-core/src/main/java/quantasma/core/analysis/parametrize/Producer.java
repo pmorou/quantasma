@@ -7,8 +7,9 @@ import java.util.NoSuchElementException;
 import java.util.function.Function;
 
 public class Producer {
-    private final Map<String, Variable<?>> variablesByLabel = new LinkedHashMap<>();
     private final Producer producer;
+
+    private Map<String, Variable<?>> variablesByLabel = new LinkedHashMap<>();
 
     private Producer() {
         producer = this;
@@ -74,11 +75,16 @@ public class Producer {
                                .getValue();
     }
 
+    private void reset() {
+        variablesByLabel = new LinkedHashMap<>();
+    }
+
     public <T> Iterator<T> iterator(Function<Producer, T> recipe) {
         return new Iterator<T>() {
             private boolean isIterating;
 
             {
+                producer.reset();
                 recipe.apply(producer); // initialize variables
             }
 
