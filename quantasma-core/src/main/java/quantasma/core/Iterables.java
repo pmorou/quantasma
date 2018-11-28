@@ -7,6 +7,10 @@ public class Iterables {
 
     @SafeVarargs
     public static <T> ReusableIterator<T> reusableIterator(T... values) {
+        return new ReusableIteratorImpl<>(Arrays.asList(values));
+    }
+
+    public static <T> ReusableIterator<T> reusableIterator(Iterable<T> values) {
         return new ReusableIteratorImpl<>(values);
     }
 
@@ -15,18 +19,18 @@ public class Iterables {
     }
 
     private static class ReusableIteratorImpl<T> implements ReusableIterator<T> {
-        private final T[] values;
+        private final Iterable<T> values;
 
         private Iterator<T> iterator;
 
-        private ReusableIteratorImpl(T[] values) {
+        private ReusableIteratorImpl(Iterable<T> values) {
             this.values = values;
-            this.iterator = Arrays.asList(values).iterator();
+            this.iterator = values.iterator();
         }
 
         @Override
         public void reuse() {
-            iterator = Arrays.asList(values).iterator();
+            iterator = values.iterator();
         }
 
         @Override

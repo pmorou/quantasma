@@ -3,6 +3,8 @@ package quantasma.core.analysis.parametrize;
 import quantasma.core.Iterables;
 import quantasma.core.Iterables.ReusableIterator;
 
+import java.util.Collection;
+
 public class Variable<T> {
 
     private ReusableIterator<T> reusableIterator;
@@ -15,6 +17,22 @@ public class Variable<T> {
 
     void setNextVariable(Variable<?> variable) {
         this.nextVariable = variable;
+    }
+
+    public Variable<T> with(Collection<T> values) {
+        return values(values);
+    }
+
+    public Variable<T> values(Collection<T> values) {
+        if (isAlreadyGenerated()) {
+            return this;
+        }
+        reusableIterator = Iterables.reusableIterator(values);
+        return this;
+    }
+
+    public Variable<T> with(T... values) {
+        return values(values);
     }
 
     public Variable<T> values(T... values) {
