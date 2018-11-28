@@ -4,17 +4,17 @@ import org.junit.Test;
 
 import java.util.Iterator;
 import java.util.NoSuchElementException;
-import java.util.function.Supplier;
+import java.util.function.Function;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class GeneratorTest {
+public class ProducerTest {
 
     @Test
     public void givenFewStringValuesWhenCallGetValueShouldAlwaysReturnFirstOne() {
-        final Generator g = Generator.instance();
+        final Producer producer = Producer.instance();
 
-        final Variable<String> stringVariable = g._String("var").values("expectedValue", "anything");
+        final Variable<String> stringVariable = producer._String("var").values("expectedValue", "anything");
 
         for (int i = 0; i < 123; i++) {
             assertThat(stringVariable.$()).isEqualTo("expectedValue");
@@ -22,13 +22,13 @@ public class GeneratorTest {
     }
 
     @Test
-    public void givenOneValuesVariableshouldGenerate4CorrectObjects() {
+    public void given1VariablesShouldProduce4CorrectObjects() {
         // given
-        final Generator g = Generator.instance();
-        Supplier<TestObject> supplier = () -> new TestObject(g._int("var1").values(1, 3, 5, 7).$());
+        final Producer producer = Producer.instance();
+        final Function<Producer, TestObject> recipe = (p) -> new TestObject(p._int("var1").values(1, 3, 5, 7).$());
 
         // when
-        final Iterator<TestObject> iterator = g.iterator(supplier);
+        final Iterator<TestObject> iterator = producer.iterator(recipe);
 
         // then
         assertThat(iterator.hasNext()).isTrue();
@@ -50,14 +50,14 @@ public class GeneratorTest {
     }
 
     @Test
-    public void givenTwoValuesVariablesShouldGenerate9CorrectObjects() {
+    public void given2VariablesShouldProduceCorrectObjects() {
         // given
-        final Generator g = Generator.instance();
-        Supplier<TestObject> supplier = () -> new TestObject(g._int("var1").values(1, 3, 5).$(),
-                                                             g._String("var2").values("a", "b", "c").$());
+        final Producer producer = Producer.instance();
+        final Function<Producer, TestObject> recipe = (p) -> new TestObject(p._int("var1").values(1, 3, 5).$(),
+                                                                            p._String("var2").values("a", "b", "c").$());
 
         // when
-        final Iterator<TestObject> iterator = g.iterator(supplier);
+        final Iterator<TestObject> iterator = producer.iterator(recipe);
 
         // then
         assertThat(iterator.hasNext()).isTrue();
@@ -116,15 +116,15 @@ public class GeneratorTest {
     }
 
     @Test
-    public void givenThreeValuesVariablesShouldGenerate12CorrectObjects() {
+    public void given2VariablesShouldProduce12CorrectObjects() {
         // given
-        final Generator g = Generator.instance();
-        Supplier<TestObject> supplier = () -> new TestObject(g._int("var1").values(1, 3).$(),
-                                                             g._String("var2").values("a", "b", "c").$(),
-                                                             g._int("var3").values(7, 9).$());
+        final Producer producer = Producer.instance();
+        final Function<Producer, TestObject> supplier = (p) -> new TestObject(p._int("var1").values(1, 3).$(),
+                                                                              p._String("var2").values("a", "b", "c").$(),
+                                                                              p._int("var3").values(7, 9).$());
 
         // when
-        final Iterator<TestObject> iterator = g.iterator(supplier);
+        final Iterator<TestObject> iterator = producer.iterator(supplier);
 
         // then
         assertThat(iterator.hasNext()).isTrue();

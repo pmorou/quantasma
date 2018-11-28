@@ -4,16 +4,18 @@ import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
-import java.util.function.Supplier;
+import java.util.function.Function;
 
-public class Generator {
+public class Producer {
     private final Map<String, Variable<?>> variablesByLabel = new LinkedHashMap<>();
+    private final Producer producer;
 
-    private Generator() {
+    private Producer() {
+        producer = this;
     }
 
-    public static Generator instance() {
-        return new Generator();
+    public static Producer instance() {
+        return new Producer();
     }
 
     public Variable<Integer> _int(String label) {
@@ -47,14 +49,14 @@ public class Generator {
         return variablesByLabel.containsKey(label);
     }
 
-    private <T> T generate(Supplier<T> supplier) {
+    private <T> T produce(Function<Producer, T> definition) {
         final Variable<?> variable = firstVariable();
 
         if (!variable.iterate()) {
             throw new NoSuchElementException();
         }
 
-        return supplier.get();
+        return definition.apply(this);
     }
 
     private Variable<?> lastVariable() {
@@ -72,12 +74,12 @@ public class Generator {
                                .getValue();
     }
 
-    public <T> Iterator<T> iterator(Supplier<T> supplier) {
+    public <T> Iterator<T> iterator(Function<Producer, T> recipe) {
         return new Iterator<T>() {
             private boolean isIterating;
 
             {
-                supplier.get(); // initialize values
+                recipe.apply(producer); // initialize variables
             }
 
             @Override
@@ -101,9 +103,9 @@ public class Generator {
             public T next() {
                 if (!isIterating) {
                     isIterating = true;
-                    return supplier.get();
+                    return recipe.apply(producer);
                 }
-                return generate(supplier);
+                return produce(recipe);
             }
         };
     }
