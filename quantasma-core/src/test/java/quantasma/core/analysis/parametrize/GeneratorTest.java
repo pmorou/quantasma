@@ -10,7 +10,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 public class GeneratorTest {
     @Test
-    public void givenOneValuesParameterShouldGenerateCorrectValues() {
+    public void givenOneValuesParameterShouldGenerate4CorrectObjects() {
         // given
         final Generator g = Generator.instance();
         Supplier<TestObject> supplier = () -> new TestObject(g._int("param1").values(1, 3, 5, 7).$());
@@ -38,7 +38,7 @@ public class GeneratorTest {
     }
 
     @Test
-    public void givenTwoValuesParametersShouldGenerateCorrectValues() {
+    public void givenTwoValuesParametersShouldGenerate9CorrectObjects() {
         // given
         final Generator g = Generator.instance();
         Supplier<TestObject> supplier = () -> new TestObject(g._int("param1").values(1, 3, 5).$(),
@@ -104,7 +104,7 @@ public class GeneratorTest {
     }
 
     @Test
-    public void givenThreeValuesParametersShouldGenerateCorrectValues() {
+    public void givenThreeValuesParametersShouldGenerate12CorrectObjects() {
         // given
         final Generator g = Generator.instance();
         Supplier<TestObject> supplier = () -> new TestObject(g._int("param1").values(1, 3).$(),
