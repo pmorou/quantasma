@@ -9,11 +9,11 @@ public class Parameter<T> {
     private T currentValue;
     private Parameter<?> nextParameter;
 
-    public Parameter<?> getNextParameter() {
+    Parameter<?> getNextParameter() {
         return nextParameter;
     }
 
-    public void setNextParameter(Parameter<?> parameter) {
+    void setNextParameter(Parameter<?> parameter) {
         this.nextParameter = parameter;
     }
 
@@ -33,7 +33,7 @@ public class Parameter<T> {
         return overThisParameter() || overNextParameter();
     }
 
-    public boolean overThisParameter() {
+    private boolean overThisParameter() {
         if (hasNext()) {
             updateCurrentValue();
             return true;
@@ -43,7 +43,7 @@ public class Parameter<T> {
         return false;
     }
 
-    public boolean hasNext() {
+    boolean hasNext() {
         return reusableIterator.hasNext();
     }
 
@@ -51,14 +51,14 @@ public class Parameter<T> {
         currentValue = reusableIterator.next();
     }
 
-    public boolean overNextParameter() {
+    private boolean overNextParameter() {
         if (!hasNextParameter()) {
             return false;
         }
         return nextParameter.iterate();
     }
 
-    public boolean hasNextParameter() {
+    boolean hasNextParameter() {
         return nextParameter != null;
     }
 
