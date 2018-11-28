@@ -18,14 +18,14 @@ public class Parameter<T> {
     }
 
     public Parameter<T> values(T... values) {
-        if (isAlreadyUsed()) {
+        if (isAlreadyGenerated()) {
             return this;
         }
         reusableIterator = Iterables.reusableIterator(values);
         return this;
     }
 
-    private boolean isAlreadyUsed() {
+    private boolean isAlreadyGenerated() {
         return currentValue != null;
     }
 
