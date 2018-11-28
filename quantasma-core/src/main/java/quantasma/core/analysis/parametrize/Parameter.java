@@ -34,13 +34,17 @@ public class Parameter<T> {
     }
 
     public boolean overThisParameter() {
-        if (reusableIterator.hasNext()) {
+        if (hasNext()) {
             updateCurrentValue();
             return true;
         }
         reusableIterator.reuse();
         updateCurrentValue();
         return false;
+    }
+
+    public boolean hasNext() {
+        return reusableIterator.hasNext();
     }
 
     private void updateCurrentValue() {

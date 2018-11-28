@@ -3,155 +3,196 @@ package quantasma.core.analysis.parametrize;
 import lombok.Data;
 import org.junit.Test;
 
+import java.util.Iterator;
+import java.util.NoSuchElementException;
 import java.util.function.Supplier;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class GeneratorTest {
     @Test
-    public void givenOneParameterShouldGenerateCorrectValues() {
+    public void givenOneValuesParameterShouldGenerateCorrectValues() {
         // given
         final Generator g = Generator.instance();
         Supplier<TestObject> supplier = () -> new TestObject(g._int("param1").values(1, 3, 5, 7).$());
 
+        // when
+        final Iterator<TestObject> iterator = g.iterator(supplier);
+
         // then
-        assertThat(g.next(supplier).param1).isEqualTo(1);
-        assertThat(g.next(supplier).param1).isEqualTo(3);
-        assertThat(g.next(supplier).param1).isEqualTo(5);
-        assertThat(g.next(supplier).param1).isEqualTo(7);
+        assertThat(iterator.hasNext()).isTrue();
+        assertThat(iterator.next().param1).isEqualTo(1);
+        assertThat(iterator.hasNext()).isTrue();
+        assertThat(iterator.next().param1).isEqualTo(3);
+        assertThat(iterator.hasNext()).isTrue();
+        assertThat(iterator.next().param1).isEqualTo(5);
+        assertThat(iterator.hasNext()).isTrue();
+        assertThat(iterator.next().param1).isEqualTo(7);
+        assertThat(iterator.hasNext()).isFalse();
 
         try {
-            g.next(supplier);
-        } catch (RuntimeException e) {
+            iterator.next();
+        } catch (NoSuchElementException expected) {
             return;
         }
         throw new AssertionError();
     }
 
     @Test
-    public void givenTwoParametersShouldGenerateCorrectValues() {
+    public void givenTwoValuesParametersShouldGenerateCorrectValues() {
         // given
         final Generator g = Generator.instance();
         Supplier<TestObject> supplier = () -> new TestObject(g._int("param1").values(1, 3, 5).$(),
                                                              g._String("param2").values("a", "b", "c").$());
 
+        // when
+        final Iterator<TestObject> iterator = g.iterator(supplier);
+
         // then
-        final TestObject _1thCall = g.next(supplier);
+        assertThat(iterator.hasNext()).isTrue();
+        final TestObject _1thCall = iterator.next();
         assertThat(_1thCall.param1).isEqualTo(1);
         assertThat(_1thCall.param2).isEqualTo("a");
 
-        final TestObject _2thCall = g.next(supplier);
+        assertThat(iterator.hasNext()).isTrue();
+        final TestObject _2thCall = iterator.next();
         assertThat(_2thCall.param1).isEqualTo(3);
         assertThat(_2thCall.param2).isEqualTo("a");
 
-        final TestObject _3thCall = g.next(supplier);
+        assertThat(iterator.hasNext()).isTrue();
+        final TestObject _3thCall = iterator.next();
         assertThat(_3thCall.param1).isEqualTo(5);
         assertThat(_3thCall.param2).isEqualTo("a");
 
-        final TestObject _4thCall = g.next(supplier);
+        assertThat(iterator.hasNext()).isTrue();
+        final TestObject _4thCall = iterator.next();
         assertThat(_4thCall.param1).isEqualTo(1);
         assertThat(_4thCall.param2).isEqualTo("b");
 
-        final TestObject _5thCall = g.next(supplier);
+        assertThat(iterator.hasNext()).isTrue();
+        final TestObject _5thCall = iterator.next();
         assertThat(_5thCall.param1).isEqualTo(3);
         assertThat(_5thCall.param2).isEqualTo("b");
 
-        final TestObject _6thCall = g.next(supplier);
+        assertThat(iterator.hasNext()).isTrue();
+        final TestObject _6thCall = iterator.next();
         assertThat(_6thCall.param1).isEqualTo(5);
         assertThat(_6thCall.param2).isEqualTo("b");
 
-        final TestObject _7thCall = g.next(supplier);
+        assertThat(iterator.hasNext()).isTrue();
+        final TestObject _7thCall = iterator.next();
         assertThat(_7thCall.param1).isEqualTo(1);
         assertThat(_7thCall.param2).isEqualTo("c");
 
-        final TestObject _8thCall = g.next(supplier);
+        assertThat(iterator.hasNext()).isTrue();
+        final TestObject _8thCall = iterator.next();
         assertThat(_8thCall.param1).isEqualTo(3);
         assertThat(_8thCall.param2).isEqualTo("c");
 
-        final TestObject _9thCall = g.next(supplier);
+        assertThat(iterator.hasNext()).isTrue();
+        final TestObject _9thCall = iterator.next();
         assertThat(_9thCall.param1).isEqualTo(5);
         assertThat(_9thCall.param2).isEqualTo("c");
 
+        assertThat(iterator.hasNext()).isFalse();
+
         try {
-            g.next(supplier);
-        } catch (RuntimeException e) {
+            iterator.next();
+        } catch (NoSuchElementException expected) {
             return;
         }
         throw new AssertionError();
     }
 
     @Test
-    public void givenThreeParametersShouldGenerateCorrectValues() {
+    public void givenThreeValuesParametersShouldGenerateCorrectValues() {
         // given
         final Generator g = Generator.instance();
         Supplier<TestObject> supplier = () -> new TestObject(g._int("param1").values(1, 3).$(),
                                                              g._String("param2").values("a", "b", "c").$(),
                                                              g._int("param3").values(7, 9).$());
 
+        // when
+        final Iterator<TestObject> iterator = g.iterator(supplier);
+
         // then
-        final TestObject _1thCall = g.next(supplier);
+        assertThat(iterator.hasNext()).isTrue();
+        final TestObject _1thCall = iterator.next();
         assertThat(_1thCall.param1).isEqualTo(1);
         assertThat(_1thCall.param2).isEqualTo("a");
         assertThat(_1thCall.param3).isEqualTo(7);
 
-        final TestObject _2thCall = g.next(supplier);
+        assertThat(iterator.hasNext()).isTrue();
+        final TestObject _2thCall = iterator.next();
         assertThat(_2thCall.param1).isEqualTo(3);
         assertThat(_2thCall.param2).isEqualTo("a");
         assertThat(_2thCall.param3).isEqualTo(7);
 
-        final TestObject _3thCall = g.next(supplier);
+        assertThat(iterator.hasNext()).isTrue();
+        final TestObject _3thCall = iterator.next();
         assertThat(_3thCall.param1).isEqualTo(1);
         assertThat(_3thCall.param2).isEqualTo("b");
         assertThat(_3thCall.param3).isEqualTo(7);
 
-        final TestObject _4thCall = g.next(supplier);
+        assertThat(iterator.hasNext()).isTrue();
+        final TestObject _4thCall = iterator.next();
         assertThat(_4thCall.param1).isEqualTo(3);
         assertThat(_4thCall.param2).isEqualTo("b");
         assertThat(_4thCall.param3).isEqualTo(7);
 
-        final TestObject _5thCall = g.next(supplier);
+        assertThat(iterator.hasNext()).isTrue();
+        final TestObject _5thCall = iterator.next();
         assertThat(_5thCall.param1).isEqualTo(1);
         assertThat(_5thCall.param2).isEqualTo("c");
         assertThat(_5thCall.param3).isEqualTo(7);
 
-        final TestObject _6thCall = g.next(supplier);
+        assertThat(iterator.hasNext()).isTrue();
+        final TestObject _6thCall = iterator.next();
         assertThat(_6thCall.param1).isEqualTo(3);
         assertThat(_6thCall.param2).isEqualTo("c");
         assertThat(_6thCall.param3).isEqualTo(7);
 
-        final TestObject _7thCall = g.next(supplier);
+        assertThat(iterator.hasNext()).isTrue();
+        final TestObject _7thCall = iterator.next();
         assertThat(_7thCall.param1).isEqualTo(1);
         assertThat(_7thCall.param2).isEqualTo("a");
         assertThat(_7thCall.param3).isEqualTo(9);
 
-        final TestObject _8thCall = g.next(supplier);
+        assertThat(iterator.hasNext()).isTrue();
+        final TestObject _8thCall = iterator.next();
         assertThat(_8thCall.param1).isEqualTo(3);
         assertThat(_8thCall.param2).isEqualTo("a");
         assertThat(_8thCall.param3).isEqualTo(9);
 
-        final TestObject _9thCall = g.next(supplier);
+        assertThat(iterator.hasNext()).isTrue();
+        final TestObject _9thCall = iterator.next();
         assertThat(_9thCall.param1).isEqualTo(1);
         assertThat(_9thCall.param2).isEqualTo("b");
         assertThat(_9thCall.param3).isEqualTo(9);
 
-        final TestObject _10thCall = g.next(supplier);
+        assertThat(iterator.hasNext()).isTrue();
+        final TestObject _10thCall = iterator.next();
         assertThat(_10thCall.param1).isEqualTo(3);
         assertThat(_10thCall.param2).isEqualTo("b");
         assertThat(_10thCall.param3).isEqualTo(9);
 
-        final TestObject _11thCall = g.next(supplier);
+        assertThat(iterator.hasNext()).isTrue();
+        final TestObject _11thCall = iterator.next();
         assertThat(_11thCall.param1).isEqualTo(1);
         assertThat(_11thCall.param2).isEqualTo("c");
         assertThat(_11thCall.param3).isEqualTo(9);
 
-        final TestObject _12thCall = g.next(supplier);
+        assertThat(iterator.hasNext()).isTrue();
+        final TestObject _12thCall = iterator.next();
         assertThat(_12thCall.param1).isEqualTo(3);
         assertThat(_12thCall.param2).isEqualTo("c");
         assertThat(_12thCall.param3).isEqualTo(9);
 
+        assertThat(iterator.hasNext()).isFalse();
+
         try {
-            g.next(supplier);
-        } catch (RuntimeException e) {
+            iterator.next();
+        } catch (NoSuchElementException expected) {
             return;
         }
         throw new AssertionError();

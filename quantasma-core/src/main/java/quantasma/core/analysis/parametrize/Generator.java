@@ -1,7 +1,9 @@
 package quantasma.core.analysis.parametrize;
 
+import java.util.Iterator;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.NoSuchElementException;
 import java.util.function.Supplier;
 
 public class Generator {
@@ -45,7 +47,44 @@ public class Generator {
         return parametersByLabel.containsKey(label);
     }
 
-    public <T> T next(Supplier<T> supplier) {
+    public <T> Iterator<T> iterator(Supplier<T> supplier) {
+        supplier.get();
+
+        return new Iterator<T>() {
+            private boolean firstRun = true;
+
+            @Override
+            public boolean hasNext() {
+                if (firstRun) {
+                    return true;
+                }
+                if (parametersByLabel.isEmpty()) {
+                    return false;
+                }
+                Parameter<?> parameter = firstParameter();
+                boolean hasNext = parameter.hasNext();
+                while (!hasNext) {
+                    parameter = parameter.getNextParameter();
+                    if (parameter == null) {
+                        return false;
+                    }
+                    hasNext = parameter.hasNext();
+                }
+                return hasNext;
+            }
+
+            @Override
+            public T next() {
+                if (firstRun) {
+                    firstRun = false;
+                    return supplier.get();
+                }
+                return generate(supplier);
+            }
+        };
+    }
+
+    private <T> T generate(Supplier<T> supplier) {
         if (parametersByLabel.isEmpty()) {
             return supplier.get();
         }
@@ -53,7 +92,7 @@ public class Generator {
         final Parameter<?> parameter = firstParameter();
 
         if (!parameter.iterate()) {
-            throw new RuntimeException("No more options");
+            throw new NoSuchElementException();
         }
 
         return supplier.get();
