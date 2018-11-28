@@ -3,9 +3,14 @@ package quantasma.core.analysis.parametrize;
 import quantasma.core.Iterables;
 import quantasma.core.Iterables.ReusableIterator;
 
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
 public class Variable<T> {
+
+    private final Set<T> allValues = new LinkedHashSet<>();
 
     private ReusableIterator<T> reusableIterator;
     private T currentValue;
@@ -27,7 +32,7 @@ public class Variable<T> {
         if (isAlreadyGenerated()) {
             return this;
         }
-        reusableIterator = Iterables.reusableIterator(values);
+        allValues.addAll(values);
         return this;
     }
 
@@ -39,7 +44,7 @@ public class Variable<T> {
         if (isAlreadyGenerated()) {
             return this;
         }
-        reusableIterator = Iterables.reusableIterator(values);
+        allValues.addAll(Arrays.asList(values));
         return this;
     }
 
@@ -86,6 +91,7 @@ public class Variable<T> {
 
     public T value() {
         if (currentValue == null) {
+            reusableIterator = Iterables.reusableIterator(allValues);
             updateCurrentValue();
         }
         return currentValue;

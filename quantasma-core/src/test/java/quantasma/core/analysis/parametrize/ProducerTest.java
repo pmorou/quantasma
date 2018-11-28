@@ -37,6 +37,19 @@ public class ProducerTest {
     }
 
     @Test
+    public void givenDuplicatedValuesShouldProduceObjectsWithoutDuplicates() {
+        final Function<Producer, TestObject> recipe = (p) -> new TestObject(p._int("var1").with(1, 2, 3, 2).$());
+        final Producer producer = Producer.instance();
+
+        final Iterator<TestObject> iterator = producer.iterator(recipe);
+
+        assertThat(iterator.next().var1).isEqualTo(1);
+        assertThat(iterator.next().var1).isEqualTo(2);
+        assertThat(iterator.next().var1).isEqualTo(3);
+        assertThat(iterator.hasNext()).isFalse();
+    }
+
+    @Test
     public void givenSecondIteratorCallShouldReturnNewIterator() {
         // given
         final Function<Producer, TestObject> recipe = (p) -> new TestObject(p._int("var1").values(1, 3).$());
