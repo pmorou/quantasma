@@ -37,6 +37,40 @@ public class ProducerTest {
     }
 
     @Test
+    public void givenReusedVariablesShouldKeepTheSameValueForBoth() {
+        final Function<Producer, TestObject> recipe = (p) -> {
+            final Variable<Integer> var1 = p._int("var1").with(1, 2);
+            final Variable<String> var2 = p._String("var2").with("9", "8");
+            return new TestObject(var1.$(), var2.$(), var1.$());
+        };
+        final Producer producer = Producer.instance();
+
+        final Iterator<TestObject> iterator = producer.iterator(recipe);
+
+        final TestObject _1stCall = iterator.next();
+        assertThat(_1stCall.var1).isEqualTo(1);
+        assertThat(_1stCall.var2).isEqualTo("9");
+        assertThat(_1stCall.var3).isEqualTo(1);
+
+        final TestObject _2stCall = iterator.next();
+        assertThat(_2stCall.var1).isEqualTo(2);
+        assertThat(_2stCall.var2).isEqualTo("9");
+        assertThat(_2stCall.var3).isEqualTo(2);
+
+        final TestObject _3stCall = iterator.next();
+        assertThat(_3stCall.var1).isEqualTo(1);
+        assertThat(_3stCall.var2).isEqualTo("8");
+        assertThat(_3stCall.var3).isEqualTo(1);
+
+        final TestObject _4stCall = iterator.next();
+        assertThat(_4stCall.var1).isEqualTo(2);
+        assertThat(_4stCall.var2).isEqualTo("8");
+        assertThat(_4stCall.var3).isEqualTo(2);
+
+        assertThat(iterator.hasNext()).isFalse();
+    }
+
+    @Test
     public void givenDuplicatedValuesShouldProduceObjectsWithoutDuplicates() {
         final Function<Producer, TestObject> recipe = (p) -> new TestObject(p._int("var1").with(1, 2, 3, 2).$());
         final Producer producer = Producer.instance();
