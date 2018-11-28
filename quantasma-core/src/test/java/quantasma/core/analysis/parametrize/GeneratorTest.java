@@ -1,6 +1,5 @@
 package quantasma.core.analysis.parametrize;
 
-import lombok.Data;
 import org.junit.Test;
 
 import java.util.Iterator;
@@ -198,7 +197,6 @@ public class GeneratorTest {
         throw new AssertionError();
     }
 
-    @Data
     static class TestObject {
         private final int param1;
         private final String param2;
