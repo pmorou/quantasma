@@ -29,7 +29,7 @@ public class Variable<T> {
     }
 
     public Variable<T> values(Collection<T> values) {
-        if (isAlreadyGenerated()) {
+        if (isAlreadyIterating()) {
             return this;
         }
         allValues.addAll(values);
@@ -41,14 +41,14 @@ public class Variable<T> {
     }
 
     public Variable<T> values(T... values) {
-        if (isAlreadyGenerated()) {
+        if (isAlreadyIterating()) {
             return this;
         }
         allValues.addAll(Arrays.asList(values));
         return this;
     }
 
-    private boolean isAlreadyGenerated() {
+    private boolean isAlreadyIterating() {
         return currentValue != null;
     }
 
