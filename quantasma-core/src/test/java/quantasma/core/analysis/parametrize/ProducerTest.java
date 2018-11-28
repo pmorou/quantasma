@@ -7,6 +7,7 @@ import java.util.NoSuchElementException;
 import java.util.function.Function;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.Assert.fail;
 
 public class ProducerTest {
 
@@ -24,8 +25,8 @@ public class ProducerTest {
     @Test
     public void givenSecondIteratorCallShouldReturnNewIterator() {
         // given
-        final Producer producer = Producer.instance();
         final Function<Producer, TestObject> recipe = (p) -> new TestObject(p._int("var1").values(1, 3).$());
+        final Producer producer = Producer.instance();
         final Iterator<TestObject> iterator = producer.iterator(recipe);
         for (int i = 0; i < 2; i++) {
             assertThat(iterator.hasNext()).isTrue();
@@ -47,11 +48,10 @@ public class ProducerTest {
     @Test
     public void given1VariablesShouldProduce4CorrectObjects() {
         // given
-        final Producer producer = Producer.instance();
         final Function<Producer, TestObject> recipe = (p) -> new TestObject(p._int("var1").values(1, 3, 5, 7).$());
 
         // when
-        final Iterator<TestObject> iterator = producer.iterator(recipe);
+        final Iterator<TestObject> iterator = Producer.instance().iterator(recipe);
 
         // then
         assertThat(iterator.hasNext()).isTrue();
@@ -69,18 +69,17 @@ public class ProducerTest {
         } catch (NoSuchElementException expected) {
             return;
         }
-        throw new AssertionError();
+        fail();
     }
 
     @Test
     public void given2VariablesShouldProduceCorrectObjects() {
         // given
-        final Producer producer = Producer.instance();
         final Function<Producer, TestObject> recipe = (p) -> new TestObject(p._int("var1").values(1, 3, 5).$(),
                                                                             p._String("var2").values("a", "b", "c").$());
 
         // when
-        final Iterator<TestObject> iterator = producer.iterator(recipe);
+        final Iterator<TestObject> iterator = Producer.instance().iterator(recipe);
 
         // then
         assertThat(iterator.hasNext()).isTrue();
@@ -135,19 +134,18 @@ public class ProducerTest {
         } catch (NoSuchElementException expected) {
             return;
         }
-        throw new AssertionError();
+        fail();
     }
 
     @Test
     public void given2VariablesShouldProduce12CorrectObjects() {
         // given
-        final Producer producer = Producer.instance();
-        final Function<Producer, TestObject> supplier = (p) -> new TestObject(p._int("var1").values(1, 3).$(),
-                                                                              p._String("var2").values("a", "b", "c").$(),
-                                                                              p._int("var3").values(7, 9).$());
+        final Function<Producer, TestObject> recipe = (p) -> new TestObject(p._int("var1").values(1, 3).$(),
+                                                                            p._String("var2").values("a", "b", "c").$(),
+                                                                            p._int("var3").values(7, 9).$());
 
         // when
-        final Iterator<TestObject> iterator = producer.iterator(supplier);
+        final Iterator<TestObject> iterator = Producer.instance().iterator(recipe);
 
         // then
         assertThat(iterator.hasNext()).isTrue();
@@ -229,7 +227,7 @@ public class ProducerTest {
         } catch (NoSuchElementException expected) {
             return;
         }
-        throw new AssertionError();
+        fail();
     }
 
     static class TestObject {
