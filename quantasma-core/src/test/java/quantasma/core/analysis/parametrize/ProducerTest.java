@@ -23,6 +23,20 @@ public class ProducerTest {
     }
 
     @Test
+    public void givenOrderedValuesShouldProduceObjectsInTheSameOrder() {
+        final Function<Producer, TestObject> recipe = (p) -> new TestObject(p._int("var1").with(3, 1, 7, 9).$());
+        final Producer producer = Producer.instance();
+
+        final Iterator<TestObject> iterator = producer.iterator(recipe);
+
+        assertThat(iterator.next().var1).isEqualTo(3);
+        assertThat(iterator.next().var1).isEqualTo(1);
+        assertThat(iterator.next().var1).isEqualTo(7);
+        assertThat(iterator.next().var1).isEqualTo(9);
+        assertThat(iterator.hasNext()).isFalse();
+    }
+
+    @Test
     public void givenSecondIteratorCallShouldReturnNewIterator() {
         // given
         final Function<Producer, TestObject> recipe = (p) -> new TestObject(p._int("var1").values(1, 3).$());
