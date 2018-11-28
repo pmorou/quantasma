@@ -8,7 +8,9 @@ Library stands on top of [ta4j](https://github.com/ta4j/ta4j) providing addition
 
 -   multi-period time series
 
--   unlimited number of symbols
+-   market-aware strategies
+
+-   parametrized backtests
 
 The aim is to provide any needed functionality to follow the ever-changing markets in the most efficient way.
 

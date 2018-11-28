@@ -37,6 +37,10 @@ public class TestManager {
 
     private TradingRecord runTest(TradeStrategy tradeStrategy, Order.OrderType orderType, int startIndex, int finishIndex) {
         final MainTimeSeries mainTimeSeries = getMainTimeSeries(tradeStrategy);
+        if (mainTimeSeries.isEmpty()) {
+            throw new RuntimeException("Empty time series");
+        }
+
         final int runBeginIndex = Math.max(startIndex, mainTimeSeries.getBeginIndex());
         final int runEndIndex = Math.min(finishIndex, mainTimeSeries.getEndIndex());
 

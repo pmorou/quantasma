@@ -82,13 +82,13 @@ public class BaseTradeStrategy extends BaseStrategy implements TradeStrategy {
         return amount;
     }
 
+    protected void setAmount(Num amount) {
+        this.amount = amount;
+    }
+
     @Override
     public String getTradeSymbol() {
         return tradeSymbol;
-    }
-
-    protected void setAmount(Num amount) {
-        this.amount = amount;
     }
 
     /**
