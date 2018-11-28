@@ -16,6 +16,7 @@ Library stands on top of link:{ta4jLink}[ta4j] providing additional features as:
 * bid and ask prices
 * multi-period time series
 * market-aware strategies
+* parametrized backtests
 
 The aim is to provide any needed functionality to follow the ever-changing markets in the most efficient way.
 
