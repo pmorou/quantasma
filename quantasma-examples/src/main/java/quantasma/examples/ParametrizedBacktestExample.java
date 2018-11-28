@@ -15,11 +15,11 @@ import quantasma.core.TestMarketData;
 import quantasma.core.TradeStrategy;
 import quantasma.core.analysis.parametrize.Producer;
 import quantasma.core.analysis.parametrize.Variable;
+import quantasma.core.analysis.parametrize.Variables;
 import quantasma.core.timeseries.MultipleTimeSeriesBuilder;
 import quantasma.core.timeseries.ReflectionManualIndexTimeSeries;
 import quantasma.core.timeseries.TimeSeriesDefinition;
 
-import java.util.Iterator;
 import java.util.function.Function;
 
 import static quantasma.core.analysis.parametrize.Ints.range;
@@ -42,9 +42,9 @@ public class ParametrizedBacktestExample {
         final TimeSeries timeSeries = context.getDataService().getMarketData().of("EURUSD").getTimeSeries(BarPeriod.M1);
         final ClosePriceIndicator closePrice = new ClosePriceIndicator(timeSeries);
 
-        final Function<Producer, TradeStrategy> recipe = p -> {
-            final Variable<Integer> rsiPeriod = p._int("rsiPeriod").values(10, 14);
-            final Variable<Integer> rsiLowerBound = p._int("rsiLowerBound").with(range(10, 40, 10));
+        final Function<Variables, TradeStrategy> recipe = var -> {
+            final Variable<Integer> rsiPeriod = var._int("rsiPeriod").values(10, 14);
+            final Variable<Integer> rsiLowerBound = var._int("rsiLowerBound").with(range(10, 40, 10));
 
             final RSIIndicator rsi = new RSIIndicator(closePrice, rsiPeriod.$());
             return new RSIStrategy.Builder<>(context,
@@ -57,9 +57,9 @@ public class ParametrizedBacktestExample {
 
         // Feed historical data by calling testMarketData.add()
 
-        final Iterator<TradeStrategy> iterator = Producer.instance().iterator(recipe);
-        while (iterator.hasNext()) {
-            final TradingRecord result = new TestManager(testMarketData).run(iterator.next(), Order.OrderType.BUY);
+        final Producer<TradeStrategy> producer = Producer.from(recipe);
+        while (producer.hasNext()) {
+            final TradingRecord result = new TestManager(testMarketData).run(producer.next(), Order.OrderType.BUY);
             // Proper criterion can be used now on the result
         }
         // end::ParametrizedBacktestExample[]
