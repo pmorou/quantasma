@@ -12,6 +12,28 @@ import static org.junit.Assert.fail;
 public class ProducerTest {
 
     @Test
+    public void givenNextElementsShouldReturnItsParameters() {
+        // given
+        final Function<Variables, TestObject> recipe = (var) -> new TestObject(var._int("var1").with(3, 1).$(),
+                                                                               var._String("var2").with("a", "b").$());
+
+        // when
+        final Producer<TestObject> producer = Producer.from(recipe);
+
+        // then
+        assertThat(producer.hasNext()).isTrue();
+        producer.next();
+        assertThat(producer.getParameters().keys()).containsOnly("var1", "var2");
+        assertThat(producer.getParameters().value("var1")).isEqualTo(3);
+        assertThat(producer.getParameters().value("var2")).isEqualTo("a");
+
+        assertThat(producer.hasNext()).isTrue();
+        producer.next();
+        assertThat(producer.getParameters().value("var1")).isEqualTo(1);
+        assertThat(producer.getParameters().value("var2")).isEqualTo("a");
+    }
+
+    @Test
     public void givenOrderedValuesShouldProduceObjectsInTheSameOrder() {
         final Function<Variables, TestObject> recipe = (var) -> new TestObject(var._int("var1").with(3, 1, 7, 9).$());
 

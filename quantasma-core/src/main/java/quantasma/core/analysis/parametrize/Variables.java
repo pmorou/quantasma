@@ -65,4 +65,11 @@ public class Variables {
         return definition.apply(this);
     }
 
+    public Parameters getParameters() {
+        return variablesByLabel.entrySet()
+                               .stream()
+                               .reduce(new Parameters(),
+                                       (p, entry) -> p.add(entry.getKey(), entry.getValue().value()),
+                                       Parameters::addAll);
+    }
 }

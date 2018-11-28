@@ -5,6 +5,8 @@ import java.util.function.Function;
 
 public interface Producer<T> extends Iterator<T> {
 
+    Parameters getParameters();
+
     static <T> Producer<T> from(Function<Variables, T> recipe) {
         return new Producer<T>() {
             final private Variables variables = new Variables();
@@ -13,6 +15,11 @@ public interface Producer<T> extends Iterator<T> {
 
             {
                 recipe.apply(variables); // initialize variables
+            }
+
+            @Override
+            public Parameters getParameters() {
+                return variables.getParameters();
             }
 
             @Override
