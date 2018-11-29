@@ -14,6 +14,7 @@
         <module>quantasma-core</module>
         <module>quantasma-examples</module>
         <module>quantasma-integrations</module>
+        <module>quantasma-app</module>
     </modules>
 
     <properties>
