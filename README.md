@@ -2,7 +2,17 @@
 
 All-in-one algorithmic trading platform. Build your own backtested-strategy using Java, and execute along with support of continuous track and optimization modules.
 
-Library stands on top of [ta4j](https://github.com/ta4j/ta4j) providing additional features as:
+Modules short-description:
+
+-   [quantasma-app]({quantasma-app/}): ready-to-use platform
+
+-   [quantasma-core]({quantasma-core/}): trading library providing core mechanisms
+
+-   [quantasma-examples]({quantasma-examples/}): example usages
+
+-   [quantasma-integrations]({quantasma-integrations/}): integrations with 3rd party APIs
+
+Platform stands on top of [ta4j](https://github.com/ta4j/ta4j) providing additional features as:
 
 -   bid and ask prices
 
@@ -11,6 +21,8 @@ Library stands on top of [ta4j](https://github.com/ta4j/ta4j) providing addition
 -   market-aware strategies
 
 -   parametrized backtests
+
+You can use above platform or build your own based on [quantasma-core]({quantasma-core/}) library.
 
 The aim is to provide any needed functionality to follow the ever-changing markets in the most efficient way.
 
@@ -22,7 +34,7 @@ The aim is to provide any needed functionality to follow the ever-changing marke
 
 ## Example Usage
 
-Creating a trading application is as simple as the following code.
+In case you decide to create your own trading application its as simple as the following code.
 
 ``` java
 // Any strategy based on TradeStrategy interface needs a Context object
