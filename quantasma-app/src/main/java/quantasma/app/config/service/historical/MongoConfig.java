@@ -3,7 +3,6 @@ package quantasma.app.config.service.historical;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.Document;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.data.mongodb.core.MongoOperations;
 import org.springframework.data.mongodb.core.index.CompoundIndexDefinition;
@@ -13,19 +12,22 @@ import org.springframework.data.mongodb.core.index.IndexDefinition;
 @Slf4j
 public class MongoConfig {
 
+    private final HistoricalDataServiceProperties properties;
+
     @Autowired
-    public void ensureIndexes(MongoOperations mongoOperations, @Value("${service.historical-data.collection-prefix}") String collectionPrefix) {
+    public MongoConfig(HistoricalDataServiceProperties historicalDataServiceProperties) {
+        this.properties = historicalDataServiceProperties;
+    }
+
+    @Autowired
+    public void ensureIndexes(MongoOperations mongoOperations) {
         final Document doc = new Document()
                 .append("date", 1)
                 .append("symbol", 1)
                 .append("period", 1);
         final IndexDefinition compoundIndexDefinition = new CompoundIndexDefinition(doc).unique();
-        final String collectionName = collectionName(collectionPrefix);
-        log.info("Ensuring [{}] index on the [{}] collection.", compoundIndexDefinition, collectionName);
-        mongoOperations.indexOps(collectionName).ensureIndex(compoundIndexDefinition);
+        log.info("Ensuring [{}] index on the [{}] collection.", compoundIndexDefinition, properties.collectionName());
+        mongoOperations.indexOps(properties.collectionName()).ensureIndex(compoundIndexDefinition);
     }
 
-    private static String collectionName(String collectionPrefix) {
-        return collectionPrefix + "_OHLCV";
-    }
 }
