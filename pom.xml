@@ -25,6 +25,9 @@
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
         <ta4j.version>0.12</ta4j.version>
         <lombok.version>1.18.4</lombok.version>
+        <groovy.version>2.5.4</groovy.version>
+        <spock.version>1.2-groovy-2.5</spock.version>
+        <cglib.version>3.2.9</cglib.version>
     </properties>
 
     <dependencies>
