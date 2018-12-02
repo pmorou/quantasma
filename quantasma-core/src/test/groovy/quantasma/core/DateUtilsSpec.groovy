@@ -23,14 +23,14 @@ class DateUtilsSpec extends Specification {
         result.getMinute() == expectedMinutes
 
         where:
-        hour | minutes | barPeriod    | expectedHour | expectedMinutes
-        10   | 00      | BarPeriod.M1 | 10           | 01
-        10   | 59      | BarPeriod.M1 | 11           | 00
-        10   | 00      | BarPeriod.M5 | 10           | 05
-        10   | 13      | BarPeriod.M5 | 10           | 15
-        10   | 15      | BarPeriod.M5 | 10           | 20
-        10   | 16      | BarPeriod.M5 | 10           | 20
-        10   | 55      | BarPeriod.M5 | 11           | 00
+        hour | minutes | barPeriod    || expectedHour | expectedMinutes
+        10   | 00      | BarPeriod.M1 || 10           | 01
+        10   | 59      | BarPeriod.M1 || 11           | 00
+        10   | 00      | BarPeriod.M5 || 10           | 05
+        10   | 13      | BarPeriod.M5 || 10           | 15
+        10   | 15      | BarPeriod.M5 || 10           | 20
+        10   | 16      | BarPeriod.M5 || 10           | 20
+        10   | 55      | BarPeriod.M5 || 11           | 00
     }
 
     private static ZonedDateTime createTime(Integer hour, Integer minutes) {
@@ -49,19 +49,19 @@ class DateUtilsSpec extends Specification {
         result == expectedResult
 
         where:
-        lowerBound           | upperBound          | inclusiveUpperBound | expectedResult
-        time                 | time                | true                | true
-        time                 | time                | false               | false
-        time                 | time.plusSeconds(1) | true                | true
-        time                 | time.plusSeconds(1) | false               | true
-        time.minusSeconds(1) | time                | true                | true
-        time.minusSeconds(1) | time                | false               | false
-        time.minusSeconds(1) | time.plusSeconds(1) | true                | true
-        time.minusSeconds(1) | time.plusSeconds(1) | false               | true
-        time.plusSeconds(1)  | time.plusSeconds(1) | true                | false
-        time.plusSeconds(1)  | time.plusSeconds(1) | false               | false
-        time.plusSeconds(1)  | time.plusSeconds(2) | true                | false
-        time.plusSeconds(1)  | time.plusSeconds(2) | false               | false
+        lowerBound           | upperBound          | inclusiveUpperBound || expectedResult
+        time                 | time                | true                || true
+        time                 | time                | false               || false
+        time                 | time.plusSeconds(1) | true                || true
+        time                 | time.plusSeconds(1) | false               || true
+        time.minusSeconds(1) | time                | true                || true
+        time.minusSeconds(1) | time                | false               || false
+        time.minusSeconds(1) | time.plusSeconds(1) | true                || true
+        time.minusSeconds(1) | time.plusSeconds(1) | false               || true
+        time.plusSeconds(1)  | time.plusSeconds(1) | true                || false
+        time.plusSeconds(1)  | time.plusSeconds(1) | false               || false
+        time.plusSeconds(1)  | time.plusSeconds(2) | true                || false
+        time.plusSeconds(1)  | time.plusSeconds(2) | false               || false
 
         value = time
     }
@@ -75,14 +75,14 @@ class DateUtilsSpec extends Specification {
         result == expectedResult
 
         where:
-        innerLowerBound      | innerUpperBound     | outerLowerBound | outerUpperBound       | inclusiveUpperBound | expectedResult
-        time                 | time.plusSeconds(1) | time            | time.plusSeconds(1)   | true                | true
-        time                 | time.plusSeconds(1) | time            | time.plusSeconds(1)   | false               | false
-        time                 | time.plusSeconds(1) | time            | time.plusSeconds(100) | false               | true
-        time.plusSeconds(1)  | time.plusSeconds(2) | time            | time.plusSeconds(100) | false               | true
-        time.plusSeconds(1)  | time.plusSeconds(2) | time            | time.plusSeconds(2)   | true                | true
-        time.plusSeconds(1)  | time.plusSeconds(2) | time            | time.plusSeconds(2)   | false               | false
-        time.minusSeconds(1) | time.plusSeconds(2) | time            | time.plusSeconds(100) | false               | false
+        innerLowerBound      | innerUpperBound     | outerLowerBound | outerUpperBound       | inclusiveUpperBound || expectedResult
+        time                 | time.plusSeconds(1) | time            | time.plusSeconds(1)   | true                || true
+        time                 | time.plusSeconds(1) | time            | time.plusSeconds(1)   | false               || false
+        time                 | time.plusSeconds(1) | time            | time.plusSeconds(100) | false               || true
+        time.plusSeconds(1)  | time.plusSeconds(2) | time            | time.plusSeconds(100) | false               || true
+        time.plusSeconds(1)  | time.plusSeconds(2) | time            | time.plusSeconds(2)   | true                || true
+        time.plusSeconds(1)  | time.plusSeconds(2) | time            | time.plusSeconds(2)   | false               || false
+        time.minusSeconds(1) | time.plusSeconds(2) | time            | time.plusSeconds(100) | false               || false
     }
 
     def 'given inner lower bound greater than inner upper bound should throw an exception'() {

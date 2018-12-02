@@ -96,14 +96,14 @@ class ReflectionManualIndexTimeSeriesSpec extends Specification {
         endIndex == expectedEndIndex
 
         where:
-        className                                | barPeriod    | factory                     | expectedEndIndex
-        BaseTimeSeries.getName()                 | BarPeriod.M1 | BASE_TIME_SERIES            | 2
-        BaseSymbolTimeSeries.getName()           | BarPeriod.M1 | BASE_SYMBOL_TIME_SERIES     | 2
-        BaseSymbolTimeSeries.class.getName()     | BarPeriod.M5 | BASE_SYMBOL_TIME_SERIES     | 0
-        BaseMainTimeSeries.class.getName()       | BarPeriod.M1 | BASE_MAIN_TIME_SERIES       | 2
-        BaseMainTimeSeries.class.getName()       | BarPeriod.M5 | BASE_MAIN_TIME_SERIES       | 0
-        BaseAggregatedTimeSeries.class.getName() | BarPeriod.M1 | BASE_AGGREGATED_TIME_SERIES | 2
-        BaseAggregatedTimeSeries.class.getName() | BarPeriod.M5 | BASE_AGGREGATED_TIME_SERIES | 0
+        className                                | barPeriod    | factory                     || expectedEndIndex
+        BaseTimeSeries.getName()                 | BarPeriod.M1 | BASE_TIME_SERIES            || 2
+        BaseSymbolTimeSeries.getName()           | BarPeriod.M1 | BASE_SYMBOL_TIME_SERIES     || 2
+        BaseSymbolTimeSeries.class.getName()     | BarPeriod.M5 | BASE_SYMBOL_TIME_SERIES     || 0
+        BaseMainTimeSeries.class.getName()       | BarPeriod.M1 | BASE_MAIN_TIME_SERIES       || 2
+        BaseMainTimeSeries.class.getName()       | BarPeriod.M5 | BASE_MAIN_TIME_SERIES       || 0
+        BaseAggregatedTimeSeries.class.getName() | BarPeriod.M1 | BASE_AGGREGATED_TIME_SERIES || 2
+        BaseAggregatedTimeSeries.class.getName() | BarPeriod.M5 | BASE_AGGREGATED_TIME_SERIES || 0
     }
 
     @Unroll

@@ -32,11 +32,11 @@ class FinishDepositCriterionSpec extends Specification {
         finishDepositCriterion.calculate(timeSeries, result).delegate == expectedDeposit
 
         where:
-        amount  | expectedDeposit
-        100_000 | 1020.0
-        10_000  | 1002.0
-        20_000  | 1004.0
-        10      | 1000.002
+        amount  || expectedDeposit
+        100_000 || 1020.0
+        10_000  || 1002.0
+        20_000  || 1004.0
+        10      || 1000.002
     }
 
     private BaseSymbolTimeSeries createTimeSeriesWithBars() {

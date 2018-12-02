@@ -44,12 +44,12 @@ class AverageLastValuesIndicatorSpec extends Specification {
         result == expectedAverage
 
         where:
-        barsCount | expectedAverage
-        4         | numOf(2)
-        3         | numOf(1)
-        2         | NaN.NaN
-        1         | NaN.NaN
-        0         | NaN.NaN
+        barsCount || expectedAverage
+        4         || numOf(2)
+        3         || numOf(1)
+        2         || NaN.NaN
+        1         || NaN.NaN
+        0         || NaN.NaN
     }
 
     private def numOf(int number) {
