@@ -37,31 +37,34 @@ class MarketDataSpec extends Specification {
         timeSeriesForSymbol2.getBarCount() == expectedBarCount
 
         where:
-        time                    | barsToAdd | expectedBarCount | _
-        MIDNIGHT                | 0         | 0                | _
-        MIDNIGHT.plusMinutes(1) | 0         | 0                | _
-        MIDNIGHT.plusMinutes(2) | 0         | 0                | _
-        MIDNIGHT.plusMinutes(3) | 0         | 0                | _
-        MIDNIGHT.plusMinutes(4) | 0         | 0                | _
-        MIDNIGHT.plusMinutes(5) | 0         | 0                | _
-        MIDNIGHT                | 1         | 1                | _
-        MIDNIGHT.plusMinutes(1) | 1         | 1                | _
-        MIDNIGHT.plusMinutes(2) | 1         | 1                | _
-        MIDNIGHT.plusMinutes(3) | 1         | 1                | _
-        MIDNIGHT.plusMinutes(4) | 1         | 1                | _
-        MIDNIGHT.plusMinutes(5) | 1         | 1                | _
-        MIDNIGHT                | 2         | 2                | _
-        MIDNIGHT.plusMinutes(1) | 2         | 2                | _
-        MIDNIGHT.plusMinutes(2) | 2         | 2                | _
-        MIDNIGHT.plusMinutes(3) | 2         | 2                | _
-        MIDNIGHT.plusMinutes(4) | 2         | 2                | _
-        MIDNIGHT.plusMinutes(5) | 2         | 2                | _
-        MIDNIGHT                | 3         | 2                | _
-        MIDNIGHT.plusMinutes(1) | 3         | 2                | _
-        MIDNIGHT.plusMinutes(2) | 3         | 2                | _
-        MIDNIGHT.plusMinutes(3) | 3         | 2                | _
-        MIDNIGHT.plusMinutes(4) | 3         | 2                | _
-        MIDNIGHT.plusMinutes(5) | 3         | 2                | _
+        time                    | barsToAdd | expectedBarCount
+        MIDNIGHT                | 0         | 0
+        MIDNIGHT.plusMinutes(1) | 0         | 0
+        MIDNIGHT.plusMinutes(2) | 0         | 0
+        MIDNIGHT.plusMinutes(3) | 0         | 0
+        MIDNIGHT.plusMinutes(4) | 0         | 0
+        MIDNIGHT.plusMinutes(5) | 0         | 0
+
+        MIDNIGHT                | 1         | 1
+        MIDNIGHT.plusMinutes(1) | 1         | 1
+        MIDNIGHT.plusMinutes(2) | 1         | 1
+        MIDNIGHT.plusMinutes(3) | 1         | 1
+        MIDNIGHT.plusMinutes(4) | 1         | 1
+        MIDNIGHT.plusMinutes(5) | 1         | 1
+
+        MIDNIGHT                | 2         | 2
+        MIDNIGHT.plusMinutes(1) | 2         | 2
+        MIDNIGHT.plusMinutes(2) | 2         | 2
+        MIDNIGHT.plusMinutes(3) | 2         | 2
+        MIDNIGHT.plusMinutes(4) | 2         | 2
+        MIDNIGHT.plusMinutes(5) | 2         | 2
+
+        MIDNIGHT                | 3         | 2
+        MIDNIGHT.plusMinutes(1) | 3         | 2
+        MIDNIGHT.plusMinutes(2) | 3         | 2
+        MIDNIGHT.plusMinutes(3) | 3         | 2
+        MIDNIGHT.plusMinutes(4) | 3         | 2
+        MIDNIGHT.plusMinutes(5) | 3         | 2
     }
 
     @Unroll
