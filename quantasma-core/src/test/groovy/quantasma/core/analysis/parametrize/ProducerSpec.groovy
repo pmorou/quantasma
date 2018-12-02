@@ -197,7 +197,7 @@ class ProducerSpec extends Specification {
 
     def 'given already started iterator when used new iterator should be able to continue old iterator'() {
         given:
-        Function<Variables, TestObject> recipe = { var -> new TestObject(var._int("var1").values(1, 3).$()) }
+        final Function<Variables, TestObject> recipe = { var -> new TestObject(var._int("var1").values(1, 3).$()) }
         final Iterator<TestObject> it1 = Producer.from(recipe)
         assert it1.hasNext()
         assert it1.next().var1 == 1
