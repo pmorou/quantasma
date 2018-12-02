@@ -29,6 +29,8 @@ class IterablesSpec extends Specification {
 
         when:
         reusableIterator.reuse()
+
+        and:
         while (reusableIterator.hasNext()) {
             values << reusableIterator.next()
         }

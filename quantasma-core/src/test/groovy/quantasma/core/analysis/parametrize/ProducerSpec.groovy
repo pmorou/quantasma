@@ -96,6 +96,8 @@ class ProducerSpec extends Specification {
         given:
         final Function<Variables, TestObject> recipe = { var -> new TestObject(var._int("var1").values(1, 3).$()) }
         final Iterator<TestObject> producer = Producer.from(recipe)
+
+        and:
         for (int i = 0; i < 2; i++) {
             assert producer.hasNext()
             producer.next()

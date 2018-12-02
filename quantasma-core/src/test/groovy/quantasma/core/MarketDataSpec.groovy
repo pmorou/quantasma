@@ -112,10 +112,12 @@ class MarketDataSpec extends Specification {
 
         when:
         marketData.add("referenceSymbol", addMinutes(time, 1), 1)
+
+        then:
         rule1.isSatisfied(referenceTimeSeries.getEndIndex())
         !rule2.isSatisfied(targetTimeSeries.getEndIndex())
 
-        then:
+        and:
         marketData.add("referenceSymbol", addMinutes(time, 2), 0.9)
         marketData.add("targetSymbol", addMinutes(time, 2), 1)
         rule1.isSatisfied(referenceTimeSeries.getEndIndex())
