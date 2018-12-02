@@ -17,6 +17,10 @@ class BaseAggregatedTimeSeriesSpec extends Specification {
 
     private static final ZonedDateTime MIDNIGHT = utc(LocalDateTime.of(2018, 11, 20, 0, 0))
 
+    private static List<ZonedDateTime> 'minutes possibilities from 0:00 to 0:05'() {
+        (0..5).collect({ MIDNIGHT.plusMinutes(it) })
+    }
+
     @Unroll
     def 'given 1 M5 and 1 M1 bars at time (#time) should return unique bar at index 0'() {
         given:
@@ -34,13 +38,7 @@ class BaseAggregatedTimeSeriesSpec extends Specification {
         resultAtIndex0.getClosePrice().doubleValue() == 1
 
         where:
-        time                    | _
-        MIDNIGHT                | _
-        MIDNIGHT.plusMinutes(1) | _
-        MIDNIGHT.plusMinutes(2) | _
-        MIDNIGHT.plusMinutes(3) | _
-        MIDNIGHT.plusMinutes(4) | _
-        MIDNIGHT.plusMinutes(5) | _
+        time << 'minutes possibilities from 0:00 to 0:05'()
     }
 
     @Unroll
@@ -66,13 +64,7 @@ class BaseAggregatedTimeSeriesSpec extends Specification {
         resultAtIndex1.getClosePrice().doubleValue() == 1
 
         where:
-        time                    | _
-        MIDNIGHT                | _
-        MIDNIGHT.plusMinutes(1) | _
-        MIDNIGHT.plusMinutes(2) | _
-        MIDNIGHT.plusMinutes(3) | _
-        MIDNIGHT.plusMinutes(4) | _
-        MIDNIGHT.plusMinutes(5) | _
+        time << 'minutes possibilities from 0:00 to 0:05'()
     }
 
     @Unroll
@@ -106,13 +98,7 @@ class BaseAggregatedTimeSeriesSpec extends Specification {
         resultAtIndex5.getClosePrice().doubleValue() == 5
 
         where:
-        time                    | _
-        MIDNIGHT                | _
-        MIDNIGHT.plusMinutes(1) | _
-        MIDNIGHT.plusMinutes(2) | _
-        MIDNIGHT.plusMinutes(3) | _
-        MIDNIGHT.plusMinutes(4) | _
-        MIDNIGHT.plusMinutes(5) | _
+        time << 'minutes possibilities from 0:00 to 0:05'()
     }
 
     @Unroll
@@ -149,13 +135,7 @@ class BaseAggregatedTimeSeriesSpec extends Specification {
         actualLastBar == thirdM5Bar
 
         where:
-        time                    | _
-        MIDNIGHT                | _
-        MIDNIGHT.plusMinutes(1) | _
-        MIDNIGHT.plusMinutes(2) | _
-        MIDNIGHT.plusMinutes(3) | _
-        MIDNIGHT.plusMinutes(4) | _
-        MIDNIGHT.plusMinutes(5) | _
+        time << 'minutes possibilities from 0:00 to 0:05'()
     }
 
     private static BaseAggregatedTimeSeries createBaseAggregatedTimeSeries(MainTimeSeries mainTimeSeries) {

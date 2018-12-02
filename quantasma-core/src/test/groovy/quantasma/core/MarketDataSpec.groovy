@@ -20,6 +20,10 @@ class MarketDataSpec extends Specification {
     private static final ZonedDateTime MIDNIGHT = utc(LocalDateTime.of(2018, 11, 20, 0, 0))
     private static final BarPeriod ONE_MINUTE_PERIOD = BarPeriod.M1
 
+    private static List<ZonedDateTime> 'minutes possibilities from 0:00 to 0:05'() {
+        (0..5).collect({ MIDNIGHT.plusMinutes(it) })
+    }
+
     @Unroll
     def 'given 2 time series with max size of 2 bars when add (#barsToAdd) bars first created at time (#time) should have (#expectedBarCount) bars'() {
         given:
@@ -88,13 +92,7 @@ class MarketDataSpec extends Specification {
         isEqualToOneRule.isSatisfied(targetTimeSeries.getEndIndex())
 
         where:
-        time                    | _
-        MIDNIGHT                | _
-        MIDNIGHT.plusMinutes(1) | _
-        MIDNIGHT.plusMinutes(2) | _
-        MIDNIGHT.plusMinutes(3) | _
-        MIDNIGHT.plusMinutes(4) | _
-        MIDNIGHT.plusMinutes(5) | _
+        time << 'minutes possibilities from 0:00 to 0:05'()
     }
 
     @Unroll
@@ -130,13 +128,7 @@ class MarketDataSpec extends Specification {
         rule2.isSatisfied(targetTimeSeries.getEndIndex())
 
         where:
-        time                    | _
-        MIDNIGHT                | _
-        MIDNIGHT.plusMinutes(1) | _
-        MIDNIGHT.plusMinutes(2) | _
-        MIDNIGHT.plusMinutes(3) | _
-        MIDNIGHT.plusMinutes(4) | _
-        MIDNIGHT.plusMinutes(5) | _
+        time << 'minutes possibilities from 0:00 to 0:05'()
     }
 
     @Unroll
@@ -151,13 +143,7 @@ class MarketDataSpec extends Specification {
         marketData.of('knownSymbol').getMainTimeSeries().getBarCount() == 0
 
         where:
-        time                    | _
-        MIDNIGHT                | _
-        MIDNIGHT.plusMinutes(1) | _
-        MIDNIGHT.plusMinutes(2) | _
-        MIDNIGHT.plusMinutes(3) | _
-        MIDNIGHT.plusMinutes(4) | _
-        MIDNIGHT.plusMinutes(5) | _
+        time << 'minutes possibilities from 0:00 to 0:05'()
     }
 
     def 'get unspecified symbol should thrown an illegal argument exception'() {
