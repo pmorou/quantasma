@@ -27,9 +27,8 @@ class AverageLastValuesIndicatorSpec extends Specification {
         thrown(ex)
 
         where:
-        lastValuesCount | ex
-        0               | IllegalArgumentException
-        -1              | IllegalArgumentException
+        lastValuesCount << [0, -1]
+        ex = IllegalArgumentException
     }
 
     @Unroll
