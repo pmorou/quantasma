@@ -81,9 +81,9 @@ class MarketDataSpec extends Specification {
 
         and:
         marketData.add("targetSymbol", time, 0.5)
-        !isEqualToOneRule.isSatisfied(0)
+        assert !isEqualToOneRule.isSatisfied(0)
         marketData.add("targetSymbol", addMinutes(time, 1), 1)
-        isEqualToOneRule.isSatisfied(1)
+        assert isEqualToOneRule.isSatisfied(1)
 
         when:
         marketData.add("symbol2", addMinutes(time, 2), 0)
@@ -107,8 +107,8 @@ class MarketDataSpec extends Specification {
         and:
         marketData.add("referenceSymbol", time, 0)
         marketData.add("targetSymbol", time, 0)
-        !rule1.isSatisfied(referenceTimeSeries.getEndIndex())
-        !rule2.isSatisfied(targetTimeSeries.getEndIndex())
+        assert !rule1.isSatisfied(referenceTimeSeries.getEndIndex())
+        assert !rule2.isSatisfied(targetTimeSeries.getEndIndex())
 
         when:
         marketData.add("referenceSymbol", addMinutes(time, 1), 1)

@@ -97,10 +97,10 @@ class ProducerSpec extends Specification {
         final Function<Variables, TestObject> recipe = { var -> new TestObject(var._int("var1").values(1, 3).$()) }
         final Iterator<TestObject> producer = Producer.from(recipe)
         for (int i = 0; i < 2; i++) {
-            producer.hasNext()
+            assert producer.hasNext()
             producer.next()
         }
-        !producer.hasNext()
+        assert !producer.hasNext()
 
         when:
         final Iterator<TestObject> nextProducer = Producer.from(recipe)
@@ -197,9 +197,9 @@ class ProducerSpec extends Specification {
         given:
         Function<Variables, TestObject> recipe = { var -> new TestObject(var._int("var1").values(1, 3).$()) }
         final Iterator<TestObject> it1 = Producer.from(recipe)
-        it1.hasNext()
-        it1.next().var1 == 1
-        it1.hasNext()
+        assert it1.hasNext()
+        assert it1.next().var1 == 1
+        assert it1.hasNext()
 
         when:
         final Iterator<TestObject> it2 = Producer.from(recipe)
