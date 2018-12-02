@@ -92,7 +92,7 @@ class ProducerSpec extends Specification {
         !producer.hasNext()
     }
 
-    def 'given second tterator call should return new iterator'() {
+    def 'given second iterator call should return new iterator'() {
         given:
         final Function<Variables, TestObject> recipe = { var -> new TestObject(var._int("var1").values(1, 3).$()) }
         final Iterator<TestObject> producer = Producer.from(recipe)
