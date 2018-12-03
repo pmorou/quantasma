@@ -11,26 +11,37 @@ import spock.lang.Specification
 
 class TestManagerSpec extends Specification {
 
-    private def bar = Mock(Bar, {
-        getClosePrice() >>> [DoubleNum.valueOf(0), DoubleNum.valueOf(1), DoubleNum.valueOf(2)]
-    })
-    private def tradeStrategy = Mock(TradeStrategy, {
-        getTradeSymbol() >> "symbol"
-        shouldOperate(_, _) >> true
-    })
-    private def mainTimeSeries = Mock(MainTimeSeries, {
-        getBar(_) >> bar
-        getBeginIndex() >> 0
-        getEndIndex() >> 2
-        getBarData() >> []
-    })
-    private def multipleTimeSeries = Mock(MultipleTimeSeries, {
-        getMainTimeSeries() >> mainTimeSeries
-    })
-    private def testMarketData = Mock(TestMarketData, {
-        of("symbol") >> multipleTimeSeries
-        manualIndexTimeSeres() >> [Mock(ManualIndexTimeSeries)]
-    })
+    private def tradeStrategy
+    private def bar
+    private def mainTimeSeries
+    private def multipleTimeSeries
+    private def testMarketData
+
+    def setup() {
+        tradeStrategy = Mock(TradeStrategy, {
+            getTradeSymbol() >> "symbol"
+            shouldOperate(_, _) >> true
+        })
+
+        bar = Stub(Bar, {
+            getClosePrice() >>> [DoubleNum.valueOf(0), DoubleNum.valueOf(1), DoubleNum.valueOf(2)]
+        })
+
+        mainTimeSeries = Stub(MainTimeSeries, {
+            getBar(_) >> bar
+            getBeginIndex() >> 0
+            getEndIndex() >> 2
+        })
+
+        multipleTimeSeries = Stub(MultipleTimeSeries, {
+            getMainTimeSeries() >> mainTimeSeries
+        })
+
+        testMarketData = Stub(TestMarketData, {
+            of("symbol") >> multipleTimeSeries
+            manualIndexTimeSeres() >> [Mock(ManualIndexTimeSeries)]
+        })
+    }
 
     def 'given 3 bars should check strategy 3 times and have both finish and unfinished trades with different amount objects'() {
         given:
