@@ -39,7 +39,7 @@ class TestManagerSpec extends Specification {
 
         testMarketData = Stub(TestMarketData, {
             of("symbol") >> multipleTimeSeries
-            manualIndexTimeSeres() >> [Mock(ManualIndexTimeSeries)]
+            manualIndexTimeSeres() >> [Stub(ManualIndexTimeSeries)]
         })
     }
 
