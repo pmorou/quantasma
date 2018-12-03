@@ -79,7 +79,7 @@ class BaseAggregatedTimeSeriesSpec extends Specification {
         }
 
         expect:
-        with(aggregatedTimeSeries) {
+        verifyAll(aggregatedTimeSeries) {
             getBar(0) == NaNBar.NaN
             getBar(1) == NaNBar.NaN
             getBar(2) == NaNBar.NaN

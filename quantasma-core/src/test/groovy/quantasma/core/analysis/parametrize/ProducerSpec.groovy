@@ -240,7 +240,7 @@ class ProducerSpec extends Specification {
     }
 
     private void assertFields(TestObject testObject, int expectedVar1, String expectedVar2, Integer expectedVar3) {
-        with(testObject) {
+        verifyAll(testObject) {
             var1 == expectedVar1
             var2 == expectedVar2
             var3 == expectedVar3
