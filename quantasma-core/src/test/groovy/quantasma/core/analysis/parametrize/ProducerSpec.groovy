@@ -205,11 +205,11 @@ class ProducerSpec extends Specification {
 
         when:
         final Iterator<TestObject> it2 = Producer.from(recipe)
-        it2.hasNext()
-        it2.next().var1 == 1
-        it2.hasNext()
-        it2.next().var1 == 3
-        !it2.hasNext()
+        assert it2.hasNext()
+        assert it2.next().var1 == 1
+        assert it2.hasNext()
+        assert it2.next().var1 == 3
+        assert !it2.hasNext()
 
         then:
         it1.hasNext()
