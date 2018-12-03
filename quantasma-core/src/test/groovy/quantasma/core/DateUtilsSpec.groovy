@@ -1,6 +1,5 @@
 package quantasma.core
 
-import spock.lang.Shared
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -9,6 +8,8 @@ import java.time.ZoneOffset
 import java.time.ZonedDateTime
 
 class DateUtilsSpec extends Specification {
+
+    private static final def TEN_O_CLOCK = ZonedDateTime.of(LocalDateTime.of(2010, 1, 1, 10, 0, 0), ZoneOffset.UTC)
 
     @Unroll
     def 'given bar period (#barPeriod) and time (#hour):(#minutes) should return time (#expectedHour):(#expectedMinutes)'() {
@@ -37,9 +38,6 @@ class DateUtilsSpec extends Specification {
         ZonedDateTime.of(LocalDateTime.of(2010, 1, 1, hour, minutes, 0), ZoneOffset.UTC)
     }
 
-    @Shared
-    private def time = ZonedDateTime.of(LocalDateTime.of(2010, 1, 1, 10, 0, 0), ZoneOffset.UTC)
-
     @Unroll
     def 'given value (#value) and lower bound (#lowerBound)/upper bound (#upperBound):inclusive(#inclusiveUpperBound) should return (#expectedResult)'() {
         when:
@@ -49,21 +47,21 @@ class DateUtilsSpec extends Specification {
         result == expectedResult
 
         where:
-        lowerBound           | upperBound          | inclusiveUpperBound || expectedResult
-        time                 | time                | true                || true
-        time                 | time                | false               || false
-        time                 | time.plusSeconds(1) | true                || true
-        time                 | time.plusSeconds(1) | false               || true
-        time.minusSeconds(1) | time                | true                || true
-        time.minusSeconds(1) | time                | false               || false
-        time.minusSeconds(1) | time.plusSeconds(1) | true                || true
-        time.minusSeconds(1) | time.plusSeconds(1) | false               || true
-        time.plusSeconds(1)  | time.plusSeconds(1) | true                || false
-        time.plusSeconds(1)  | time.plusSeconds(1) | false               || false
-        time.plusSeconds(1)  | time.plusSeconds(2) | true                || false
-        time.plusSeconds(1)  | time.plusSeconds(2) | false               || false
+        lowerBound                  | upperBound                 | inclusiveUpperBound || expectedResult
+        TEN_O_CLOCK                 | TEN_O_CLOCK                | true                || true
+        TEN_O_CLOCK                 | TEN_O_CLOCK                | false               || false
+        TEN_O_CLOCK                 | TEN_O_CLOCK.plusSeconds(1) | true                || true
+        TEN_O_CLOCK                 | TEN_O_CLOCK.plusSeconds(1) | false               || true
+        TEN_O_CLOCK.minusSeconds(1) | TEN_O_CLOCK                | true                || true
+        TEN_O_CLOCK.minusSeconds(1) | TEN_O_CLOCK                | false               || false
+        TEN_O_CLOCK.minusSeconds(1) | TEN_O_CLOCK.plusSeconds(1) | true                || true
+        TEN_O_CLOCK.minusSeconds(1) | TEN_O_CLOCK.plusSeconds(1) | false               || true
+        TEN_O_CLOCK.plusSeconds(1)  | TEN_O_CLOCK.plusSeconds(1) | true                || false
+        TEN_O_CLOCK.plusSeconds(1)  | TEN_O_CLOCK.plusSeconds(1) | false               || false
+        TEN_O_CLOCK.plusSeconds(1)  | TEN_O_CLOCK.plusSeconds(2) | true                || false
+        TEN_O_CLOCK.plusSeconds(1)  | TEN_O_CLOCK.plusSeconds(2) | false               || false
 
-        value = time
+        value = TEN_O_CLOCK
     }
 
     @Unroll
@@ -75,19 +73,19 @@ class DateUtilsSpec extends Specification {
         result == expectedResult
 
         where:
-        innerLowerBound      | innerUpperBound     | outerLowerBound | outerUpperBound       | inclusiveUpperBound || expectedResult
-        time                 | time.plusSeconds(1) | time            | time.plusSeconds(1)   | true                || true
-        time                 | time.plusSeconds(1) | time            | time.plusSeconds(1)   | false               || false
-        time                 | time.plusSeconds(1) | time            | time.plusSeconds(100) | false               || true
-        time.plusSeconds(1)  | time.plusSeconds(2) | time            | time.plusSeconds(100) | false               || true
-        time.plusSeconds(1)  | time.plusSeconds(2) | time            | time.plusSeconds(2)   | true                || true
-        time.plusSeconds(1)  | time.plusSeconds(2) | time            | time.plusSeconds(2)   | false               || false
-        time.minusSeconds(1) | time.plusSeconds(2) | time            | time.plusSeconds(100) | false               || false
+        innerLowerBound             | innerUpperBound            | outerLowerBound | outerUpperBound              | inclusiveUpperBound || expectedResult
+        TEN_O_CLOCK                 | TEN_O_CLOCK.plusSeconds(1) | TEN_O_CLOCK     | TEN_O_CLOCK.plusSeconds(1)   | true                || true
+        TEN_O_CLOCK                 | TEN_O_CLOCK.plusSeconds(1) | TEN_O_CLOCK     | TEN_O_CLOCK.plusSeconds(1)   | false               || false
+        TEN_O_CLOCK                 | TEN_O_CLOCK.plusSeconds(1) | TEN_O_CLOCK     | TEN_O_CLOCK.plusSeconds(100) | false               || true
+        TEN_O_CLOCK.plusSeconds(1)  | TEN_O_CLOCK.plusSeconds(2) | TEN_O_CLOCK     | TEN_O_CLOCK.plusSeconds(100) | false               || true
+        TEN_O_CLOCK.plusSeconds(1)  | TEN_O_CLOCK.plusSeconds(2) | TEN_O_CLOCK     | TEN_O_CLOCK.plusSeconds(2)   | true                || true
+        TEN_O_CLOCK.plusSeconds(1)  | TEN_O_CLOCK.plusSeconds(2) | TEN_O_CLOCK     | TEN_O_CLOCK.plusSeconds(2)   | false               || false
+        TEN_O_CLOCK.minusSeconds(1) | TEN_O_CLOCK.plusSeconds(2) | TEN_O_CLOCK     | TEN_O_CLOCK.plusSeconds(100) | false               || false
     }
 
     def 'given inner lower bound greater than inner upper bound should throw an exception'() {
         when:
-        DateUtils.isInRange(time, time.minusSeconds(1), time, time.plusSeconds(1), true)
+        DateUtils.isInRange(TEN_O_CLOCK, TEN_O_CLOCK.minusSeconds(1), TEN_O_CLOCK, TEN_O_CLOCK.plusSeconds(1), true)
 
         then:
         thrown(IllegalArgumentException)
