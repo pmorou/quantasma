@@ -23,13 +23,15 @@ class BaseBidAskBarSpec extends Specification {
         bar.addPrice(func.apply(16), func.apply(26))
 
         then:
-        bar.getBidOpenPrice().doubleValue() == 15
-        bar.getBidMaxPrice().doubleValue() == 19
-        bar.getBidMinPrice().doubleValue() == 11
-        bar.getBidClosePrice().doubleValue() == 16
-        bar.getAskOpenPrice().doubleValue() == 25
-        bar.getAskMaxPrice().doubleValue() == 29
-        bar.getAskMinPrice().doubleValue() == 21
-        bar.getAskClosePrice().doubleValue() == 26
+        with (bar) {
+            getBidOpenPrice().doubleValue() == 15
+            getBidMaxPrice().doubleValue() == 19
+            getBidMinPrice().doubleValue() == 11
+            getBidClosePrice().doubleValue() == 16
+            getAskOpenPrice().doubleValue() == 25
+            getAskMaxPrice().doubleValue() == 29
+            getAskMinPrice().doubleValue() == 21
+            getAskClosePrice().doubleValue() == 26
+        }
     }
 }

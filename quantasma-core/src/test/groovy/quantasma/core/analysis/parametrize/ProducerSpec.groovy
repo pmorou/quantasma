@@ -16,16 +16,18 @@ class ProducerSpec extends Specification {
         final Producer<TestObject> producer = Producer.from(recipe)
 
         then:
-        producer.hasNext()
-        producer.next()
-        producer.getParameters().keys().every({ it in ["var1", "var2"] })
-        producer.getParameters().value("var1") == 3
-        producer.getParameters().value("var2") == "a"
+        with(producer) {
+            hasNext()
+            next()
+            getParameters().keys().every({ it in ["var1", "var2"] })
+            getParameters().value("var1") == 3
+            getParameters().value("var2") == "a"
 
-        producer.hasNext()
-        producer.next()
-        producer.getParameters().value("var1") == 1
-        producer.getParameters().value("var2") == "a"
+            hasNext()
+            next()
+            getParameters().value("var1") == 1
+            getParameters().value("var2") == "a"
+        }
     }
 
     def 'given ordered values should produce objects in the same order'() {
@@ -36,11 +38,13 @@ class ProducerSpec extends Specification {
         final Producer<TestObject> producer = Producer.from(recipe)
 
         then:
-        producer.next().var1 == 3
-        producer.next().var1 == 1
-        producer.next().var1 == 7
-        producer.next().var1 == 9
-        !producer.hasNext()
+        with(producer) {
+            next().var1 == 3
+            next().var1 == 1
+            next().var1 == 7
+            next().var1 == 9
+            !hasNext()
+        }
     }
 
     def 'given reused variables should keep the same value for both'() {
@@ -55,27 +59,13 @@ class ProducerSpec extends Specification {
         final Producer<TestObject> producer = Producer.from(recipe)
 
         then:
-        final TestObject _1stCall = producer.next()
-        _1stCall.var1 == 1
-        _1stCall.var2 == "9"
-        _1stCall.var3 == 1
-
-        final TestObject _2stCall = producer.next()
-        _2stCall.var1 == 2
-        _2stCall.var2 == "9"
-        _2stCall.var3 == 2
-
-        final TestObject _3stCall = producer.next()
-        _3stCall.var1 == 1
-        _3stCall.var2 == "8"
-        _3stCall.var3 == 1
-
-        final TestObject _4stCall = producer.next()
-        _4stCall.var1 == 2
-        _4stCall.var2 == "8"
-        _4stCall.var3 == 2
-
-        !producer.hasNext()
+        with(producer) {
+            assertFields(next(), 1, "9", 1)
+            assertFields(next(), 2, "9", 2)
+            assertFields(next(), 1, "8", 1)
+            assertFields(next(), 2, "8", 2)
+            !hasNext()
+        }
     }
 
     def 'given duplicated values should produce objects without duplicates'() {
@@ -86,10 +76,12 @@ class ProducerSpec extends Specification {
         final Producer<TestObject> producer = Producer.from(recipe)
 
         then:
-        producer.next().var1 == 1
-        producer.next().var1 == 2
-        producer.next().var1 == 3
-        !producer.hasNext()
+        with(producer) {
+            next().var1 == 1
+            next().var1 == 2
+            next().var1 == 3
+            !hasNext()
+        }
     }
 
     def 'given second iterator call should return new iterator'() {
@@ -109,8 +101,10 @@ class ProducerSpec extends Specification {
 
         then:
         for (int i = 0; i < 2; i++) {
-            nextProducer.hasNext()
-            nextProducer.next()
+            with(nextProducer) {
+                hasNext()
+                next()
+            }
         }
         !nextProducer.hasNext()
     }
@@ -124,16 +118,18 @@ class ProducerSpec extends Specification {
         final Producer<TestObject> producer = Producer.from(recipe)
 
         then:
-        producer.hasNext()
-        producer.next().var1 == 1
-        producer.hasNext()
-        producer.next().var1 == 3
-        producer.hasNext()
-        producer.next().var1 == 5
-        producer.hasNext()
-        producer.next().var1 == 7
-        !producer.hasNext()
-        producer.next()
+        with(producer) {
+            hasNext()
+            next().var1 == 1
+            hasNext()
+            next().var1 == 3
+            hasNext()
+            next().var1 == 5
+            hasNext()
+            next().var1 == 7
+            !hasNext()
+            next()
+        }
     }
 
     @FailsWith(NoSuchElementException)
@@ -146,75 +142,56 @@ class ProducerSpec extends Specification {
         final Producer<TestObject> producer = Producer.from(recipe)
 
         then:
-        producer.hasNext()
-        final TestObject _1thCall = producer.next()
-        _1thCall.var1 == 1
-        _1thCall.var2 == "a"
-
-        producer.hasNext()
-        final TestObject _2thCall = producer.next()
-        _2thCall.var1 == 3
-        _2thCall.var2 == "a"
-
-        producer.hasNext()
-        final TestObject _3thCall = producer.next()
-        _3thCall.var1 == 5
-        _3thCall.var2 == "a"
-
-        producer.hasNext()
-        final TestObject _4thCall = producer.next()
-        _4thCall.var1 == 1
-        _4thCall.var2 == "b"
-
-        producer.hasNext()
-        final TestObject _5thCall = producer.next()
-        _5thCall.var1 == 3
-        _5thCall.var2 == "b"
-
-        producer.hasNext()
-        final TestObject _6thCall = producer.next()
-        _6thCall.var1 == 5
-        _6thCall.var2 == "b"
-
-        producer.hasNext()
-        final TestObject _7thCall = producer.next()
-        _7thCall.var1 == 1
-        _7thCall.var2 == "c"
-
-        producer.hasNext()
-        final TestObject _8thCall = producer.next()
-        _8thCall.var1 == 3
-        _8thCall.var2 == "c"
-
-        producer.hasNext()
-        final TestObject _9thCall = producer.next()
-        _9thCall.var1 == 5
-        _9thCall.var2 == "c"
-
-        !producer.hasNext()
-        producer.next()
+        with(producer) {
+            hasNext()
+            assertFields(next(), 1, "a")
+            hasNext()
+            assertFields(next(), 3, "a")
+            hasNext()
+            assertFields(next(), 5, "a")
+            hasNext()
+            assertFields(next(), 1, "b")
+            hasNext()
+            assertFields(next(), 3, "b")
+            hasNext()
+            assertFields(next(), 5, "b")
+            hasNext()
+            assertFields(next(), 1, "c")
+            hasNext()
+            assertFields(next(), 3, "c")
+            hasNext()
+            assertFields(next(), 5, "c")
+            !hasNext()
+            next() // throws an exception
+        }
     }
 
     def 'given already started iterator when used new iterator should be able to continue old iterator'() {
         given:
         final Function<Variables, TestObject> recipe = { var -> new TestObject(var._int("var1").values(1, 3).$()) }
-        final Iterator<TestObject> it1 = Producer.from(recipe)
-        assert it1.hasNext()
-        assert it1.next().var1 == 1
-        assert it1.hasNext()
+        final Iterator<TestObject> oldIterator = Producer.from(recipe)
+        with (oldIterator) {
+            hasNext()
+            next().var1 == 1
+            hasNext()
+        }
 
         when:
-        final Iterator<TestObject> it2 = Producer.from(recipe)
-        assert it2.hasNext()
-        assert it2.next().var1 == 1
-        assert it2.hasNext()
-        assert it2.next().var1 == 3
-        assert !it2.hasNext()
+        final Iterator<TestObject> newIterator = Producer.from(recipe)
+        with (newIterator) {
+            hasNext()
+            next().var1 == 1
+            hasNext()
+            next().var1 == 3
+            !hasNext()
+        }
 
         then:
-        it1.hasNext()
-        it1.next().var1 == 3
-        !it1.hasNext()
+        with (oldIterator) {
+            hasNext()
+            next().var1 == 3
+            !hasNext()
+        }
     }
 
     @FailsWith(NoSuchElementException)
@@ -228,80 +205,46 @@ class ProducerSpec extends Specification {
         final Iterator<TestObject> producer = Producer.from(recipe)
 
         then:
-        producer.hasNext()
-        final TestObject _1thCall = producer.next()
-        _1thCall.var1 == 1
-        _1thCall.var2 == "a"
-        _1thCall.var3 == 7
+        with (producer) {
+            hasNext()
+            assertFields(next(), 1, "a", 7)
+            hasNext()
+            assertFields(next(), 3, "a", 7)
+            hasNext()
+            assertFields(next(), 1, "b", 7)
+            hasNext()
+            assertFields(next(), 3, "b", 7)
+            hasNext()
+            assertFields(next(), 1, "c", 7)
+            hasNext()
+            assertFields(next(), 3, "c", 7)
+            hasNext()
+            assertFields(next(), 1, "a", 9)
+            hasNext()
+            assertFields(next(), 3, "a", 9)
+            hasNext()
+            assertFields(next(), 1, "b", 9)
+            hasNext()
+            assertFields(next(), 3, "b", 9)
+            hasNext()
+            assertFields(next(), 1, "c", 9)
+            hasNext()
+            assertFields(next(), 3, "c", 9)
+            !hasNext()
+            next()
+        }
+    }
 
-        producer.hasNext()
-        final TestObject _2thCall = producer.next()
-        _2thCall.var1 == 3
-        _2thCall.var2 == "a"
-        _2thCall.var3 == 7
+    private void assertFields(TestObject testObject, int expectedVar1, String expectedVar2) {
+        assertFields(testObject, expectedVar1, expectedVar2, 0)
+    }
 
-        producer.hasNext()
-        final TestObject _3thCall = producer.next()
-        _3thCall.var1 == 1
-        _3thCall.var2 == "b"
-        _3thCall.var3 == 7
-
-        producer.hasNext()
-        final TestObject _4thCall = producer.next()
-        _4thCall.var1 == 3
-        _4thCall.var2 == "b"
-        _4thCall.var3 == 7
-
-        producer.hasNext()
-        final TestObject _5thCall = producer.next()
-        _5thCall.var1 == 1
-        _5thCall.var2 == "c"
-        _5thCall.var3 == 7
-
-        producer.hasNext()
-        final TestObject _6thCall = producer.next()
-        _6thCall.var1 == 3
-        _6thCall.var2 == "c"
-        _6thCall.var3 == 7
-
-        producer.hasNext()
-        final TestObject _7thCall = producer.next()
-        _7thCall.var1 == 1
-        _7thCall.var2 == "a"
-        _7thCall.var3 == 9
-
-        producer.hasNext()
-        final TestObject _8thCall = producer.next()
-        _8thCall.var1 == 3
-        _8thCall.var2 == "a"
-        _8thCall.var3 == 9
-
-        producer.hasNext()
-        final TestObject _9thCall = producer.next()
-        _9thCall.var1 == 1
-        _9thCall.var2 == "b"
-        _9thCall.var3 == 9
-
-        producer.hasNext()
-        final TestObject _10thCall = producer.next()
-        _10thCall.var1 == 3
-        _10thCall.var2 == "b"
-        _10thCall.var3 == 9
-
-        producer.hasNext()
-        final TestObject _11thCall = producer.next()
-        _11thCall.var1 == 1
-        _11thCall.var2 == "c"
-        _11thCall.var3 == 9
-
-        producer.hasNext()
-        final TestObject _12thCall = producer.next()
-        _12thCall.var1 == 3
-        _12thCall.var2 == "c"
-        _12thCall.var3 == 9
-
-        !producer.hasNext()
-        producer.next()
+    private void assertFields(TestObject testObject, int expectedVar1, String expectedVar2, Integer expectedVar3) {
+        with(testObject) {
+            var1 == expectedVar1
+            var2 == expectedVar2
+            var3 == expectedVar3
+        }
     }
 
     static class TestObject {
