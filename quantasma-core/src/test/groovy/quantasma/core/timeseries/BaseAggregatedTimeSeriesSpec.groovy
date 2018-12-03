@@ -23,7 +23,7 @@ class BaseAggregatedTimeSeriesSpec extends Specification {
 
     @Unroll
     def 'given 1 M5 and 1 M1 bars at time (#time) should return unique bar at index 0'() {
-        given:
+        setup:
         def mainTimeSeries = BaseMainTimeSeries.create(TimeSeriesDefinition.unlimited(BarPeriod.M1), "symbol")
         def aggregatedTimeSeries = createBaseAggregatedTimeSeries(mainTimeSeries)
         createM1Bar(0, mainTimeSeries)
@@ -31,11 +31,8 @@ class BaseAggregatedTimeSeriesSpec extends Specification {
         createM5Bar(0, aggregatedTimeSeries)
         aggregatedTimeSeries.addPrice(1)
 
-        when:
-        def resultAtIndex0 = aggregatedTimeSeries.getBar(0)
-
-        then:
-        resultAtIndex0.getClosePrice().doubleValue() == 1
+        expect:
+        aggregatedTimeSeries.getBar(0).getClosePrice().doubleValue() == 1
 
         where:
         time << 'minutes possibilities from 0:00 to 0:05'()
@@ -69,7 +66,7 @@ class BaseAggregatedTimeSeriesSpec extends Specification {
 
     @Unroll
     def 'given 2 M5 bars at time (#time) should return unique bars from index 1 to 0'() {
-        given:
+        setup:
         def mainTimeSeries = BaseMainTimeSeries.create(TimeSeriesDefinition.unlimited(BarPeriod.M1), "symbol")
         def aggregatedTimeSeries = createBaseAggregatedTimeSeries(mainTimeSeries)
         6.times {
@@ -81,21 +78,15 @@ class BaseAggregatedTimeSeriesSpec extends Specification {
             aggregatedTimeSeries.addPrice(it)
         }
 
-        when:
-        def resultAtIndex0 = aggregatedTimeSeries.getBar(3)
-        def resultAtIndex1 = aggregatedTimeSeries.getBar(3)
-        def resultAtIndex2 = aggregatedTimeSeries.getBar(3)
-        def resultAtIndex3 = aggregatedTimeSeries.getBar(3)
-        def resultAtIndex4 = aggregatedTimeSeries.getBar(4)
-        def resultAtIndex5 = aggregatedTimeSeries.getBar(5)
-
-        then:
-        resultAtIndex0 == NaNBar.NaN
-        resultAtIndex1 == NaNBar.NaN
-        resultAtIndex2 == NaNBar.NaN
-        resultAtIndex3 == NaNBar.NaN
-        resultAtIndex4.getClosePrice().doubleValue() == 4
-        resultAtIndex5.getClosePrice().doubleValue() == 5
+        expect:
+        with(aggregatedTimeSeries) {
+            getBar(0) == NaNBar.NaN
+            getBar(1) == NaNBar.NaN
+            getBar(2) == NaNBar.NaN
+            getBar(3) == NaNBar.NaN
+            getBar(4).getClosePrice().doubleValue() == 4
+            getBar(5).getClosePrice().doubleValue() == 5
+        }
 
         where:
         time << 'minutes possibilities from 0:00 to 0:05'()
@@ -103,7 +94,7 @@ class BaseAggregatedTimeSeriesSpec extends Specification {
 
     @Unroll
     def 'given 3 M5 bars should return correct first and last created bar'() {
-        given:
+        setup:
         def mainTimeSeries = BaseMainTimeSeries.create(TimeSeriesDefinition.unlimited(BarPeriod.M1), "symbol")
         def aggregatedTimeSeries = createBaseAggregatedTimeSeries(mainTimeSeries)
         def firstM5Bar = null, secondM5Bar = null, thirdM5Bar = null
@@ -126,13 +117,9 @@ class BaseAggregatedTimeSeriesSpec extends Specification {
             aggregatedTimeSeries.addPrice(it)
         }
 
-        when:
-        def actualFirstBar = aggregatedTimeSeries.getFirstBar()
-        def actualLastBar = aggregatedTimeSeries.getLastBar()
-
-        then:
-        actualFirstBar == firstM5Bar
-        actualLastBar == thirdM5Bar
+        expect:
+        aggregatedTimeSeries.getFirstBar() == firstM5Bar
+        aggregatedTimeSeries.getLastBar() == thirdM5Bar
 
         where:
         time << 'minutes possibilities from 0:00 to 0:05'()
