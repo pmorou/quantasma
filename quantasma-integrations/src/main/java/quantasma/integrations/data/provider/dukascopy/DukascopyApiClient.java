@@ -53,6 +53,7 @@ public class DukascopyApiClient {
 
             @Override
             public void onDisconnect() {
+                log.info("Disconnected");
                 tryToReconnect();
             }
         });
@@ -69,10 +70,12 @@ public class DukascopyApiClient {
     }
 
     private void tryToReconnect() {
+        log.info("Connecting...");
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
                 while (!client.isConnected()) {
+
                     try {
                         if (lightReconnects > 0 && client.isReconnectAllowed()) {
                             client.reconnect();
