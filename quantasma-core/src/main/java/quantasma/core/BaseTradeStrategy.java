@@ -7,20 +7,24 @@ import org.ta4j.core.Rule;
 import org.ta4j.core.Strategy;
 import org.ta4j.core.num.DoubleNum;
 import org.ta4j.core.num.Num;
+import org.ta4j.core.num.PrecisionNum;
 
 import java.util.Objects;
+import java.util.function.Function;
 
 public class BaseTradeStrategy extends BaseStrategy implements TradeStrategy {
     private final Context context;
+    private final Function<Number, Num> numFunction;
 
     private String tradeSymbol;
     private Num amount;
 
-    protected BaseTradeStrategy(Builder builder) {
+    protected BaseTradeStrategy(Builder<?, ?> builder) {
         super(builder.getName(), builder.getEntryRule(), builder.getExitRule(), builder.getUnstablePeriod());
         this.context = Objects.requireNonNull(builder.getContext());
         this.tradeSymbol = Objects.requireNonNull(builder.getTradeSymbol());
-        this.amount = DoubleNum.valueOf(0);
+        this.numFunction = Objects.requireNonNull(builder.getNumFunction());
+        this.amount = numFunction.apply(0);
     }
 
     @Override
@@ -91,6 +95,10 @@ public class BaseTradeStrategy extends BaseStrategy implements TradeStrategy {
         return tradeSymbol;
     }
 
+    protected Function<Number, Num> getNumFunction() {
+        return numFunction;
+    }
+
     /**
      * Example of builder which preserves all methods of its parents<p>
      *
@@ -106,6 +114,7 @@ public class BaseTradeStrategy extends BaseStrategy implements TradeStrategy {
 
         private String name = "unamed_series";
         private int unstablePeriod;
+        private Function<Number, Num> numFunction = PrecisionNum::valueOf;
 
         public Builder(Context context, String tradeSymbol, Rule entryRule, Rule exitRule) {
             this.context = Objects.requireNonNull(context);
@@ -121,6 +130,16 @@ public class BaseTradeStrategy extends BaseStrategy implements TradeStrategy {
 
         public T withUnstablePeriod(int unstablePeriod) {
             this.unstablePeriod = unstablePeriod;
+            return self();
+        }
+
+        public T withNumTypeOf(Function<Number, Num> numFunction) {
+            this.numFunction = numFunction;
+            return self();
+        }
+
+        public T withNumTypeOf(Num type) {
+            this.numFunction = type.function();
             return self();
         }
 
