@@ -4,6 +4,7 @@ server:
 service:
   historical-data:
     enabled: false
+    prefix: dukascopy
   live-data:
     enabled: false
 
