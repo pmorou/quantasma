@@ -6,3 +6,7 @@ service:
     enabled: false
   live-data:
     enabled: false
+
+spring:
+  profiles:
+    active: dukascopy
