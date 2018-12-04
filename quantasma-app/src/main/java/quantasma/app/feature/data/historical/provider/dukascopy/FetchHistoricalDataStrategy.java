@@ -75,7 +75,7 @@ public class FetchHistoricalDataStrategy implements IStrategy {
             }
 
             if (bidBars.size() == 0 || bidBars.get(1).getTime() == latestDate.toEpochMilli()) {
-                break;
+                break; // no more records
             }
             latestDate = Instant.ofEpochMilli(bidBars.get(1).getTime());
         }
