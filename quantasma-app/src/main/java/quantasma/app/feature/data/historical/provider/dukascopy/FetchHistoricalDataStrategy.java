@@ -88,13 +88,13 @@ public class FetchHistoricalDataStrategy implements IStrategy {
 
     private class BarBucketCollection {
         class BarBucket {
-            public IBar bidBar;
-            public IBar askBar;
+            IBar bidBar;
+            IBar askBar;
         }
 
-        public Map<Long, BarBucket> bars = new TreeMap<>();
+        Map<Long, BarBucket> bars = new TreeMap<>();
 
-        public void insertBidBar(IBar bar) {
+        void insertBidBar(IBar bar) {
             final BarBucket nullIfAbsent = bars.computeIfPresent(bar.getTime(), (time, barBucket) -> {
                 barBucket.bidBar = bar;
                 return barBucket;
@@ -106,7 +106,7 @@ public class FetchHistoricalDataStrategy implements IStrategy {
             }
         }
 
-        public void insertAskBar(IBar bar) {
+        void insertAskBar(IBar bar) {
             final BarBucket nullIfAbsent = bars.computeIfPresent(bar.getTime(), (aLong, barBucket) -> {
                 barBucket.askBar = bar;
                 return barBucket;
@@ -118,7 +118,7 @@ public class FetchHistoricalDataStrategy implements IStrategy {
             }
         }
 
-        public void verify() {
+        void verify() {
             bars.forEach((aLong, barBucket) -> {
                 if (barBucket.bidBar == null || barBucket.askBar == null) {
                     throw new RuntimeException();
