@@ -4,6 +4,7 @@ import org.ta4j.core.Bar
 import org.ta4j.core.Order
 import org.ta4j.core.TradingRecord
 import org.ta4j.core.num.DoubleNum
+import org.ta4j.core.num.PrecisionNum
 import quantasma.core.timeseries.MainTimeSeries
 import quantasma.core.timeseries.ManualIndexTimeSeries
 import quantasma.core.timeseries.MultipleTimeSeries
@@ -21,6 +22,7 @@ class TestManagerSpec extends Specification {
         tradeStrategy = Mock(TradeStrategy, {
             getTradeSymbol() >> "symbol"
             shouldOperate(_, _) >> true
+            getAmount() >> PrecisionNum.valueOf(Math.random()) // unique values imitating possibility of changing an amount between trades
         })
 
         bar = Stub(Bar, {

@@ -96,13 +96,12 @@ public class TestManager {
             manualIndexTimeSeriesSet.forEach(ManualIndexTimeSeries::resetIndexes);
         }
 
+        // decorator methods below
+
         @Override
         public Num getAmount() {
-            // unique values imitating possibility of changing an amount between trades
-            return DoubleNum.valueOf(Math.random());
+            return strategy.getAmount();
         }
-
-        // decorator methods below
 
         @Override
         public String getName() {
