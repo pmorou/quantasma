@@ -44,20 +44,23 @@ public class FinishDepositCriterion extends AbstractAnalysisCriterion {
 
         public Num calculate(TimeSeries series, Trade trade) {
             if (trade.isClosed()) {
-                final Num exitClosePrice = hasPrice(trade.getExit()) ?
-                        trade.getExit().getPrice() : series.getBar(trade.getExit().getIndex()).getClosePrice();
-                final Num entryClosePrice = hasPrice(trade.getEntry()) ?
-                        trade.getEntry().getPrice() : series.getBar(trade.getEntry().getIndex()).getClosePrice();
-
-                final Num pips;
-                if (trade.getEntry().isBuy()) {
-                    pips = exitClosePrice.minus(entryClosePrice).dividedBy(series.numOf(pipResolution));
-                } else {
-                    pips = entryClosePrice.minus(exitClosePrice).dividedBy(series.numOf(pipResolution));
-                }
-                return realUnitProfit(series, trade, pips);
+                final Num exitClosePrice = getPrice(series, trade.getExit());
+                final Num entryClosePrice = getPrice(series, trade.getEntry());
+                final Num pips = difference(trade, exitClosePrice, entryClosePrice)
+                        .dividedBy(series.numOf(pipResolution));
+                return toRealUnit(series, trade, pips);
             }
             return series.numOf(0);
+        }
+
+        private Num getPrice(TimeSeries series, Order exit) {
+            return hasPrice(exit) ?
+                    exit.getPrice() : series.getBar(exit.getIndex()).getClosePrice();
+        }
+
+        private Num difference(Trade trade, Num exitClosePrice, Num entryClosePrice) {
+            return trade.getEntry().isBuy() ?
+                    exitClosePrice.minus(entryClosePrice) : entryClosePrice.minus(exitClosePrice);
         }
 
         private boolean hasPrice(Order exit) {
@@ -67,7 +70,7 @@ public class FinishDepositCriterion extends AbstractAnalysisCriterion {
         private final static int STANDARD_LOT_SIZE = 100_000;
         private final static int STANDARD_LOT_PROFIT = 10;
 
-        private static Num realUnitProfit(TimeSeries timeSeries, Trade trade, Num pips) {
+        private static Num toRealUnit(TimeSeries timeSeries, Trade trade, Num pips) {
             return trade.getExit().getAmount()
                         .dividedBy(timeSeries.numOf(STANDARD_LOT_SIZE))
                         .multipliedBy(timeSeries.numOf(STANDARD_LOT_PROFIT))
