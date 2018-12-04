@@ -13,7 +13,7 @@ public interface OhlcvTickService {
 
     void insert(PersistentOhlcvTick persistentOhlcvTick);
 
-    void insertSkipDuplicates(PersistentOhlcvTick persistentOhlcvTick);
+    void insertSkipDuplicates(OhlcvTick ohlcvTick);
 
     List<OhlcvTick> findBySymbolAndDateBetweenOrderByDate(String symbol, Instant startDate, TemporalAmount window);
 

@@ -48,4 +48,18 @@ public class PersistentOhlcvTick implements Serializable {
         this.volume = volume;
     }
 
+    public static PersistentOhlcvTick from(OhlcvTick ohlcvTick) {
+        return new PersistentOhlcvTick(ohlcvTick.getPeriod(),
+                                       ohlcvTick.getDate(),
+                                       ohlcvTick.getSymbol(),
+                                       ohlcvTick.getBidOpen(),
+                                       ohlcvTick.getBidLow(),
+                                       ohlcvTick.getBidHigh(),
+                                       ohlcvTick.getBidClose(),
+                                       ohlcvTick.getAskOpen(),
+                                       ohlcvTick.getAskLow(),
+                                       ohlcvTick.getAskHigh(),
+                                       ohlcvTick.getAskClose(),
+                                       ohlcvTick.getVolume());
+    }
 }

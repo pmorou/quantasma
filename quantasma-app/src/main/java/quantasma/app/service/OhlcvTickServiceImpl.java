@@ -44,11 +44,11 @@ public class OhlcvTickServiceImpl implements OhlcvTickService {
     }
 
     @Override
-    public void insertSkipDuplicates(PersistentOhlcvTick persistentOhlcvTick) {
+    public void insertSkipDuplicates(OhlcvTick ohlcvTick) {
         try {
-            ohlcvTickRepository.insert(persistentOhlcvTick);
+            ohlcvTickRepository.insert(new PersistentOhlcvTick());
         } catch (DuplicateKeyException e) {
-            System.out.println(String.format("Exception [%s] in [%s]", e.getMessage(), persistentOhlcvTick));
+            System.out.println(String.format("Exception [%s] in [%s]", e.getMessage(), ohlcvTick));
         }
     }
 
