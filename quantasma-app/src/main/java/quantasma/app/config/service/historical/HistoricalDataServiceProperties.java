@@ -10,7 +10,7 @@ public class HistoricalDataServiceProperties {
 
     private final String prefix;
 
-    public HistoricalDataServiceProperties(@Value("service.historical-data") String prefix) {
+    public HistoricalDataServiceProperties(@Value("${service.historical-data.prefix}") String prefix) {
         this.prefix = prefix;
     }
 
