@@ -28,7 +28,7 @@ public class DukascopyApiClient {
             initializeClient();
         } catch (Exception e) {
             log.error("{}", e);
-            throw new RuntimeException(e);
+            throw new RuntimeException("Failed to connect Dukascopy servers", e);
         }
     }
 
