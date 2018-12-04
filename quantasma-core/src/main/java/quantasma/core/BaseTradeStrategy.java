@@ -24,7 +24,7 @@ public class BaseTradeStrategy extends BaseStrategy implements TradeStrategy {
         this.context = Objects.requireNonNull(builder.getContext());
         this.tradeSymbol = Objects.requireNonNull(builder.getTradeSymbol());
         this.numFunction = Objects.requireNonNull(builder.getNumFunction());
-        this.amount = numFunction.apply(0);
+        this.amount = numFunction.apply(builder.getAmount());
     }
 
     @Override
@@ -115,6 +115,7 @@ public class BaseTradeStrategy extends BaseStrategy implements TradeStrategy {
         private String name = "unamed_series";
         private int unstablePeriod;
         private Function<Number, Num> numFunction = PrecisionNum::valueOf;
+        private int amount = 100;
 
         public Builder(Context context, String tradeSymbol, Rule entryRule, Rule exitRule) {
             this.context = Objects.requireNonNull(context);
@@ -140,6 +141,11 @@ public class BaseTradeStrategy extends BaseStrategy implements TradeStrategy {
 
         public T withNumTypeOf(Num type) {
             this.numFunction = type.function();
+            return self();
+        }
+
+        public T withAmount(int amount) {
+            this.amount = amount;
             return self();
         }
 
