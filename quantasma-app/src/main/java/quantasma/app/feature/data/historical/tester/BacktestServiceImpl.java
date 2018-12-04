@@ -13,6 +13,7 @@ import quantasma.core.TradeStrategy;
 import quantasma.core.analysis.StrategyBacktest;
 import quantasma.core.analysis.TradeScenario;
 import quantasma.core.analysis.criterion.FinishDepositCriterion;
+import quantasma.core.analysis.criterion.TradesCountCriterion;
 
 import java.time.ZonedDateTime;
 import java.time.temporal.TemporalAmount;
@@ -39,11 +40,8 @@ public class BacktestServiceImpl implements BacktestService {
             final TimeSeries timeSeries = tradeScenario.getTimeSeries();
             final TradingRecord tradingRecord = tradeScenario.getTradingRecord();
 
-            final Num finishDeposit = new FinishDepositCriterion(100, 0.0001).calculate(timeSeries, tradingRecord);
-            final int trades = tradingRecord.getTrades().size();
-            final Num profit = finishDeposit.minus(timeSeries.numOf(100));
-            final Num avgProfit = profit.dividedBy(timeSeries.numOf(trades));
-            final Num winningTradesNumber = new AverageProfitableTradesCriterion().calculate(timeSeries, tradingRecord);
+            final Num profit = new FinishDepositCriterion(0, 0.0001).calculate(timeSeries, tradingRecord);
+            final Num avgProfit = profit.dividedBy(timeSeries.numOf(tradingRecord.getTrades().size()));
 
             log.info("Parameters [{}]", tradeScenario.getParameters().getParameters());
             log.info(String.format("%9s | %9s | %9s | %11s | %9s | %9s",
@@ -56,12 +54,12 @@ public class BacktestServiceImpl implements BacktestService {
             log.info(String.format("%9.5f | %9.5f | %9d | %11.2f | %9.4f | %9.5f",
                                    profit.doubleValue(),
                                    avgProfit.doubleValue(),
-                                   trades,
-                                   winningTradesNumber.doubleValue(),
+                                   new TradesCountCriterion().calculate(timeSeries, tradingRecord).intValue(),
+                                   new AverageProfitableTradesCriterion().calculate(timeSeries, tradingRecord).doubleValue(),
                                    new RewardRiskRatioCriterion().calculate(timeSeries, tradingRecord).doubleValue(),
                                    new ProfitLossCriterion().calculate(timeSeries, tradingRecord).doubleValue()));
 
-            if (trades > 0) {
+            if (tradingRecord.getTrades().size() > 0) {
                 log.info("trades:");
                 tradingRecord.getTrades()
                              .stream()
