@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ta4j.core.Order;
 import org.ta4j.core.TimeSeries;
+import org.ta4j.core.TradingRecord;
 import org.ta4j.core.indicators.RSIIndicator;
 import org.ta4j.core.indicators.helpers.ClosePriceIndicator;
 import org.ta4j.core.trading.rules.CrossedDownIndicatorRule;
@@ -90,9 +91,10 @@ public class RSIBacktest implements StrategyBacktest {
         final Producer<TradeStrategy> producer = Producer.from(recipe);
         final List<TradeScenario> result = new LinkedList<>();
         while (producer.hasNext()) {
+            final TradingRecord tradingRecord = new TestManager(testMarketData).run(producer.next(), Order.OrderType.BUY);
             result.add(new TradeScenario(timeSeries,
                                          producer.getParameters(),
-                                         new TestManager(testMarketData).run(producer.next(), Order.OrderType.BUY)));
+                                         tradingRecord));
         }
         return result;
     }
