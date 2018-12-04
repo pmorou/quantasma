@@ -37,12 +37,12 @@ public class DukascopyApiClient {
 
             @Override
             public void onStart(long processId) {
-                log.info("Strategy started: " + processId);
+                log.info("Strategy started [processingId: {}]", processId);
             }
 
             @Override
             public void onStop(long processId) {
-                log.info("Strategy stopped: " + processId);
+                log.info("Strategy stopped [processingId: {}]", processId);
                 if (client.getStartedStrategies().size() == 0) {
                     System.exit(0);
                 }
