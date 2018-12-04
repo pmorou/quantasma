@@ -68,10 +68,10 @@ public class FinishDepositCriterion extends AbstractAnalysisCriterion {
         private final static int STANDARD_LOT_PROFIT = 10;
 
         private static Num realUnitProfit(TimeSeries timeSeries, Trade trade, Num pips) {
-            return timeSeries.numOf(trade.getExit().getAmount().doubleValue())
-                             .dividedBy(timeSeries.numOf(STANDARD_LOT_SIZE))
-                             .multipliedBy(timeSeries.numOf(STANDARD_LOT_PROFIT))
-                             .multipliedBy(pips);
+            return trade.getExit().getAmount()
+                        .dividedBy(timeSeries.numOf(STANDARD_LOT_SIZE))
+                        .multipliedBy(timeSeries.numOf(STANDARD_LOT_PROFIT))
+                        .multipliedBy(pips);
         }
     }
 }
