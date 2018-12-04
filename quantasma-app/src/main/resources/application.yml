@@ -4,3 +4,5 @@ server:
 service:
   historical-data:
     enabled: false
+  live-data:
+    enabled: false
