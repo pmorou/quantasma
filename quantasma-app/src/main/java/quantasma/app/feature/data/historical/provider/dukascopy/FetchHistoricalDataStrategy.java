@@ -52,12 +52,8 @@ public class FetchHistoricalDataStrategy implements IStrategy {
             final List<IBar> askBars = history.getBars(Instrument.EURUSD, Period.ONE_MIN, OfferSide.ASK, Filter.WEEKENDS, 50_000, latestDate.toEpochMilli(), 0);
 
             final BarBucketCollection collection = new BarBucketCollection();
-
-            bidBars.stream()
-                   .forEach(collection::insertBidBar);
-            askBars.stream()
-                   .forEach(collection::insertAskBar);
-
+            bidBars.forEach(collection::insertBidBar);
+            askBars.forEach(collection::insertAskBar);
             collection.verify();
 
             for (Map.Entry<Long, BarBucketCollection.BarBucket> bucketEntry : collection.bars.entrySet()) {
