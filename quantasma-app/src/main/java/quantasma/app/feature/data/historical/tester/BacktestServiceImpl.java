@@ -26,7 +26,7 @@ import java.util.List;
 
 @Service
 @Slf4j
-public class BackTestServiceImpl implements BackTestService {
+public class BacktestServiceImpl implements BacktestService {
 
     @Autowired
     private List<StrategyBacktest> backtests;

@@ -5,6 +5,6 @@ import quantasma.core.TradeStrategy;
 import java.time.ZonedDateTime;
 import java.time.temporal.TemporalAmount;
 
-public interface BackTestService {
+public interface BacktestService {
     void testOverPeriod(TradeStrategy strategy, ZonedDateTime from, TemporalAmount timeDuration);
 }
