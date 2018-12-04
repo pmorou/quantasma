@@ -70,8 +70,6 @@ public class FetchHistoricalDataStrategy implements IStrategy {
                                                                     bucket.askBar.getHigh(),
                                                                     bucket.askBar.getClose(),
                                                                     (int) (bucket.bidBar.getVolume() + bucket.askBar.getVolume())));
-
-
             }
 
             if (bidBars.size() == 0 || bidBars.get(1).getTime() == latestDate.toEpochMilli()) {
@@ -125,7 +123,6 @@ public class FetchHistoricalDataStrategy implements IStrategy {
                 }
             });
         }
-
     }
 
     public boolean isDone() {
