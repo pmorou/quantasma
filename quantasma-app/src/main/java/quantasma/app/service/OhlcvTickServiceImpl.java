@@ -1,5 +1,6 @@
 package quantasma.app.service;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import quantasma.app.model.OhlcvTick;
@@ -14,6 +15,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 @Service
+@Slf4j
 public class OhlcvTickServiceImpl implements OhlcvTickService {
 
     private final OhlcvTickRepository ohlcvTickRepository;
@@ -45,10 +47,11 @@ public class OhlcvTickServiceImpl implements OhlcvTickService {
 
     @Override
     public void insertSkipDuplicates(OhlcvTick ohlcvTick) {
+        final PersistentOhlcvTick persistentOhlcvTick = PersistentOhlcvTick.from(ohlcvTick);
         try {
-            ohlcvTickRepository.insert(PersistentOhlcvTick.from(ohlcvTick));
+            ohlcvTickRepository.insert(persistentOhlcvTick);
         } catch (DuplicateKeyException e) {
-            System.out.println(String.format("Exception [%s] in [%s]", e.getMessage(), ohlcvTick));
+            log.warn("Exception [{}] while inserting [{}]", e.getMessage(), persistentOhlcvTick);
         }
     }
 
