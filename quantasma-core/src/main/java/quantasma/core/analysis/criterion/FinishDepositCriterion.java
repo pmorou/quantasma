@@ -44,9 +44,9 @@ public class FinishDepositCriterion extends AbstractAnalysisCriterion {
 
         public Num calculate(TimeSeries series, Trade trade) {
             if (trade.isClosed()) {
-                Num exitClosePrice = hasPrice(trade.getExit()) ?
+                final Num exitClosePrice = hasPrice(trade.getExit()) ?
                         trade.getExit().getPrice() : series.getBar(trade.getExit().getIndex()).getClosePrice();
-                Num entryClosePrice = hasPrice(trade.getEntry()) ?
+                final Num entryClosePrice = hasPrice(trade.getEntry()) ?
                         trade.getEntry().getPrice() : series.getBar(trade.getEntry().getIndex()).getClosePrice();
 
                 final Num pips;
