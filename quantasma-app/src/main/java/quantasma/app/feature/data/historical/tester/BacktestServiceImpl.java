@@ -43,7 +43,7 @@ public class BacktestServiceImpl implements BacktestService {
             final Num profit = new FinishDepositCriterion(0, 0.0001).calculate(timeSeries, tradingRecord);
             final Num avgProfit = profit.dividedBy(timeSeries.numOf(tradingRecord.getTrades().size()));
 
-            log.info("Parameters [{}]", tradeScenario.getParameters().getParameters());
+            log.info("Parameters: [{}]", tradeScenario.getParameters().getParameters());
             log.info(String.format("%9s | %9s | %9s | %11s | %9s | %9s",
                                    "p/l",
                                    "avg-p/l",
@@ -60,17 +60,16 @@ public class BacktestServiceImpl implements BacktestService {
                                    new ProfitLossCriterion().calculate(timeSeries, tradingRecord).doubleValue()));
 
             if (tradingRecord.getTrades().size() > 0) {
-                log.info("trades:");
+                log.info("Trades:");
+                log.info(String.format("%11s | %11s | %10s | %17s | %17s", "open price", "close price", "p/l [pips]", "open date", "close date"));
                 tradingRecord.getTrades()
-                             .stream()
-                             .map(trade ->
-                                          String.format("open price: %7s, close price: %7s, p/l in pips: %7.2f, open date: %7s, close date: %7s",
-                                                        trade.getEntry().getPrice(),
-                                                        trade.getExit().getPrice(),
-                                                        new FinishDepositCriterion.ProfitLossPipsCalculator(0.0001).calculate(timeSeries, trade).doubleValue(),
-                                                        timeSeries.getBar(trade.getEntry().getIndex()).getBeginTime(),
-                                                        timeSeries.getBar(trade.getExit().getIndex()).getBeginTime()))
-                             .forEach(System.out::println);
+                             .forEach(trade ->
+                                              log.info(String.format("%11s | %11s | %10.5f | %17s | %17s",
+                                                                     trade.getEntry().getPrice(),
+                                                                     trade.getExit().getPrice(),
+                                                                     new FinishDepositCriterion.ProfitLossPipsCalculator(0.0001).calculate(timeSeries, trade).doubleValue(),
+                                                                     timeSeries.getBar(trade.getEntry().getIndex()).getBeginTime(),
+                                                                     timeSeries.getBar(trade.getExit().getIndex()).getBeginTime())));
             }
         });
     }
