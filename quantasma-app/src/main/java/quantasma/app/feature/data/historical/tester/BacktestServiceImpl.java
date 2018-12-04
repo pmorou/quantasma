@@ -15,6 +15,7 @@ import org.ta4j.core.analysis.criteria.ProfitLossCriterion;
 import org.ta4j.core.analysis.criteria.RewardRiskRatioCriterion;
 import org.ta4j.core.analysis.criteria.TotalProfitCriterion;
 import org.ta4j.core.analysis.criteria.VersusBuyAndHoldCriterion;
+import org.ta4j.core.num.Num;
 import quantasma.core.TradeStrategy;
 import quantasma.core.analysis.StrategyBacktest;
 import quantasma.core.analysis.TradeScenario;
@@ -40,34 +41,46 @@ public class BacktestServiceImpl implements BacktestService {
 
         final List<TradeScenario> tradeScenarios = backtest.run(from.toLocalDateTime(), timeDuration);
 
+        log.info("== Backtesting result for [{}] ==", backtest.strategy().getName());
         tradeScenarios.forEach(tradeScenario -> {
-            log.info("==Backtesting result==");
-            log.info("Strategy [{}], Parameters [{}]", backtest.strategy().getSimpleName(), tradeScenario.getParameters());
             final TimeSeries timeSeries = tradeScenario.getTimeSeries();
             final TradingRecord tradingRecord = tradeScenario.getTradingRecord();
-            log.info("average profitable trades: {}", new AverageProfitableTradesCriterion().calculate(timeSeries, tradingRecord));
-            log.info("average profit: {}", new AverageProfitCriterion().calculate(timeSeries, tradingRecord));
-            log.info("buy and hold: {}", new BuyAndHoldCriterion().calculate(timeSeries, tradingRecord));
-            log.info("maximum drawdown: {}", new MaximumDrawdownCriterion().calculate(timeSeries, tradingRecord));
-            log.info("number of bars: {}", new NumberOfBarsCriterion().calculate(timeSeries, tradingRecord));
-            log.info("number of trades: {}", new NumberOfTradesCriterion().calculate(timeSeries, tradingRecord));
-            log.info("profit/loss: {}", new ProfitLossCriterion().calculate(timeSeries, tradingRecord));
-            log.info("reward risk ratio: {}", new RewardRiskRatioCriterion().calculate(timeSeries, tradingRecord));
-            log.info("total profit: {}", new TotalProfitCriterion().calculate(timeSeries, tradingRecord));
-            log.info("versus buy and hold: {}", new VersusBuyAndHoldCriterion(new BuyAndHoldCriterion()).calculate(timeSeries, tradingRecord));
-            log.info("finish deposit: {}", new FinishDepositCriterion(100, 0.0001).calculate(timeSeries, tradingRecord));
 
-            log.info("trades:");
-            tradingRecord.getTrades()
-                         .stream()
-                         .map(trade ->
-                                      String.format("open price: %s, close price: %s, p/l in pips: %.2f, open date: %s, close date: %s",
-                                                    trade.getEntry().getPrice(),
-                                                    trade.getExit().getPrice(),
-                                                    new FinishDepositCriterion.ProfitLossPipsCalculator(0.0001).calculate(timeSeries, trade).doubleValue(),
-                                                    timeSeries.getBar(trade.getEntry().getIndex()).getBeginTime(),
-                                                    timeSeries.getBar(trade.getExit().getIndex()).getBeginTime()))
-                         .forEach(System.out::println);
+            final Num finishDeposit = new FinishDepositCriterion(100, 0.0001).calculate(timeSeries, tradingRecord);
+            final int trades = tradingRecord.getTrades().size();
+            final Num profit = finishDeposit.minus(timeSeries.numOf(100));
+            final Num avgProfit = profit.dividedBy(timeSeries.numOf(trades));
+            final Num winningTradesNumber = new AverageProfitableTradesCriterion().calculate(timeSeries, tradingRecord);
+
+            log.info("Parameters [{}]", tradeScenario.getParameters().getParameters());
+            log.info(String.format("%9s | %9s | %9s | %11s | %9s | %9s",
+                                   "p/l",
+                                   "avg-p/l",
+                                   "trades",
+                                   "%win-trades",
+                                   "rwrd/risk",
+                                   "p/l"));
+            log.info(String.format("%9.5f | %9.5f | %9d | %11.2f | %9.4f | %9.5f",
+                                   profit.doubleValue(),
+                                   avgProfit.doubleValue(),
+                                   trades,
+                                   winningTradesNumber.doubleValue(),
+                                   new RewardRiskRatioCriterion().calculate(timeSeries, tradingRecord).doubleValue(),
+                                   new ProfitLossCriterion().calculate(timeSeries, tradingRecord).doubleValue()));
+
+            if (trades > 0) {
+                log.info("trades:");
+                tradingRecord.getTrades()
+                             .stream()
+                             .map(trade ->
+                                          String.format("open price: %7s, close price: %7s, p/l in pips: %7.2f, open date: %7s, close date: %7s",
+                                                        trade.getEntry().getPrice(),
+                                                        trade.getExit().getPrice(),
+                                                        new FinishDepositCriterion.ProfitLossPipsCalculator(0.0001).calculate(timeSeries, trade).doubleValue(),
+                                                        timeSeries.getBar(trade.getEntry().getIndex()).getBeginTime(),
+                                                        timeSeries.getBar(trade.getExit().getIndex()).getBeginTime()))
+                             .forEach(System.out::println);
+            }
         });
     }
 }
