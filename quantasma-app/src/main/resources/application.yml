@@ -9,5 +9,10 @@ service:
     enabled: false
 
 spring:
+  data:
+    mongodb:
+      host: 172.17.0.2
+      port: 27017
+      database: historical
   profiles:
     active: dukascopy
