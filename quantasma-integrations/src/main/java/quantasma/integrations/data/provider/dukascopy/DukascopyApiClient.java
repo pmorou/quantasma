@@ -43,9 +43,6 @@ public class DukascopyApiClient {
             @Override
             public void onStop(long processId) {
                 log.info("Strategy stopped [processingId: {}]", processId);
-                if (client.getStartedStrategies().size() == 0) {
-                    System.exit(0);
-                }
             }
 
             @Override
