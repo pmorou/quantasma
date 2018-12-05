@@ -13,7 +13,7 @@ import org.ta4j.core.num.Num;
 import quantasma.core.TradeStrategy;
 import quantasma.core.analysis.StrategyBacktest;
 import quantasma.core.analysis.TradeScenario;
-import quantasma.core.analysis.criterion.FinishDepositCriterion;
+import quantasma.core.analysis.criterion.ProfitLossPipsCriterion;
 import quantasma.core.analysis.criterion.TradesCountCriterion;
 
 import java.time.ZonedDateTime;
@@ -42,7 +42,7 @@ public class BacktestServiceImpl implements BacktestService {
             final TimeSeries timeSeries = tradeScenario.getTimeSeries();
             final TradingRecord tradingRecord = tradeScenario.getTradingRecord();
 
-            final Num profit = new FinishDepositCriterion(0, 0.0001).calculate(timeSeries, tradingRecord);
+            final Num profit = new ProfitLossPipsCriterion(0.0001).calculate(timeSeries, tradingRecord);
             final Num avgProfit = profit.dividedBy(timeSeries.numOf(tradingRecord.getTrades().size()));
 
             log.info("Parameters: [{}]", tradeScenario.getParameters().getParameters());
@@ -71,7 +71,7 @@ public class BacktestServiceImpl implements BacktestService {
                                               log.info(String.format("%11s | %11s | %10.5f | %17s | %17s",
                                                                      trade.getEntry().getPrice(),
                                                                      trade.getExit().getPrice(),
-                                                                     new FinishDepositCriterion.ProfitLossPipsCalculator(0.0001).calculate(timeSeries, trade).doubleValue(),
+                                                                     new ProfitLossPipsCriterion(0.0001).calculate(timeSeries, trade).doubleValue(),
                                                                      timeSeries.getBar(trade.getEntry().getIndex()).getBeginTime(),
                                                                      timeSeries.getBar(trade.getExit().getIndex()).getBeginTime())));
             }
@@ -79,7 +79,7 @@ public class BacktestServiceImpl implements BacktestService {
     }
 
     private static Comparator<Trade> byProfitLoss(TimeSeries timeSeries) {
-        return (o1, o2) -> Double.compare(new FinishDepositCriterion.ProfitLossPipsCalculator(0.0001).calculate(timeSeries, o2).doubleValue(),
-                                          new FinishDepositCriterion.ProfitLossPipsCalculator(0.0001).calculate(timeSeries, o1).doubleValue());
+        return (o1, o2) -> Double.compare(new ProfitLossPipsCriterion(0.0001).calculate(timeSeries, o2).doubleValue(),
+                                          new ProfitLossPipsCriterion(0.0001).calculate(timeSeries, o1).doubleValue());
     }
 }
