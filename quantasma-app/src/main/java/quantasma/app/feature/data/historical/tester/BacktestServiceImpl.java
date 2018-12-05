@@ -4,6 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.ta4j.core.TimeSeries;
+import org.ta4j.core.Trade;
 import org.ta4j.core.TradingRecord;
 import org.ta4j.core.analysis.criteria.AverageProfitableTradesCriterion;
 import org.ta4j.core.analysis.criteria.ProfitLossCriterion;
@@ -17,6 +18,7 @@ import quantasma.core.analysis.criterion.TradesCountCriterion;
 
 import java.time.ZonedDateTime;
 import java.time.temporal.TemporalAmount;
+import java.util.Comparator;
 import java.util.List;
 
 @Service
@@ -63,6 +65,8 @@ public class BacktestServiceImpl implements BacktestService {
                 log.info("Trades:");
                 log.info(String.format("%11s | %11s | %10s | %17s | %17s", "open price", "close price", "p/l [pips]", "open date", "close date"));
                 tradingRecord.getTrades()
+                             .stream()
+                             .sorted(byProfitLoss(timeSeries))
                              .forEach(trade ->
                                               log.info(String.format("%11s | %11s | %10.5f | %17s | %17s",
                                                                      trade.getEntry().getPrice(),
@@ -72,5 +76,10 @@ public class BacktestServiceImpl implements BacktestService {
                                                                      timeSeries.getBar(trade.getExit().getIndex()).getBeginTime())));
             }
         });
+    }
+
+    private static Comparator<Trade> byProfitLoss(TimeSeries timeSeries) {
+        return (o1, o2) -> Double.compare(new FinishDepositCriterion.ProfitLossPipsCalculator(0.0001).calculate(timeSeries, o2).doubleValue(),
+                                          new FinishDepositCriterion.ProfitLossPipsCalculator(0.0001).calculate(timeSeries, o1).doubleValue());
     }
 }
