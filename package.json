@@ -10,11 +10,23 @@
     "type": "git",
     "url": "git+https://github.com/pmorou/quantasma.git"
   },
-  "keywords": ["algorithmic", "trading", "platform", "strategy", "backtesting", "quant", "finance", "java"],
+  "keywords": [
+    "algorithmic",
+    "trading",
+    "platform",
+    "strategy",
+    "backtesting",
+    "quant",
+    "finance",
+    "java"
+  ],
   "author": "Piotr Morończyk",
   "license": "MIT",
   "bugs": {
     "url": "https://github.com/pmorou/quantasma/issues"
   },
-  "homepage": "https://github.com/pmorou/quantasma#readme"
+  "homepage": "https://github.com/pmorou/quantasma#readme",
+  "dependencies": {
+    "@angular/cli": "^6.2.8"
+  }
 }
