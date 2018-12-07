@@ -6,9 +6,17 @@ import { HttpClient } from "@angular/common/http";
 })
 export class StrategyService {
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient) {}
 
   getStrategies() {
     return this.http.get("strategy/all");
+  }
+
+  deactivate(id: any) {
+    return this.http.get("strategy/deactivate/" + id);
+  }
+
+  activate(id: any) {
+    return this.http.get("strategy/activate/" + id);
   }
 }

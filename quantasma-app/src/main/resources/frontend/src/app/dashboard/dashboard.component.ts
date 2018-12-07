@@ -12,9 +12,20 @@ export class DashboardComponent implements OnInit {
   constructor(private strategyService: StrategyService) { }
 
   ngOnInit() {
+    this.getStrategies();
+  }
+
+  getStrategies() {
     this.strategyService.getStrategies().subscribe(
       data => this.strategies$ = data
     );
   }
 
+  deactivateStrategy(id: any) {
+    this.strategyService.deactivate(id).subscribe(() => this.getStrategies());
+  }
+
+  activateStrategy(id: any) {
+    this.strategyService.activate(id).subscribe(() => this.getStrategies());
+  }
 }
