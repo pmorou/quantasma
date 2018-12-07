@@ -18,6 +18,14 @@ public class BaseStrategyControl implements StrategyControl {
     }
 
     @Override
+    public Set<TradeStrategy> registeredStrategies() {
+        return strategies.entrySet()
+                         .stream()
+                         .map(Map.Entry::getKey)
+                         .collect(Collectors.toSet());
+    }
+
+    @Override
     public Set<TradeStrategy> getActiveStrategies() {
         return strategies.entrySet().stream().filter(Map.Entry::getValue).map(Map.Entry::getKey).collect(Collectors.toSet());
     }
