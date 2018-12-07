@@ -4,7 +4,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import quantasma.core.BarPeriod;
 import quantasma.core.BaseContext;
-import quantasma.core.BaseStrategyControl;
+import quantasma.core.InMemoryStrategyControl;
 import quantasma.core.BaseTradeEngine;
 import quantasma.core.Context;
 import quantasma.core.NullOrderService;
@@ -19,7 +19,7 @@ public class TradeEngineConfig {
 
     @Bean
     public StrategyControl strategyControl() {
-        return new BaseStrategyControl();
+        return new InMemoryStrategyControl();
     }
 
     @Bean

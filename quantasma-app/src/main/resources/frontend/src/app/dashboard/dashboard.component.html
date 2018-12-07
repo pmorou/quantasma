@@ -3,7 +3,8 @@
 <ul>
   <li *ngFor="let strategy of strategies$">
     <ul>
-      {{ strategy }}
+      <strong>name:</strong> {{ strategy.name }}<br />
+      <strong>is running:</strong> {{ strategy.active }}
     </ul>
   </li>
 </ul>

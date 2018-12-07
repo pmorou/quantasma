@@ -2,11 +2,10 @@ package quantasma.app.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.ta4j.core.Strategy;
 import quantasma.core.StrategyControl;
+import quantasma.core.StrategyInfo;
 
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service
 public class StrategyServiceImpl implements StrategyService {
@@ -19,10 +18,7 @@ public class StrategyServiceImpl implements StrategyService {
     }
 
     @Override
-    public Set<String> all() {
-        return strategyControl.registeredStrategies()
-                              .stream()
-                              .map(Strategy::getName)
-                              .collect(Collectors.toSet());
+    public Set<StrategyInfo> all() {
+        return strategyControl.registeredStrategies();
     }
 }

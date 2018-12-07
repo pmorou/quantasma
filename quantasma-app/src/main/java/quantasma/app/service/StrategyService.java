@@ -1,7 +1,9 @@
 package quantasma.app.service;
 
+import quantasma.core.StrategyInfo;
+
 import java.util.Set;
 
 public interface StrategyService {
-    Set<String> all();
+    Set<StrategyInfo> all();
 }
