@@ -15,9 +15,13 @@ class StatusControllerSpec extends Specification {
     @Autowired
     private MockMvc mockMvc
 
-    def 'status returns OK'() throws Exception {
+    def 'status returns OK'() {
+        when:
         mockMvc.perform(get("status"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("OK"))
+
+        then:
+        noExceptionThrown()
     }
 }
