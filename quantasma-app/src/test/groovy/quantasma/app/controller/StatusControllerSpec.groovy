@@ -12,15 +12,15 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(RootController)
-class RootControllerSpec {
+@WebMvcTest(StatusController)
+class StatusControllerSpec {
 
     @Autowired
     private MockMvc mockMvc
 
     @Test
-    void rootOk() throws Exception {
-        mockMvc.perform(get("test"))
+    void statusOk() throws Exception {
+        mockMvc.perform(get("status"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("OK"))
     }

@@ -4,13 +4,13 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-@RestController("/")
+@RestController
 @Slf4j
-public class RootController {
+public class StatusController {
 
-    @RequestMapping
-    public String root() {
-        log.info("Root accessed");
+    @RequestMapping("status")
+    public String status() {
+        log.info("Status checked");
         return "OK";
     }
 
