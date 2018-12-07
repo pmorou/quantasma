@@ -18,7 +18,7 @@ public class InMemoryStrategyControl implements StrategyControl {
         if (isAlreadyRegistered(strategy)) {
             throw new RuntimeException("Strategy already registered.");
         }
-        strategies.put(generateId(), new ControlledTradeStrategy(strategy, true));
+        strategies.put(generateId(), new ControlledTradeStrategy(strategy, false));
     }
 
     private boolean isAlreadyRegistered(TradeStrategy strategy) {
@@ -30,14 +30,15 @@ public class InMemoryStrategyControl implements StrategyControl {
     }
 
     private static long generateId() {
-        return (long) (Math.random() * Long.MAX_VALUE);
+        return (long) (Math.random() * Integer.MAX_VALUE);
     }
 
     @Override
     public Set<StrategyInfo> registeredStrategies() {
         return strategies.entrySet()
                          .stream()
-                         .map(entry -> new StrategyInfo(entry.getValue().getStrategy().getName(),
+                         .map(entry -> new StrategyInfo(entry.getKey(),
+                                                        entry.getValue().getStrategy().getName(),
                                                         entry.getValue().isActive()))
                          .collect(Collectors.toSet());
     }
