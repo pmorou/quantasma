@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { StrategyService } from "../strategy.service";
 
 @Component({
   selector: 'app-dashboard',
@@ -6,10 +7,14 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
+  strategies$: Object;
 
-  constructor() { }
+  constructor(private strategyService: StrategyService) { }
 
   ngOnInit() {
+    this.strategyService.getStrategies().subscribe(
+      data => this.strategies$ = data
+    );
   }
 
 }
