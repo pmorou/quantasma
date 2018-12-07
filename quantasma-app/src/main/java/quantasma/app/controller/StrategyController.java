@@ -1,6 +1,7 @@
 package quantasma.app.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import quantasma.core.StrategyInfo;
@@ -22,5 +23,15 @@ public class StrategyController {
     @RequestMapping("all")
     public Set<StrategyInfo> all() {
         return strategyService.all();
+    }
+
+    @RequestMapping("activate/{id}")
+    public void activate(@PathVariable Long id) {
+        strategyService.activate(id);
+    }
+
+    @RequestMapping("deactivate/{id}")
+    public void deactivate(@PathVariable Long id) {
+        strategyService.deactivate(id);
     }
 }

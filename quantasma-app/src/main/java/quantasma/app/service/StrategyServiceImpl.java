@@ -21,4 +21,14 @@ public class StrategyServiceImpl implements StrategyService {
     public Set<StrategyInfo> all() {
         return strategyControl.registeredStrategies();
     }
+
+    @Override
+    public void activate(Long id) {
+        strategyControl.enable(id);
+    }
+
+    @Override
+    public void deactivate(Long id) {
+        strategyControl.disable(id);
+    }
 }
