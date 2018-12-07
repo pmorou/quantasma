@@ -7,7 +7,7 @@ public interface StrategyControl {
 
     Set<TradeStrategy> registeredStrategies();
 
-    Set<TradeStrategy> getActiveStrategies();
+    Set<TradeStrategy> activeStrategies();
 
     void disable(TradeStrategy tradeStrategy);
 
