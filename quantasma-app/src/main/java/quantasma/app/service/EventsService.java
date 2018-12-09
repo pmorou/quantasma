@@ -1,6 +1,6 @@
 package quantasma.app.service;
 
-import quantasma.integrations.event.AccountEvent;
+import quantasma.integrations.event.AccountStateEvent;
 import quantasma.integrations.event.QuoteEvent;
 import reactor.core.publisher.Flux;
 
@@ -9,7 +9,7 @@ public interface EventsService {
 
     void publish(QuoteEvent quoteEvent);
 
-    Flux<AccountEvent> account();
+    Flux<AccountStateEvent> accountState();
 
-    void publish(AccountEvent accountEvent);
+    void publish(AccountStateEvent accountStateEvent);
 }

@@ -13,7 +13,7 @@ public interface Event<D> {
         return new QuoteEvent(data);
     }
 
-    static AccountEvent accountInfo(AccountInfo data) {
-        return new AccountEvent(data);
+    static AccountStateEvent accountState(AccountState data) {
+        return new AccountStateEvent(data);
     }
 }

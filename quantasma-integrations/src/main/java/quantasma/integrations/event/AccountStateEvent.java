@@ -4,13 +4,13 @@ import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.UUID;
 
-public class AccountEvent implements Event<AccountInfo> {
-    private static final String NAME = "account-event";
+public class AccountStateEvent implements Event<AccountState> {
+    private static final String NAME = "account_state-event";
 
     private final String id;
-    private final AccountInfo data;
+    private final AccountState data;
 
-    AccountEvent(AccountInfo data) {
+    AccountStateEvent(AccountState data) {
         this.data = data;
         this.id = ZonedDateTime.now(ZoneOffset.UTC).toString() + "_" + UUID.randomUUID().toString();
     }
@@ -26,7 +26,7 @@ public class AccountEvent implements Event<AccountInfo> {
     }
 
     @Override
-    public AccountInfo data() {
+    public AccountState data() {
         return data;
     }
 }

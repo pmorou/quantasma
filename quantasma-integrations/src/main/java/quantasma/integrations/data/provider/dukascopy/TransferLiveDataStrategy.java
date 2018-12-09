@@ -14,7 +14,7 @@ import com.dukascopy.api.JFException;
 import com.dukascopy.api.Period;
 import lombok.extern.slf4j.Slf4j;
 import quantasma.core.Quote;
-import quantasma.integrations.event.AccountInfo;
+import quantasma.integrations.event.AccountState;
 import quantasma.integrations.event.Event;
 import quantasma.integrations.event.EventSink;
 
@@ -49,14 +49,14 @@ public class TransferLiveDataStrategy implements IStrategy {
             }
         }
 
-        eventSink.flush(Event.accountInfo(
-                new AccountInfo(history.getEquity(),
-                                account.getBalance(),
-                                profitLoss,
-                                totalAmount,
-                                account.getUsedMargin(),
-                                account.getAccountCurrency().getSymbol(),
-                                account.getLeverage())));
+        eventSink.flush(Event.accountState(
+                new AccountState(history.getEquity(),
+                                 account.getBalance(),
+                                 profitLoss,
+                                 totalAmount,
+                                 account.getUsedMargin(),
+                                 account.getAccountCurrency().getSymbol(),
+                                 account.getLeverage())));
     }
 
     public void onMessage(IMessage message) throws JFException {
