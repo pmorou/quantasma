@@ -5,8 +5,6 @@
     <ul>
       <strong>name:</strong> {{ strategy.name }}<br />
       <strong>is running:</strong> {{ strategy.active }}<br />
-      <!--<a href="strategy/{{ strategy.active ? 'deactivate' : 'activate' }}/{{ strategy.id }}">{{ strategy.active ? 'deactivate' : 'activate' }}</a>-->
-      <!--<a href="strategy/{{ strategy.active ? 'deactivate' : 'activate' }}/{{ strategy.id }}">{{ strategy.active ? 'deactivate' : 'activate' }}</a>-->
       <a href="#" id="deactivate" *ngIf="strategy.active" (click)="deactivateStrategy(strategy.id)">deactivate</a>
       <a href="#" id="activate" *ngIf="!strategy.active" (click)="activateStrategy(strategy.id)">activate</a>
     </ul>
