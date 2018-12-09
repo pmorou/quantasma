@@ -40,10 +40,11 @@ public class TransferLiveDataStrategy implements IStrategy {
     }
 
     public void onTick(Instrument instrument, ITick tick) throws JFException {
-        eventSink.flush(Event.quote(new Quote(instrument.getPrimaryJFCurrency().getSymbol() + instrument.getSecondaryJFCurrency().getSymbol(),
-                                              Instant.ofEpochMilli(tick.getTime()).atZone(ZoneOffset.UTC),
-                                              tick.getBid(),
-                                              tick.getAsk())));
+        eventSink.flush(Event.quote(
+                new Quote(instrument.getPrimaryJFCurrency().getSymbol() + instrument.getSecondaryJFCurrency().getSymbol(),
+                          Instant.ofEpochMilli(tick.getTime()).atZone(ZoneOffset.UTC),
+                          tick.getBid(),
+                          tick.getAsk())));
     }
 
     public void onBar(Instrument instrument, Period period, IBar askBar, IBar bidBar) throws JFException {
