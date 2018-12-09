@@ -16,6 +16,10 @@
     "lib": [
       "es2017",
       "dom"
-    ]
+    ],
+    "forceConsistentCasingInFileNames": true,
+    "noImplicitReturns": true,
+    "strict": true,
+    "noUnusedLocals": true
   }
 }

@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { NavigationEnd, Router } from "@angular/router";
-import { filter } from "rxjs/internal/operators";
+import { filter, map } from "rxjs/internal/operators";
 
 @Component({
   selector: 'app-sidebar',
@@ -8,11 +8,12 @@ import { filter } from "rxjs/internal/operators";
   styleUrls: ['./sidebar.component.scss']
 })
 export class SidebarComponent implements OnInit {
-  currentUrl: string;
+  currentUrl: string = "";
 
   constructor(private router: Router) {
-    router.events.pipe(
-      filter(event => event instanceof NavigationEnd)
+    this.router.events.pipe(
+      filter(event => event instanceof NavigationEnd),
+      map(value => <NavigationEnd> value)
     ).subscribe(
       (_: NavigationEnd) => this.currentUrl = _.url
     )

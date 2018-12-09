@@ -12,9 +12,9 @@ export class EventsService {
 
   constructor() {
     this.quotesSource = new EventSource('events/quotes');
-    this.quotesSource.addEventListener('quote-event', (message: MessageEvent) => {
-      this.quotesSubject.next(JSON.parse(message.data));
-    });
+    this.quotesSource.addEventListener('quote-event', ((event: MessageEvent) => {
+      this.quotesSubject.next(JSON.parse(event.data));
+    }) as (event: Event) => void);
     this.quotesSource.onerror = (evt) => EventsService._onSseError(evt);
   }
 
