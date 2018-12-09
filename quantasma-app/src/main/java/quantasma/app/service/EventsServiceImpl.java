@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import quantasma.app.event.EventBuffer;
 import quantasma.core.TradeEngine;
+import quantasma.integrations.event.AccountEvent;
 import quantasma.integrations.event.QuoteEvent;
 import reactor.core.publisher.Flux;
 
@@ -13,6 +14,7 @@ import reactor.core.publisher.Flux;
 public class EventsServiceImpl implements EventsService {
 
     private final EventBuffer<QuoteEvent> quoteEventBuffer = new EventBuffer<>();
+    private final EventBuffer<AccountEvent> accountEventBuffer = new EventBuffer<>();
 
     private final TradeEngine tradeEngine;
 
@@ -29,6 +31,11 @@ public class EventsServiceImpl implements EventsService {
     public void publish(QuoteEvent quoteEvent) {
         tradeEngine.process(quoteEvent.data());
         quoteEventBuffer.setNext(quoteEvent);
+    }
+
+    @Override
+    public void publish(AccountEvent accountEvent) {
+        accountEventBuffer.setNext(accountEvent);
     }
 
 }

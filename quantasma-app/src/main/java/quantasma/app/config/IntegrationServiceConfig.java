@@ -17,6 +17,7 @@ import quantasma.examples.RSIStrategy;
 import quantasma.integrations.data.provider.LiveDataProvider;
 import quantasma.integrations.data.provider.dukascopy.DukascopyApiClient;
 import quantasma.integrations.data.provider.dukascopy.DukascopyLiveDataApiProvider;
+import quantasma.integrations.event.AccountEvent;
 import quantasma.integrations.event.EventSink;
 import quantasma.integrations.event.QuoteEvent;
 
@@ -42,7 +43,8 @@ public class IntegrationServiceConfig {
     @Bean
     public EventSink eventSink(EventsService eventsService) {
         return EventSink.instance()
-                        .install(QuoteEvent.class, eventsService::publish);
+                        .install(QuoteEvent.class, eventsService::publish)
+                        .install(AccountEvent.class, eventsService::publish);
     }
 
     @Bean

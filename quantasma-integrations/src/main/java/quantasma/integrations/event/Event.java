@@ -12,4 +12,8 @@ public interface Event<D> {
     static QuoteEvent quote(Quote data) {
         return new QuoteEvent(data);
     }
+
+    static AccountEvent accountInfo(AccountInfo data) {
+        return new AccountEvent(data);
+    }
 }
