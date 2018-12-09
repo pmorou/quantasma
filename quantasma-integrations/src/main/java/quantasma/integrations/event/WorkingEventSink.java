@@ -20,7 +20,7 @@ class WorkingEventSink implements EventSink {
     }
 
     @Override
-    public <E extends Event<D>, D> EventSink install(Class<E> type, EventPipe<E, D> eventHandler) {
+    public <E extends Event<D>, D> EventSink pipe(Class<E> type, EventPipe<E, D> eventHandler) {
         handlers.put(type, eventHandler);
         return this;
     }

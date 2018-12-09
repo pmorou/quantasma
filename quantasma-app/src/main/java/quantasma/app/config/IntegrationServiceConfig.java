@@ -43,8 +43,8 @@ public class IntegrationServiceConfig {
     @Bean
     public EventSink eventSink(EventsService eventsService) {
         return EventSink.instance()
-                        .install(QuoteEvent.class, eventsService::publish)
-                        .install(AccountEvent.class, eventsService::publish);
+                        .pipe(QuoteEvent.class, eventsService::publish)
+                        .pipe(AccountEvent.class, eventsService::publish);
     }
 
     @Bean
