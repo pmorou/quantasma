@@ -1,5 +1,7 @@
 package quantasma.integrations.event;
 
+import quantasma.core.Quote;
+
 import java.time.ZoneOffset;
 import java.time.ZonedDateTime;
 import java.util.UUID;

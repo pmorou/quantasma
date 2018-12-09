@@ -7,7 +7,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import quantasma.app.event.SseEvent;
 import quantasma.app.service.EventsService;
-import quantasma.integrations.event.Quote;
+import quantasma.core.Quote;
 import reactor.core.publisher.Flux;
 
 @RestController

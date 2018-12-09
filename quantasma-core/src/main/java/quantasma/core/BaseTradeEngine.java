@@ -38,4 +38,8 @@ public class BaseTradeEngine implements TradeEngine {
         });
     }
 
+    @Override
+    public void process(Quote quote) {
+        process(quote.getSymbol(), quote.getTime(), quote.getBid(), quote.getAsk());
+    }
 }

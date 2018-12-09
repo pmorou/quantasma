@@ -1,4 +1,4 @@
-package quantasma.integrations.event;
+package quantasma.core;
 
 import lombok.Data;
 

@@ -10,10 +10,9 @@ import com.dukascopy.api.Instrument;
 import com.dukascopy.api.JFException;
 import com.dukascopy.api.Period;
 import lombok.extern.slf4j.Slf4j;
-import quantasma.core.TradeEngine;
+import quantasma.core.Quote;
 import quantasma.integrations.event.Event;
 import quantasma.integrations.event.EventSink;
-import quantasma.integrations.event.Quote;
 
 import java.time.Instant;
 import java.time.ZoneOffset;
@@ -21,10 +20,10 @@ import java.time.ZoneOffset;
 @Slf4j
 public class TransferLiveDataStrategy implements IStrategy {
 
-    private final TradeEngine tradeEngine;
+    private final EventSink eventSink;
 
-    public TransferLiveDataStrategy(TradeEngine strategyRegister) {
-        this.tradeEngine = strategyRegister;
+    public TransferLiveDataStrategy(EventSink eventSink) {
+        this.eventSink = eventSink;
     }
 
     public void onStart(IContext context) throws JFException {
@@ -41,12 +40,10 @@ public class TransferLiveDataStrategy implements IStrategy {
     }
 
     public void onTick(Instrument instrument, ITick tick) throws JFException {
-        eventSink.flush(Event.quote(new Quote("EURUSD", tick.getBid(), tick.getAsk())));
-
-        tradeEngine.process("EURUSD",
-                            Instant.ofEpochMilli(tick.getTime()).atZone(ZoneOffset.UTC),
-                            tick.getBid(),
-                            tick.getAsk());
+        eventSink.flush(Event.quote(new Quote(instrument.getPrimaryJFCurrency().getSymbol() + instrument.getSecondaryJFCurrency().getSymbol(),
+                                              Instant.ofEpochMilli(tick.getTime()).atZone(ZoneOffset.UTC),
+                                              tick.getBid(),
+                                              tick.getAsk())));
     }
 
     public void onBar(Instrument instrument, Period period, IBar askBar, IBar bidBar) throws JFException {

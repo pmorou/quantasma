@@ -21,7 +21,7 @@ public class DukascopyLiveDataApiProvider extends AbstractLiveDataProvider {
 
     @Override
     public void run() {
-        final TransferLiveDataStrategy liveDataStrategy = new TransferLiveDataStrategy(tradeEngine, eventSink);
+        final TransferLiveDataStrategy liveDataStrategy = new TransferLiveDataStrategy(eventSink);
         strategyProcessId = dukascopyClient.runStrategy(liveDataStrategy);
     }
 

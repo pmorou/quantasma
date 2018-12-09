@@ -1,5 +1,7 @@
 package quantasma.integrations.event;
 
+import quantasma.core.Quote;
+
 public interface Event<D> {
     String id();
 
