@@ -67,7 +67,7 @@ public class TransferLiveDataStrategy implements IStrategy {
 
     public void onTick(Instrument instrument, ITick tick) throws JFException {
         eventSink.flush(Event.quote(
-                new Quote(instrument.getPrimaryJFCurrency().getSymbol() + instrument.getSecondaryJFCurrency().getSymbol(),
+                new Quote(instrument.getPrimaryJFCurrency().getCurrencyCode() + instrument.getSecondaryJFCurrency().getCurrencyCode(),
                           Instant.ofEpochMilli(tick.getTime()).atZone(ZoneOffset.UTC),
                           tick.getBid(),
                           tick.getAsk())));
