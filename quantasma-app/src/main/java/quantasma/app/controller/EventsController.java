@@ -8,6 +8,7 @@ import org.springframework.web.bind.annotation.RestController;
 import quantasma.app.event.SseEvent;
 import quantasma.app.service.EventsService;
 import quantasma.core.Quote;
+import quantasma.integrations.event.AccountInfo;
 import reactor.core.publisher.Flux;
 
 @RestController
@@ -25,6 +26,12 @@ public class EventsController {
     public Flux<ServerSentEvent<Quote>> quotes() {
         return eventsService.quotes()
                             .map(quoteEvent -> SseEvent.create(quoteEvent).sse());
+    }
+
+    @GetMapping(value = "account")
+    public Flux<ServerSentEvent<AccountInfo>> account() {
+        return eventsService.account()
+                            .map(accountEvent -> SseEvent.create(accountEvent).sse());
     }
 
 }

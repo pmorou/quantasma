@@ -34,6 +34,11 @@ public class EventsServiceImpl implements EventsService {
     }
 
     @Override
+    public Flux<AccountEvent> account() {
+        return Flux.from(accountEventBuffer.publisher());
+    }
+
+    @Override
     public void publish(AccountEvent accountEvent) {
         accountEventBuffer.setNext(accountEvent);
     }

@@ -9,5 +9,7 @@ public interface EventsService {
 
     void publish(QuoteEvent quoteEvent);
 
+    Flux<AccountEvent> account();
+
     void publish(AccountEvent accountEvent);
 }
