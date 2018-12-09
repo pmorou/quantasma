@@ -1,5 +1,7 @@
 package quantasma.integrations.event;
 
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.UUID;
 
 public class QuoteEvent implements Event<Quote> {
@@ -10,7 +12,7 @@ public class QuoteEvent implements Event<Quote> {
 
     QuoteEvent(Quote data) {
         this.data = data;
-        this.id = UUID.randomUUID().toString();
+        this.id = ZonedDateTime.now(ZoneOffset.UTC).toString() + "_" + UUID.randomUUID().toString();
     }
 
     @Override

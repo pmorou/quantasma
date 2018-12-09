@@ -7,7 +7,7 @@ public interface Event<D> {
 
     D data();
 
-    static Event<Quote> quote(Quote data) {
+    static QuoteEvent quote(Quote data) {
         return new QuoteEvent(data);
     }
 }
