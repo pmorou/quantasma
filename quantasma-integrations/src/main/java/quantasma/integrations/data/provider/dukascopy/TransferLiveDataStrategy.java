@@ -28,6 +28,7 @@ public class TransferLiveDataStrategy implements IStrategy {
 
     private IEngine engine;
     private IHistory history;
+    private IAccount account;
 
     public TransferLiveDataStrategy(EventSink eventSink) {
         this.eventSink = eventSink;
@@ -37,6 +38,7 @@ public class TransferLiveDataStrategy implements IStrategy {
         log.info("Starting live data strategy");
         engine = context.getEngine();
         history = context.getHistory();
+        account = context.getAccount();
     }
 
     public void onAccount(IAccount account) throws JFException {
@@ -71,6 +73,7 @@ public class TransferLiveDataStrategy implements IStrategy {
                           Instant.ofEpochMilli(tick.getTime()).atZone(ZoneOffset.UTC),
                           tick.getBid(),
                           tick.getAsk())));
+        onAccount(account);
     }
 
     public void onBar(Instrument instrument, Period period, IBar askBar, IBar bidBar) throws JFException {
