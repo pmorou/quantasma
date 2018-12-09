@@ -7,22 +7,36 @@ import { Observable, Subject } from "rxjs/index";
 })
 export class EventsService {
 
-  private quotesSource: EventSource;
-  private quotesSubject: Subject<Quote> = new Subject();
+  private sources: EventSource[] = [];
 
-  constructor() {
-    this.quotesSource = new EventSource('events/quotes');
-    this.quotesSource.addEventListener('quote-event', ((event: MessageEvent) => {
-      this.quotesSubject.next(JSON.parse(event.data));
-    }) as (event: Event) => void);
-    this.quotesSource.onerror = (evt) => EventsService._onSseError(evt);
-  }
+  private quotesSubject: Subject<Quote> = this.initializeSubject('events/quotes', 'quote-event');
 
-  private static _onSseError(e: any): void {
-    console.log("SSE Event failure: ", e);
+  constructor() { }
+
+  private initializeSubject<E>(url: string, event: string): Subject<E> {
+    const subject: Subject<E> = new Subject();
+    this.sources.push(EventsService.subjectLinkedEventSource(url, event, subject));
+    return subject;
   }
 
   public quotes(): Observable<Quote> {
     return this.quotesSubject.asObservable();
+  }
+
+  private static subjectLinkedEventSource<E>(url: string, event: string, subject: Subject<E>): EventSource {
+    const eventSource: EventSource = new EventSource(url);
+    eventSource.addEventListener(event, EventsService.onSseMessage(subject));
+    eventSource.onerror = EventsService.onSseError();
+    return eventSource;
+  }
+
+  private static onSseMessage<E>(subject: Subject<E>) {
+    return ((event: MessageEvent) => {
+      subject.next(JSON.parse(event.data));
+    }) as (event: Event) => void;
+  }
+
+  private static onSseError() {
+    return (evt: any) => console.log("SSE Event failure: ", evt);
   }
 }
