@@ -46,7 +46,7 @@ public class TransferLiveDataStrategy implements IStrategy {
         double totalAmount = 0;
         for (IOrder order : engine.getOrders()) {
             if (order.getState() == IOrder.State.FILLED) {
-                profitLoss += order.getProfitLossInUSD();
+                profitLoss += order.getProfitLossInAccountCurrency();
                 totalAmount += order.getAmount();
             }
         }
