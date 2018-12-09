@@ -13,6 +13,25 @@ body {
   #content {
     padding: 30px 50px;
 
+    #quotes {
+
+      ul {
+
+        &.quotes__list {
+          list-style-type: none;
+
+          li {
+            background-color: #fff;
+            padding: 20px;
+            margin-right: 10px;
+            height: 50px;
+            min-width: 200px;
+            display: inline-block;
+          }
+        }
+      }
+    }
+
     ul {
       list-style-type: none;
       margin: 0;

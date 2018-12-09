@@ -6,12 +6,14 @@ import { AppRoutingModule } from './app-routing.module';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { HttpClientModule } from "@angular/common/http";
+import { QuotesComponent } from './quotes/quotes.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SidebarComponent,
-    DashboardComponent
+    DashboardComponent,
+    QuotesComponent
   ],
   imports: [
     BrowserModule,
