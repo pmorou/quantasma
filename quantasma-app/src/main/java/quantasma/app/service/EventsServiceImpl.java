@@ -14,9 +14,9 @@ import reactor.core.publisher.Flux;
 @Slf4j
 public class EventsServiceImpl implements EventsService {
 
-    private final EventBuffer<QuoteEvent> quoteEventBuffer = new EventBuffer<>();
-    private final EventBuffer<AccountStateEvent> accountStateEventBuffer = new EventBuffer<>();
-    private final EventBuffer<OpenedPositionsEvent> openedPositionsEventBuffer = new EventBuffer<>();
+    private final EventBuffer<QuoteEvent> quoteEventBuffer = EventBuffer.instance(QuoteEvent.class);
+    private final EventBuffer<AccountStateEvent> accountStateEventBuffer = EventBuffer.instance(AccountStateEvent.class);
+    private final EventBuffer<OpenedPositionsEvent> openedPositionsEventBuffer = EventBuffer.instance(OpenedPositionsEvent.class);
 
     private final TradeEngine tradeEngine;
 
