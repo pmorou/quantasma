@@ -21,7 +21,7 @@ public interface SseEvent<D> extends Event<D> {
                 .build();
     }
 
-    static <D> Function<? extends Event<D>, ServerSentEvent<D>> buildSse() {
+    static <D> Function<Event<D>, ServerSentEvent<D>> buildSse() {
         return event -> SseEvent.create(event).sse();
     }
 
