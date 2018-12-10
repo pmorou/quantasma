@@ -1,0 +1,27 @@
+<h1>Opened Positions</h1>
+<table>
+  <thead>
+    <tr>
+      <th>Symbol</th>
+      <th>Direction</th>
+      <th>Amount</th>
+      <th>Price</th>
+      <th>Stop Loss</th>
+      <th>Take Profit</th>
+      <th>P/L pips</th>
+      <th>P/L</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let position of openedPositions">
+      <td>{{ position.symbol }}</td>
+      <td>{{ position.direction }}</td>
+      <td>{{ position.amount }}</td>
+      <td>{{ position.price }}</td>
+      <td>{{ position.stopLoss }}</td>
+      <td>{{ position.takeProfit }}</td>
+      <td>{{ position.profitLossPips }}</td>
+      <td>{{ position.profitLoss }}</td>
+    </tr>
+  </tbody>
+</table>
