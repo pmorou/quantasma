@@ -30,6 +30,7 @@ import java.util.List;
 public class TransferLiveDataStrategy implements IStrategy {
 
     private static final DecimalFormat SECOND_DECIMAL_POINT_FORMAT = new DecimalFormat("#.##");
+    private static final DecimalFormat THIRD_DECIMAL_POINT_FORMAT = new DecimalFormat("#.###");
 
     private final EventSink eventSink;
 
@@ -66,7 +67,7 @@ public class TransferLiveDataStrategy implements IStrategy {
                 new AccountState(history.getEquity(),
                                  account.getBalance(),
                                  toSecondDecimalPoint(profitLoss),
-                                 totalAmount,
+                                 toThirdDecimalPoint(totalAmount),
                                  toSecondDecimalPoint(account.getUsedMargin()),
                                  account.getAccountCurrency().getCurrencyCode(),
                                  account.getLeverage())));
@@ -86,6 +87,10 @@ public class TransferLiveDataStrategy implements IStrategy {
 
     private double toSecondDecimalPoint(double profitLoss) {
         return Double.valueOf(SECOND_DECIMAL_POINT_FORMAT.format(profitLoss));
+    }
+
+    private double toThirdDecimalPoint(double profitLoss) {
+        return Double.valueOf(THIRD_DECIMAL_POINT_FORMAT.format(profitLoss));
     }
 
     public void onMessage(IMessage message) {
