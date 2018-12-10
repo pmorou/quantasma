@@ -25,9 +25,9 @@ public class EventsController {
         this.eventsService = eventsService;
     }
 
-    @GetMapping(value = "quotes")
-    public Flux<ServerSentEvent<Quote>> quotes() {
-        return eventsService.quotes()
+    @GetMapping(value = "quote")
+    public Flux<ServerSentEvent<Quote>> quote() {
+        return eventsService.quote()
                             .map(SseEvent.buildSse());
     }
 

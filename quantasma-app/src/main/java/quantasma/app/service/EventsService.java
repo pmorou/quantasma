@@ -6,7 +6,7 @@ import quantasma.integrations.event.QuoteEvent;
 import reactor.core.publisher.Flux;
 
 public interface EventsService {
-    Flux<QuoteEvent> quotes();
+    Flux<QuoteEvent> quote();
 
     void publish(QuoteEvent quoteEvent);
 

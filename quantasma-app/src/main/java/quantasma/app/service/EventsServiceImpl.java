@@ -26,7 +26,7 @@ public class EventsServiceImpl implements EventsService {
     }
 
     @Override
-    public Flux<QuoteEvent> quotes() {
+    public Flux<QuoteEvent> quote() {
         return Flux.from(quoteEventBuffer.publisher());
     }
 

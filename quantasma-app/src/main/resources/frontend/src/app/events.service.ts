@@ -11,7 +11,7 @@ export class EventsService {
 
   private sources: EventSource[] = [];
 
-  private quotesSubject: Subject<Quote> = this.initializeSubject('events/quotes', 'quote-event');
+  private quoteSubject: Subject<Quote> = this.initializeSubject('events/quote', 'quote-event');
   private accountStateSubject: Subject<AccountState> = this.initializeSubject('events/accountState', 'account_state-event');
   private openedPositionsSubject: Subject<OpenedPosition[]> = this.initializeSubject('events/openedPositions', 'opened_positions-event');
 
@@ -24,7 +24,7 @@ export class EventsService {
   }
 
   public quotes(): Observable<Quote> {
-    return this.quotesSubject.asObservable();
+    return this.quoteSubject.asObservable();
   }
 
   public accountState(): Observable<AccountState> {
