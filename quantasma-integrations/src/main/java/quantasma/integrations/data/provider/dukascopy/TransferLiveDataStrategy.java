@@ -65,7 +65,7 @@ public class TransferLiveDataStrategy implements IStrategy {
                                  profitLoss,
                                  totalAmount,
                                  account.getUsedMargin(),
-                                 account.getAccountCurrency().getSymbol(),
+                                 account.getAccountCurrency().getCurrencyCode(),
                                  account.getLeverage())));
     }
 
