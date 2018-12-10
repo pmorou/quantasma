@@ -38,7 +38,7 @@ public class TransferLiveDataStrategy implements IStrategy {
         this.eventSink = eventSink;
     }
 
-    public void onStart(IContext context) throws JFException {
+    public void onStart(IContext context) {
         log.info("Starting live data strategy");
         engine = context.getEngine();
         history = context.getHistory();
@@ -81,10 +81,10 @@ public class TransferLiveDataStrategy implements IStrategy {
                 order.getProfitLossInAccountCurrency());
     }
 
-    public void onMessage(IMessage message) throws JFException {
+    public void onMessage(IMessage message) {
     }
 
-    public void onStop() throws JFException {
+    public void onStop() {
     }
 
     public void onTick(Instrument instrument, ITick tick) throws JFException {
@@ -97,7 +97,7 @@ public class TransferLiveDataStrategy implements IStrategy {
         onAccount(account); // trigger account-related events
     }
 
-    public void onBar(Instrument instrument, Period period, IBar askBar, IBar bidBar) throws JFException {
+    public void onBar(Instrument instrument, Period period, IBar askBar, IBar bidBar) {
     }
 
 }
