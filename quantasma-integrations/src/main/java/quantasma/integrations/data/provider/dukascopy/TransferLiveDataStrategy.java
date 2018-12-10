@@ -19,6 +19,7 @@ import quantasma.integrations.event.Direction;
 import quantasma.integrations.event.Event;
 import quantasma.integrations.event.EventSink;
 import quantasma.integrations.event.OpenedPosition;
+import quantasma.integrations.util.MathUtils;
 
 import java.text.DecimalFormat;
 import java.time.Instant;
@@ -28,9 +29,6 @@ import java.util.List;
 
 @Slf4j
 public class TransferLiveDataStrategy implements IStrategy {
-
-    private static final DecimalFormat SECOND_DECIMAL_POINT_FORMAT = new DecimalFormat("#.##");
-    private static final DecimalFormat THIRD_DECIMAL_POINT_FORMAT = new DecimalFormat("#.###");
 
     private final EventSink eventSink;
 
@@ -66,9 +64,9 @@ public class TransferLiveDataStrategy implements IStrategy {
         eventSink.flush(Event.accountState(
                 new AccountState(history.getEquity(),
                                  account.getBalance(),
-                                 toSecondDecimalPoint(profitLoss),
-                                 toThirdDecimalPoint(totalAmount),
-                                 toSecondDecimalPoint(account.getUsedMargin()),
+                                 MathUtils.round(profitLoss, 2),
+                                 MathUtils.round(totalAmount, 3),
+                                 MathUtils.round(account.getUsedMargin(), 2),
                                  account.getAccountCurrency().getCurrencyCode(),
                                  account.getLeverage())));
     }
@@ -83,14 +81,6 @@ public class TransferLiveDataStrategy implements IStrategy {
                 order.getTakeProfitPrice(),
                 order.getProfitLossInPips(),
                 order.getProfitLossInAccountCurrency());
-    }
-
-    private double toSecondDecimalPoint(double profitLoss) {
-        return Double.valueOf(SECOND_DECIMAL_POINT_FORMAT.format(profitLoss));
-    }
-
-    private double toThirdDecimalPoint(double profitLoss) {
-        return Double.valueOf(THIRD_DECIMAL_POINT_FORMAT.format(profitLoss));
     }
 
     public void onMessage(IMessage message) {
