@@ -17,7 +17,7 @@ export class QuotesComponent implements OnInit {
 
   updateCurrency(): void {
     this.events.quotes().subscribe((value: Quote) => {
-        var li = document.getElementById("quote-" + value.symbol);
+        let li = document.getElementById("quote-" + value.symbol);
         if (li == null) {
           li = document.createElement("li");
           li.id = "quote-" + value.symbol;
