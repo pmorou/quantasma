@@ -93,7 +93,8 @@ public class TransferLiveDataStrategy implements IStrategy {
                           Instant.ofEpochMilli(tick.getTime()).atZone(ZoneOffset.UTC),
                           tick.getBid(),
                           tick.getAsk())));
-        onAccount(account);
+
+        onAccount(account); // trigger account-related events
     }
 
     public void onBar(Instrument instrument, Period period, IBar askBar, IBar bidBar) throws JFException {
