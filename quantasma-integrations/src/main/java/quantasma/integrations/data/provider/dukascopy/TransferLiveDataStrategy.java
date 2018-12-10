@@ -54,16 +54,7 @@ public class TransferLiveDataStrategy implements IStrategy {
             if (order.getState() == IOrder.State.FILLED) {
                 profitLoss += order.getProfitLossInAccountCurrency();
                 totalAmount += order.getAmount();
-
-                openedPositions.add(new OpenedPosition(
-                        order.getInstrument().getName(),
-                        order.getOrderCommand().isLong() ? Direction.LONG : Direction.SHORT,
-                        order.getAmount(),
-                        order.getOpenPrice(),
-                        order.getStopLossPrice(),
-                        order.getTakeProfitPrice(),
-                        order.getProfitLossInPips(),
-                        order.getProfitLossInAccountCurrency()));
+                openedPositions.add(createOpenedPosition(order));
             }
         }
 
@@ -76,6 +67,18 @@ public class TransferLiveDataStrategy implements IStrategy {
                                  account.getUsedMargin(),
                                  account.getAccountCurrency().getSymbol(),
                                  account.getLeverage())));
+    }
+
+    private static OpenedPosition createOpenedPosition(IOrder order) {
+        return new OpenedPosition(
+                order.getInstrument().getName(),
+                order.getOrderCommand().isLong() ? Direction.LONG : Direction.SHORT,
+                order.getAmount(),
+                order.getOpenPrice(),
+                order.getStopLossPrice(),
+                order.getTakeProfitPrice(),
+                order.getProfitLossInPips(),
+                order.getProfitLossInAccountCurrency());
     }
 
     public void onMessage(IMessage message) throws JFException {
