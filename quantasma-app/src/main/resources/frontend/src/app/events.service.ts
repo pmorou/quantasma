@@ -9,7 +9,7 @@ import { Observable, Subject } from "rxjs/index";
 })
 export class EventsService {
 
-  private sources: EventSource[] = [];
+  private sources: EventSource[] = []; // keep objects (connections) alive
 
   private quoteSubject: Subject<Quote> = this.initializeSubject('events/quote', 'quote-event');
   private accountStateSubject: Subject<AccountState> = this.initializeSubject('events/accountState', 'account_state-event');
