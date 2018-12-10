@@ -7,13 +7,15 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 import { DashboardComponent } from './dashboard/dashboard.component';
 import { HttpClientModule } from "@angular/common/http";
 import { QuotesComponent } from './quotes/quotes.component';
+import { AccountStateComponent } from './account-state/account-state.component';
 
 @NgModule({
   declarations: [
     AppComponent,
     SidebarComponent,
     DashboardComponent,
-    QuotesComponent
+    QuotesComponent,
+    AccountStateComponent
   ],
   imports: [
     BrowserModule,
