@@ -5,6 +5,8 @@ import lombok.Getter;
 import org.springframework.http.codec.ServerSentEvent;
 import quantasma.integrations.event.Event;
 
+import java.util.function.Function;
+
 public interface SseEvent<D> extends Event<D> {
 
     static <D> SseEvent<D> create(Event<D> event) {
@@ -17,6 +19,10 @@ public interface SseEvent<D> extends Event<D> {
                 .event(name())
                 .data(data())
                 .build();
+    }
+
+    static <D> Function<? extends Event<D>, ServerSentEvent<D>> buildSse() {
+        return event -> SseEvent.create(event).sse();
     }
 
     @AllArgsConstructor

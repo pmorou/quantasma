@@ -46,6 +46,11 @@ public class EventsServiceImpl implements EventsService {
     }
 
     @Override
+    public Flux<OpenedPositionsEvent> openedPositions() {
+        return Flux.from(openedPositionsEventBuffer.publisher());
+    }
+
+    @Override
     public void publish(OpenedPositionsEvent openedPositionsEvent) {
         openedPositionsEventBuffer.setNext(openedPositionsEvent);
     }

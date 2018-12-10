@@ -28,18 +28,18 @@ public class EventsController {
     @GetMapping(value = "quotes")
     public Flux<ServerSentEvent<Quote>> quotes() {
         return eventsService.quotes()
-                            .map(quoteEvent -> SseEvent.create(quoteEvent).sse());
+                            .map(SseEvent.buildSse());
     }
 
     @GetMapping(value = "accountState")
     public Flux<ServerSentEvent<AccountState>> accountState() {
         return eventsService.accountState()
-                            .map(accountStateEvent -> SseEvent.create(accountStateEvent).sse());
+                            .map(SseEvent.buildSse());
     }
 
     @GetMapping(value = "openedPositions")
     public Flux<ServerSentEvent<List<OpenedPosition>>> openedPositions() {
         return eventsService.openedPositions()
-                            .map(accountStateEvent -> SseEvent.create(accountStateEvent).sse());
+                            .map(SseEvent.buildSse());
     }
 }
