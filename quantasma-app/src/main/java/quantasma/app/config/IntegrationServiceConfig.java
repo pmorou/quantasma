@@ -19,6 +19,7 @@ import quantasma.integrations.data.provider.dukascopy.DukascopyApiClient;
 import quantasma.integrations.data.provider.dukascopy.DukascopyLiveDataApiProvider;
 import quantasma.integrations.event.AccountStateEvent;
 import quantasma.integrations.event.EventSink;
+import quantasma.integrations.event.OpenedPositionsEvent;
 import quantasma.integrations.event.QuoteEvent;
 
 @Configuration
@@ -44,7 +45,8 @@ public class IntegrationServiceConfig {
     public EventSink eventSink(EventsService eventsService) {
         return EventSink.instance()
                         .pipe(QuoteEvent.class, eventsService::publish)
-                        .pipe(AccountStateEvent.class, eventsService::publish);
+                        .pipe(AccountStateEvent.class, eventsService::publish)
+                        .pipe(OpenedPositionsEvent.class, eventsService::publish);
     }
 
     @Bean

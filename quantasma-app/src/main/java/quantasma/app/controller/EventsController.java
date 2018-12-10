@@ -9,7 +9,10 @@ import quantasma.app.event.SseEvent;
 import quantasma.app.service.EventsService;
 import quantasma.core.Quote;
 import quantasma.integrations.event.AccountState;
+import quantasma.integrations.event.OpenedPosition;
 import reactor.core.publisher.Flux;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("events")
@@ -34,4 +37,9 @@ public class EventsController {
                             .map(accountStateEvent -> SseEvent.create(accountStateEvent).sse());
     }
 
+    @GetMapping(value = "openedPositions")
+    public Flux<ServerSentEvent<List<OpenedPosition>>> openedPositions() {
+        return eventsService.openedPositions()
+                            .map(accountStateEvent -> SseEvent.create(accountStateEvent).sse());
+    }
 }
