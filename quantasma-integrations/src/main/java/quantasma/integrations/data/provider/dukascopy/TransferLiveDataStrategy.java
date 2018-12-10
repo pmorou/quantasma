@@ -15,11 +15,15 @@ import com.dukascopy.api.Period;
 import lombok.extern.slf4j.Slf4j;
 import quantasma.core.Quote;
 import quantasma.integrations.event.AccountState;
+import quantasma.integrations.event.Direction;
 import quantasma.integrations.event.Event;
 import quantasma.integrations.event.EventSink;
+import quantasma.integrations.event.OpenedPosition;
 
 import java.time.Instant;
 import java.time.ZoneOffset;
+import java.util.LinkedList;
+import java.util.List;
 
 @Slf4j
 public class TransferLiveDataStrategy implements IStrategy {
@@ -44,13 +48,26 @@ public class TransferLiveDataStrategy implements IStrategy {
     public void onAccount(IAccount account) throws JFException {
         double profitLoss = 0;
         double totalAmount = 0;
+
+        final List<OpenedPosition> openedPositions = new LinkedList<>();
         for (IOrder order : engine.getOrders()) {
             if (order.getState() == IOrder.State.FILLED) {
                 profitLoss += order.getProfitLossInAccountCurrency();
                 totalAmount += order.getAmount();
+
+                openedPositions.add(new OpenedPosition(
+                        order.getInstrument().getName(),
+                        order.getOrderCommand().isLong() ? Direction.LONG : Direction.SHORT,
+                        order.getAmount(),
+                        order.getOpenPrice(),
+                        order.getStopLossPrice(),
+                        order.getTakeProfitPrice(),
+                        order.getProfitLossInPips(),
+                        order.getProfitLossInAccountCurrency()));
             }
         }
 
+        eventSink.flush(Event.openedPositions(openedPositions));
         eventSink.flush(Event.accountState(
                 new AccountState(history.getEquity(),
                                  account.getBalance(),
