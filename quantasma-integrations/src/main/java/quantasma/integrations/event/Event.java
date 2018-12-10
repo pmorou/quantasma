@@ -2,6 +2,8 @@ package quantasma.integrations.event;
 
 import quantasma.core.Quote;
 
+import java.util.List;
+
 public interface Event<D> {
     String id();
 
@@ -15,5 +17,9 @@ public interface Event<D> {
 
     static AccountStateEvent accountState(AccountState data) {
         return new AccountStateEvent(data);
+    }
+
+    static OpenedPositionsEvent openedPositions(List<OpenedPosition> data) {
+        return new OpenedPositionsEvent(data);
     }
 }
