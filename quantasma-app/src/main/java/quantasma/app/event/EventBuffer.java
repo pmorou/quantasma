@@ -57,7 +57,6 @@ public class EventBuffer<E extends Event> {
                 @Override
                 public void request(long n) {
                     try {
-                        log.info("requesting");
                         s.onNext(events.take());
                     } catch (InterruptedException e) {
                         e.printStackTrace();
