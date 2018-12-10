@@ -20,6 +20,7 @@ import quantasma.integrations.event.Event;
 import quantasma.integrations.event.EventSink;
 import quantasma.integrations.event.OpenedPosition;
 
+import java.text.DecimalFormat;
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.util.LinkedList;
@@ -27,6 +28,8 @@ import java.util.List;
 
 @Slf4j
 public class TransferLiveDataStrategy implements IStrategy {
+
+    private static final DecimalFormat SECOND_DECIMAL_POINT_FORMAT = new DecimalFormat("#.##");
 
     private final EventSink eventSink;
 
@@ -62,9 +65,9 @@ public class TransferLiveDataStrategy implements IStrategy {
         eventSink.flush(Event.accountState(
                 new AccountState(history.getEquity(),
                                  account.getBalance(),
-                                 profitLoss,
+                                 toSecondDecimalPoint(profitLoss),
                                  totalAmount,
-                                 account.getUsedMargin(),
+                                 toSecondDecimalPoint(account.getUsedMargin()),
                                  account.getAccountCurrency().getCurrencyCode(),
                                  account.getLeverage())));
     }
@@ -79,6 +82,10 @@ public class TransferLiveDataStrategy implements IStrategy {
                 order.getTakeProfitPrice(),
                 order.getProfitLossInPips(),
                 order.getProfitLossInAccountCurrency());
+    }
+
+    private double toSecondDecimalPoint(double profitLoss) {
+        return Double.valueOf(SECOND_DECIMAL_POINT_FORMAT.format(profitLoss));
     }
 
     public void onMessage(IMessage message) {
