@@ -1,5 +1,6 @@
 import { Injectable } from '@angular/core';
 import { AccountState } from "../shared/account-state.model";
+import { OpenedPosition } from "../shared/opened-position.model";
 import { Quote } from "../shared/quote.model";
 import { Observable, Subject } from "rxjs/index";
 
@@ -12,6 +13,7 @@ export class EventsService {
 
   private quotesSubject: Subject<Quote> = this.initializeSubject('events/quotes', 'quote-event');
   private accountStateSubject: Subject<AccountState> = this.initializeSubject('events/accountState', 'account_state-event');
+  private openedPositionsSubject: Subject<OpenedPosition[]> = this.initializeSubject('events/openedPositions', 'opened_positions-event');
 
   constructor() { }
 
@@ -27,6 +29,10 @@ export class EventsService {
 
   public accountState(): Observable<AccountState> {
     return this.accountStateSubject.asObservable();
+  }
+
+  public openedPositions(): Observable<OpenedPosition[]> {
+    return this.openedPositionsSubject.asObservable();
   }
 
   private static subjectLinkedEventSource<E>(url: string, event: string, subject: Subject<E>): EventSource {
