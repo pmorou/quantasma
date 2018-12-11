@@ -28,7 +28,7 @@ public class TestManager {
         return run(tradeStrategy, orderType, getMainTimeSeries(tradeStrategy).getBeginIndex(), getMainTimeSeries(tradeStrategy).getEndIndex());
     }
 
-    private MainTimeSeries getMainTimeSeries(TradeStrategy tradeStrategy) {
+    public MainTimeSeries getMainTimeSeries(TradeStrategy tradeStrategy) {
         return testMarketData.of(tradeStrategy.getTradeSymbol()).getMainTimeSeries();
     }
 

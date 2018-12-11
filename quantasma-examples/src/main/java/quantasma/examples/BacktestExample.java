@@ -28,12 +28,11 @@ public class BacktestExample {
                 .withMarketData(testMarketData)
                 .build();
 
-        final Parameters parameters = new Parameters()
+        final TradeStrategy rsiStrategy = RSIStrategy.buildBullish(context, new Parameters()
                 .add("tradeSymbol", "EURUSD")
                 .add("rsiPeriod", 14)
                 .add("rsiLowerBound", 30)
-                .add("rsiUpperBound", 70);
-        final TradeStrategy rsiStrategy = RSIStrategy.buildBullish(context, parameters);
+                .add("rsiUpperBound", 70));
 
         // Feed historical data by calling testMarketData.add()
 

@@ -18,7 +18,6 @@ import quantasma.core.TestMarketData;
 import quantasma.core.TradeStrategy;
 import quantasma.core.analysis.StrategyBacktest;
 import quantasma.core.analysis.TradeScenario;
-import quantasma.core.analysis.parametrize.Parameters;
 import quantasma.core.analysis.parametrize.Producer;
 import quantasma.core.analysis.parametrize.Variable;
 import quantasma.core.analysis.parametrize.Variables;
@@ -62,28 +61,12 @@ public class RSIBacktest implements StrategyBacktest {
                 .withMarketData(testMarketData)
                 .build();
 
-        final TimeSeries timeSeries = context.getDataService()
-                                             .getMarketData()
-                                             .of(SYMBOL)
-                                             .getTimeSeries(BarPeriod.M1);
-
-        final ClosePriceIndicator closePrice = new ClosePriceIndicator(timeSeries);
-
         final Function<Variables, TradeStrategy> recipe = var -> {
-            final Variable<Integer> rsiPeriod = var._int("rsiPeriod").values(10, 14);
-            final Variable<Integer> rsiLowerBound = var._int("rsiLowerBound").with(range(10, 40, 10));
-            final Variable<Integer> rsiUpperBound = var._int("rsiUpperBound").with(range(90, 60, 10));
-            final Variable<String> tradeSymbol = var._String("tradeSymbol").with(SYMBOL);
-
-            final RSIIndicator rsi = new RSIIndicator(closePrice, rsiPeriod.$());
-
-            return new RSIStrategy.Builder<>(context,
-                                             tradeSymbol.$(),
-                                             new CrossedDownIndicatorRule(rsi, rsiLowerBound.$()),
-                                             new CrossedUpIndicatorRule(rsi, rsiUpperBound.$()),
-                                             var.getParameters())
-                    .withUnstablePeriod(rsiPeriod.$())
-                    .build();
+            var._int("rsiPeriod").values(10, 14);
+            var._int("rsiLowerBound").with(range(10, 40, 10));
+            var._int("rsiUpperBound").with(range(90, 60, 10));
+            var._String("tradeSymbol").with("EURUSD");
+            return RSIStrategy.buildBullish(context, var.getParameters());
         };
 
         // implement strategies: close, open, 4 ticks ohlc
@@ -93,11 +76,13 @@ public class RSIBacktest implements StrategyBacktest {
                                                             ohlcvTick.getBidClose(),
                                                             ohlcvTick.getAskClose()));
 
+        final TestManager testManager = new TestManager(testMarketData);
         final Producer<TradeStrategy> producer = Producer.from(recipe);
         final List<TradeScenario> result = new LinkedList<>();
         while (producer.hasNext()) {
-            final TradingRecord tradingRecord = new TestManager(testMarketData).run(producer.next(), Order.OrderType.BUY);
-            result.add(new TradeScenario(timeSeries,
+            final TradeStrategy tradeStrategy = producer.next();
+            final TradingRecord tradingRecord = testManager.run(tradeStrategy, Order.OrderType.BUY);
+            result.add(new TradeScenario(testManager.getMainTimeSeries(tradeStrategy),
                                          producer.getParameters(),
                                          tradingRecord));
         }

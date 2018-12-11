@@ -32,17 +32,16 @@ public class TradeAppExample {
                 .withOrderService(new NullOrderService())
                 .build();
 
-        final TradeEngine tradeEngine = BaseTradeEngine.create(context);
-
-        final Parameters parameters = new Parameters()
+        final TradeStrategy rsiStrategy = RSIStrategy.buildBullish(context, new Parameters()
                 .add("tradeSymbol", "EURUSD")
                 .add("rsiPeriod", 14)
                 .add("rsiLowerBound", 30)
                 .add("rsiUpperBound", 70));
-        final TradeStrategy rsiStrategy = RSIStrategy.buildBullish(context, parameters);
 
         // Only registered strategies are given market data
         context.getStrategyControl().register(rsiStrategy);
+
+        final TradeEngine tradeEngine = BaseTradeEngine.create(context);
 
         // Example call on market data change
         tradeEngine.process("EURUSD", ZonedDateTime.now(), 1.13757, 1.13767);

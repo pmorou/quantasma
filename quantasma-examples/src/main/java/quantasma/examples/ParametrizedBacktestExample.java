@@ -13,6 +13,7 @@ import quantasma.core.Context;
 import quantasma.core.TestManager;
 import quantasma.core.TestMarketData;
 import quantasma.core.TradeStrategy;
+import quantasma.core.analysis.TradeScenario;
 import quantasma.core.analysis.parametrize.Producer;
 import quantasma.core.analysis.parametrize.Variable;
 import quantasma.core.analysis.parametrize.Variables;
@@ -39,30 +40,21 @@ public class ParametrizedBacktestExample {
                 .withMarketData(testMarketData)
                 .build();
 
-        final TimeSeries timeSeries = context.getDataService().getMarketData().of("EURUSD").getTimeSeries(BarPeriod.M1);
-        final ClosePriceIndicator closePrice = new ClosePriceIndicator(timeSeries);
-
         final Function<Variables, TradeStrategy> recipe = var -> {
-            final Variable<Integer> rsiPeriod = var._int("rsiPeriod").values(10, 14);
-            final Variable<Integer> rsiLowerBound = var._int("rsiLowerBound").with(range(10, 40, 10));
-            final Variable<Integer> rsiUpperBound = var._int("rsiUpperBound").with(range(90, 60, 10));
-            final Variable<String> tradeSymbol = var._String("tradeSymbol").with("EURUSD");
-
-            final RSIIndicator rsi = new RSIIndicator(closePrice, rsiPeriod.$());
-            return new RSIStrategy.Builder<>(context,
-                                             tradeSymbol.$(),
-                                             new CrossedDownIndicatorRule(rsi, rsiLowerBound.$()),
-                                             new CrossedUpIndicatorRule(rsi, rsiUpperBound.$()),
-                                             var.getParameters())
-                    .withUnstablePeriod(rsiPeriod.$())
-                    .build();
+            var._int("rsiPeriod").values(10, 14);
+            var._int("rsiLowerBound").with(range(10, 40, 10));
+            var._int("rsiUpperBound").with(range(90, 60, 10));
+            var._String("tradeSymbol").with("EURUSD");
+            return RSIStrategy.buildBullish(context, var.getParameters());
         };
 
         // Feed historical data by calling testMarketData.add()
 
+        final TestManager testManager = new TestManager(testMarketData);
         final Producer<TradeStrategy> producer = Producer.from(recipe);
         while (producer.hasNext()) {
-            final TradingRecord result = new TestManager(testMarketData).run(producer.next(), Order.OrderType.BUY);
+            final TradeStrategy tradeStrategy = producer.next();
+            final TradingRecord result = testManager.run(tradeStrategy, Order.OrderType.BUY);
             // Proper criterion can be used now on the result
         }
         // end::ParametrizedBacktestExample[]
