@@ -10,10 +10,18 @@ public class Ints {
     }
 
     public static List<Integer> range(int fromInclusive, int toExclusive, int step) {
-        final ArrayList<Integer> list = new ArrayList<>();
+        final List<Integer> list = new ArrayList<>();
+
+        // ascending case
         for (int i = fromInclusive; i < toExclusive; i += step) {
             list.add(i);
         }
+
+        // descending case
+        for (int i = fromInclusive; i > toExclusive; i -= step) {
+            list.add(i);
+        }
+
         return list;
     }
 
