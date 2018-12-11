@@ -81,10 +81,9 @@ public class RSIBacktest implements StrategyBacktest {
         final List<TradeScenario> result = new LinkedList<>();
         while (producer.hasNext()) {
             final TradeStrategy tradeStrategy = producer.next();
-            final TradingRecord tradingRecord = testManager.run(tradeStrategy, Order.OrderType.BUY);
             result.add(new TradeScenario(testManager.getMainTimeSeries(tradeStrategy),
-                                         producer.getParameters(),
-                                         tradingRecord));
+                                         tradeStrategy.getParameters(),
+                                         testManager.run(tradeStrategy, Order.OrderType.BUY)));
         }
         return result;
     }
