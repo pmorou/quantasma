@@ -67,6 +67,7 @@ public class RSIStrategy extends BaseTradeStrategy {
                              parameters)
                 .withName(String.format("bullish_rsi_strategy_%s-%s", rsiLowerBound, rsiUpperBound))
                 .withUnstablePeriod((Integer) parameters.get("rsiPeriod"))
+                .withAmount(1000)
                 .build();
     }
 
