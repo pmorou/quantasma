@@ -51,12 +51,12 @@ public class ParametrizedBacktestExample {
         // Feed historical data by calling testMarketData.add()
 
         final TestManager testManager = new TestManager(testMarketData);
-        final Producer<TradeStrategy> producer = Producer.from(recipe);
-        while (producer.hasNext()) {
-            final TradeStrategy tradeStrategy = producer.next();
-            final TradingRecord result = testManager.run(tradeStrategy, Order.OrderType.BUY);
-            // Proper criterion can be used now on the result
-        }
-        // end::ParametrizedBacktestExample[]
+        Producer.from(recipe)
+                .stream()
+                .forEach(tradeStrategy -> {
+                    final TradingRecord result = testManager.run(tradeStrategy, Order.OrderType.BUY);
+                    // Proper criterion can be used now on the result
+                });
     }
+    // end::ParametrizedBacktestExample[]
 }

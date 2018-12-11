@@ -29,9 +29,9 @@ import quantasma.examples.RSIStrategy;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.temporal.TemporalAmount;
-import java.util.LinkedList;
 import java.util.List;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static quantasma.core.analysis.parametrize.Ints.range;
 
@@ -77,15 +77,12 @@ public class RSIBacktest implements StrategyBacktest {
                                                             ohlcvTick.getAskClose()));
 
         final TestManager testManager = new TestManager(testMarketData);
-        final Producer<TradeStrategy> producer = Producer.from(recipe);
-        final List<TradeScenario> result = new LinkedList<>();
-        while (producer.hasNext()) {
-            final TradeStrategy tradeStrategy = producer.next();
-            result.add(new TradeScenario(testManager.getMainTimeSeries(tradeStrategy),
-                                         tradeStrategy.getParameters(),
-                                         testManager.run(tradeStrategy, Order.OrderType.BUY)));
-        }
-        return result;
+        return Producer.from(recipe)
+                       .stream()
+                       .map(tradeStrategy -> new TradeScenario(testManager.getMainTimeSeries(tradeStrategy),
+                                                               tradeStrategy.getParameters(),
+                                                               testManager.run(tradeStrategy, Order.OrderType.BUY)))
+                       .collect(Collectors.toList());
     }
 
     private static TestMarketData createTestMarketData() {
