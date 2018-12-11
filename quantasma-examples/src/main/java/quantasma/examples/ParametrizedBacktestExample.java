@@ -45,12 +45,15 @@ public class ParametrizedBacktestExample {
         final Function<Variables, TradeStrategy> recipe = var -> {
             final Variable<Integer> rsiPeriod = var._int("rsiPeriod").values(10, 14);
             final Variable<Integer> rsiLowerBound = var._int("rsiLowerBound").with(range(10, 40, 10));
+            final Variable<Integer> rsiUpperBound = var._int("rsiUpperBound").with(range(90, 60, 10));
+            final Variable<String> tradeSymbol = var._String("tradeSymbol").with("EURUSD");
 
             final RSIIndicator rsi = new RSIIndicator(closePrice, rsiPeriod.$());
             return new RSIStrategy.Builder<>(context,
-                                             "EURUSD",
+                                             tradeSymbol.$(),
                                              new CrossedDownIndicatorRule(rsi, rsiLowerBound.$()),
-                                             new CrossedUpIndicatorRule(rsi, 100 - rsiLowerBound.$()))
+                                             new CrossedUpIndicatorRule(rsi, rsiUpperBound.$()),
+                                             var.getParameters())
                     .withUnstablePeriod(rsiPeriod.$())
                     .build();
         };

@@ -7,6 +7,7 @@ import quantasma.core.Context;
 import quantasma.core.NullOrderService;
 import quantasma.core.TradeEngine;
 import quantasma.core.TradeStrategy;
+import quantasma.core.analysis.parametrize.Parameters;
 import quantasma.core.timeseries.MultipleTimeSeriesBuilder;
 import quantasma.core.timeseries.TimeSeriesDefinition;
 
@@ -33,7 +34,12 @@ public class TradeAppExample {
 
         final TradeEngine tradeEngine = BaseTradeEngine.create(context);
 
-        final TradeStrategy rsiStrategy = RSIStrategy.buildBullish(context, "EURUSD", BarPeriod.M1);
+        final Parameters parameters = new Parameters()
+                .add("tradeSymbol", "EURUSD")
+                .add("rsiPeriod", 14)
+                .add("rsiBottomLvl", 30)
+                .add("rsiUpperLvl", 70);
+        final TradeStrategy rsiStrategy = RSIStrategy.buildBullish(context, parameters);
 
         // Only registered strategies are given market data
         context.getStrategyControl().register(rsiStrategy);

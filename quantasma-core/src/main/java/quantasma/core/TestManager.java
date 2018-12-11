@@ -8,6 +8,7 @@ import org.ta4j.core.Strategy;
 import org.ta4j.core.TradingRecord;
 import org.ta4j.core.num.DoubleNum;
 import org.ta4j.core.num.Num;
+import quantasma.core.analysis.parametrize.Parameters;
 import quantasma.core.timeseries.MainTimeSeries;
 import quantasma.core.timeseries.ManualIndexTimeSeries;
 
@@ -111,6 +112,11 @@ public class TestManager {
         @Override
         public String getTradeSymbol() {
             return strategy.getTradeSymbol();
+        }
+
+        @Override
+        public Parameters getParameters() {
+            return strategy.getParameters();
         }
 
         @Override

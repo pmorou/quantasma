@@ -11,6 +11,7 @@ import org.ta4j.core.trading.rules.CrossedUpIndicatorRule;
 import quantasma.core.BarPeriod;
 import quantasma.core.BaseTradeStrategy;
 import quantasma.core.Context;
+import quantasma.core.analysis.parametrize.Parameters;
 import quantasma.core.order.CloseMarkerOrder;
 import quantasma.core.order.OpenMarketOrder;
 
@@ -55,26 +56,26 @@ public class RSIStrategy extends BaseTradeStrategy {
         return openedPositionsCounter > 0;
     }
 
-    public static RSIStrategy buildBullish(Context context, String tradeSymbol, BarPeriod barPeriod) {
-        final RSIIndicator rsi = createRSIIndicator(context, tradeSymbol, barPeriod);
-        return new Builder<>(context, tradeSymbol, new CrossedUpIndicatorRule(rsi, 30), new CrossedDownIndicatorRule(rsi, 70))
-                .withName("bullish_rsi_strategy_30-70")
-                .withUnstablePeriod(14)
+    public static RSIStrategy buildBullish(Context context, Parameters parameters) {
+        final Number rsiLowerBound = (Number) parameters.get("rsiLowerBound");
+        final Number rsiUpperBound = (Number) parameters.get("rsiUpperBound");
+        final RSIIndicator rsi = createRSIIndicator(context, parameters);
+        return new Builder<>(context,
+                             (String) parameters.get("tradeSymbol"),
+                             new CrossedUpIndicatorRule(rsi, rsiLowerBound),
+                             new CrossedDownIndicatorRule(rsi, rsiUpperBound),
+                             parameters)
+                .withName(String.format("bullish_rsi_strategy_%s-%s", rsiLowerBound, rsiUpperBound))
+                .withUnstablePeriod((Integer) parameters.get("rsiPeriod"))
                 .build();
     }
 
-    public static RSIStrategy buildBearish(Context context, String tradeSymbol, BarPeriod barPeriod) {
-        final RSIIndicator rsi = createRSIIndicator(context, tradeSymbol, barPeriod);
-        return new Builder<>(context, tradeSymbol, new CrossedDownIndicatorRule(rsi, 70), new CrossedUpIndicatorRule(rsi, 30))
-                .withName("bearish_rsi_strategy_30-70")
-                .withUnstablePeriod(14)
-                .build();
-    }
-
-    private static RSIIndicator createRSIIndicator(Context context, String tradeSymbol, BarPeriod barPeriod) {
-        final TimeSeries timeSeries = context.getDataService().getMarketData().of(tradeSymbol).getTimeSeries(barPeriod);
+    private static RSIIndicator createRSIIndicator(Context context, Parameters parameters) {
+        final TimeSeries timeSeries = context.getDataService().getMarketData()
+                                             .of((String) parameters.get("tradeSymbol"))
+                                             .getTimeSeries(BarPeriod.M1);
         final ClosePriceIndicator closePrice = new ClosePriceIndicator(timeSeries);
-        return new RSIIndicator(closePrice, 14);
+        return new RSIIndicator(closePrice, (Integer) parameters.get("rsiPeriod"));
     }
 
     /**
@@ -82,8 +83,8 @@ public class RSIStrategy extends BaseTradeStrategy {
      */
     public static class Builder<T extends Builder<T, R>, R extends RSIStrategy> extends BaseTradeStrategy.Builder<T, R> {
 
-        public Builder(Context context, String tradeSymbol, Rule entryRule, Rule exitRule) {
-            super(context, tradeSymbol, entryRule, exitRule);
+        public Builder(Context context, String tradeSymbol, Rule entryRule, Rule exitRule, Parameters parameters) {
+            super(context, tradeSymbol, entryRule, exitRule, parameters);
         }
 
         // New methods can be added here

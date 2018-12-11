@@ -8,11 +8,11 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import quantasma.app.config.service.integration.DukascopyLiveDataConfig;
 import quantasma.app.service.EventsService;
-import quantasma.core.BarPeriod;
 import quantasma.core.Context;
 import quantasma.core.StrategyControl;
 import quantasma.core.TradeEngine;
 import quantasma.core.TradeStrategy;
+import quantasma.core.analysis.parametrize.Parameters;
 import quantasma.examples.RSIStrategy;
 import quantasma.integrations.data.provider.LiveDataProvider;
 import quantasma.integrations.data.provider.dukascopy.DukascopyApiClient;
@@ -28,7 +28,12 @@ public class IntegrationServiceConfig {
 
     @Bean
     public TradeStrategy rsiStrategy(StrategyControl strategyControl, Context context) {
-        final TradeStrategy strategy = RSIStrategy.buildBullish(context, "EURUSD", BarPeriod.M1);
+        final Parameters parameters = new Parameters()
+                .add("tradeSymbol", "EURUSD")
+                .add("rsiPeriod", 14)
+                .add("rsiLowerBound", 30)
+                .add("rsiUpperBound", 70);
+        final TradeStrategy strategy = RSIStrategy.buildBullish(context, parameters);
         strategyControl.register(strategy);
         return strategy;
     }
