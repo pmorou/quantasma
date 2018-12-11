@@ -7,38 +7,15 @@ import java.util.function.Function
 
 class ProducerSpec extends Specification {
 
-    def 'given next elements should return its parameters'() {
-        given:
-        final Function<Variables, TestObject> recipe = { var -> new TestObject(var._int("var1").with(3, 1).$(),
-                                                                               var._String("var2").with("a", "b").$()) }
-
-        when:
-        final Producer<TestObject> producer = Producer.from(recipe)
-
-        then:
-        with(producer) {
-            hasNext()
-            next()
-            getParameters().keys().every({ it in ["var1", "var2"] })
-            getParameters().get("var1") == 3
-            getParameters().get("var2") == "a"
-
-            hasNext()
-            next()
-            getParameters().get("var1") == 1
-            getParameters().get("var2") == "a"
-        }
-    }
-
     def 'given ordered values should produce objects in the same order'() {
         given:
         final Function<Variables, TestObject> recipe = { var -> new TestObject(var._int("var1").with(3, 1, 7, 9).$()) }
 
         when:
-        final Producer<TestObject> producer = Producer.from(recipe)
+        final Iterator<TestObject> iterator = Producer.from(recipe).iterator()
 
         then:
-        with(producer) {
+        with(iterator) {
             next().var1 == 3
             next().var1 == 1
             next().var1 == 7
@@ -56,10 +33,10 @@ class ProducerSpec extends Specification {
          }
 
         when:
-        final Producer<TestObject> producer = Producer.from(recipe)
+        final Iterator<TestObject> iterator = Producer.from(recipe).iterator()
 
         then:
-        with(producer) {
+        with(iterator) {
             assertFields(next(), 1, "9", 1)
             assertFields(next(), 2, "9", 2)
             assertFields(next(), 1, "8", 1)
@@ -73,10 +50,10 @@ class ProducerSpec extends Specification {
         final Function<Variables, TestObject> recipe = { var -> new TestObject(var._int("var1").with(1, 2, 3, 2).$()) }
 
         when:
-        final Producer<TestObject> producer = Producer.from(recipe)
+        final Iterator<TestObject> iterator = Producer.from(recipe).iterator()
 
         then:
-        with(producer) {
+        with(iterator) {
             next().var1 == 1
             next().var1 == 2
             next().var1 == 3
@@ -87,26 +64,27 @@ class ProducerSpec extends Specification {
     def 'given second iterator call should return new iterator'() {
         given:
         final Function<Variables, TestObject> recipe = { var -> new TestObject(var._int("var1").values(1, 3).$()) }
-        final Iterator<TestObject> producer = Producer.from(recipe)
+        final Producer<TestObject> producer = Producer.from(recipe)
+        final Iterator<TestObject> iterator = producer.iterator()
 
         and:
         for (int i = 0; i < 2; i++) {
-            assert producer.hasNext()
-            producer.next()
+            assert iterator.hasNext()
+            iterator.next()
         }
-        assert !producer.hasNext()
+        assert !iterator.hasNext()
 
         when:
-        final Iterator<TestObject> nextProducer = Producer.from(recipe)
+        final Iterator<TestObject> nextIterator = Producer.from(recipe).iterator()
 
         then:
         for (int i = 0; i < 2; i++) {
-            with(nextProducer) {
+            with(nextIterator) {
                 hasNext()
                 next()
             }
         }
-        !nextProducer.hasNext()
+        !nextIterator.hasNext()
     }
 
     @FailsWith(NoSuchElementException)
@@ -115,10 +93,10 @@ class ProducerSpec extends Specification {
         final Function<Variables, TestObject> recipe = { var -> new TestObject(var._int("var1").values(1, 3, 5, 7).$()) }
 
         when:
-        final Producer<TestObject> producer = Producer.from(recipe)
+        final Iterator<TestObject> iterator = Producer.from(recipe).iterator()
 
         then:
-        with(producer) {
+        with(iterator) {
             hasNext()
             next().var1 == 1
             hasNext()
@@ -139,10 +117,10 @@ class ProducerSpec extends Specification {
                                                                                var._String("var2").values("a", "b", "c").$()) }
 
         when:
-        final Producer<TestObject> producer = Producer.from(recipe)
+        final Iterator<TestObject> iterator = Producer.from(recipe).iterator()
 
         then:
-        with(producer) {
+        with(iterator) {
             hasNext()
             assertFields(next(), 1, "a")
             hasNext()
@@ -169,7 +147,8 @@ class ProducerSpec extends Specification {
     def 'given already started iterator when used new iterator should be able to continue old iterator'() {
         given:
         final Function<Variables, TestObject> recipe = { var -> new TestObject(var._int("var1").values(1, 3).$()) }
-        final Iterator<TestObject> oldIterator = Producer.from(recipe)
+        final Producer producer = Producer.from(recipe)
+        final Iterator<TestObject> oldIterator = producer.iterator()
         with (oldIterator) {
             hasNext()
             next().var1 == 1
@@ -177,7 +156,7 @@ class ProducerSpec extends Specification {
         }
 
         when:
-        final Iterator<TestObject> newIterator = Producer.from(recipe)
+        final Iterator<TestObject> newIterator = producer.iterator()
         with (newIterator) {
             hasNext()
             next().var1 == 1
@@ -202,10 +181,10 @@ class ProducerSpec extends Specification {
                                                                                var._int("var3").values(7, 9).$()) }
 
         when:
-        final Iterator<TestObject> producer = Producer.from(recipe)
+        final Iterator<TestObject> iterator = Producer.from(recipe).iterator()
 
         then:
-        with (producer) {
+        with (iterator) {
             hasNext()
             assertFields(next(), 1, "a", 7)
             hasNext()
