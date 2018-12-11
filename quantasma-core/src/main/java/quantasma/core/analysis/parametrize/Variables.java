@@ -7,7 +7,7 @@ import java.util.function.Function;
 
 public class Variables {
 
-    private Map<String, Variable<?>> variablesByLabel = new LinkedHashMap<>();
+    private final Map<String, Variable<?>> variablesByLabel = new LinkedHashMap<>();
 
     public Variable<Integer> _int(String label) {
         final Variable<Integer> param = new Variable<>();
