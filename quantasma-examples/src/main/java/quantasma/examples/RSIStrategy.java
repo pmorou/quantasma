@@ -16,13 +16,13 @@ import quantasma.core.order.CloseMarkerOrder;
 import quantasma.core.order.OpenMarketOrder;
 
 @Slf4j
-public class RSIStrategy extends BaseTradeStrategy {
+public final class RSIStrategy extends BaseTradeStrategy {
 
     private static final int MAX_NUMBER_OF_POSITIONS = 1;
 
     private int openedPositionsCounter = 0;
 
-    protected RSIStrategy(Builder builder) {
+    private RSIStrategy(Builder builder) {
         super(builder);
     }
 
@@ -82,9 +82,9 @@ public class RSIStrategy extends BaseTradeStrategy {
     /**
      * @see quantasma.core.BaseTradeStrategy.Builder
      */
-    public static class Builder<T extends Builder<T, R>, R extends RSIStrategy> extends BaseTradeStrategy.Builder<T, R> {
+    private static class Builder<T extends Builder<T, R>, R extends RSIStrategy> extends BaseTradeStrategy.Builder<T, R> {
 
-        public Builder(Context context, String tradeSymbol, Rule entryRule, Rule exitRule, Parameters parameters) {
+        private Builder(Context context, String tradeSymbol, Rule entryRule, Rule exitRule, Parameters parameters) {
             super(context, tradeSymbol, entryRule, exitRule, parameters);
         }
 
