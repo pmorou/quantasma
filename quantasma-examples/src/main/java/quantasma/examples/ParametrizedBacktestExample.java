@@ -1,21 +1,14 @@
 package quantasma.examples;
 
 import org.ta4j.core.Order;
-import org.ta4j.core.TimeSeries;
 import org.ta4j.core.TradingRecord;
-import org.ta4j.core.indicators.RSIIndicator;
-import org.ta4j.core.indicators.helpers.ClosePriceIndicator;
-import org.ta4j.core.trading.rules.CrossedDownIndicatorRule;
-import org.ta4j.core.trading.rules.CrossedUpIndicatorRule;
 import quantasma.core.BarPeriod;
 import quantasma.core.BaseContext;
 import quantasma.core.Context;
 import quantasma.core.TestManager;
 import quantasma.core.TestMarketData;
 import quantasma.core.TradeStrategy;
-import quantasma.core.analysis.TradeScenario;
 import quantasma.core.analysis.parametrize.Producer;
-import quantasma.core.analysis.parametrize.Variable;
 import quantasma.core.analysis.parametrize.Variables;
 import quantasma.core.timeseries.MultipleTimeSeriesBuilder;
 import quantasma.core.timeseries.ReflectionManualIndexTimeSeries;
