@@ -20,13 +20,13 @@ class ProducerSpec extends Specification {
             hasNext()
             next()
             getParameters().keys().every({ it in ["var1", "var2"] })
-            getParameters().value("var1") == 3
-            getParameters().value("var2") == "a"
+            getParameters().get("var1") == 3
+            getParameters().get("var2") == "a"
 
             hasNext()
             next()
-            getParameters().value("var1") == 1
-            getParameters().value("var2") == "a"
+            getParameters().get("var1") == 1
+            getParameters().get("var2") == "a"
         }
     }
 

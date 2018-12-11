@@ -24,7 +24,7 @@ public class Parameters {
         return parameters.keySet();
     }
 
-    public Object value(String key) {
+    public Object get(String key) {
         return parameters.get(key);
     }
 
