@@ -37,8 +37,8 @@ public class TradeAppExample {
         final Parameters parameters = new Parameters()
                 .add("tradeSymbol", "EURUSD")
                 .add("rsiPeriod", 14)
-                .add("rsiBottomLvl", 30)
-                .add("rsiUpperLvl", 70);
+                .add("rsiLowerBound", 30)
+                .add("rsiUpperBound", 70));
         final TradeStrategy rsiStrategy = RSIStrategy.buildBullish(context, parameters);
 
         // Only registered strategies are given market data
