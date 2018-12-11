@@ -9,7 +9,7 @@ import { AccountState } from "../../shared/account-state.model";
 })
 export class AccountStateComponent implements OnInit {
 
-  public accountState$?: AccountState;
+  accountState$?: AccountState;
 
   constructor(private events: EventsService) { }
 

@@ -15,7 +15,7 @@ export class QuotesComponent implements OnInit {
     this.events.quotes().subscribe(this.renderQuote);
   }
 
-  renderQuote(): void {
+  private renderQuote(): void {
     (value: Quote) => {
       let li = document.getElementById("quote-" + value.symbol);
       if (li == null) {

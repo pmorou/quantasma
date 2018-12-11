@@ -9,7 +9,7 @@ import { OpenedPosition } from "../../shared/opened-position.model";
 })
 export class OpenedPositionsComponent implements OnInit {
 
-  public openedPositions$: OpenedPosition[] = [];
+  openedPositions$: OpenedPosition[] = [];
 
   constructor(private events: EventsService) {
   }
