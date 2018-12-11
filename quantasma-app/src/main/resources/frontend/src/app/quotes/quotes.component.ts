@@ -12,22 +12,20 @@ export class QuotesComponent implements OnInit {
   constructor(private events: EventsService) { }
 
   ngOnInit() {
-    this.events.quotes().subscribe(this.renderQuote);
+    this.events.quotes().subscribe((quote: Quote) => QuotesComponent.renderQuote(quote));
   }
 
-  private renderQuote(): void {
-    (value: Quote) => {
-      let li = document.getElementById("quote-" + value.symbol);
-      if (li == null) {
-        li = document.createElement("li");
-        li.id = "quote-" + value.symbol;
-        document.getElementsByClassName("quotes__list")[0].appendChild(li);
-      }
-      li.innerHTML =
-        "<b>" + value.symbol + "</b>" +
-        "</br>bid: " + value.bid +
-        "</br>ask: " + value.ask;
+  private static renderQuote(quote: Quote): void {
+    let li = document.getElementById("quote-" + quote.symbol);
+    if (li == null) {
+      li = document.createElement("li");
+      li.id = "quote-" + quote.symbol;
+      document.getElementsByClassName("quotes__list")[0].appendChild(li);
     }
+    li.innerHTML =
+      "<b>" + quote.symbol + "</b>" +
+      "</br>bid: " + quote.bid +
+      "</br>ask: " + quote.ask;
   };
 
 }
