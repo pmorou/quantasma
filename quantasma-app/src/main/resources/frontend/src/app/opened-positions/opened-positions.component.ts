@@ -9,14 +9,14 @@ import { OpenedPosition } from "../../shared/opened-position.model";
 })
 export class OpenedPositionsComponent implements OnInit {
 
-  public openedPositions: OpenedPosition[] = [];
+  public openedPositions$: OpenedPosition[] = [];
 
   constructor(private events: EventsService) {
   }
 
   ngOnInit() {
     this.events.openedPositions().subscribe(value => {
-      this.openedPositions = value;
+      this.openedPositions$ = value;
     })
   }
 
