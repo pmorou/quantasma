@@ -7,6 +7,7 @@ import org.ta4j.core.Rule;
 import org.ta4j.core.Strategy;
 import org.ta4j.core.TradingRecord;
 import org.ta4j.core.num.Num;
+import quantasma.core.analysis.parametrize.Parameterizable;
 import quantasma.core.analysis.parametrize.Values;
 import quantasma.core.timeseries.MainTimeSeries;
 import quantasma.core.timeseries.ManualIndexTimeSeries;
@@ -116,6 +117,11 @@ public class TestManager {
         @Override
         public Values getParameterValues() {
             return strategy.getParameterValues();
+        }
+
+        @Override
+        public Parameterizable[] parameterizables() {
+            return new Parameterizable[0];
         }
 
         @Override

@@ -7,6 +7,7 @@ import org.ta4j.core.Rule;
 import org.ta4j.core.Strategy;
 import org.ta4j.core.num.Num;
 import org.ta4j.core.num.PrecisionNum;
+import quantasma.core.analysis.parametrize.Parameterizable;
 import quantasma.core.analysis.parametrize.Values;
 
 import java.util.Objects;
@@ -100,6 +101,11 @@ public class BaseTradeStrategy extends BaseStrategy implements TradeStrategy {
     @Override
     public Values<?> getParameterValues() {
         return parameterValues;
+    }
+
+    @Override
+    public Parameterizable[] parameterizables() {
+        return new Parameterizable[0];
     }
 
     protected Function<Number, Num> getNumFunction() {

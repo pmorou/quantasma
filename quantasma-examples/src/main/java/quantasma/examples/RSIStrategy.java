@@ -80,6 +80,11 @@ public class RSIStrategy extends BaseTradeStrategy {
         return new RSIIndicator(closePrice, (Integer) values.get(Parameter.RSI_PERIOD));
     }
 
+    @Override
+    public Parameterizable[] parameterizables() {
+        return Parameter.values();
+    }
+
     /**
      * @see quantasma.core.BaseTradeStrategy.Builder
      */
