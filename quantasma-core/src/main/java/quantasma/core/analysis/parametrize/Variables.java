@@ -90,7 +90,7 @@ public class Variables<P extends Enum & Parameter> {
     public Parameters getParameters() {
         return variablesByLabel.entrySet()
                                .stream()
-                               .reduce(Parameters.instance((Class<P>) parameterClass),
+                               .reduce(Parameters.from((Class<P>) parameterClass),
                                        (p, entry) -> p.add(entry.getKey(), entry.getValue().value()),
                                        Parameters::addAll);
     }

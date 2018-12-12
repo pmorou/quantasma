@@ -62,7 +62,7 @@ public class RSIStrategyChild extends RSIStrategy {
     public static void main(String[] args) {
         final Context context = new BaseContext.Builder().build();
 
-        final RSIStrategyChild example = new RSIStrategyChild.Builder<>(context, "symbol", new EmptyRule(), new EmptyRule(), Parameters.instance(ParameterList.class))
+        final RSIStrategyChild example = new RSIStrategyChild.Builder<>(context, "symbol", new EmptyRule(), new EmptyRule(), Parameters.from(ParameterList.class))
                 .withName("from mother of all builders")
                 .withChild() // Current builder, type preserved
                 .build();

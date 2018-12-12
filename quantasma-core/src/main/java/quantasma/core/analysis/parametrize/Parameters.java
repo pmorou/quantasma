@@ -16,7 +16,7 @@ public class Parameters<T extends Enum & Parameter> {
         this.clazz = clazz;
     }
 
-    public static <T extends Enum & Parameter> Parameters<T> instance(Class<T> clazz) {
+    public static <T extends Enum & Parameter> Parameters<T> from(Class<T> clazz) {
         return new Parameters<>(clazz);
     }
 

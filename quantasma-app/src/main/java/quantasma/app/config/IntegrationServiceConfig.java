@@ -28,7 +28,7 @@ public class IntegrationServiceConfig {
 
     @Bean
     public TradeStrategy rsiStrategy(StrategyControl strategyControl, Context context) {
-        final Parameters parameters = Parameters.instance(RSIStrategy.ParameterList.class)
+        final Parameters parameters = Parameters.from(RSIStrategy.ParameterList.class)
                 .add(RSIStrategy.ParameterList.TRADE_SYMBOL, "EURUSD")
                 .add(RSIStrategy.ParameterList.RSI_PERIOD, 14)
                 .add(RSIStrategy.ParameterList.RSI_LOWER_BOUND, 30)
