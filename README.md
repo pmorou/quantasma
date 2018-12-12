@@ -54,12 +54,12 @@ final Context context = new BaseContext.Builder()
         .build();
 
 final TradeStrategy rsiStrategy = RSIStrategy.buildBullish(context,
-                                                           Parameters.from(ParameterList.class)
-                                                                     // String and Enum are allowed
-                                                                     .add(ParameterList.TRADE_SYMBOL, "EURUSD")
-                                                                     .add(ParameterList.RSI_PERIOD, 14)
-                                                                     .add(ParameterList.RSI_LOWER_BOUND, 30)
-                                                                     .add(ParameterList.RSI_UPPER_BOUND, 70));
+                                                           Values.of(Parameter.class)
+                                                                 // String and Enum are allowed
+                                                                 .add(Parameter.TRADE_SYMBOL, "EURUSD")
+                                                                 .add(Parameter.RSI_PERIOD, 14)
+                                                                 .add(Parameter.RSI_LOWER_BOUND, 30)
+                                                                 .add(Parameter.RSI_UPPER_BOUND, 70));
 
 // Only registered strategies are given market data
 context.getStrategyControl().register(rsiStrategy);
