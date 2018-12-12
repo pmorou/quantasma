@@ -12,6 +12,7 @@ import quantasma.core.TestMarketData;
 import quantasma.core.TradeStrategy;
 import quantasma.core.analysis.StrategyBacktest;
 import quantasma.core.analysis.TradeScenario;
+import quantasma.core.analysis.parametrize.Parameterizable;
 import quantasma.core.analysis.parametrize.Producer;
 import quantasma.core.analysis.parametrize.Variables;
 import quantasma.core.timeseries.MultipleTimeSeriesBuilder;
@@ -45,6 +46,11 @@ public class RSIBacktest implements StrategyBacktest {
     @Override
     public Class<? extends TradeStrategy> strategy() {
         return RSIStrategy.class;
+    }
+
+    @Override
+    public Parameterizable[] parameterizables() {
+        return RSIStrategy.Parameter.values();
     }
 
     @Override
