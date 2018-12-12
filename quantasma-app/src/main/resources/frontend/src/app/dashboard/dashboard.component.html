@@ -3,8 +3,14 @@
 <ul>
   <li *ngFor="let strategy of strategies$">
     <ul>
-      <strong>name:</strong> {{ strategy.name }}<br />
-      <strong>is running:</strong> {{ strategy.active }}<br />
+      <strong>name:</strong> {{ strategy.name }}<br/>
+
+      <strong>parameters:</strong>
+      <div *ngFor="let parameter of strategy.parameters">
+        {{ parameter.name }}:{{ parameter.value }}<br/>
+      </div>
+
+      <strong>is running:</strong> {{ strategy.active }}<br/>
       <a href="#" id="deactivate" *ngIf="strategy.active" (click)="deactivateStrategy(strategy.id)">deactivate</a>
       <a href="#" id="activate" *ngIf="!strategy.active" (click)="activateStrategy(strategy.id)">activate</a>
     </ul>

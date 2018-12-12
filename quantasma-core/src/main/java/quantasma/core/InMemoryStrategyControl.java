@@ -5,6 +5,7 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -39,8 +40,21 @@ public class InMemoryStrategyControl implements StrategyControl {
                          .stream()
                          .map(entry -> new StrategyDescription(entry.getKey(),
                                                                entry.getValue().getStrategy().getName(),
-                                                               entry.getValue().isActive())
+                                                               entry.getValue().isActive(),
+                                                               getParameters(entry.getValue().getStrategy())))
                          .collect(Collectors.toSet());
+    }
+
+    private static List<StrategyDescription.Parameter> getParameters(TradeStrategy strategy) {
+        return strategy.getParameterValues()
+                       .getValuesByParameter()
+                       .entrySet()
+                       .stream()
+                       .map(entry -> new StrategyDescription.Parameter(
+                               entry.getKey().name(),
+                               entry.getKey().clazz().getSimpleName(),
+                               entry.getValue()))
+                       .collect(Collectors.toList());
     }
 
     @Override
