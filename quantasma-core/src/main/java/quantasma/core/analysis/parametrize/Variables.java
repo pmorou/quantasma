@@ -5,7 +5,7 @@ import java.util.Map;
 import java.util.NoSuchElementException;
 import java.util.function.Function;
 
-public class Variables<P extends Enum & Parameter> {
+public class Variables<P extends Enum & Parameterizable> {
 
     private final Map<String, Variable<?>> variablesByLabel = new LinkedHashMap<>();
 
@@ -87,11 +87,11 @@ public class Variables<P extends Enum & Parameter> {
         return definition.apply(this);
     }
 
-    public Parameters getParameters() {
+    public Values getValues() {
         return variablesByLabel.entrySet()
                                .stream()
-                               .reduce(Parameters.from((Class<P>) parameterClass),
+                               .reduce(Values.of((Class<P>) parameterClass),
                                        (p, entry) -> p.add(entry.getKey(), entry.getValue().value()),
-                                       Parameters::addAll);
+                                       Values::addAll);
     }
 }

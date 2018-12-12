@@ -7,10 +7,10 @@ import quantasma.core.Context;
 import quantasma.core.NullOrderService;
 import quantasma.core.TradeEngine;
 import quantasma.core.TradeStrategy;
-import quantasma.core.analysis.parametrize.Parameters;
+import quantasma.core.analysis.parametrize.Values;
 import quantasma.core.timeseries.MultipleTimeSeriesBuilder;
 import quantasma.core.timeseries.TimeSeriesDefinition;
-import quantasma.examples.RSIStrategy.ParameterList;
+import quantasma.examples.RSIStrategy.Parameter;
 
 import java.time.ZonedDateTime;
 
@@ -34,12 +34,12 @@ public class TradeAppExample {
                 .build();
 
         final TradeStrategy rsiStrategy = RSIStrategy.buildBullish(context,
-                                                                   Parameters.from(ParameterList.class)
-                                                                             // String and Enum are allowed
-                                                                             .add(ParameterList.TRADE_SYMBOL, "EURUSD")
-                                                                             .add(ParameterList.RSI_PERIOD, 14)
-                                                                             .add(ParameterList.RSI_LOWER_BOUND, 30)
-                                                                             .add(ParameterList.RSI_UPPER_BOUND, 70));
+                                                                   Values.of(Parameter.class)
+                                                                         // String and Enum are allowed
+                                                                         .add(Parameter.TRADE_SYMBOL, "EURUSD")
+                                                                         .add(Parameter.RSI_PERIOD, 14)
+                                                                         .add(Parameter.RSI_LOWER_BOUND, 30)
+                                                                         .add(Parameter.RSI_UPPER_BOUND, 70));
 
         // Only registered strategies are given market data
         context.getStrategyControl().register(rsiStrategy);

@@ -1,6 +1,6 @@
 package quantasma.core.analysis.parametrize;
 
-public interface Parameter {
+public interface Parameterizable {
 
     String name();
 

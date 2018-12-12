@@ -7,7 +7,7 @@ import org.ta4j.core.Rule;
 import org.ta4j.core.Strategy;
 import org.ta4j.core.num.Num;
 import org.ta4j.core.num.PrecisionNum;
-import quantasma.core.analysis.parametrize.Parameters;
+import quantasma.core.analysis.parametrize.Values;
 
 import java.util.Objects;
 import java.util.function.Function;
@@ -15,7 +15,7 @@ import java.util.function.Function;
 public class BaseTradeStrategy extends BaseStrategy implements TradeStrategy {
     private final Context context;
     private final Function<Number, Num> numFunction;
-    private final Parameters parameters;
+    private final Values<?> parameterValues;
 
     private String tradeSymbol;
     private Num amount;
@@ -26,12 +26,12 @@ public class BaseTradeStrategy extends BaseStrategy implements TradeStrategy {
         this.tradeSymbol = Objects.requireNonNull(builder.getTradeSymbol());
         this.numFunction = Objects.requireNonNull(builder.getNumFunction());
         this.amount = numFunction.apply(builder.getAmount());
-        this.parameters = builder.getParameters();
+        this.parameterValues = builder.getParametersValues();
     }
 
     @Override
     public TradeStrategy opposite() {
-        return new Builder<>(context, tradeSymbol, getExitRule(), getEntryRule(), parameters)
+        return new Builder<>(context, tradeSymbol, getExitRule(), getEntryRule(), parameterValues)
                 .withName("opposite(" + getName() + ")")
                 .withUnstablePeriod(getUnstablePeriod())
                 .build();
@@ -39,7 +39,7 @@ public class BaseTradeStrategy extends BaseStrategy implements TradeStrategy {
 
     @Override
     public TradeStrategy and(Strategy strategy) {
-        return new Builder<>(context, tradeSymbol, getEntryRule().and(strategy.getEntryRule()), getExitRule().and(strategy.getExitRule()), parameters)
+        return new Builder<>(context, tradeSymbol, getEntryRule().and(strategy.getEntryRule()), getExitRule().and(strategy.getExitRule()), parameterValues)
                 .withName("and(" + getName() + "," + strategy.getName() + ")")
                 .withUnstablePeriod(Math.max(getUnstablePeriod(), strategy.getUnstablePeriod()))
                 .build();
@@ -47,7 +47,7 @@ public class BaseTradeStrategy extends BaseStrategy implements TradeStrategy {
 
     @Override
     public TradeStrategy and(String name, Strategy strategy, int unstablePeriod) {
-        return new Builder<>(context, tradeSymbol, getEntryRule().and(strategy.getEntryRule()), getExitRule().and(strategy.getExitRule()), parameters)
+        return new Builder<>(context, tradeSymbol, getEntryRule().and(strategy.getEntryRule()), getExitRule().and(strategy.getExitRule()), parameterValues)
                 .withName(name)
                 .withUnstablePeriod(unstablePeriod)
                 .build();
@@ -55,7 +55,7 @@ public class BaseTradeStrategy extends BaseStrategy implements TradeStrategy {
 
     @Override
     public TradeStrategy or(Strategy strategy) {
-        return new Builder<>(context, tradeSymbol, getEntryRule().or(strategy.getEntryRule()), getExitRule().or(strategy.getExitRule()), parameters)
+        return new Builder<>(context, tradeSymbol, getEntryRule().or(strategy.getEntryRule()), getExitRule().or(strategy.getExitRule()), parameterValues)
                 .withName("or(" + getName() + "," + strategy.getName() + ")")
                 .withUnstablePeriod(Math.max(getUnstablePeriod(), strategy.getUnstablePeriod()))
                 .build();
@@ -63,7 +63,7 @@ public class BaseTradeStrategy extends BaseStrategy implements TradeStrategy {
 
     @Override
     public TradeStrategy or(String name, Strategy strategy, int unstablePeriod) {
-        return new Builder<>(context, tradeSymbol, getEntryRule().or(strategy.getEntryRule()), getExitRule().or(strategy.getExitRule()), parameters)
+        return new Builder<>(context, tradeSymbol, getEntryRule().or(strategy.getEntryRule()), getExitRule().or(strategy.getExitRule()), parameterValues)
                 .withName(name)
                 .withUnstablePeriod(unstablePeriod)
                 .build();
@@ -98,8 +98,8 @@ public class BaseTradeStrategy extends BaseStrategy implements TradeStrategy {
     }
 
     @Override
-    public Parameters getParameters() {
-        return parameters;
+    public Values<?> getParameterValues() {
+        return parameterValues;
     }
 
     protected Function<Number, Num> getNumFunction() {
@@ -118,19 +118,19 @@ public class BaseTradeStrategy extends BaseStrategy implements TradeStrategy {
         private final String tradeSymbol;
         private final Rule entryRule;
         private final Rule exitRule;
-        private final Parameters parameters;
+        private final Values<?> parametersValues;
 
         private String name = "unamed_series";
         private int unstablePeriod;
         private Function<Number, Num> numFunction = PrecisionNum::valueOf;
         private int amount = 100;
 
-        public Builder(Context context, String tradeSymbol, Rule entryRule, Rule exitRule, Parameters parameters) {
+        public Builder(Context context, String tradeSymbol, Rule entryRule, Rule exitRule, Values<?> parameterValues) {
             this.context = Objects.requireNonNull(context);
             this.tradeSymbol = Objects.requireNonNull(tradeSymbol);
             this.entryRule = Objects.requireNonNull(entryRule);
             this.exitRule = Objects.requireNonNull(exitRule);
-            this.parameters = parameters;
+            this.parametersValues = Objects.requireNonNull(parameterValues);
         }
 
         public T withName(String name) {

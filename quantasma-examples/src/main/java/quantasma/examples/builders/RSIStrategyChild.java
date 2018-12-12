@@ -4,8 +4,8 @@ import org.ta4j.core.Rule;
 import org.ta4j.core.TradingRecord;
 import quantasma.core.BaseContext;
 import quantasma.core.Context;
-import quantasma.core.analysis.parametrize.Parameter;
-import quantasma.core.analysis.parametrize.Parameters;
+import quantasma.core.analysis.parametrize.Parameterizable;
+import quantasma.core.analysis.parametrize.Values;
 import quantasma.examples.RSIStrategy;
 
 public class RSIStrategyChild extends RSIStrategy {
@@ -18,8 +18,8 @@ public class RSIStrategyChild extends RSIStrategy {
      */
     public static class Builder<T extends Builder<T, R>, R extends RSIStrategyChild> extends RSIStrategy.Builder<T, R> {
 
-        public Builder(Context context, String tradeSymbol, Rule entryRule, Rule exitRule, Parameters parameters) {
-            super(context, tradeSymbol, entryRule, exitRule, parameters);
+        public Builder(Context context, String tradeSymbol, Rule entryRule, Rule exitRule, Values<?> parameterValues) {
+            super(context, tradeSymbol, entryRule, exitRule, parameterValues);
         }
 
         public T withChild() {
@@ -37,12 +37,12 @@ public class RSIStrategyChild extends RSIStrategy {
         }
     }
 
-    public enum ParameterList implements Parameter {
+    public enum Parameter implements Parameterizable {
         UNDEFINED(Object.class);
 
         private final Class<?> clazz;
 
-        ParameterList(Class<?> clazz) {
+        Parameter(Class<?> clazz) {
             this.clazz = clazz;
         }
 
@@ -62,7 +62,7 @@ public class RSIStrategyChild extends RSIStrategy {
     public static void main(String[] args) {
         final Context context = new BaseContext.Builder().build();
 
-        final RSIStrategyChild example = new RSIStrategyChild.Builder<>(context, "symbol", new EmptyRule(), new EmptyRule(), Parameters.from(ParameterList.class))
+        final RSIStrategyChild example = new RSIStrategyChild.Builder<>(context, "symbol", new EmptyRule(), new EmptyRule(), Values.of(Parameter.class))
                 .withName("from mother of all builders")
                 .withChild() // Current builder, type preserved
                 .build();

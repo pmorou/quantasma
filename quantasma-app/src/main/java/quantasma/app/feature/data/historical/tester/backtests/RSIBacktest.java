@@ -18,7 +18,7 @@ import quantasma.core.timeseries.MultipleTimeSeriesBuilder;
 import quantasma.core.timeseries.ReflectionManualIndexTimeSeries;
 import quantasma.core.timeseries.TimeSeriesDefinition;
 import quantasma.examples.RSIStrategy;
-import quantasma.examples.RSIStrategy.ParameterList;
+import quantasma.examples.RSIStrategy.Parameter;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -27,7 +27,7 @@ import java.util.List;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
-import static quantasma.core.analysis.parametrize.Ints.range;
+import static quantasma.core.analysis.parametrize.generators.Ints.range;
 
 @Component
 public class RSIBacktest implements StrategyBacktest {
@@ -55,12 +55,12 @@ public class RSIBacktest implements StrategyBacktest {
                 .withMarketData(testMarketData)
                 .build();
 
-        final Function<Variables<ParameterList>, TradeStrategy> recipe = var -> {
-            var._int(ParameterList.RSI_PERIOD).values(10, 14);
-            var._int(ParameterList.RSI_LOWER_BOUND).with(range(10, 40, 10));
-            var._int(ParameterList.RSI_UPPER_BOUND).with(range(90, 60, 10));
-            var._String(ParameterList.TRADE_SYMBOL).with("EURUSD");
-            return RSIStrategy.buildBullish(context, var.getParameters());
+        final Function<Variables<Parameter>, TradeStrategy> recipe = var -> {
+            var._int(Parameter.RSI_PERIOD).values(10, 14);
+            var._int(Parameter.RSI_LOWER_BOUND).with(range(10, 40, 10));
+            var._int(Parameter.RSI_UPPER_BOUND).with(range(90, 60, 10));
+            var._String(Parameter.TRADE_SYMBOL).with("EURUSD");
+            return RSIStrategy.buildBullish(context, var.getValues());
         };
 
         // implement strategies: close, open, 4 ticks ohlc
@@ -74,7 +74,7 @@ public class RSIBacktest implements StrategyBacktest {
         return Producer.from(recipe)
                        .stream()
                        .map(tradeStrategy -> new TradeScenario(testManager.getMainTimeSeries(tradeStrategy),
-                                                               tradeStrategy.getParameters(),
+                                                               tradeStrategy.getParameterValues(),
                                                                testManager.run(tradeStrategy, Order.OrderType.BUY)))
                        .collect(Collectors.toList());
     }

@@ -12,7 +12,7 @@ import quantasma.core.Context;
 import quantasma.core.StrategyControl;
 import quantasma.core.TradeEngine;
 import quantasma.core.TradeStrategy;
-import quantasma.core.analysis.parametrize.Parameters;
+import quantasma.core.analysis.parametrize.Values;
 import quantasma.examples.RSIStrategy;
 import quantasma.integrations.data.provider.LiveDataProvider;
 import quantasma.integrations.data.provider.dukascopy.DukascopyApiClient;
@@ -28,12 +28,13 @@ public class IntegrationServiceConfig {
 
     @Bean
     public TradeStrategy rsiStrategy(StrategyControl strategyControl, Context context) {
-        final Parameters parameters = Parameters.from(RSIStrategy.ParameterList.class)
-                .add(RSIStrategy.ParameterList.TRADE_SYMBOL, "EURUSD")
-                .add(RSIStrategy.ParameterList.RSI_PERIOD, 14)
-                .add(RSIStrategy.ParameterList.RSI_LOWER_BOUND, 30)
-                .add(RSIStrategy.ParameterList.RSI_UPPER_BOUND, 70);
-        final TradeStrategy strategy = RSIStrategy.buildBullish(context, parameters);
+        final Values<RSIStrategy.Parameter> parameterValues =
+                Values.of(RSIStrategy.Parameter.class)
+                      .add(RSIStrategy.Parameter.TRADE_SYMBOL, "EURUSD")
+                      .add(RSIStrategy.Parameter.RSI_PERIOD, 14)
+                      .add(RSIStrategy.Parameter.RSI_LOWER_BOUND, 30)
+                      .add(RSIStrategy.Parameter.RSI_UPPER_BOUND, 70);
+        final TradeStrategy strategy = RSIStrategy.buildBullish(context, parameterValues);
         strategyControl.register(strategy);
         return strategy;
     }

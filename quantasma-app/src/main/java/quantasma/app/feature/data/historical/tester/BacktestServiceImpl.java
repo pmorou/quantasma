@@ -45,7 +45,7 @@ public class BacktestServiceImpl implements BacktestService {
             final Num profit = new ProfitLossPipsCriterion(0.0001).calculate(timeSeries, tradingRecord);
             final Num avgProfit = profit.dividedBy(timeSeries.numOf(tradingRecord.getTrades().size()));
 
-            log.info("Parameters: [{}]", tradeScenario.getParameters().getParameters());
+            log.info("Parameters: [{}]", tradeScenario.getValues().getValuesByParameter());
             log.info(String.format("%9s | %9s | %9s | %11s | %9s | %9s",
                                    "p/l",
                                    "avg-p/l",

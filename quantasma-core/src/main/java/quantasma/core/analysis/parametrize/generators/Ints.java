@@ -1,4 +1,4 @@
-package quantasma.core.analysis.parametrize;
+package quantasma.core.analysis.parametrize.generators;
 
 import java.util.ArrayList;
 import java.util.List;

@@ -8,11 +8,11 @@ import quantasma.core.Context;
 import quantasma.core.TestManager;
 import quantasma.core.TestMarketData;
 import quantasma.core.TradeStrategy;
-import quantasma.core.analysis.parametrize.Parameters;
+import quantasma.core.analysis.parametrize.Values;
 import quantasma.core.timeseries.MultipleTimeSeriesBuilder;
 import quantasma.core.timeseries.ReflectionManualIndexTimeSeries;
 import quantasma.core.timeseries.TimeSeriesDefinition;
-import quantasma.examples.RSIStrategy.ParameterList;
+import quantasma.examples.RSIStrategy.Parameter;
 
 public class BacktestExample {
     public static void main(String[] args) {
@@ -30,11 +30,11 @@ public class BacktestExample {
                 .build();
 
         final TradeStrategy rsiStrategy = RSIStrategy.buildBullish(context,
-                                                                   Parameters.from(ParameterList.class)
-                                                                             .add(ParameterList.TRADE_SYMBOL, "EURUSD")
-                                                                             .add(ParameterList.RSI_PERIOD, 14)
-                                                                             .add(ParameterList.RSI_LOWER_BOUND, 30)
-                                                                             .add(ParameterList.RSI_UPPER_BOUND, 70));
+                                                                   Values.of(Parameter.class)
+                                                                         .add(Parameter.TRADE_SYMBOL, "EURUSD")
+                                                                         .add(Parameter.RSI_PERIOD, 14)
+                                                                         .add(Parameter.RSI_LOWER_BOUND, 30)
+                                                                         .add(Parameter.RSI_UPPER_BOUND, 70));
 
         // Feed historical data by calling testMarketData.add()
 

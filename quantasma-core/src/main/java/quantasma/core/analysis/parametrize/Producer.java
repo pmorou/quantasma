@@ -13,11 +13,11 @@ public interface Producer<T> {
 
     Iterator<T> iterator();
 
-    static <T, P extends Enum & Parameter> Producer<T> from(Function<Variables<P>, T> recipe) {
+    static <T, P extends Enum & Parameterizable> Producer<T> from(Function<Variables<P>, T> recipe) {
         return new SimpleProducer<>(recipe);
     }
 
-    class SimpleProducer<T, P extends Enum & Parameter> implements Producer<T> {
+    class SimpleProducer<T, P extends Enum & Parameterizable> implements Producer<T> {
         private final Function<Variables<P>, T> recipe;
 
         private SimpleProducer(Function<Variables<P>, T> recipe) {
