@@ -87,7 +87,7 @@ public class Variables<P extends Enum & Parameterizable> {
         return definition.apply(this);
     }
 
-    public Values getValues() {
+    public Values<P> getParameterValues() {
         return variablesByLabel.entrySet()
                                .stream()
                                .reduce(Values.of((Class<P>) parameterClass),

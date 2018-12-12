@@ -60,7 +60,7 @@ public class RSIBacktest implements StrategyBacktest {
             var._int(Parameter.RSI_LOWER_BOUND).with(range(10, 40, 10));
             var._int(Parameter.RSI_UPPER_BOUND).with(range(90, 60, 10));
             var._String(Parameter.TRADE_SYMBOL).with("EURUSD");
-            return RSIStrategy.buildBullish(context, var.getValues());
+            return RSIStrategy.buildBullish(context, var.getParameterValues());
         };
 
         // implement strategies: close, open, 4 ticks ohlc
