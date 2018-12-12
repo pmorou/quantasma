@@ -3,7 +3,7 @@ package quantasma.app.service;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import quantasma.core.StrategyControl;
-import quantasma.core.StrategyInfo;
+import quantasma.core.StrategyDescription;
 
 import java.util.Set;
 
@@ -18,7 +18,7 @@ public class StrategyServiceImpl implements StrategyService {
     }
 
     @Override
-    public Set<StrategyInfo> all() {
+    public Set<StrategyDescription> all() {
         return strategyControl.registeredStrategies();
     }
 

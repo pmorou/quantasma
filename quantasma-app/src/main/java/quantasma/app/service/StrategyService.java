@@ -1,11 +1,11 @@
 package quantasma.app.service;
 
-import quantasma.core.StrategyInfo;
+import quantasma.core.StrategyDescription;
 
 import java.util.Set;
 
 public interface StrategyService {
-    Set<StrategyInfo> all();
+    Set<StrategyDescription> all();
 
     void activate(Long id);
 

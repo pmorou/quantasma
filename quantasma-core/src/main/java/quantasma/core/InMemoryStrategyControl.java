@@ -34,12 +34,12 @@ public class InMemoryStrategyControl implements StrategyControl {
     }
 
     @Override
-    public Set<StrategyInfo> registeredStrategies() {
+    public Set<StrategyDescription> registeredStrategies() {
         return strategies.entrySet()
                          .stream()
-                         .map(entry -> new StrategyInfo(entry.getKey(),
-                                                        entry.getValue().getStrategy().getName(),
-                                                        entry.getValue().isActive()))
+                         .map(entry -> new StrategyDescription(entry.getKey(),
+                                                               entry.getValue().getStrategy().getName(),
+                                                               entry.getValue().isActive())
                          .collect(Collectors.toSet());
     }
 
