@@ -6,7 +6,6 @@ import org.ta4j.core.Order;
 import org.ta4j.core.Rule;
 import org.ta4j.core.Strategy;
 import org.ta4j.core.TradingRecord;
-import org.ta4j.core.num.DoubleNum;
 import org.ta4j.core.num.Num;
 import quantasma.core.analysis.parametrize.Parameters;
 import quantasma.core.timeseries.MainTimeSeries;
