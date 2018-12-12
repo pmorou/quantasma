@@ -53,11 +53,12 @@ final Context context = new BaseContext.Builder()
         .withOrderService(new NullOrderService())
         .build();
 
-final TradeStrategy rsiStrategy = RSIStrategy.buildBullish(context, new Parameters()
-        .add("tradeSymbol", "EURUSD")
-        .add("rsiPeriod", 14)
-        .add("rsiLowerBound", 30)
-        .add("rsiUpperBound", 70));
+final TradeStrategy rsiStrategy = RSIStrategy.buildBullish(context,
+                                                           Parameters.instance(ParameterList.class)
+                                                                     .add(ParameterList.TRADE_SYMBOL, "EURUSD")
+                                                                     .add(ParameterList.RSI_PERIOD, 14)
+                                                                     .add(ParameterList.RSI_LOWER_BOUND, 30)
+                                                                     .add(ParameterList.RSI_UPPER_BOUND, 70));
 
 // Only registered strategies are given market data
 context.getStrategyControl().register(rsiStrategy);
