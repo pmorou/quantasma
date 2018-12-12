@@ -57,27 +57,27 @@ public class RSIStrategy extends BaseTradeStrategy {
         return openedPositionsCounter > 0;
     }
 
-    public static RSIStrategy buildBullish(Context context, Values<Parameter> values)  {
-        final Number rsiLowerBound = (Number) values.get(Parameter.RSI_LOWER_BOUND);
-        final Number rsiUpperBound = (Number) values.get(Parameter.RSI_UPPER_BOUND);
-        final RSIIndicator rsi = createRSIIndicator(context, values);
+    public static RSIStrategy buildBullish(Context context, Values<Parameter> parameterValues)  {
+        final Number rsiLowerBound = (Number) parameterValues.get(Parameter.RSI_LOWER_BOUND);
+        final Number rsiUpperBound = (Number) parameterValues.get(Parameter.RSI_UPPER_BOUND);
+        final RSIIndicator rsi = createRSIIndicator(context, parameterValues);
         return new Builder<>(context,
-                             (String) values.get(Parameter.TRADE_SYMBOL),
+                             (String) parameterValues.get(Parameter.TRADE_SYMBOL),
                              new CrossedUpIndicatorRule(rsi, rsiLowerBound),
                              new CrossedDownIndicatorRule(rsi, rsiUpperBound),
-                             values)
+                             parameterValues)
                 .withName(String.format("bullish_rsi_strategy_%s-%s", rsiLowerBound, rsiUpperBound))
-                .withUnstablePeriod((Integer) values.get(Parameter.RSI_PERIOD))
+                .withUnstablePeriod((Integer) parameterValues.get(Parameter.RSI_PERIOD))
                 .withAmount(1000)
                 .build();
     }
 
-    private static RSIIndicator createRSIIndicator(Context context, Values<Parameter> values) {
+    private static RSIIndicator createRSIIndicator(Context context, Values<Parameter> parameterValues) {
         final TimeSeries timeSeries = context.getDataService().getMarketData()
-                                             .of((String) values.get(Parameter.TRADE_SYMBOL))
+                                             .of((String) parameterValues.get(Parameter.TRADE_SYMBOL))
                                              .getTimeSeries(BarPeriod.M1);
         final ClosePriceIndicator closePrice = new ClosePriceIndicator(timeSeries);
-        return new RSIIndicator(closePrice, (Integer) values.get(Parameter.RSI_PERIOD));
+        return new RSIIndicator(closePrice, (Integer) parameterValues.get(Parameter.RSI_PERIOD));
     }
 
     @Override
