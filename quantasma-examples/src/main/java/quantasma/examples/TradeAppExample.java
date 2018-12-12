@@ -7,7 +7,6 @@ import quantasma.core.Context;
 import quantasma.core.NullOrderService;
 import quantasma.core.TradeEngine;
 import quantasma.core.TradeStrategy;
-import quantasma.core.analysis.parametrize.Values;
 import quantasma.core.timeseries.MultipleTimeSeriesBuilder;
 import quantasma.core.timeseries.TimeSeriesDefinition;
 import quantasma.examples.RSIStrategy.Parameter;
@@ -34,8 +33,8 @@ public class TradeAppExample {
                 .build();
 
         final TradeStrategy rsiStrategy = RSIStrategy.buildBullish(context,
-                                                                   Values.of(Parameter.class)
-                                                                         // String and Enum are allowed
+                                                                   parameterValues -> parameterValues
+                                                                         // Strings/Enums are allowed
                                                                          .add(Parameter.TRADE_SYMBOL, "EURUSD")
                                                                          .add(Parameter.RSI_PERIOD, 14)
                                                                          .add(Parameter.RSI_LOWER_BOUND, 30)

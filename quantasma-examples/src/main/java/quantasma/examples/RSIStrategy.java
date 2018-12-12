@@ -16,6 +16,8 @@ import quantasma.core.analysis.parametrize.Values;
 import quantasma.core.order.CloseMarkerOrder;
 import quantasma.core.order.OpenMarketOrder;
 
+import java.util.function.UnaryOperator;
+
 @Slf4j
 public class RSIStrategy extends BaseTradeStrategy {
 
@@ -70,6 +72,11 @@ public class RSIStrategy extends BaseTradeStrategy {
                 .withUnstablePeriod((Integer) parameterValues.get(Parameter.RSI_PERIOD))
                 .withAmount(1000)
                 .build();
+    }
+
+    public static RSIStrategy buildBullish(Context context, UnaryOperator<Values<Parameter>> parameterValuesBuilder) {
+        final Values<Parameter> parameterValues = parameterValuesBuilder.apply(Values.of(Parameter.class));
+        return buildBullish(context, parameterValues);
     }
 
     private static RSIIndicator createRSIIndicator(Context context, Values<Parameter> parameterValues) {
