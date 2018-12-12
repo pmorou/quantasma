@@ -118,9 +118,9 @@ public class RSIStrategy extends BaseTradeStrategy {
      * Allowed parametrization settings
      */
     public enum Parameter implements Parameterizable {
-        RSI_LOWER_BOUND(Number.class),
-        RSI_UPPER_BOUND(Number.class),
-        RSI_PERIOD(Number.class),
+        RSI_LOWER_BOUND(Integer.class),
+        RSI_UPPER_BOUND(Integer.class),
+        RSI_PERIOD(Integer.class),
         TRADE_SYMBOL(String.class);
 
         private final Class<?> clazz;
