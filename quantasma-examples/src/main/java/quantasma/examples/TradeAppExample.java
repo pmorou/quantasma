@@ -10,6 +10,7 @@ import quantasma.core.TradeStrategy;
 import quantasma.core.analysis.parametrize.Parameters;
 import quantasma.core.timeseries.MultipleTimeSeriesBuilder;
 import quantasma.core.timeseries.TimeSeriesDefinition;
+import quantasma.examples.RSIStrategy.ParameterList;
 
 import java.time.ZonedDateTime;
 
@@ -32,11 +33,12 @@ public class TradeAppExample {
                 .withOrderService(new NullOrderService())
                 .build();
 
-        final TradeStrategy rsiStrategy = RSIStrategy.buildBullish(context, new Parameters()
-                .add("tradeSymbol", "EURUSD")
-                .add("rsiPeriod", 14)
-                .add("rsiLowerBound", 30)
-                .add("rsiUpperBound", 70));
+        final TradeStrategy rsiStrategy = RSIStrategy.buildBullish(context,
+                                                                   Parameters.instance(ParameterList.class)
+                                                                             .add(ParameterList.TRADE_SYMBOL, "EURUSD")
+                                                                             .add(ParameterList.RSI_PERIOD, 14)
+                                                                             .add(ParameterList.RSI_LOWER_BOUND, 30)
+                                                                             .add(ParameterList.RSI_UPPER_BOUND, 70));
 
         // Only registered strategies are given market data
         context.getStrategyControl().register(rsiStrategy);
@@ -50,4 +52,5 @@ public class TradeAppExample {
         tradeEngine.process("EURJPY", ZonedDateTime.now(), 129.653, 129.663);
         // end::tradeAppExample[]
     }
+
 }

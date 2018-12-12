@@ -11,6 +11,7 @@ import org.ta4j.core.trading.rules.CrossedUpIndicatorRule;
 import quantasma.core.BarPeriod;
 import quantasma.core.BaseTradeStrategy;
 import quantasma.core.Context;
+import quantasma.core.analysis.parametrize.Parameter;
 import quantasma.core.analysis.parametrize.Parameters;
 import quantasma.core.order.CloseMarkerOrder;
 import quantasma.core.order.OpenMarketOrder;
@@ -56,27 +57,27 @@ public final class RSIStrategy extends BaseTradeStrategy {
         return openedPositionsCounter > 0;
     }
 
-    public static RSIStrategy buildBullish(Context context, Parameters parameters) {
-        final Number rsiLowerBound = (Number) parameters.get("rsiLowerBound");
-        final Number rsiUpperBound = (Number) parameters.get("rsiUpperBound");
+    public static RSIStrategy buildBullish(Context context, Parameters parameters)  {
+        final Number rsiLowerBound = (Number) parameters.get(ParameterList.RSI_LOWER_BOUND);
+        final Number rsiUpperBound = (Number) parameters.get(ParameterList.RSI_UPPER_BOUND);
         final RSIIndicator rsi = createRSIIndicator(context, parameters);
         return new Builder<>(context,
-                             (String) parameters.get("tradeSymbol"),
+                             (String) parameters.get(ParameterList.TRADE_SYMBOL),
                              new CrossedUpIndicatorRule(rsi, rsiLowerBound),
                              new CrossedDownIndicatorRule(rsi, rsiUpperBound),
                              parameters)
                 .withName(String.format("bullish_rsi_strategy_%s-%s", rsiLowerBound, rsiUpperBound))
-                .withUnstablePeriod((Integer) parameters.get("rsiPeriod"))
+                .withUnstablePeriod((Integer) parameters.get(ParameterList.RSI_PERIOD))
                 .withAmount(1000)
                 .build();
     }
 
     private static RSIIndicator createRSIIndicator(Context context, Parameters parameters) {
         final TimeSeries timeSeries = context.getDataService().getMarketData()
-                                             .of((String) parameters.get("tradeSymbol"))
+                                             .of((String) parameters.get(ParameterList.TRADE_SYMBOL))
                                              .getTimeSeries(BarPeriod.M1);
         final ClosePriceIndicator closePrice = new ClosePriceIndicator(timeSeries);
-        return new RSIIndicator(closePrice, (Integer) parameters.get("rsiPeriod"));
+        return new RSIIndicator(closePrice, (Integer) parameters.get(ParameterList.RSI_PERIOD));
     }
 
     /**
@@ -100,4 +101,26 @@ public final class RSIStrategy extends BaseTradeStrategy {
             return (R) new RSIStrategy(this);
         }
     }
+
+    /**
+     * Allowed parametrization settings
+     */
+    public enum ParameterList implements Parameter {
+        RSI_LOWER_BOUND(Number.class),
+        RSI_UPPER_BOUND(Number.class),
+        RSI_PERIOD(Number.class),
+        TRADE_SYMBOL(String.class);
+
+        private final Class<?> clazz;
+
+        ParameterList(Class<?> clazz) {
+            this.clazz = clazz;
+        }
+
+        @Override
+        public Class<?> clazz() {
+            return clazz;
+        }
+    }
+
 }

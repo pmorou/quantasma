@@ -13,6 +13,7 @@ import quantasma.core.analysis.parametrize.Variables;
 import quantasma.core.timeseries.MultipleTimeSeriesBuilder;
 import quantasma.core.timeseries.ReflectionManualIndexTimeSeries;
 import quantasma.core.timeseries.TimeSeriesDefinition;
+import quantasma.examples.RSIStrategy.ParameterList;
 
 import java.util.function.Function;
 
@@ -33,11 +34,11 @@ public class ParametrizedBacktestExample {
                 .withMarketData(testMarketData)
                 .build();
 
-        final Function<Variables, TradeStrategy> recipe = var -> {
-            var._int("rsiPeriod").values(10, 14);
-            var._int("rsiLowerBound").with(range(10, 40, 10));
-            var._int("rsiUpperBound").with(range(90, 60, 10));
-            var._String("tradeSymbol").with("EURUSD");
+        final Function<Variables<ParameterList>, TradeStrategy> recipe = var -> {
+            var._int(ParameterList.RSI_PERIOD).values(10, 14);
+            var._int(ParameterList.RSI_LOWER_BOUND).with(range(10, 40, 10));
+            var._int(ParameterList.RSI_UPPER_BOUND).with(range(90, 60, 10));
+            var._String(ParameterList.TRADE_SYMBOL).with("EURUSD");
             return RSIStrategy.buildBullish(context, var.getParameters());
         };
 

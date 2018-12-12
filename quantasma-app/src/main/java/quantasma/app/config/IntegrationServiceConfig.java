@@ -28,11 +28,11 @@ public class IntegrationServiceConfig {
 
     @Bean
     public TradeStrategy rsiStrategy(StrategyControl strategyControl, Context context) {
-        final Parameters parameters = new Parameters()
-                .add("tradeSymbol", "EURUSD")
-                .add("rsiPeriod", 14)
-                .add("rsiLowerBound", 30)
-                .add("rsiUpperBound", 70);
+        final Parameters parameters = Parameters.instance(RSIStrategy.ParameterList.class)
+                .add(RSIStrategy.ParameterList.TRADE_SYMBOL, "EURUSD")
+                .add(RSIStrategy.ParameterList.RSI_PERIOD, 14)
+                .add(RSIStrategy.ParameterList.RSI_LOWER_BOUND, 30)
+                .add(RSIStrategy.ParameterList.RSI_UPPER_BOUND, 70);
         final TradeStrategy strategy = RSIStrategy.buildBullish(context, parameters);
         strategyControl.register(strategy);
         return strategy;

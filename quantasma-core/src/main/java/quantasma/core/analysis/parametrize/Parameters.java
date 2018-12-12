@@ -1,31 +1,54 @@
 package quantasma.core.analysis.parametrize;
 
-import lombok.Data;
+import lombok.Getter;
 
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
 
-@Data
-public class Parameters {
-    Map<String, Object> parameters = new HashMap<>();
+public class Parameters<T extends Enum & Parameter> {
+    private final Class<T> clazz;
 
-    public Parameters add(String key, Object value) {
+    @Getter
+    Map<T, Object> parameters = new HashMap<>();
+
+    public Parameters(Class<T> clazz) {
+        this.clazz = clazz;
+    }
+
+    public static <T extends Enum & Parameter> Parameters<T> instance(Class<T> clazz) {
+        return new Parameters<>(clazz);
+    }
+
+    public Parameters<T> add(T key, Object value) {
         parameters.put(key, value);
         return this;
     }
 
-    public Parameters addAll(Parameters parameters) {
-        this.parameters.putAll(parameters.parameters);
+    public Parameters<T> add(String key, Object value) {
+        add(getEnum(key), value);
         return this;
     }
 
-    public Set<String> keys() {
+    private T getEnum(String key) {
+        return (T) Enum.valueOf(clazz, key);
+    }
+
+    public Parameters<T> addAll(Parameters<T> parameters) {
+        this.parameters.putAll(parameters.getParameters());
+        return this;
+    }
+
+    public Set<T> keys() {
         return parameters.keySet();
     }
 
+    public Object get(T parameter) {
+        return parameters.get(parameter);
+    }
+
     public Object get(String key) {
-        return parameters.get(key);
+        return parameters.get(getEnum(key));
     }
 
 }

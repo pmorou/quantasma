@@ -4,6 +4,7 @@ import org.ta4j.core.Rule;
 import org.ta4j.core.TradingRecord;
 import quantasma.core.BaseContext;
 import quantasma.core.Context;
+import quantasma.core.analysis.parametrize.Parameter;
 import quantasma.core.analysis.parametrize.Parameters;
 import quantasma.examples.RSIStrategy;
 
@@ -36,6 +37,21 @@ public class RSIStrategyChild extends RSIStrategy {
         }
     }
 
+    public enum ParameterList implements Parameter {
+        UNDEFINED(Object.class);
+
+        private final Class<?> clazz;
+
+        ParameterList(Class<?> clazz) {
+            this.clazz = clazz;
+        }
+
+        @Override
+        public Class<?> clazz() {
+            return clazz;
+        }
+    }
+
     protected static class EmptyRule implements Rule {
         @Override
         public boolean isSatisfied(int index, TradingRecord tradingRecord) {
@@ -46,7 +62,7 @@ public class RSIStrategyChild extends RSIStrategy {
     public static void main(String[] args) {
         final Context context = new BaseContext.Builder().build();
 
-        final RSIStrategyChild example = new RSIStrategyChild.Builder<>(context, "symbol", new EmptyRule(), new EmptyRule(), new Parameters())
+        final RSIStrategyChild example = new RSIStrategyChild.Builder<>(context, "symbol", new EmptyRule(), new EmptyRule(), Parameters.instance(ParameterList.class))
                 .withName("from mother of all builders")
                 .withChild() // Current builder, type preserved
                 .build();

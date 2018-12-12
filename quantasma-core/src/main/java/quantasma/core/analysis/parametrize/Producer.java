@@ -13,14 +13,14 @@ public interface Producer<T> {
 
     Iterator<T> iterator();
 
-    static <T> Producer<T> from(Function<Variables, T> recipe) {
+    static <T, P extends Enum & Parameter> Producer<T> from(Function<Variables<P>, T> recipe) {
         return new SimpleProducer<>(recipe);
     }
 
-    class SimpleProducer<T> implements Producer<T> {
-        private final Function<Variables, T> recipe;
+    class SimpleProducer<T, P extends Enum & Parameter> implements Producer<T> {
+        private final Function<Variables<P>, T> recipe;
 
-        private SimpleProducer(Function<Variables, T> recipe) {
+        private SimpleProducer(Function<Variables<P>, T> recipe) {
             this.recipe = recipe;
         }
 
@@ -32,7 +32,7 @@ public interface Producer<T> {
         @Override
         public Iterator<T> iterator() {
             return new Iterator<T>() {
-                final private Variables variables = new Variables();
+                final private Variables<P> variables = new Variables<>();
 
                 private boolean isIterating;
 

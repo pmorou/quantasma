@@ -12,6 +12,7 @@ import quantasma.core.analysis.parametrize.Parameters;
 import quantasma.core.timeseries.MultipleTimeSeriesBuilder;
 import quantasma.core.timeseries.ReflectionManualIndexTimeSeries;
 import quantasma.core.timeseries.TimeSeriesDefinition;
+import quantasma.examples.RSIStrategy.ParameterList;
 
 public class BacktestExample {
     public static void main(String[] args) {
@@ -28,11 +29,12 @@ public class BacktestExample {
                 .withMarketData(testMarketData)
                 .build();
 
-        final TradeStrategy rsiStrategy = RSIStrategy.buildBullish(context, new Parameters()
-                .add("tradeSymbol", "EURUSD")
-                .add("rsiPeriod", 14)
-                .add("rsiLowerBound", 30)
-                .add("rsiUpperBound", 70));
+        final TradeStrategy rsiStrategy = RSIStrategy.buildBullish(context,
+                                                                   Parameters.instance(ParameterList.class)
+                                                                             .add(ParameterList.TRADE_SYMBOL, "EURUSD")
+                                                                             .add(ParameterList.RSI_PERIOD, 14)
+                                                                             .add(ParameterList.RSI_LOWER_BOUND, 30)
+                                                                             .add(ParameterList.RSI_UPPER_BOUND, 70));
 
         // Feed historical data by calling testMarketData.add()
 
