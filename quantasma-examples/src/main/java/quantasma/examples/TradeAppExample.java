@@ -35,6 +35,7 @@ public class TradeAppExample {
 
         final TradeStrategy rsiStrategy = RSIStrategy.buildBullish(context,
                                                                    Parameters.from(ParameterList.class)
+                                                                             // String and Enum are allowed
                                                                              .add(ParameterList.TRADE_SYMBOL, "EURUSD")
                                                                              .add(ParameterList.RSI_PERIOD, 14)
                                                                              .add(ParameterList.RSI_LOWER_BOUND, 30)
