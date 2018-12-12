@@ -11,14 +11,14 @@ import java.util.stream.Collectors;
 
 public class InMemoryStrategyControl implements StrategyControl {
 
-    private final Map<Long, ControlledTradeStrategy> strategies = new HashMap<>();
+    private final Map<Long, StrategyStatus> strategies = new HashMap<>();
 
     @Override
     public void register(TradeStrategy strategy) {
         if (isAlreadyRegistered(strategy)) {
             throw new RuntimeException("Strategy already registered.");
         }
-        strategies.put(generateId(), new ControlledTradeStrategy(strategy, false));
+        strategies.put(generateId(), new StrategyStatus(strategy, false));
     }
 
     private boolean isAlreadyRegistered(TradeStrategy strategy) {
@@ -54,7 +54,7 @@ public class InMemoryStrategyControl implements StrategyControl {
 
     @Override
     public void disable(Long id) {
-        final ControlledTradeStrategy value = strategies.get(id);
+        final StrategyStatus value = strategies.get(id);
         if (value == null) {
             throw new RuntimeException(String.format("Strategy does not exist: [id: %s]", id));
         }
@@ -63,7 +63,7 @@ public class InMemoryStrategyControl implements StrategyControl {
 
     @Override
     public void enable(Long id) {
-        final ControlledTradeStrategy value = strategies.get(id);
+        final StrategyStatus value = strategies.get(id);
         if (value == null) {
             throw new RuntimeException(String.format("Strategy does not exist: [id: %s]", id));
         }
@@ -73,7 +73,7 @@ public class InMemoryStrategyControl implements StrategyControl {
     @Getter
     @Setter
     @AllArgsConstructor
-    private static class ControlledTradeStrategy {
+    private static class StrategyStatus {
         private TradeStrategy strategy;
         private boolean active;
     }
