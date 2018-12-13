@@ -1,9 +1,12 @@
 package quantasma.core.analysis.parametrize;
 
+import java.util.Arrays;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.NoSuchElementException;
+import java.util.Set;
 import java.util.function.Function;
+import java.util.stream.Collectors;
 
 public class Variables<P extends Enum & Parameterizable> {
 
@@ -93,5 +96,21 @@ public class Variables<P extends Enum & Parameterizable> {
                                .reduce(Values.of((Class<P>) parameterClass),
                                        (p, entry) -> p.add(entry.getKey(), entry.getValue().value()),
                                        Values::addAll);
+    }
+
+    public static <P extends Enum & Parameterizable> void addValues(Variables<P> var, P parameter, Object[] values) {
+        if (parameter.clazz() == String.class) {
+            var._String(parameter).values(castArray(values));
+        } else if (parameter.clazz() == Integer.class) {
+            var._int(parameter).values(castArray(values));
+        } else {
+            throw new IllegalArgumentException();
+        }
+    }
+
+    private static <T> Set<T> castArray(Object[] value) {
+        return Arrays.stream(value)
+                     .map(o -> (T) o)
+                     .collect(Collectors.toSet());
     }
 }

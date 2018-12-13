@@ -24,11 +24,12 @@ import quantasma.examples.RSIStrategy.Parameter;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.time.temporal.TemporalAmount;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
+import java.util.Set;
 import java.util.function.Function;
 import java.util.stream.Collectors;
-
-import static quantasma.core.analysis.parametrize.generators.Ints.range;
 
 @Component
 public class RSIBacktest implements StrategyBacktest {
@@ -54,7 +55,7 @@ public class RSIBacktest implements StrategyBacktest {
     }
 
     @Override
-    public List<TradeScenario> run(LocalDateTime from, TemporalAmount window) {
+    public List<TradeScenario> run(Map<String, Object[]> parameters, LocalDateTime from, TemporalAmount window) {
         final TestMarketData testMarketData = createTestMarketData();
 
         final Context context = new BaseContext.Builder()
@@ -62,10 +63,10 @@ public class RSIBacktest implements StrategyBacktest {
                 .build();
 
         final Function<Variables<Parameter>, TradeStrategy> recipe = var -> {
-            var._int(Parameter.RSI_PERIOD).values(10, 14);
-            var._int(Parameter.RSI_LOWER_BOUND).with(range(10, 40, 10));
-            var._int(Parameter.RSI_UPPER_BOUND).with(range(90, 60, 10));
-            var._String(Parameter.TRADE_SYMBOL).with("EURUSD");
+            parameters.forEach((key, value) ->
+                                       Variables.addValues(var,
+                                                           Parameter.valueOf(key),
+                                                           value));
             return RSIStrategy.buildBullish(context, var.getParameterValues());
         };
 

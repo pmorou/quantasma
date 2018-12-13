@@ -15,11 +15,14 @@ import quantasma.core.analysis.StrategyBacktest;
 import quantasma.core.analysis.TradeScenario;
 import quantasma.core.analysis.criterion.ProfitLossPipsCriterion;
 import quantasma.core.analysis.criterion.TradesCountCriterion;
+import quantasma.examples.RSIStrategy;
 
 import java.time.ZonedDateTime;
 import java.time.temporal.TemporalAmount;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 @Service
 @Slf4j
@@ -35,7 +38,16 @@ public class BacktestServiceImpl implements BacktestService {
                                                    .findFirst()
                                                    .orElseThrow(RuntimeException::new);
 
-        final List<TradeScenario> tradeScenarios = backtest.run(from.toLocalDateTime(), timeDuration);
+        final Map<String, Object[]> parameters = new HashMap<>();
+        parameters.put(RSIStrategy.Parameter.TRADE_SYMBOL.name(), new Object[]{"EURUSD"});
+        parameters.put(RSIStrategy.Parameter.RSI_PERIOD.name(), new Object[]{10, 14});
+        parameters.put(RSIStrategy.Parameter.RSI_LOWER_BOUND.name(), new Object[]{10, 20, 30, 40});
+        parameters.put(RSIStrategy.Parameter.RSI_UPPER_BOUND.name(), new Object[]{90, 80, 70, 60});
+
+        final List<TradeScenario> tradeScenarios = backtest.run(
+                parameters,
+                from.toLocalDateTime(),
+                timeDuration);
 
         log.info("== Backtesting result for [{}] ==", backtest.strategy().getName());
         tradeScenarios.forEach(tradeScenario -> {
