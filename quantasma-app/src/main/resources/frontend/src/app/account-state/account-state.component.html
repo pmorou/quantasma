@@ -1,5 +1,5 @@
 <div id="account-state_summary">
-  <table *ngIf="accountState$ != null">
+  <table>
     <thead>
     <tr>
       <th>Equity</th>
@@ -12,7 +12,7 @@
     </tr>
     </thead>
     <tbody>
-    <tr>
+    <tr *ngIf="accountState$ != null">
       <td>{{ accountState$?.equity }}</td>
       <td>{{ accountState$?.balance }}</td>
       <td>{{ accountState$?.positionsProfitLoss }}</td>
@@ -21,9 +21,15 @@
       <td>{{ accountState$?.currency }}</td>
       <td>{{ accountState$?.leverage }}</td>
     </tr>
+    <tr *ngIf="accountState$ == null">
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
     </tbody>
   </table>
-  <p *ngIf="accountState$ == null">
-    Waiting for signal...
-  </p>
 </div>
