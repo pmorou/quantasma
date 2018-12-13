@@ -2,11 +2,7 @@
 
 <ul>
   <li *ngFor="let backtest of backtests$">
-    <strong>name:</strong> {{ backtest.strategy }}<br/>
-
-    <strong>parameters:</strong>
-    <div *ngFor="let parameter of backtest.parameters">
-      <span style="margin-left: 10px">{{ parameter.name }}: {{ parameter.type }}</span><br/>
-    </div>
+    <strong>Strategy:</strong> {{ backtest.strategy }}<br/>
+    <strong>Parameters:</strong><span *ngFor="let parameter of backtest.parameters"> {{ parameter.name }}</span>
   </li>
 </ul>
