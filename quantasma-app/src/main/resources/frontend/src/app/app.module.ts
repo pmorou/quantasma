@@ -9,6 +9,7 @@ import { HttpClientModule } from "@angular/common/http";
 import { QuotesComponent } from './quotes/quotes.component';
 import { AccountStateComponent } from './account-state/account-state.component';
 import { OpenedPositionsComponent } from './opened-positions/opened-positions.component';
+import { BacktestComponent } from './backtest/backtest.component';
 
 @NgModule({
   declarations: [
@@ -17,7 +18,8 @@ import { OpenedPositionsComponent } from './opened-positions/opened-positions.co
     DashboardComponent,
     QuotesComponent,
     AccountStateComponent,
-    OpenedPositionsComponent
+    OpenedPositionsComponent,
+    BacktestComponent
   ],
   imports: [
     BrowserModule,

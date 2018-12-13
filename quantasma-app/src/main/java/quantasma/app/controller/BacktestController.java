@@ -29,14 +29,20 @@ public class BacktestController {
                            .map(backtest -> new BacktestScenario(
                                    backtest.strategy().getSimpleName(),
                                    Arrays.stream(backtest.parameterizables())
-                                         .collect(Collectors.toMap(Parameterizable::name,
-                                                                   o -> o.clazz().getSimpleName()))))
+                                         .map(p -> new Parameter(p.name(), p.clazz().getSimpleName()))
+                                         .collect(Collectors.toList())))
                            .collect(Collectors.toList());
     }
 
     @Data
     static class BacktestScenario {
         private final String strategy;
-        private final Map<String, String> parameterizable;
+        private final List<Parameter> parameters;
+    }
+
+    @Data
+    static class Parameter {
+        private final String name;
+        private final String type;
     }
 }
