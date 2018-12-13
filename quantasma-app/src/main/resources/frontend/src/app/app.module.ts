@@ -9,7 +9,7 @@ import { HttpClientModule } from "@angular/common/http";
 import { QuotesComponent } from './quotes/quotes.component';
 import { AccountStateComponent } from './account-state/account-state.component';
 import { OpenedPositionsComponent } from './opened-positions/opened-positions.component';
-import { BacktestComponent } from './backtest/backtest.component';
+import { BacktestComponent } from './backtests/backtest.component';
 
 @NgModule({
   declarations: [
