@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { StrategyService } from './strategy-service.service';
+import { StrategyService } from './strategy.service';
 
 describe('StrategyService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
