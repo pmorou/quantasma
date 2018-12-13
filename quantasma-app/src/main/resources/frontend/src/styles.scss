@@ -14,6 +14,16 @@ body {
   #content {
 
     #top {
+      background-color: #FFF;
+      padding: 11px;
+      border: 0 solid #00A8FF;
+      border-bottom-width: 2px;
+
+      table {
+        th {
+          padding-right: 20px;
+        }
+      }
     }
 
     .component {
