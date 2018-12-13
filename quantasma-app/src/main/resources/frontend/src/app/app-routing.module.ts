@@ -9,7 +9,7 @@ const routes: Routes = [
     component: DashboardComponent
   },
   {
-    path: 'backtests',
+    path: 'backtest',
     component: BacktestComponent
   }
 ];
