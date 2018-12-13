@@ -1,18 +1,21 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { EventsService } from "../events.service";
 import { Quote } from "../../shared/quote.model";
+import { Subscription } from "rxjs/index";
 
 @Component({
   selector: 'app-quotes',
   templateUrl: './quotes.component.html',
   styleUrls: ['./quotes.component.scss']
 })
-export class QuotesComponent implements OnInit {
+export class QuotesComponent implements OnInit, OnDestroy {
+
+  private subscription: Subscription = Subscription.EMPTY;
 
   constructor(private events: EventsService) { }
 
   ngOnInit() {
-    this.events.quotes().subscribe((quote: Quote) => QuotesComponent.renderQuote(quote));
+    this.subscription = this.events.quotes().subscribe((quote: Quote) => QuotesComponent.renderQuote(quote));
   }
 
   private static renderQuote(quote: Quote): void {
@@ -27,5 +30,9 @@ export class QuotesComponent implements OnInit {
       "</br>bid: " + quote.bid +
       "</br>ask: " + quote.ask;
   };
+
+  ngOnDestroy(): void {
+    this.subscription.unsubscribe();
+  }
 
 }
