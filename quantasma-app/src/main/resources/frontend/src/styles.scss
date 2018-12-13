@@ -20,8 +20,10 @@ body {
       border-bottom-width: 2px;
 
       table {
-        th {
+        th, td {
           padding-right: 20px;
+          text-align: center;
+          vertical-align: middle;
         }
       }
     }
