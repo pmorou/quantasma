@@ -10,10 +10,14 @@ body {
   grid-template-columns: 70px auto;
   height: 100%;
 
-  #content {
-    padding: 30px 50px;
 
-    #quotes {
+  #content {
+
+    #top {
+    }
+
+    .component {
+      padding: 10px 10px;
 
       ul {
 

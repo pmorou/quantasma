@@ -1,8 +1,12 @@
-<h1>Backtest</h1>
+<div class="component">
 
-<ul>
-  <li *ngFor="let backtest of backtests$">
-    <strong>Strategy:</strong> {{ backtest.strategy }}<br/>
-    <strong>Parameters:</strong><span *ngFor="let parameter of backtest.parameters"> {{ parameter.name }}</span>
-  </li>
-</ul>
+  <h1>Backtest</h1>
+
+  <ul>
+    <li *ngFor="let backtest of backtests$">
+      <strong>Strategy:</strong> {{ backtest.strategy }}<br/>
+      <strong>Parameters:</strong><span *ngFor="let parameter of backtest.parameters"> {{ parameter.name }}</span>
+    </li>
+  </ul>
+
+</div>

@@ -2,19 +2,14 @@
   <app-sidebar></app-sidebar>
 
   <div id="content">
-
-    <div id="quotes">
-      <app-quotes></app-quotes>
+    <div id="top">
+      <div id="account-state">
+        <app-account-state></app-account-state>
+      </div>
     </div>
 
-    <div id="account-state">
-      <app-account-state></app-account-state>
+    <div class="component">
+      <router-outlet></router-outlet>
     </div>
-
-    <div id="opened-positions">
-      <app-opened-positions></app-opened-positions>
-    </div>
-
-    <router-outlet></router-outlet>
   </div>
 </div>
