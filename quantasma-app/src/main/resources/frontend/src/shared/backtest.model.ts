@@ -8,7 +8,7 @@ export class Backtest {
   }
 }
 
-class Parameter {
+export class Parameter {
   constructor(public name: string,
               public type: string) {
     this.name = name;

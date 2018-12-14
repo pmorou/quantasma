@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from "@angular/router";
 import { BacktestService } from "../backtest.service";
-import { Backtest } from "../../shared/Backtest";
+import { Backtest } from "../../shared/backtest.model";
 
 @Component({
   selector: 'app-backtest-strategy',
@@ -10,19 +10,19 @@ import { Backtest } from "../../shared/Backtest";
 })
 export class BacktestStrategyComponent implements OnInit {
 
-  private backtestName$: string = "";
-
+  public backtestName$: string = "";
   public backtest?: Backtest;
 
   constructor(private route: ActivatedRoute, private backtestService: BacktestService) {
     this.route.params.subscribe(params =>
       this.backtestName$ = params.name
-    )
+    );
   }
 
   ngOnInit() {
-    this.backtestService.get(this.backtestName$).subscribe(value =>
-      this.backtest = <Backtest> value
+    this.backtestService.get(this.backtestName$).subscribe(value => {
+        this.backtest = <Backtest> value;
+      }
     );
   }
 

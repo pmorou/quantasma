@@ -6,11 +6,14 @@
       <p><strong>Strategy:</strong> {{ backtest?.strategy }}</p>
       <p><strong>Parameters:</strong></p>
       <ul>
-        <li *ngFor="let parameter of backtest?.parameters">{{ parameter.name }}: {{ parameter.type }}</li>
+        <li *ngFor="let parameter of backtest?.parameters">
+          {{ parameter.name }}: {{ parameter.type }}
+        </li>
       </ul>
       <p>
         <a (click)="runTest()">Run</a>
       </p>
     </li>
   </ul>
+
 </div>
