@@ -10,6 +10,8 @@ import { QuotesComponent } from './quotes/quotes.component';
 import { AccountStateComponent } from './account-state/account-state.component';
 import { OpenedPositionsComponent } from './opened-positions/opened-positions.component';
 import { BacktestComponent } from './backtests/backtest.component';
+import { BacktestStrategyComponent } from './backtest-strategy/backtest-strategy.component';
+import { RouterModule } from "@angular/router";
 
 @NgModule({
   declarations: [
@@ -19,12 +21,14 @@ import { BacktestComponent } from './backtests/backtest.component';
     QuotesComponent,
     AccountStateComponent,
     OpenedPositionsComponent,
-    BacktestComponent
+    BacktestComponent,
+    BacktestStrategyComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
-    HttpClientModule
+    HttpClientModule,
+    RouterModule
   ],
   providers: [],
   bootstrap: [AppComponent]

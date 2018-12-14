@@ -2,6 +2,7 @@ package quantasma.app.controller;
 
 import lombok.Data;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import quantasma.core.analysis.StrategyBacktest;
@@ -25,15 +26,19 @@ public class BacktestController {
     public List<BacktestScenario> all() {
         return backtestList.stream()
                            .map(backtest -> new BacktestScenario(
+                                   backtest.getClass().getSimpleName(),
                                    backtest.strategy().getSimpleName(),
                                    Arrays.stream(backtest.parameterizables())
-                                         .map(p -> new Parameter(p.name(), p.clazz().getSimpleName()))
+                                         .map(p -> new Parameter(
+                                                 p.name(),
+                                                 p.clazz().getSimpleName()))
                                          .collect(Collectors.toList())))
                            .collect(Collectors.toList());
     }
 
     @Data
     static class BacktestScenario {
+        private final String name;
         private final String strategy;
         private final List<Parameter> parameters;
     }
@@ -42,5 +47,21 @@ public class BacktestController {
     static class Parameter {
         private final String name;
         private final String type;
+    }
+
+    @RequestMapping("{name}")
+    public BacktestScenario get(@PathVariable String name) {
+        return backtestList.stream()
+                           .filter(strategyBacktest -> strategyBacktest.getClass().getSimpleName().equalsIgnoreCase(name))
+                           .map(backtest -> new BacktestScenario(
+                                   backtest.getClass().getSimpleName(),
+                                   backtest.strategy().getSimpleName(),
+                                   Arrays.stream(backtest.parameterizables())
+                                         .map(p -> new Parameter(
+                                                 p.name(),
+                                                 p.clazz().getSimpleName()))
+                                         .collect(Collectors.toList())))
+                           .findFirst()
+                           .orElseThrow(RuntimeException::new);
     }
 }
