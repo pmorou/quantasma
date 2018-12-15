@@ -11,7 +11,9 @@ import { AccountStateComponent } from './account-state/account-state.component';
 import { OpenedPositionsComponent } from './opened-positions/opened-positions.component';
 import { BacktestComponent } from './backtests/backtest.component';
 import { BacktestStrategyComponent } from './backtest-strategy/backtest-strategy.component';
+import { BacktestStrategyFormComponent } from './backtest-strategy-form/backtest-strategy-form.component';
 import { RouterModule } from "@angular/router";
+import { ReactiveFormsModule } from "@angular/forms";
 
 @NgModule({
   declarations: [
@@ -22,13 +24,15 @@ import { RouterModule } from "@angular/router";
     AccountStateComponent,
     OpenedPositionsComponent,
     BacktestComponent,
-    BacktestStrategyComponent
+    BacktestStrategyComponent,
+    BacktestStrategyFormComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
-    RouterModule
+    RouterModule,
+    ReactiveFormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
