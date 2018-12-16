@@ -16,7 +16,7 @@ export class BacktestService {
     return this.http.get("backtest/" + name);
   }
 
-  public test(json: string) {
-    return this.http.post("backtest/", json);
+  public test(name: string, json: string) {
+    return this.http.post("backtest/" + name, json);
   }
 }

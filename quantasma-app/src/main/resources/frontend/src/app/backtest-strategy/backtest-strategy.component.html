@@ -6,7 +6,8 @@
       <p><strong>Strategy:</strong> {{ backtest?.strategy }}</p>
 
       <app-backtest-strategy-form [params]="availableParameters"
-                                  [crits]="availableCriterions"></app-backtest-strategy-form>
+                                  [crits]="availableCriterions"
+                                  [strategy]="backtestName$"></app-backtest-strategy-form>
     </li>
   </ul>
 
