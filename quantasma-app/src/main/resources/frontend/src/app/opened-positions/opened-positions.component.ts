@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { EventsService } from "../events.service";
-import { OpenedPosition } from "../../shared/opened-position.model";
+import { OpenedPosition } from "../shared/opened-position.model";
 import { Subscription } from "rxjs/index";
 
 @Component({

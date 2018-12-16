@@ -1,7 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute } from "@angular/router";
 import { BacktestService } from "../backtest.service";
-import { Backtest, Parameter } from "../../shared/backtest.model";
+import { Backtest, Parameter } from "../shared/backtest.model";
 
 @Component({
   selector: 'app-backtest-strategy',

@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { AccountState } from "../shared/account-state.model";
-import { OpenedPosition } from "../shared/opened-position.model";
-import { Quote } from "../shared/quote.model";
+import { AccountState } from "./shared/account-state.model";
+import { OpenedPosition } from "./shared/opened-position.model";
+import { Quote } from "./shared/quote.model";
 import { Observable, Subject } from "rxjs/index";
 
 @Injectable({

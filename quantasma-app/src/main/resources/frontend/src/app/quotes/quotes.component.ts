@@ -1,6 +1,6 @@
 import { Component, OnDestroy, OnInit } from '@angular/core';
 import { EventsService } from "../events.service";
-import { Quote } from "../../shared/quote.model";
+import { Quote } from "../shared/quote.model";
 import { Subscription } from "rxjs/index";
 
 @Component({
