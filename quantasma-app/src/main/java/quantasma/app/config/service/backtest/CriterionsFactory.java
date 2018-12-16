@@ -15,7 +15,7 @@ public class CriterionsFactory {
     private final Map<String, AnalysisCriterion> criterionMap = new HashMap<>();
 
     @Autowired
-    public void collectCriterions(List<AnalysisCriterion> criterions) {
+    private void collectCriterions(List<AnalysisCriterion> criterions) {
         criterions.forEach(criterion -> criterionMap.put(criterion.getClass().getSimpleName(), criterion));
     }
 
