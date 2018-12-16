@@ -1,18 +1,19 @@
-<h1>Backtest</h1>
-
 <form [formGroup]="backtestForm" (ngSubmit)="onSubmit()">
-
   <label>
-    Title: <input formControlName="title"/>
+    Test name: <input formControlName="title"/>
   </label>
 
-  <h2>Parameters</h2>
-  <p *ngFor="let param of availableParameters">
-    {{param['name']}}: {{param['type']}}
-    <button type="button" (click)="addParameter(param['name'])">Specify</button>
-  </p>
+  <p><strong>Parameters:</strong></p>
 
-  <h4>Defined values</h4>
+  <ul>
+    <li *ngFor="let param of availableParameters">
+      {{param['name']}}: {{param['type']}}
+      <button type="button" (click)="addParameter(param['name'])">Specify</button>
+    </li>
+  </ul>
+
+  <p><strong>Values:</strong></p>
+
   <div formArrayName="parameters">
     <div *ngFor="let item of parameters.controls; let paramIndex=index" [formGroupName]="paramIndex">
       <div *ngIf="item.value.name != ''">
@@ -22,7 +23,8 @@
     </div>
   </div>
 
-  <h2>Criterions</h2>
+  <p><strong>Criterions:</strong></p>
+
   <div formArrayName="criterions">
     <div *ngFor="let item of criterions.controls; let paramIndex=index" [formGroupName]="paramIndex">
       <select formControlName="name">
@@ -32,10 +34,11 @@
       <button type="button" (click)="deleteCriterions(paramIndex)">X</button>
     </div>
   </div>
-  <button type="button" (click)="addCriterion('')">Add</button>
 
   <br/>
-  <br/>
-  <br/>
+
+  <button type="button" (click)="addCriterion('')">Add</button>
+
+  <br/><br/><br/>
   <button type="submit">Run</button>
 </form>

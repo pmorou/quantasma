@@ -13,6 +13,9 @@ export class BacktestStrategyComponent implements OnInit {
   public backtestName$: string = "";
   public backtest?: Backtest;
 
+  availableParameters: Object[] = [{name:'PARAM1', type:'integer'}, {name:'PARAM2', type:'integer'}, {name:'PARAM3', type:'integer'}];
+  availableCriterions: string[] = ['criterion1', 'criterion2', 'criterion3', 'criterion4'];
+
   constructor(private route: ActivatedRoute, private backtestService: BacktestService) {
     this.route.params.subscribe(params =>
       this.backtestName$ = params.name

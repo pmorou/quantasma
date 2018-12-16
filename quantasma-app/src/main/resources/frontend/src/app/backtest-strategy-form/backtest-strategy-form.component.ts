@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
+import { BacktestService } from "../backtest.service";
 
 @Component({
   selector: 'app-backtest-strategy-form',
@@ -13,7 +14,7 @@ export class BacktestStrategyFormComponent implements OnInit {
   @Input("crits")
   availableCriterions: string[] = [];
 
-  constructor(private fb: FormBuilder) { }
+  constructor(private fb: FormBuilder, private backtestService: BacktestService) { }
 
   backtestForm: FormGroup = this.fb.group({
     title: [],
@@ -25,8 +26,15 @@ export class BacktestStrategyFormComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.backtestForm.invalid);
     console.log(JSON.stringify(this.backtestForm.value));
+    if (this.backtestForm.invalid) {
+      console.log("Form invalid");
+      return;
+    }
+    this.backtestService.test(JSON.stringify(this.backtestForm.value))
+    .subscribe(value => {
+      console.log("Tested");
+    });
   }
 
   get parameters() {

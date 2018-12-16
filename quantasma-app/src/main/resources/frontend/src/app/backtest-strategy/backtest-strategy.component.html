@@ -4,15 +4,9 @@
   <ul>
     <li>
       <p><strong>Strategy:</strong> {{ backtest?.strategy }}</p>
-      <p><strong>Parameters:</strong></p>
-      <ul>
-        <li *ngFor="let parameter of backtest?.parameters">
-          {{ parameter.name }}: {{ parameter.type }}
-        </li>
-      </ul>
-      <p>
-        <a (click)="runTest()">Run</a>
-      </p>
+
+      <app-backtest-strategy-form [params]="availableParameters"
+                                  [crits]="availableCriterions"></app-backtest-strategy-form>
     </li>
   </ul>
 
