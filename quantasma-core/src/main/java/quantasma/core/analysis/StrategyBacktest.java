@@ -14,6 +14,6 @@ public interface StrategyBacktest {
 
     Parameterizable[] parameterizables();
 
-    List<BacktestResult> run(Map<String, Object[]> parameters, List<String> criterions, LocalDateTime from, TemporalAmount window);
+    List<BacktestResult> run(Map<String, Object[]> backtestParameters, List<String> analysisCriterions, LocalDateTime fromDate, TemporalAmount timeWindow);
 
 }

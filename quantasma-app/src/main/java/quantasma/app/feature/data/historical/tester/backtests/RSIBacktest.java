@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import org.ta4j.core.AnalysisCriterion;
 import org.ta4j.core.Order;
 import quantasma.app.config.service.backtest.CriterionsFactory;
+import quantasma.app.model.OhlcvTick;
 import quantasma.app.service.OhlcvTickService;
 import quantasma.core.BarPeriod;
 import quantasma.core.BaseContext;
@@ -31,6 +32,7 @@ import java.time.temporal.TemporalAmount;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -61,7 +63,7 @@ public class RSIBacktest implements StrategyBacktest {
     }
 
     @Override
-    public List<BacktestResult> run(Map<String, Object[]> parameters, List<String> criterions, LocalDateTime from, TemporalAmount window) {
+    public List<BacktestResult> run(Map<String, Object[]> backtestParameters, List<String> analysisCriterions, LocalDateTime fromDate, TemporalAmount timeWindow) {
         final TestMarketData testMarketData = createTestMarketData();
 
         final Context context = new BaseContext.Builder()
@@ -69,46 +71,61 @@ public class RSIBacktest implements StrategyBacktest {
                 .build();
 
         final Function<Variables<Parameter>, TradeStrategy> recipe = var -> {
-            parameters.forEach((key, value) ->
-                                       Variables.addValues(var,
-                                                           Parameter.valueOf(key),
-                                                           value));
+            backtestParameters.forEach((key, value) ->
+                                               Variables.addValues(var,
+                                                                   Parameter.valueOf(key),
+                                                                   value));
             return RSIStrategy.buildBullish(context, var.getParameterValues());
         };
 
         // implement strategies: close, open, 4 ticks ohlc
-        tickService.findBySymbolAndDateBetweenOrderByDate(SYMBOL, from.toInstant(ZoneOffset.UTC), window)
-                   .forEach(ohlcvTick -> testMarketData.add(ohlcvTick.getSymbol(),
-                                                            ohlcvTick.getDate().atZone(ZoneOffset.UTC),
-                                                            ohlcvTick.getBidClose(),
-                                                            ohlcvTick.getAskClose()));
+        tickService.findBySymbolAndDateBetweenOrderByDate(SYMBOL, fromDate.toInstant(ZoneOffset.UTC), timeWindow)
+                   .forEach(loadTicks(testMarketData));
 
         final TestManager testManager = new TestManager(testMarketData);
-        final List<TradeScenario> tradeScenarios = Producer.from(recipe)
-                                                           .stream()
-                                                           .map(tradeStrategy -> new TradeScenario(testManager.getMainTimeSeries(tradeStrategy),
-                                                                                                   tradeStrategy.getParameterValues(),
-                                                                                                   testManager.run(tradeStrategy, Order.OrderType.BUY)))
-                                                           .collect(Collectors.toList());
+
+        final List<TradeScenario> tradeScenarios = prepareTradeScenarios(recipe, testManager);
 
         return tradeScenarios.stream()
-                             .map(tradeScenario -> {
-                                 final List<AnalysisCriterion> criterionas = criterions.stream()
-                                                                                       .map(criterionsFactory::get)
-                                                                                       .collect(Collectors.toList());
-
-                                 final Map<String, String> res = new HashMap<>();
-                                 for (AnalysisCriterion criteriona : criterionas) {
-                                     res.put(criteriona.getClass().getSimpleName(),
-                                             criteriona.calculate(tradeScenario.getTimeSeries(),
-                                                                  tradeScenario.getTradingRecord())
-                                                       .toString());
-                                 }
-
-
-                                 return new BacktestResult((Map<Object, Object>) tradeScenario.getValues().getValuesByParameter(), res);
-                             })
+                             .map(gatherResult(analysisCriterions))
                              .collect(Collectors.toList());
+    }
+
+    private Function<TradeScenario, BacktestResult> gatherResult(List<String> analysisCriterions) {
+        return tradeScenario -> {
+            final List<AnalysisCriterion> criterions = analysisCriterions.stream()
+                                                                         .map(criterionsFactory::get)
+                                                                         .collect(Collectors.toList());
+            final Map<String, String> calculatedCriterions = analyze(tradeScenario, criterions);
+            return new BacktestResult((Map<Object, Object>) tradeScenario.getValues().getValuesByParameter(), calculatedCriterions);
+        };
+    }
+
+    private static Map<String, String> analyze(TradeScenario tradeScenario, List<AnalysisCriterion> criterions) {
+        final Map<String, String> calculatedCriterions = new HashMap<>();
+        for (AnalysisCriterion criterion : criterions) {
+            calculatedCriterions.put(criterion.getClass().getSimpleName(),
+                                     criterion.calculate(tradeScenario.getTimeSeries(),
+                                                         tradeScenario.getTradingRecord())
+                                              .toString());
+        }
+        return calculatedCriterions;
+    }
+
+    private static List<TradeScenario> prepareTradeScenarios(Function<Variables<Parameter>, TradeStrategy> recipe, TestManager testManager) {
+        return Producer.from(recipe)
+                       .stream()
+                       .map(tradeStrategy -> new TradeScenario(testManager.getMainTimeSeries(tradeStrategy),
+                                                               tradeStrategy.getParameterValues(),
+                                                               testManager.run(tradeStrategy, Order.OrderType.BUY)))
+                       .collect(Collectors.toList());
+    }
+
+    private static Consumer<OhlcvTick> loadTicks(TestMarketData testMarketData) {
+        return ohlcvTick -> testMarketData.add(ohlcvTick.getSymbol(),
+                                               ohlcvTick.getDate().atZone(ZoneOffset.UTC),
+                                               ohlcvTick.getBidClose(),
+                                               ohlcvTick.getAskClose());
     }
 
     private static TestMarketData createTestMarketData() {
