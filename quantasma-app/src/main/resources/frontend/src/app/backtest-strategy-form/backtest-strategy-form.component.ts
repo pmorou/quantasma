@@ -45,8 +45,7 @@ export class BacktestStrategyFormComponent implements OnInit {
       return;
     }
 
-    this.backtestService.test(this.backtestName, JSON.stringify(this.backtestForm.value))
-    .subscribe(value => {
+    this.backtestService.test(this.backtestName, JSON.stringify(this.backtestForm.value)).subscribe(value => {
       this.testFinished.emit(value);
       this.status = "done.";
     });
