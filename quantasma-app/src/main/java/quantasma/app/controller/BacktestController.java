@@ -5,10 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import quantasma.app.config.service.backtest.CriterionsFactory;
 import quantasma.core.analysis.StrategyBacktest;
 
 import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 import java.util.stream.Collectors;
 
 @RestController
@@ -16,10 +18,12 @@ import java.util.stream.Collectors;
 public class BacktestController {
 
     private final List<StrategyBacktest> backtestList;
+    private final CriterionsFactory criterionsFactory;
 
     @Autowired
-    public BacktestController(List<StrategyBacktest> backtestList) {
+    public BacktestController(List<StrategyBacktest> backtestList, CriterionsFactory criterionsFactory) {
         this.backtestList = backtestList;
+        this.criterionsFactory = criterionsFactory;
     }
 
     @RequestMapping("all")
@@ -63,5 +67,10 @@ public class BacktestController {
                                          .collect(Collectors.toList())))
                            .findFirst()
                            .orElseThrow(RuntimeException::new);
+    }
+
+    @RequestMapping("criterions")
+    public Set<String> criterions() {
+        return criterionsFactory.available();
     }
 }
