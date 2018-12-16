@@ -8,7 +8,7 @@ import { BacktestService } from "../backtest.service";
 })
 export class BacktestComponent implements OnInit {
 
-  backtests$: Object = [];
+  backtests$: any = [];
 
   constructor(private backtestService: BacktestService) { }
 

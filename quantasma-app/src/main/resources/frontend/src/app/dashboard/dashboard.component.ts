@@ -7,7 +7,7 @@ import { StrategyService } from "../strategy.service";
   styleUrls: ['./dashboard.component.scss']
 })
 export class DashboardComponent implements OnInit {
-  strategies$: Object = [];
+  strategies$: any = [];
 
   constructor(private strategyService: StrategyService) { }
 

@@ -7,8 +7,8 @@
 
   <ul>
     <li *ngFor="let param of availableParameters">
-      {{param['name']}}: {{param['type']}}
-      <button type="button" (click)="addParameter(param['name'])">Specify</button>
+      {{ param.name }}: {{ param.type }}
+      <button type="button" (click)="addParameter(param.name)">Specify</button>
     </li>
   </ul>
 
