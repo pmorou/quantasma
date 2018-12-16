@@ -10,7 +10,7 @@ import { BacktestService } from "../backtest.service";
 export class BacktestStrategyFormComponent implements OnInit {
 
   @Input("params")
-  availableParameters: Object[] = [];
+  availableParameters: any[] = [];
   @Input("crits")
   availableCriterions: string[] = [];
   @Input("backtestName")
@@ -19,7 +19,7 @@ export class BacktestStrategyFormComponent implements OnInit {
   @Output()
   testFinished = new EventEmitter();
 
-  windows: Object[] = [{name: '1 day', value: 'P1D'}, {name: '1 week', value: 'P1W'}, {name: '1 month', value: 'P1M'}, {name: '1 year', value: 'P1Y'}];
+  windows: any[] = [{name: '1 day', value: 'P1D'}, {name: '1 week', value: 'P1W'}, {name: '1 month', value: 'P1M'}, {name: '1 year', value: 'P1Y'}];
 
   constructor(private fb: FormBuilder, private backtestService: BacktestService) { }
 

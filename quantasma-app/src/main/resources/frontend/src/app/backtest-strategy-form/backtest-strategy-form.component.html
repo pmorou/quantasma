@@ -49,7 +49,7 @@
     <label for="window">
       Window
       <select id="window" formControlName="window">
-        <option *ngFor="let window of windows" value="{{window['value']}}">{{window['name']}}</option>
+        <option *ngFor="let window of windows" value="{{ window.value }}">{{ window.name }}</option>
       </select>
     </label>
   </div>
