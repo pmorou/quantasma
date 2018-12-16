@@ -13,8 +13,8 @@ export class BacktestStrategyFormComponent implements OnInit {
   availableParameters: Object[] = [];
   @Input("crits")
   availableCriterions: string[] = [];
-  @Input("strategy")
-  strategy: string = "";
+  @Input("backtestName")
+  backtestName: string = "";
 
   constructor(private fb: FormBuilder, private backtestService: BacktestService) { }
 
@@ -33,7 +33,7 @@ export class BacktestStrategyFormComponent implements OnInit {
       console.log("Form invalid");
       return;
     }
-    this.backtestService.test(this.strategy, JSON.stringify(this.backtestForm.value))
+    this.backtestService.test(this.backtestName, JSON.stringify(this.backtestForm.value))
     .subscribe(value => {
       console.log("Tested");
     });
