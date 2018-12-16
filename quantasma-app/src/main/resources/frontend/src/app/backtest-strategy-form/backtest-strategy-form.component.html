@@ -12,8 +12,6 @@
     </li>
   </ul>
 
-  <p><strong>Values:</strong></p>
-
   <div formArrayName="parameters">
     <div *ngFor="let item of parameters.controls; let paramIndex=index" [formGroupName]="paramIndex">
       <div *ngIf="item.value.name != ''">
