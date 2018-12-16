@@ -9,6 +9,10 @@
                                   [crits]="availableCriterions"
                                   [backtestName]="backtest?.name"
                                   (testFinished)="testFinished($event)"></app-backtest-strategy-form>
+
+      <br/>
+
+      <p>{{ result | json }}</p>
     </li>
   </ul>
 

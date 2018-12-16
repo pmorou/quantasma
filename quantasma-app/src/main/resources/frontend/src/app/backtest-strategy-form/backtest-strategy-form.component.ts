@@ -19,6 +19,7 @@ export class BacktestStrategyFormComponent implements OnInit {
   @Output()
   testFinished = new EventEmitter();
 
+  status: string = "ready";
   windows: any[] = [{name: '1 day', value: 'P1D'}, {name: '1 week', value: 'P1W'}, {name: '1 month', value: 'P1M'}, {name: '1 year', value: 'P1Y'}];
 
   constructor(private fb: FormBuilder, private backtestService: BacktestService) { }
@@ -37,6 +38,8 @@ export class BacktestStrategyFormComponent implements OnInit {
   }
 
   onSubmit() {
+    this.status = "loading...";
+
     console.log(JSON.stringify(this.backtestForm.value));
     if (this.backtestForm.invalid) {
       console.log("Form invalid");
@@ -44,8 +47,8 @@ export class BacktestStrategyFormComponent implements OnInit {
     }
     this.backtestService.test(this.backtestName, JSON.stringify(this.backtestForm.value))
     .subscribe(value => {
-
       this.testFinished.emit(value);
+      this.status = "done.";
     });
   }
 

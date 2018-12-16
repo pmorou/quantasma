@@ -16,6 +16,8 @@ export class BacktestStrategyComponent implements OnInit {
   availableParameters: Parameter[] = [];
   availableCriterions: string[] = [];
 
+  result: any;
+
   constructor(private route: ActivatedRoute, private backtestService: BacktestService) {
     this.route.params.subscribe(params =>
       this.backtestName$ = params.name
@@ -35,6 +37,7 @@ export class BacktestStrategyComponent implements OnInit {
 
   testFinished($event: any) {
     console.log({$event});
+    this.result = $event;
   }
 
   runTest() {
