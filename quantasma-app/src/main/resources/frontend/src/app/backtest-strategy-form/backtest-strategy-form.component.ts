@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { BacktestService } from "../backtest.service";
 
@@ -15,6 +15,9 @@ export class BacktestStrategyFormComponent implements OnInit {
   availableCriterions: string[] = [];
   @Input("backtestName")
   backtestName: string = "";
+
+  @Output()
+  testFinished = new EventEmitter();
 
   windows: Object[] = [{name: '1 day', value: 'P1D'}, {name: '1 week', value: 'P1W'}, {name: '1 month', value: 'P1M'}, {name: '1 year', value: 'P1Y'}];
 
@@ -41,7 +44,8 @@ export class BacktestStrategyFormComponent implements OnInit {
     }
     this.backtestService.test(this.backtestName, JSON.stringify(this.backtestForm.value))
     .subscribe(value => {
-      console.log("Tested");
+
+      this.testFinished.emit(value);
     });
   }
 
