@@ -8,10 +8,12 @@ import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
 })
 export class BacktestStrategyFormComponent implements OnInit {
 
-  constructor(private fb: FormBuilder) { }
+  @Input("params")
+  availableParameters: Object[] = [];
+  @Input("crits")
+  availableCriterions: string[] = [];
 
-  availableParameters: Object[] = [{name:'PARAM1', type:'integer'}, {name:'PARAM2', type:'integer'}];
-  availableCriterions: string[] = ['c1', 'c2', 'c3', 'c4'];
+  constructor(private fb: FormBuilder) { }
 
   backtestForm: FormGroup = this.fb.group({
     title: [],
