@@ -16,10 +16,16 @@ export class BacktestStrategyFormComponent implements OnInit {
   @Input("backtestName")
   backtestName: string = "";
 
+  windows: Object[] = [{name: '1 day', value: 'P1D'}, {name: '1 week', value: 'P1W'}, {name: '1 month', value: 'P1M'}, {name: '1 year', value: 'P1Y'}];
+
   constructor(private fb: FormBuilder, private backtestService: BacktestService) { }
 
   backtestForm: FormGroup = this.fb.group({
     title: [],
+    time: this.fb.group({
+      from: ['', Validators.required],
+      window: ['', Validators.required]
+    }),
     criterions: this.fb.array([this.fb.group({name:['', Validators.required], value:'true'})]),
     parameters: this.fb.array([this.fb.group({name:'', value:''})])
   });

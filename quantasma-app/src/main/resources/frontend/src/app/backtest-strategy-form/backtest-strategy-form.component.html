@@ -39,6 +39,21 @@
 
   <button type="button" (click)="addCriterion('')">Add</button>
 
-  <br/><br/><br/>
+  <p><strong>Time window:</strong></p>
+
+  <div formGroupName="time">
+    <label for="from">
+      From
+      <input id="from" type="date" formControlName="from">
+    </label>
+    <label for="window">
+      Window
+      <select id="window" formControlName="window">
+        <option *ngFor="let window of windows" value="{{window['value']}}">{{window['name']}}</option>
+      </select>
+    </label>
+  </div>
+
+  <br/><br/>
   <button type="submit">Run</button>
 </form>
