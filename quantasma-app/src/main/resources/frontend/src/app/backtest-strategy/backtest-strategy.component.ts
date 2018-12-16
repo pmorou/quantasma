@@ -38,7 +38,4 @@ export class BacktestStrategyComponent implements OnInit {
   testFinished($event: any) {
     this.result = $event;
   }
-
-  runTest() {
-  }
 }
