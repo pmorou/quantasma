@@ -14,12 +14,15 @@ export class BacktestStrategyComponent implements OnInit {
   public backtest?: Backtest;
 
   availableParameters: Parameter[] = [];
-  availableCriterions: string[] = ['criterion1', 'criterion2', 'criterion3', 'criterion4'];
+  availableCriterions: string[] = [];
 
   constructor(private route: ActivatedRoute, private backtestService: BacktestService) {
     this.route.params.subscribe(params =>
       this.backtestName$ = params.name
     );
+    this.backtestService.criterions().subscribe(value => {
+      this.availableCriterions = <string[]>value;
+    })
   }
 
   ngOnInit() {

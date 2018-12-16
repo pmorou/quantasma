@@ -19,4 +19,8 @@ export class BacktestService {
   public test(name: string, json: string) {
     return this.http.post("backtest/" + name, json);
   }
+
+  public criterions() {
+    return this.http.get("backtest/criterions");
+  }
 }
