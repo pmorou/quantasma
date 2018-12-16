@@ -10,7 +10,7 @@ import { Subscription } from "rxjs/index";
 })
 export class OpenedPositionsComponent implements OnInit, OnDestroy {
 
-  openedPositions$: OpenedPosition[] = [];
+  openedPositions$?: OpenedPosition[];
   subscription: Subscription = Subscription.EMPTY;
 
   constructor(private events: EventsService) {
