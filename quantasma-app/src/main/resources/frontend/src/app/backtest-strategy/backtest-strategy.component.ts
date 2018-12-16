@@ -10,8 +10,8 @@ import { Backtest, Parameter } from "../shared/backtest.model";
 })
 export class BacktestStrategyComponent implements OnInit {
 
-  public backtestName$: string = "";
-  public backtest?: Backtest;
+  backtestName$: string = "";
+  backtest?: Backtest;
 
   availableParameters: Parameter[] = [];
   availableCriterions: string[] = [];
