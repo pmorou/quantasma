@@ -8,7 +8,7 @@
       </a>
     </li>
     <li>
-      <a routerLink="backtest" [class.activated]="currentUrl == '/backtest'">
+      <a routerLink="backtest" [class.activated]="currentUrl.startsWith('/backtest')">
         <i class="material-icons">
           tune
         </i>
