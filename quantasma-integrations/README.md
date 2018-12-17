@@ -1,0 +1,11 @@
+# Quantasma integrations
+
+Right now there is no fully integrated 3rd party API. Current state:
+
+-   Dukascopy - in development, partially available
+
+Scheduled for future releases:
+
+-   Oanda
+
+
