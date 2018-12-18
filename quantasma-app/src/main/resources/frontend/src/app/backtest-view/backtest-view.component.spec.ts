@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { StatusDashboardComponent } from './status-dashboard.component';
+import { BacktestViewComponent } from './backtest-dashboard.component';
 
-describe('StatusDashboardComponent', () => {
-  let component: StatusDashboardComponent;
-  let fixture: ComponentFixture<StatusDashboardComponent>;
+describe('BacktestComponent', () => {
+  let component: BacktestViewComponent;
+  let fixture: ComponentFixture<BacktestViewComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ StatusDashboardComponent ]
+      declarations: [ BacktestViewComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(StatusDashboardComponent);
+    fixture = TestBed.createComponent(BacktestViewComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

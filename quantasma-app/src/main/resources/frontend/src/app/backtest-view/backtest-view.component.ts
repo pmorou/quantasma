@@ -2,11 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { BacktestService } from "../backtest.service";
 
 @Component({
-  selector: 'app-backtest-dashboard',
-  templateUrl: './backtest-dashboard.component.html',
-  styleUrls: ['./backtest-dashboard.component.scss']
+  selector: 'app-backtest-view',
+  templateUrl: './backtest-view.component.html',
+  styleUrls: ['./backtest-view.component.scss']
 })
-export class BacktestDashboardComponent implements OnInit {
+export class BacktestViewComponent implements OnInit {
 
   backtests$: any = [];
 

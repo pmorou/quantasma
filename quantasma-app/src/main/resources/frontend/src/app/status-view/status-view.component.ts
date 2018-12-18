@@ -5,11 +5,11 @@ import {flatMap} from "rxjs/operators";
 import {Subject} from "rxjs/index";
 
 @Component({
-  selector: 'app-status-dashboard',
-  templateUrl: './status-dashboard.component.html',
-  styleUrls: ['./status-dashboard.component.scss']
+  selector: 'app-status-view',
+  templateUrl: './status-view.component.html',
+  styleUrls: ['./status-view.component.scss']
 })
-export class StatusDashboardComponent implements OnInit {
+export class StatusViewComponent implements OnInit {
   strategies$: any = [];
 
   updateStrategiesSubject: Subject<void> = new Subject();

@@ -4,12 +4,12 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { SidebarComponent } from './sidebar/sidebar.component';
-import { StatusDashboardComponent } from './status-dashboard/status-dashboard.component';
+import { StatusViewComponent } from './status-view/status-view.component';
 import { HttpClientModule } from "@angular/common/http";
 import { QuotesComponent } from './quotes/quotes.component';
 import { AccountStateComponent } from './account-state/account-state.component';
 import { OpenedPositionsComponent } from './opened-positions/opened-positions.component';
-import { BacktestDashboardComponent } from './backtest-dashboard/backtest-dashboard.component';
+import { BacktestViewComponent } from './backtest-view/backtest-view.component';
 import { BacktestStrategyViewComponent } from './backtest-strategy-view/backtest-strategy-view.component';
 import { BacktestStrategyFormComponent } from './backtest-strategy-form/backtest-strategy-form.component';
 import { RouterModule } from "@angular/router";
@@ -22,11 +22,11 @@ import { BacktestStrategyResultComponent } from './backtest-strategy-result/back
   declarations: [
     AppComponent,
     SidebarComponent,
-    StatusDashboardComponent,
+    StatusViewComponent,
     QuotesComponent,
     AccountStateComponent,
     OpenedPositionsComponent,
-    BacktestDashboardComponent,
+    BacktestViewComponent,
     BacktestStrategyViewComponent,
     BacktestStrategyFormComponent,
     BacktestStrategyResultComponent
