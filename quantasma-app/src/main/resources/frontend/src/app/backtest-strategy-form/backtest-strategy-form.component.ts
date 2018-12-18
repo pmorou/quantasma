@@ -39,7 +39,7 @@ export class BacktestStrategyFormComponent implements OnInit {
 
   onSubmit() {
     if (this.backtestForm.invalid) {
-      console.log("Form invalid");
+      this.status = "invalid form.";
       return;
     }
 
