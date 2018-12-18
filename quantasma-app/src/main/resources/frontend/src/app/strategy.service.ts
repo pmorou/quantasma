@@ -15,10 +15,10 @@ export class StrategyService {
   }
 
   deactivate(id: number) {
-    return this.http.get("strategy/deactivate/" + id);
+    return this.http.patch("strategy/deactivate/" + id, {});
   }
 
   activate(id: number) {
-    return this.http.get("strategy/activate/" + id);
+    return this.http.patch("strategy/activate/" + id, {});
   }
 }
