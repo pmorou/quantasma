@@ -6,11 +6,11 @@ import {BacktestStrategyResultComponent} from "../backtest-strategy-result/backt
 import { concatMap } from "rxjs/internal/operators";
 
 @Component({
-  selector: 'app-backtest-strategy',
-  templateUrl: './backtest-strategy.component.html',
-  styleUrls: ['./backtest-strategy.component.scss']
+  selector: 'app-backtest-strategy-view',
+  templateUrl: './backtest-strategy-view.component.html',
+  styleUrls: ['./backtest-strategy-view.component.scss']
 })
-export class BacktestStrategyComponent implements OnInit {
+export class BacktestStrategyViewComponent implements OnInit {
   backtest?: Backtest;
 
   availableParameters: Parameter[] = [];

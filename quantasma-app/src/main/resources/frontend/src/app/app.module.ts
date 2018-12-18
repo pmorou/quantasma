@@ -10,7 +10,7 @@ import { QuotesComponent } from './quotes/quotes.component';
 import { AccountStateComponent } from './account-state/account-state.component';
 import { OpenedPositionsComponent } from './opened-positions/opened-positions.component';
 import { BacktestDashboardComponent } from './backtest-dashboard/backtest-dashboard.component';
-import { BacktestStrategyComponent } from './backtest-strategy/backtest-strategy.component';
+import { BacktestStrategyViewComponent } from './backtest-strategy-view/backtest-strategy-view.component';
 import { BacktestStrategyFormComponent } from './backtest-strategy-form/backtest-strategy-form.component';
 import { RouterModule } from "@angular/router";
 import { MaterialModule } from './material.module';
@@ -27,7 +27,7 @@ import { BacktestStrategyResultComponent } from './backtest-strategy-result/back
     AccountStateComponent,
     OpenedPositionsComponent,
     BacktestDashboardComponent,
-    BacktestStrategyComponent,
+    BacktestStrategyViewComponent,
     BacktestStrategyFormComponent,
     BacktestStrategyResultComponent
   ],
