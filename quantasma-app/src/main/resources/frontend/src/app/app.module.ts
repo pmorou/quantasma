@@ -13,7 +13,10 @@ import { BacktestComponent } from './backtests/backtest.component';
 import { BacktestStrategyComponent } from './backtest-strategy/backtest-strategy.component';
 import { BacktestStrategyFormComponent } from './backtest-strategy-form/backtest-strategy-form.component';
 import { RouterModule } from "@angular/router";
+import { MaterialModule } from './material.module';
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { ReactiveFormsModule } from "@angular/forms";
+import { BacktestStrategyResultComponent } from './backtest-strategy-result/backtest-strategy-result.component';
 
 @NgModule({
   declarations: [
@@ -25,14 +28,17 @@ import { ReactiveFormsModule } from "@angular/forms";
     OpenedPositionsComponent,
     BacktestComponent,
     BacktestStrategyComponent,
-    BacktestStrategyFormComponent
+    BacktestStrategyFormComponent,
+    BacktestStrategyResultComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     RouterModule,
-    ReactiveFormsModule
+    ReactiveFormsModule,
+    MaterialModule,
+    BrowserAnimationsModule
   ],
   providers: [],
   bootstrap: [AppComponent]
