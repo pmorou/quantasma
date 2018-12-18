@@ -1,9 +1,11 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import { ActivatedRoute } from "@angular/router";
 import { BacktestService } from "../backtest.service";
-import { Backtest, Parameter } from "../shared/backtest.model";
+import { Backtest } from "../shared/backtest.model";
 import {BacktestStrategyResultComponent} from "../backtest-strategy-result/backtest-strategy-result.component";
 import { concatMap } from "rxjs/internal/operators";
+import { ParameterDescription } from "../shared/parameter-description.model";
+import { Criterion } from "../shared/criterion.model";
 
 @Component({
   selector: 'app-backtest-strategy-view',
@@ -13,8 +15,8 @@ import { concatMap } from "rxjs/internal/operators";
 export class BacktestStrategyViewComponent implements OnInit {
   backtest?: Backtest;
 
-  availableParameters: Parameter[] = [];
-  availableCriterions: string[] = [];
+  availableParameters: ParameterDescription[] = [];
+  availableCriterions: Criterion[] = [];
 
   @ViewChild("backtestResult")
   backtestResult?: BacktestStrategyResultComponent;
@@ -25,15 +27,15 @@ export class BacktestStrategyViewComponent implements OnInit {
     this.route.params.pipe(
       concatMap(params => this.backtestService.get(params.name)))
     .subscribe(value => {
-      this.backtest = <Backtest> value;
+      this.backtest = value;
       this.availableParameters = this.backtest.parameters;
     });
     this.backtestService.criterions().subscribe(value => {
-      this.availableCriterions = <string[]>value;
+      this.availableCriterions = value;
     })
   }
 
-  testFinished($event: any) {
+  testFinished($event: any[]) {
     const testResult = this.flatten($event);
     if (this.backtestResult != undefined) {
       this.backtestResult.updateTable(testResult);

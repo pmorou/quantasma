@@ -8,7 +8,6 @@ import { AccountState } from "../shared/account-state.model";
   styleUrls: ['./account-state.component.scss']
 })
 export class AccountStateComponent implements OnInit {
-
   accountState$?: AccountState;
 
   constructor(private events: EventsService) { }

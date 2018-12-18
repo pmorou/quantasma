@@ -9,12 +9,10 @@ import { Subscription } from "rxjs/index";
   styleUrls: ['./opened-positions.component.scss']
 })
 export class OpenedPositionsComponent implements OnInit, OnDestroy {
-
   openedPositions$?: OpenedPosition[];
   subscription: Subscription = Subscription.EMPTY;
 
-  constructor(private events: EventsService) {
-  }
+  constructor(private events: EventsService) { }
 
   ngOnInit() {
     this.subscription = this.events.openedPositions().subscribe(value => {

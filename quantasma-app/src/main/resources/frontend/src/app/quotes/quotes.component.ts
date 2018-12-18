@@ -9,7 +9,6 @@ import { Subscription } from "rxjs/index";
   styleUrls: ['./quotes.component.scss']
 })
 export class QuotesComponent implements OnInit, OnDestroy {
-
   private subscription: Subscription = Subscription.EMPTY;
 
   constructor(private events: EventsService) { }

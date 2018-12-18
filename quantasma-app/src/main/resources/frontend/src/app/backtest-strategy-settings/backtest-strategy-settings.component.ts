@@ -1,6 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { BacktestService } from "../backtest.service";
+import { ParameterDescription } from "../shared/parameter-description.model";
+import { Criterion } from "../shared/criterion.model";
+import { TimeWindow } from "../shared/time-window.model";
 
 @Component({
   selector: 'app-backtest-strategy-settings',
@@ -8,11 +11,10 @@ import { BacktestService } from "../backtest.service";
   styleUrls: ['./backtest-strategy-settings.component.scss']
 })
 export class BacktestStrategySettingsComponent implements OnInit {
-
   @Input("params")
-  availableParameters: any[] = [];
+  availableParameters: ParameterDescription[] = [];
   @Input("crits")
-  availableCriterions: string[] = [];
+  availableCriterions: Criterion[] = [];
   @Input("backtestName")
   backtestName: string = "";
 
@@ -20,7 +22,12 @@ export class BacktestStrategySettingsComponent implements OnInit {
   testFinished = new EventEmitter();
 
   status: string = "ready";
-  windows: any[] = [{name: '1 day', value: 'P1D'}, {name: '1 week', value: 'P1W'}, {name: '1 month', value: 'P1M'}, {name: '1 year', value: 'P1Y'}];
+  availableTimeWindows: TimeWindow[] = [
+    {name: '1 day', value: 'P1D'},
+    {name: '1 week', value: 'P1W'},
+    {name: '1 month', value: 'P1M'},
+    {name: '1 year', value: 'P1Y'}
+  ];
 
   constructor(private fb: FormBuilder, private backtestService: BacktestService) { }
 

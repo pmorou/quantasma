@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { BacktestService } from "../backtest.service";
+import {Backtest} from "../shared/backtest.model";
 
 @Component({
   selector: 'app-backtest-view',
@@ -7,8 +8,7 @@ import { BacktestService } from "../backtest.service";
   styleUrls: ['./backtest-view.component.scss']
 })
 export class BacktestViewComponent implements OnInit {
-
-  backtests$: any = [];
+  backtests$: Backtest[] = [];
 
   constructor(private backtestService: BacktestService) { }
 

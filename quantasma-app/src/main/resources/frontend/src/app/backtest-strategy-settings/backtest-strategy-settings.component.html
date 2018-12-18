@@ -27,7 +27,7 @@
     <div *ngFor="let item of criterions.controls; let paramIndex=index" [formGroupName]="paramIndex">
       <select formControlName="name">
         <option>-</option>
-        <option *ngFor="let crit of availableCriterions">{{crit}}</option>
+        <option *ngFor="let crit of availableCriterions">{{crit.name}}</option>
       </select>
       <button type="button" (click)="deleteCriterions(paramIndex)">X</button>
     </div>
@@ -47,7 +47,7 @@
     <label for="window">
       Window
       <select id="window" formControlName="window">
-        <option *ngFor="let window of windows" value="{{ window.value }}">{{ window.name }}</option>
+        <option *ngFor="let window of availableTimeWindows" value="{{ window.value }}">{{ window.name }}</option>
       </select>
     </label>
   </div>

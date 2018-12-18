@@ -3,6 +3,7 @@ import { StrategyService } from "../strategy.service";
 import {map, tap} from "rxjs/operators";
 import {flatMap} from "rxjs/operators";
 import {Subject} from "rxjs/index";
+import { Strategy } from "../shared/strategy.model";
 
 @Component({
   selector: 'app-status-view',
@@ -10,18 +11,18 @@ import {Subject} from "rxjs/index";
   styleUrls: ['./status-view.component.scss']
 })
 export class StatusViewComponent implements OnInit {
-  strategies$: any = [];
+  strategies$: Strategy[] = [];
 
   updateStrategiesSubject: Subject<void> = new Subject();
-  deactivateStrategySubject: Subject<any> = new Subject();
-  activateStrategySubject: Subject<any> = new Subject();
+  deactivateStrategySubject: Subject<number> = new Subject();
+  activateStrategySubject: Subject<number> = new Subject();
 
   constructor(private strategyService: StrategyService) { }
 
   ngOnInit() {
     this.updateStrategiesSubject.asObservable().pipe(
       flatMap(() => this.strategyService.getStrategies()),
-      tap((strategies: any[]) => this.strategies$ = strategies))
+      tap(strategies => this.strategies$ = strategies))
     .subscribe();
 
     this.deactivateStrategySubject.asObservable().pipe(
@@ -41,11 +42,11 @@ export class StatusViewComponent implements OnInit {
     this.updateStrategiesSubject.next();
   }
 
-  deactivateStrategy(id: any) {
+  deactivateStrategy(id: number) {
     this.deactivateStrategySubject.next(id);
   }
 
-  activateStrategy(id: any) {
+  activateStrategy(id: number) {
     this.activateStrategySubject.next(id);
   }
 }
