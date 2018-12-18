@@ -10,16 +10,15 @@ import { filter, map } from "rxjs/internal/operators";
 export class SidebarComponent implements OnInit {
   currentUrl: string = "";
 
-  constructor(private router: Router) {
+  constructor(private router: Router) { }
+
+  ngOnInit() {
     this.router.events.pipe(
       filter(event => event instanceof NavigationEnd),
       map(value => <NavigationEnd> value)
     ).subscribe(
       (_: NavigationEnd) => this.currentUrl = _.url
     )
-  }
-
-  ngOnInit() {
   }
 
 }
