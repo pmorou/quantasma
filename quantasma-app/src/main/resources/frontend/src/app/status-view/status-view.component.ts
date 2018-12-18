@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
 import { StrategyService } from "../strategy.service";
-import {map, tap} from "rxjs/operators";
 import {flatMap} from "rxjs/operators";
 import {Subject} from "rxjs/index";
 import { Strategy } from "../shared/strategy.model";
@@ -13,40 +12,31 @@ import { Strategy } from "../shared/strategy.model";
 export class StatusViewComponent implements OnInit {
   strategies$: Strategy[] = [];
 
-  updateStrategiesSubject: Subject<void> = new Subject();
-  deactivateStrategySubject: Subject<number> = new Subject();
-  activateStrategySubject: Subject<number> = new Subject();
+  private updateStrategiesSubject: Subject<void> = new Subject();
 
   constructor(private strategyService: StrategyService) { }
 
   ngOnInit() {
     this.updateStrategiesSubject.asObservable().pipe(
-      flatMap(() => this.strategyService.getStrategies()),
-      tap(strategies => this.strategies$ = strategies))
-    .subscribe();
+      flatMap(() => this.strategyService.getStrategies()))
+    .subscribe(strategies => this.strategies$ = strategies);
 
-    this.deactivateStrategySubject.asObservable().pipe(
-      map((id: any) => this.strategyService.deactivate(id)),
-      tap(() => this.updateStrategies))
-    .subscribe();
-
-    this.activateStrategySubject.asObservable().pipe(
-      map((id: any) => this.strategyService.activate(id)),
-      tap(() => this.updateStrategies))
-    .subscribe();
-
-    this.updateStrategies();
+    this.refreshStrategies();
   }
 
-  updateStrategies() {
+  refreshStrategies() {
     this.updateStrategiesSubject.next();
   }
 
   deactivateStrategy(id: number) {
-    this.deactivateStrategySubject.next(id);
+    this.strategyService.deactivate(id).subscribe(() => {
+      this.refreshStrategies();
+    })
   }
 
   activateStrategy(id: number) {
-    this.activateStrategySubject.next(id);
+    this.strategyService.activate(id).subscribe(() => {
+      this.refreshStrategies();
+    })
   }
 }
