@@ -38,12 +38,12 @@ export class BacktestStrategyFormComponent implements OnInit {
   }
 
   onSubmit() {
-    this.status = "loading...";
-
     if (this.backtestForm.invalid) {
       console.log("Form invalid");
       return;
     }
+
+    this.status = "loading...";
 
     this.backtestService.test(this.backtestName, JSON.stringify(this.backtestForm.value)).subscribe(value => {
       this.testFinished.emit(value);
