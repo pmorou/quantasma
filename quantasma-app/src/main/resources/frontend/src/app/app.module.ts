@@ -9,7 +9,7 @@ import { HttpClientModule } from "@angular/common/http";
 import { QuotesComponent } from './quotes/quotes.component';
 import { AccountStateComponent } from './account-state/account-state.component';
 import { OpenedPositionsComponent } from './opened-positions/opened-positions.component';
-import { BacktestComponent } from './backtests/backtest.component';
+import { BacktestDashboardComponent } from './backtest-dashboard/backtest-dashboard.component';
 import { BacktestStrategyComponent } from './backtest-strategy/backtest-strategy.component';
 import { BacktestStrategyFormComponent } from './backtest-strategy-form/backtest-strategy-form.component';
 import { RouterModule } from "@angular/router";
@@ -26,7 +26,7 @@ import { BacktestStrategyResultComponent } from './backtest-strategy-result/back
     QuotesComponent,
     AccountStateComponent,
     OpenedPositionsComponent,
-    BacktestComponent,
+    BacktestDashboardComponent,
     BacktestStrategyComponent,
     BacktestStrategyFormComponent,
     BacktestStrategyResultComponent

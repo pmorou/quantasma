@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { BacktestComponent } from './backtest.component';
+import { BacktestDashboardComponent } from './backtest-dashboard.component';
 
 describe('BacktestComponent', () => {
-  let component: BacktestComponent;
-  let fixture: ComponentFixture<BacktestComponent>;
+  let component: BacktestDashboardComponent;
+  let fixture: ComponentFixture<BacktestDashboardComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ BacktestComponent ]
+      declarations: [ BacktestDashboardComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(BacktestComponent);
+    fixture = TestBed.createComponent(BacktestDashboardComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

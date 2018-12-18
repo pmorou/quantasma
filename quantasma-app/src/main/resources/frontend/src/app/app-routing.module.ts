@@ -1,7 +1,7 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from "@angular/router";
 import { DashboardComponent } from "./dashboard/dashboard.component";
-import { BacktestComponent } from "./backtests/backtest.component";
+import { BacktestDashboardComponent } from "./backtest-dashboard/backtest-dashboard.component";
 import { BacktestStrategyComponent } from "./backtest-strategy/backtest-strategy.component";
 
 const routes: Routes = [
@@ -11,7 +11,7 @@ const routes: Routes = [
   },
   {
     path: 'backtest',
-    component: BacktestComponent
+    component: BacktestDashboardComponent
   },
   {
     path: 'backtest/:name',
