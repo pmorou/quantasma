@@ -3,11 +3,11 @@ import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { BacktestService } from "../backtest.service";
 
 @Component({
-  selector: 'app-backtest-strategy-form',
-  templateUrl: './backtest-strategy-form.component.html',
-  styleUrls: ['./backtest-strategy-form.component.scss']
+  selector: 'app-backtest-strategy-settings',
+  templateUrl: './backtest-strategy-settings.component.html',
+  styleUrls: ['./backtest-strategy-settings.component.scss']
 })
-export class BacktestStrategyFormComponent implements OnInit {
+export class BacktestStrategySettingsComponent implements OnInit {
 
   @Input("params")
   availableParameters: any[] = [];

@@ -1,20 +1,20 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { BacktestStrategyFormComponent } from './backtest-strategy-form.component';
+import { BacktestStrategySettingsComponent } from './backtest-strategy-form.component';
 
 describe('ProductFormComponent', () => {
-  let component: BacktestStrategyFormComponent;
-  let fixture: ComponentFixture<BacktestStrategyFormComponent>;
+  let component: BacktestStrategySettingsComponent;
+  let fixture: ComponentFixture<BacktestStrategySettingsComponent>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ BacktestStrategyFormComponent ]
+      declarations: [ BacktestStrategySettingsComponent ]
     })
     .compileComponents();
   }));
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(BacktestStrategyFormComponent);
+    fixture = TestBed.createComponent(BacktestStrategySettingsComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

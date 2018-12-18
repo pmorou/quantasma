@@ -11,7 +11,7 @@ import { AccountStateComponent } from './account-state/account-state.component';
 import { OpenedPositionsComponent } from './opened-positions/opened-positions.component';
 import { BacktestViewComponent } from './backtest-view/backtest-view.component';
 import { BacktestStrategyViewComponent } from './backtest-strategy-view/backtest-strategy-view.component';
-import { BacktestStrategyFormComponent } from './backtest-strategy-form/backtest-strategy-form.component';
+import { BacktestStrategySettingsComponent } from './backtest-strategy-settings/backtest-strategy-settings.component';
 import { RouterModule } from "@angular/router";
 import { MaterialModule } from './material.module';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
@@ -28,7 +28,7 @@ import { BacktestStrategyResultComponent } from './backtest-strategy-result/back
     OpenedPositionsComponent,
     BacktestViewComponent,
     BacktestStrategyViewComponent,
-    BacktestStrategyFormComponent,
+    BacktestStrategySettingsComponent,
     BacktestStrategyResultComponent
   ],
   imports: [

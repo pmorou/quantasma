@@ -5,10 +5,10 @@
     <li>
       <p><strong>Strategy:</strong> {{ backtest?.strategy }}</p>
 
-      <app-backtest-strategy-form [params]="availableParameters"
-                                  [crits]="availableCriterions"
-                                  [backtestName]="backtest?.name"
-                                  (testFinished)="testFinished($event)"></app-backtest-strategy-form>
+      <app-backtest-strategy-settings [params]="availableParameters"
+                                      [crits]="availableCriterions"
+                                      [backtestName]="backtest?.name"
+                                      (testFinished)="testFinished($event)"></app-backtest-strategy-settings>
 
       <br/>
 
