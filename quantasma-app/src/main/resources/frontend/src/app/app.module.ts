@@ -4,7 +4,7 @@ import { NgModule } from '@angular/core';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { SidebarComponent } from './sidebar/sidebar.component';
-import { DashboardComponent } from './dashboard/dashboard.component';
+import { StatusDashboardComponent } from './status-dashboard/status-dashboard.component';
 import { HttpClientModule } from "@angular/common/http";
 import { QuotesComponent } from './quotes/quotes.component';
 import { AccountStateComponent } from './account-state/account-state.component';
@@ -22,7 +22,7 @@ import { BacktestStrategyResultComponent } from './backtest-strategy-result/back
   declarations: [
     AppComponent,
     SidebarComponent,
-    DashboardComponent,
+    StatusDashboardComponent,
     QuotesComponent,
     AccountStateComponent,
     OpenedPositionsComponent,
