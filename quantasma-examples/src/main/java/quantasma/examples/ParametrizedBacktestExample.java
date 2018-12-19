@@ -21,7 +21,7 @@ import static quantasma.core.analysis.parametrize.generators.Ints.range;
 
 public class ParametrizedBacktestExample {
     public static void main(String[] args) {
-        // tag::ParametrizedBacktestExample[]
+        // tag::parametrizedBacktestExample[]
         final TestMarketData testMarketData = new TestMarketData(
                 MultipleTimeSeriesBuilder.basedOn(TimeSeriesDefinition.unlimited(BarPeriod.M1))
                                          .symbols("EURUSD")
@@ -52,5 +52,5 @@ public class ParametrizedBacktestExample {
                     // Proper criterion can be used now on the result
                 });
     }
-    // end::ParametrizedBacktestExample[]
+    // end::parametrizedBacktestExample[]
 }
