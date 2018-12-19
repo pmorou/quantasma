@@ -64,10 +64,6 @@ export class BacktestStrategySettingsComponent implements OnInit {
     this.parameters.push(this.fb.group({name: [name, Validators.required], value: ['', Validators.required]}));
   }
 
-  deleteParameter(index: number) {
-    this.parameters.removeAt(index);
-  }
-
   get criterions() {
     return this.backtestForm.get('criterions') as FormArray;
   }

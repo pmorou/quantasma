@@ -8,7 +8,6 @@
   <ul>
     <li *ngFor="let param of availableParameters">
       {{ param.name }}: {{ param.type }}
-      <button type="button" (click)="addParameter(param.name)">Specify</button>
     </li>
   </ul>
 
@@ -16,7 +15,6 @@
     <div *ngFor="let item of parameters.controls; let paramIndex=index" [formGroupName]="paramIndex">
       <div *ngIf="item.value.name != ''">
         <input disabled class="input--invisible" formControlName="name"/>: <input formControlName="value"/>
-        <button type="button" (click)="deleteParameter(paramIndex)">X</button>
       </div>
     </div>
   </div>
