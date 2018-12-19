@@ -47,3 +47,10 @@ In case you decide to create your own trading application its as simple as the f
 ----
 include::{examplesDir}/TradeAppExample.java[tags=tradeAppExample]
 ----
+
+Backtest parametrization:
+
+[source,java,indent=0]
+----
+include::{examplesDir}/ParametrizedBacktestExample.java[tags=parametrizedBacktestExample]
+----
