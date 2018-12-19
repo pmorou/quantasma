@@ -37,6 +37,8 @@ The aim is to provide any needed functionality to follow the ever-changing marke
 
 >= Java 8
 
+Java 9 is comming shortly. The main goal is to migrate to Java 11 step by step.
+
 == Example Usage
 
 In case you decide to create your own trading application its as simple as the following code.
