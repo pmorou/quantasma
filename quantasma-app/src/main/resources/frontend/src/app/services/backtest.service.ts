@@ -1,9 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from "@angular/common/http";
-import { Criterion } from "./shared/criterion.model";
+import { Criterion } from "../models/criterion.model";
 import { map } from "rxjs/internal/operators";
 import { Observable } from "rxjs/index";
-import { Backtest } from "./shared/backtest.model";
+import { Backtest } from "../models/backtest.model";
 
 @Injectable({
   providedIn: 'root'

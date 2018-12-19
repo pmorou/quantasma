@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { StrategyService } from "../../strategy.service";
+import { StrategyService } from "../../services/strategy.service";
 import { flatMap } from "rxjs/operators";
 import { Subject } from "rxjs/index";
-import { Strategy } from "../../shared/strategy.model";
+import { Strategy } from "../../models/strategy.model";
 
 @Component({
   selector: 'app-status-view',

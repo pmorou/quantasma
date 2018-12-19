@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { BacktestService } from "../../backtest.service";
-import { Backtest } from "../../shared/backtest.model";
+import { BacktestService } from "../../services/backtest.service";
+import { Backtest } from "../../models/backtest.model";
 
 @Component({
   selector: 'app-backtest-view',

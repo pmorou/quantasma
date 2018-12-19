@@ -1,9 +1,9 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
-import { BacktestService } from "../../backtest.service";
-import { ParameterDescription } from "../../shared/parameter-description.model";
-import { Criterion } from "../../shared/criterion.model";
-import { TimeWindow } from "../../shared/time-window.model";
+import { BacktestService } from "../../services/backtest.service";
+import { ParameterDescription } from "../../models/parameter-description.model";
+import { Criterion } from "../../models/criterion.model";
+import { TimeWindow } from "../../models/time-window.model";
 
 @Component({
   selector: 'app-backtest-strategy-settings',

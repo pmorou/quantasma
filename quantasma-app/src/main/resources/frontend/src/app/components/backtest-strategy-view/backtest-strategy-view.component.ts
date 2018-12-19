@@ -1,11 +1,11 @@
 import {Component, OnInit, ViewChild} from '@angular/core';
 import { ActivatedRoute } from "@angular/router";
-import { BacktestService } from "../../backtest.service";
-import { Backtest } from "../../shared/backtest.model";
+import { BacktestService } from "../../services/backtest.service";
+import { Backtest } from "../../models/backtest.model";
 import { BacktestStrategyResultComponent } from "../backtest-strategy-result/backtest-strategy-result.component";
 import { concatMap, tap } from "rxjs/internal/operators";
-import { ParameterDescription } from "../../shared/parameter-description.model";
-import { Criterion } from "../../shared/criterion.model";
+import { ParameterDescription } from "../../models/parameter-description.model";
+import { Criterion } from "../../models/criterion.model";
 import { BacktestStrategySettingsComponent } from "../backtest-strategy-settings/backtest-strategy-settings.component";
 
 @Component({
