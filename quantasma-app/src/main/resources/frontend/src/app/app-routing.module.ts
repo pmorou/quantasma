@@ -5,18 +5,9 @@ import { BacktestViewComponent } from "./backtest-view/backtest-view.component";
 import { BacktestStrategyViewComponent } from "./backtest-strategy-view/backtest-strategy-view.component";
 
 const routes: Routes = [
-  {
-    path: '',
-    component: StatusViewComponent
-  },
-  {
-    path: 'backtest',
-    component: BacktestViewComponent
-  },
-  {
-    path: 'backtest/:name',
-    component: BacktestStrategyViewComponent
-  }
+  { path: '', component: StatusViewComponent },
+  { path: 'backtest', component: BacktestViewComponent },
+  { path: 'backtest/:name', component: BacktestStrategyViewComponent }
 ];
 
 @NgModule({
