@@ -5,18 +5,17 @@
 
   <p><strong>Parameters:</strong></p>
 
-  <ul>
-    <li *ngFor="let param of availableParameters">
-      {{ param.name }}: {{ param.type }}
-    </li>
-  </ul>
-
   <div formArrayName="parameters">
-    <div *ngFor="let item of parameters.controls; let paramIndex=index" [formGroupName]="paramIndex">
-      <div *ngIf="item.value.name != ''">
-        <input disabled class="input--invisible" formControlName="name"/>: <input formControlName="value"/>
+    <ul>
+      <div *ngFor="let item of parameters.controls; let paramIndex=index" [formGroupName]="paramIndex">
+        <li *ngFor="let param of availableParameters">
+          <div *ngIf="param.name == item.value.name">
+            {{ param.name }} ({{ param.type }})<br />
+            <input formControlName="value"/>
+          </div>
+        </li>
       </div>
-    </div>
+    </ul>
   </div>
 
   <p><strong>Criterions:</strong></p>
