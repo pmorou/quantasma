@@ -11,7 +11,7 @@ import quantasma.core.StrategyDescription;
 import java.util.Set;
 
 @RestController
-@RequestMapping("strategy")
+@RequestMapping("api/strategy")
 public class StrategyController {
 
     private final StrategyService strategyService;

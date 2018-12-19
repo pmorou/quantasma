@@ -20,7 +20,7 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @RestController
-@RequestMapping("backtest")
+@RequestMapping("api/backtest")
 public class BacktestController {
 
     private final List<StrategyBacktest> backtestList;

@@ -15,7 +15,7 @@ import reactor.core.publisher.Flux;
 import java.util.List;
 
 @RestController
-@RequestMapping("events")
+@RequestMapping("api/events")
 public class EventsController {
 
     private final EventsService eventsService;

@@ -11,14 +11,14 @@ export class StrategyService {
   constructor(private http: HttpClient) { }
 
   getStrategies(): Observable<Strategy[]> {
-    return <Observable<Strategy[]>> this.http.get("strategy/all");
+    return <Observable<Strategy[]>> this.http.get("api/strategy/all");
   }
 
   deactivate(id: number) {
-    return this.http.patch("strategy/deactivate/" + id, {});
+    return this.http.patch("api/strategy/deactivate/" + id, {});
   }
 
   activate(id: number) {
-    return this.http.patch("strategy/activate/" + id, {});
+    return this.http.patch("api/strategy/activate/" + id, {});
   }
 }

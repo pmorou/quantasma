@@ -13,21 +13,21 @@ export class BacktestService {
   constructor(private http: HttpClient) { }
 
   public all(): Observable<Backtest[]> {
-    return <Observable<Backtest[]>> this.http.get("backtest/all");
+    return <Observable<Backtest[]>> this.http.get("api/backtest/all");
   }
 
   public get(name: string): Observable<Backtest> {
-    return <Observable<Backtest>> this.http.get("backtest/" + name);
+    return <Observable<Backtest>> this.http.get("api/backtest/" + name);
   }
 
   public test(name: string, json: string) {
-    return this.http.post("backtest/" + name, json,
+    return this.http.post("api/backtest/" + name, json,
       { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) }
     );
   }
 
   public criterions(): Observable<Criterion[]> {
-    return this.http.get("backtest/criterions").pipe(
+    return this.http.get("api/backtest/criterions").pipe(
       map(arr => (<string[]> arr).map(str => <Criterion>{name: str}))
     );
   }

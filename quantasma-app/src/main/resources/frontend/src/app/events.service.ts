@@ -11,9 +11,9 @@ export class EventsService {
 
   private sources: EventSource[] = []; // keep objects (connections) alive
 
-  private quoteSubject: Subject<Quote> = this.initializeSubject('events/quote', 'quote-event');
-  private accountStateSubject: Subject<AccountState> = this.initializeSubject('events/accountState', 'account_state-event');
-  private openedPositionsSubject: Subject<OpenedPosition[]> = this.initializeSubject('events/openedPositions', 'opened_positions-event');
+  private quoteSubject: Subject<Quote> = this.initializeSubject('api/events/quote', 'quote-event');
+  private accountStateSubject: Subject<AccountState> = this.initializeSubject('api/events/accountState', 'account_state-event');
+  private openedPositionsSubject: Subject<OpenedPosition[]> = this.initializeSubject('api/events/openedPositions', 'opened_positions-event');
 
   constructor() { }
 
