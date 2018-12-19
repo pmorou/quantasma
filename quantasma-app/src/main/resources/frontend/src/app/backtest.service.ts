@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import {Criterion} from "./shared/criterion.model";
 import {map} from "rxjs/internal/operators";
 import {Observable} from "rxjs/index";
@@ -21,7 +21,9 @@ export class BacktestService {
   }
 
   public test(name: string, json: string) {
-    return this.http.post("backtest/" + name, json);
+    return this.http.post("backtest/" + name, json,
+      { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) }
+    );
   }
 
   public criterions(): Observable<Criterion[]> {

@@ -7,9 +7,9 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import quantasma.app.config.service.backtest.CriterionsFactory;
+import quantasma.app.model.BacktestRequest;
 import quantasma.app.model.BacktestScenario;
 import quantasma.app.model.ParameterDescription;
-import quantasma.app.util.TempImplementations;
 import quantasma.core.analysis.BacktestResult;
 import quantasma.core.analysis.StrategyBacktest;
 
@@ -60,11 +60,14 @@ public class BacktestController {
     }
 
     @RequestMapping(value = "{name}", method = RequestMethod.POST)
-    public List<BacktestResult> test(@PathVariable String name, @RequestBody String json) {
+    public List<BacktestResult> test(@PathVariable String name, @RequestBody BacktestRequest request) {
         return backtestList.stream()
                            .filter(strategyBacktest -> strategyBacktest.getClass().getSimpleName().equalsIgnoreCase(name))
                            .findFirst()
-                           .map(TempImplementations.calculateBacktestResult(json))
+                           .map(strategyBacktest -> strategyBacktest.run(request.parameters(strategyBacktest.parameterizables()),
+                                                                         request.criterionNames(),
+                                                                         request.getTime().getFrom().atStartOfDay(),
+                                                                         request.getTime().getWindowAsPeriod()))
                            .orElseThrow(RuntimeException::new);
     }
 
