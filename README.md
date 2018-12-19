@@ -4,13 +4,15 @@ All-in-one algorithmic trading platform. Build your own backtested-strategy usin
 
 Modules short-description:
 
--   [quantasma-app]({quantasma-app/}): ready-to-use platform
+-   [quantasma-app]({quantasma-app/}): ready-to-use application based on below modules
 
--   [quantasma-core]({quantasma-core/}): trading library providing core mechanisms
+-   [quantasma-core]({quantasma-core/}): trading library providing core mechanics
 
 -   [quantasma-examples]({quantasma-examples/}): example usages
 
 -   [quantasma-integrations]({quantasma-integrations/}): integrations with 3rd party APIs
+
+**NOTE: All modules are still in development. Use at your own risk.**
 
 Platform stands on top of [ta4j](https://github.com/ta4j/ta4j) providing additional features as:
 
@@ -31,6 +33,8 @@ The aim is to provide any needed functionality to follow the ever-changing marke
 ## Requirements
 
 &gt;= Java 8
+
+Java 9 is comming shortly. The main goal is to migrate to Java 11 step by step.
 
 ## Example Usage
 
