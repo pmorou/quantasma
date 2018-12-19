@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core';
 import { RouterModule, Routes } from "@angular/router";
-import { StatusViewComponent } from "./status-view/status-view.component";
-import { BacktestViewComponent } from "./backtest-view/backtest-view.component";
-import { BacktestStrategyViewComponent } from "./backtest-strategy-view/backtest-strategy-view.component";
+import { StatusViewComponent } from "./components/status-view/status-view.component";
+import { BacktestViewComponent } from "./components/backtest-view/backtest-view.component";
+import { BacktestStrategyViewComponent } from "./components/backtest-strategy-view/backtest-strategy-view.component";
 
 const routes: Routes = [
   { path: '', component: StatusViewComponent },

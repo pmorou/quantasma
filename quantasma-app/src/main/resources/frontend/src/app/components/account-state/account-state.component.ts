@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { EventsService } from "../events.service";
-import { AccountState } from "../shared/account-state.model";
+import { EventsService } from "../../events.service";
+import { AccountState } from "../../shared/account-state.model";
 
 @Component({
   selector: 'app-account-state',

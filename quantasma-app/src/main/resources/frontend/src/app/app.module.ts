@@ -3,20 +3,20 @@ import { NgModule } from '@angular/core';
 
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
-import { SidebarComponent } from './sidebar/sidebar.component';
-import { StatusViewComponent } from './status-view/status-view.component';
+import { SidebarComponent } from './components/sidebar/sidebar.component';
+import { StatusViewComponent } from './components/status-view/status-view.component';
 import { HttpClientModule } from "@angular/common/http";
-import { QuotesComponent } from './quotes/quotes.component';
-import { AccountStateComponent } from './account-state/account-state.component';
-import { OpenedPositionsComponent } from './opened-positions/opened-positions.component';
-import { BacktestViewComponent } from './backtest-view/backtest-view.component';
-import { BacktestStrategyViewComponent } from './backtest-strategy-view/backtest-strategy-view.component';
-import { BacktestStrategySettingsComponent } from './backtest-strategy-settings/backtest-strategy-settings.component';
+import { QuotesComponent } from './components/quotes/quotes.component';
+import { AccountStateComponent } from './components/account-state/account-state.component';
+import { OpenedPositionsComponent } from './components/opened-positions/opened-positions.component';
+import { BacktestViewComponent } from './components/backtest-view/backtest-view.component';
+import { BacktestStrategyViewComponent } from './components/backtest-strategy-view/backtest-strategy-view.component';
+import { BacktestStrategySettingsComponent } from './components/backtest-strategy-settings/backtest-strategy-settings.component';
 import { RouterModule } from "@angular/router";
 import { MaterialModule } from './material.module';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { ReactiveFormsModule } from "@angular/forms";
-import { BacktestStrategyResultComponent } from './backtest-strategy-result/backtest-strategy-result.component';
+import { BacktestStrategyResultComponent } from './components/backtest-strategy-result/backtest-strategy-result.component';
 
 @NgModule({
   declarations: [
