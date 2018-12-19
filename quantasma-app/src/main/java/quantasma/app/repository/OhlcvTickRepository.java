@@ -1,5 +1,6 @@
 package quantasma.app.repository;
 
+import quantasma.app.model.SymbolTickSummary;
 import quantasma.app.model.PersistentOhlcvTick;
 
 import java.time.Instant;
@@ -11,4 +12,6 @@ public interface OhlcvTickRepository {
     PersistentOhlcvTick insert(PersistentOhlcvTick ohlcvTick);
 
     long countBySymbol(String symbol);
+
+    List<SymbolTickSummary> symbolsTickSummary();
 }

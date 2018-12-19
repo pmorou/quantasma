@@ -1,5 +1,6 @@
 package quantasma.app.service;
 
+import quantasma.app.model.SymbolTickSummary;
 import quantasma.app.model.OhlcvTick;
 import quantasma.app.model.PersistentOhlcvTick;
 import quantasma.core.BarPeriod;
@@ -18,4 +19,6 @@ public interface OhlcvTickService {
     List<OhlcvTick> findBySymbolAndDateBetweenOrderByDate(String symbol, Instant startDate, TemporalAmount window);
 
     long countBySymbol(String symbol);
+
+    List<SymbolTickSummary> symbolsTickSummary();
 }

@@ -10,6 +10,9 @@ import quantasma.app.config.service.backtest.CriterionsFactory;
 import quantasma.app.model.BacktestRequest;
 import quantasma.app.model.BacktestScenario;
 import quantasma.app.model.ParameterDescription;
+import quantasma.app.model.SymbolTickSummary;
+import quantasma.app.model.SymbolTickSummaryResponse;
+import quantasma.app.service.OhlcvTickService;
 import quantasma.core.analysis.BacktestResult;
 import quantasma.core.analysis.StrategyBacktest;
 
@@ -25,11 +28,13 @@ public class BacktestController {
 
     private final List<StrategyBacktest> backtestList;
     private final CriterionsFactory criterionsFactory;
+    private final OhlcvTickService tickService;
 
     @Autowired
-    public BacktestController(List<StrategyBacktest> backtestList, CriterionsFactory criterionsFactory) {
+    public BacktestController(List<StrategyBacktest> backtestList, CriterionsFactory criterionsFactory, OhlcvTickService tickService) {
         this.backtestList = backtestList;
         this.criterionsFactory = criterionsFactory;
+        this.tickService = tickService;
     }
 
     @RequestMapping("all")
@@ -75,4 +80,12 @@ public class BacktestController {
     public Set<String> criterions() {
         return criterionsFactory.available();
     }
+
+    @RequestMapping("ticks/summary")
+    public SymbolTickSummaryResponse tickSummary() {
+        return new SymbolTickSummaryResponse(tickService.symbolsTickSummary()
+                                                        .stream()
+                                                        .collect(Collectors.groupingBy(SymbolTickSummary::getSymbol)));
+    }
+
 }

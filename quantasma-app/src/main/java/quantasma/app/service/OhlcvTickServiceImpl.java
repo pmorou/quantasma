@@ -5,6 +5,7 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import quantasma.app.model.OhlcvTick;
 import quantasma.app.model.PersistentOhlcvTick;
+import quantasma.app.model.SymbolTickSummary;
 import quantasma.app.repository.OhlcvTickRepository;
 import quantasma.app.util.Util;
 import quantasma.core.BarPeriod;
@@ -77,6 +78,11 @@ public class OhlcvTickServiceImpl implements OhlcvTickService {
     @Override
     public long countBySymbol(String symbol) {
         return ohlcvTickRepository.countBySymbol(symbol);
+    }
+
+    @Override
+    public List<SymbolTickSummary> symbolsTickSummary() {
+        return ohlcvTickRepository.symbolsTickSummary();
     }
 
 }
