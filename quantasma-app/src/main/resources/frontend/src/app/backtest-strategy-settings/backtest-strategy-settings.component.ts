@@ -83,10 +83,7 @@ export class BacktestStrategySettingsComponent implements OnInit {
         from: ['', Validators.required],
         window: ['', Validators.required]
       }),
-      criterions: this.fb.array(
-        this.availableCriterions
-        .map(crit => Object.assign({value: 'true'}, {name: crit.name}))
-        .map(obj => this.fb.group(obj))
+      criterions: this.fb.array([this.fb.group({name: ''})]
       ),
       parameters: this.fb.array(
         this.availableParameters
