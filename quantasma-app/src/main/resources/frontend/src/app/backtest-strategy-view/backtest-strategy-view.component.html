@@ -5,7 +5,8 @@
     <li>
       <p><strong>Strategy:</strong> {{ backtest?.strategy }}</p>
 
-      <app-backtest-strategy-settings [params]="availableParameters"
+      <app-backtest-strategy-settings #backtestSettings
+                                      [params]="availableParameters"
                                       [crits]="availableCriterions"
                                       [backtestName]="backtest?.name"
                                       (testFinished)="testFinished($event)"></app-backtest-strategy-settings>

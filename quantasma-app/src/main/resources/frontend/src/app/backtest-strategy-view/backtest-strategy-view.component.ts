@@ -2,10 +2,11 @@ import {Component, OnInit, ViewChild} from '@angular/core';
 import { ActivatedRoute } from "@angular/router";
 import { BacktestService } from "../backtest.service";
 import { Backtest } from "../shared/backtest.model";
-import {BacktestStrategyResultComponent} from "../backtest-strategy-result/backtest-strategy-result.component";
-import { concatMap } from "rxjs/internal/operators";
+import { BacktestStrategyResultComponent } from "../backtest-strategy-result/backtest-strategy-result.component";
+import { concatMap, tap } from "rxjs/internal/operators";
 import { ParameterDescription } from "../shared/parameter-description.model";
 import { Criterion } from "../shared/criterion.model";
+import { BacktestStrategySettingsComponent } from "../backtest-strategy-settings/backtest-strategy-settings.component";
 
 @Component({
   selector: 'app-backtest-strategy-view',
@@ -14,9 +15,11 @@ import { Criterion } from "../shared/criterion.model";
 })
 export class BacktestStrategyViewComponent implements OnInit {
   backtest?: Backtest;
-
   availableParameters: ParameterDescription[] = [];
   availableCriterions: Criterion[] = [];
+
+  @ViewChild("backtestSettings")
+  backtestSettings?: BacktestStrategySettingsComponent;
 
   @ViewChild("backtestResult")
   backtestResult?: BacktestStrategyResultComponent;
@@ -25,14 +28,16 @@ export class BacktestStrategyViewComponent implements OnInit {
 
   ngOnInit() {
     this.route.params.pipe(
-      concatMap(params => this.backtestService.get(params.name)))
-    .subscribe(value => {
-      this.backtest = value;
-      this.availableParameters = this.backtest.parameters;
-    });
-    this.backtestService.criterions().subscribe(value => {
-      this.availableCriterions = value;
-    })
+      concatMap(params => this.backtestService.get(params.name)),
+      tap(value => {
+        this.backtest = value;
+        this.availableParameters = this.backtest.parameters;
+      }),
+      concatMap(() => this.backtestService.criterions()),
+      tap(value => {
+        this.availableCriterions = value;
+      })
+    ).subscribe(() => !!this.backtestSettings ? this.backtestSettings.renderForm() : {});
   }
 
   testFinished($event: any[]) {

@@ -21,6 +21,7 @@ export class BacktestStrategySettingsComponent implements OnInit {
   @Output()
   testFinished = new EventEmitter();
 
+  backtestForm: FormGroup = FormGroup.prototype;
   status: string = "ready";
   availableTimeWindows: TimeWindow[] = [
     {name: '1 day', value: 'P1D'},
@@ -29,17 +30,14 @@ export class BacktestStrategySettingsComponent implements OnInit {
     {name: '1 year', value: 'P1Y'}
   ];
 
-  constructor(private fb: FormBuilder, private backtestService: BacktestService) { }
-
-  backtestForm: FormGroup = this.fb.group({
-    title: [],
-    time: this.fb.group({
-      from: ['', Validators.required],
-      window: ['', Validators.required]
-    }),
-    criterions: this.fb.array([this.fb.group({name:['', Validators.required], value:'true'})]),
-    parameters: this.fb.array([this.fb.group({name:'', value:''})])
-  });
+  constructor(private fb: FormBuilder, private backtestService: BacktestService) {
+    this.backtestForm = this.fb.group({
+      title: [],
+      time: this.fb.group({from: {}, window: {}}),
+      criterions: this.fb.array([this.fb.group({name: '', value: ''})]),
+      parameters: this.fb.array([this.fb.group({name: '', value: ''})])
+    });
+  }
 
   ngOnInit() {
   }
@@ -82,4 +80,23 @@ export class BacktestStrategySettingsComponent implements OnInit {
     this.criterions.removeAt(index);
   }
 
+  renderForm() {
+    this.backtestForm = this.fb.group({
+      title: [],
+      time: this.fb.group({
+        from: ['', Validators.required],
+        window: ['', Validators.required]
+      }),
+      criterions: this.fb.array(
+        this.availableCriterions
+        .map(crit => Object.assign({value: 'true'}, {name: crit.name}))
+        .map(obj => this.fb.group(obj))
+      ),
+      parameters: this.fb.array(
+        this.availableParameters
+        .map(param => Object.assign({value: ''}, {name: param.name}))
+        .map(obj => this.fb.group(obj))
+      )
+    });
+  }
 }
