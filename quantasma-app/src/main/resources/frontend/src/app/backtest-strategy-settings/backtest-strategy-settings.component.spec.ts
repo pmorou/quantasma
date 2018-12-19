@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { BacktestStrategySettingsComponent } from './backtest-strategy-form.component';
+import { BacktestStrategySettingsComponent } from './backtest-strategy-settings.component';
 
 describe('ProductFormComponent', () => {
   let component: BacktestStrategySettingsComponent;

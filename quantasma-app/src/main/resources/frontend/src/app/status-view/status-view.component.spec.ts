@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { StatusViewComponent } from './status-dashboard.component';
+import { StatusViewComponent } from './status-view.component';
 
 describe('StatusDashboardComponent', () => {
   let component: StatusViewComponent;

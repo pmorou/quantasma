@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 
-import { BacktestService } from './backtest-service.service';
+import { BacktestService } from './backtest.service';
 
 describe('BacktestService', () => {
   beforeEach(() => TestBed.configureTestingModule({}));
