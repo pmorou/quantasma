@@ -14,15 +14,12 @@ import com.dukascopy.api.JFException;
 import com.dukascopy.api.OfferSide;
 import com.dukascopy.api.Period;
 import lombok.extern.slf4j.Slf4j;
-import quantasma.app.model.OhlcvTick;
 import quantasma.app.model.PushTicksSettings;
 import quantasma.app.service.OhlcvTickService;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 
 @Slf4j
 public class FetchHistoricalDataStrategy implements IStrategy {
@@ -57,27 +54,11 @@ public class FetchHistoricalDataStrategy implements IStrategy {
 
             final List<IBar> bidBars = history.getBars(resolveInstrument(), resolvePeriod(), OfferSide.BID, Filter.WEEKENDS, fetchFrom.toEpochMilli(), fetchTo.toEpochMilli());
             final List<IBar> askBars = history.getBars(resolveInstrument(), resolvePeriod(), OfferSide.ASK, Filter.WEEKENDS, fetchFrom.toEpochMilli(), fetchTo.toEpochMilli());
-
-            final BarBucketCollection collection = new BarBucketCollection();
-            bidBars.forEach(collection::insertBidBar);
-            askBars.forEach(collection::insertAskBar);
-            collection.verify();
-
-            for (Map.Entry<Long, BarBucketCollection.BarBucket> bucketEntry : collection.bars.entrySet()) {
-                final BarBucketCollection.BarBucket bucket = bucketEntry.getValue();
-                ohlcvTickService.insertSkipDuplicates(new OhlcvTick(pushTicksSettings.getBarPeriod(),
-                                                                    Instant.ofEpochMilli(bucketEntry.getKey()),
-                                                                    pushTicksSettings.getSymbol(),
-                                                                    bucket.bidBar.getOpen(),
-                                                                    bucket.bidBar.getLow(),
-                                                                    bucket.bidBar.getHigh(),
-                                                                    bucket.bidBar.getClose(),
-                                                                    bucket.askBar.getOpen(),
-                                                                    bucket.askBar.getLow(),
-                                                                    bucket.askBar.getHigh(),
-                                                                    bucket.askBar.getClose(),
-                                                                    (int) (bucket.bidBar.getVolume() + bucket.askBar.getVolume())));
-            }
+            final BarsCollection bars = new BarsCollection(pushTicksSettings.getSymbol(), pushTicksSettings.getBarPeriod());
+            bidBars.forEach(bars::insertBidBar);
+            askBars.forEach(bars::insertAskBar);
+            bars.verifyIntegrity();
+            bars.getBars().forEach((key, value) -> ohlcvTickService.insertSkipDuplicates(value.toOhlcv()));
 
             if (bidBars.size() == 0 || askBars.size() == 0) {
                 log.info("No bar found for given date range, stopping fetch");
@@ -122,47 +103,6 @@ public class FetchHistoricalDataStrategy implements IStrategy {
 
     private Instrument resolveInstrument() {
         return Instrument.valueOf(pushTicksSettings.getSymbol());
-    }
-
-    private class BarBucketCollection {
-        class BarBucket {
-            IBar bidBar;
-            IBar askBar;
-        }
-
-        Map<Long, BarBucket> bars = new TreeMap<>();
-
-        void insertBidBar(IBar bar) {
-            final BarBucket nullIfAbsent = bars.computeIfPresent(bar.getTime(), (time, barBucket) -> {
-                barBucket.bidBar = bar;
-                return barBucket;
-            });
-            if (nullIfAbsent == null) {
-                BarBucket barBucket = new BarBucket();
-                barBucket.bidBar = bar;
-                bars.putIfAbsent(bar.getTime(), barBucket);
-            }
-        }
-
-        void insertAskBar(IBar bar) {
-            final BarBucket nullIfAbsent = bars.computeIfPresent(bar.getTime(), (aLong, barBucket) -> {
-                barBucket.askBar = bar;
-                return barBucket;
-            });
-            if (nullIfAbsent == null) {
-                BarBucket barBucket = new BarBucket();
-                barBucket.askBar = bar;
-                bars.putIfAbsent(bar.getTime(), barBucket);
-            }
-        }
-
-        void verify() {
-            bars.forEach((aLong, barBucket) -> {
-                if (barBucket.bidBar == null || barBucket.askBar == null) {
-                    throw new RuntimeException();
-                }
-            });
-        }
     }
 
     public boolean isDone() {
