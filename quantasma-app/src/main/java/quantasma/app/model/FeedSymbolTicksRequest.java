@@ -31,8 +31,8 @@ public class FeedSymbolTicksRequest {
         return fromDate.atStartOfDay().toInstant(ZoneOffset.UTC);
     }
 
-
     public Instant toDateAsUtc() {
         return toDate.atStartOfDay().toInstant(ZoneOffset.UTC);
     }
+
 }

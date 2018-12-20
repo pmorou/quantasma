@@ -14,7 +14,7 @@ export class HistoricalDataUpdateComponent implements OnInit {
   constructor(private formBuilder: FormBuilder, private service: HistoricalDataService) {
     this.updateForm = this.formBuilder.group({
       symbol: ['', Validators.required],
-      period: ['', Validators.required],
+      barPeriod: ['', Validators.required],
       fromDate: ['', Validators.required],
       toDate: ['', Validators.required]
     })
