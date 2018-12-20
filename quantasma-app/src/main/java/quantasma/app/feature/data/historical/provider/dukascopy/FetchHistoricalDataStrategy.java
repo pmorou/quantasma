@@ -15,11 +15,10 @@ import com.dukascopy.api.OfferSide;
 import com.dukascopy.api.Period;
 import lombok.extern.slf4j.Slf4j;
 import quantasma.app.model.OhlcvTick;
+import quantasma.app.model.PushTicksSettings;
 import quantasma.app.service.OhlcvTickService;
-import quantasma.core.BarPeriod;
 
 import java.time.Instant;
-import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.List;
 import java.util.Map;
@@ -28,13 +27,15 @@ import java.util.TreeMap;
 @Slf4j
 public class FetchHistoricalDataStrategy implements IStrategy {
     private final OhlcvTickService ohlcvTickService;
+    private final PushTicksSettings pushTicksSettings;
 
     private IConsole console;
     private IHistory history;
     private boolean isDone;
 
-    public FetchHistoricalDataStrategy(OhlcvTickService ohlcvTickService) {
+    public FetchHistoricalDataStrategy(OhlcvTickService ohlcvTickService, PushTicksSettings pushTicksSettings) {
         this.ohlcvTickService = ohlcvTickService;
+        this.pushTicksSettings = pushTicksSettings;
     }
 
     public void onStart(IContext context) throws JFException {
@@ -42,14 +43,15 @@ public class FetchHistoricalDataStrategy implements IStrategy {
         this.history = context.getHistory();
         log.info("Strategy started");
 
-        final LocalDateTime earliestDate = LocalDateTime.of(2000, 1, 1, 0, 0, 0);
-        final long startTimeOfCurrentBar = history.getStartTimeOfCurrentBar(Instrument.EURUSD, Period.ONE_MIN);
+        final Instant earliestDate = pushTicksSettings.getFromDate();
+        final long startTimeOfCurrentBar = history.getStartTimeOfCurrentBar(resolveInstrument(), resolvePeriod());
+
         Instant latestDate = Instant.ofEpochMilli(startTimeOfCurrentBar);
 
         while (!reachedBottom(latestDate, earliestDate)) {
             log.info("Fetching 100_000 bars created <=" + latestDate.atZone(ZoneOffset.UTC));
-            final List<IBar> bidBars = history.getBars(Instrument.EURUSD, Period.ONE_MIN, OfferSide.BID, Filter.WEEKENDS, 50_000, latestDate.toEpochMilli(), 0);
-            final List<IBar> askBars = history.getBars(Instrument.EURUSD, Period.ONE_MIN, OfferSide.ASK, Filter.WEEKENDS, 50_000, latestDate.toEpochMilli(), 0);
+            final List<IBar> bidBars = history.getBars(resolveInstrument(), resolvePeriod(), OfferSide.BID, Filter.WEEKENDS, 50_000, latestDate.toEpochMilli(), 0);
+            final List<IBar> askBars = history.getBars(resolveInstrument(), resolvePeriod(), OfferSide.ASK, Filter.WEEKENDS, 50_000, latestDate.toEpochMilli(), 0);
 
             final BarBucketCollection collection = new BarBucketCollection();
             bidBars.forEach(collection::insertBidBar);
@@ -58,9 +60,9 @@ public class FetchHistoricalDataStrategy implements IStrategy {
 
             for (Map.Entry<Long, BarBucketCollection.BarBucket> bucketEntry : collection.bars.entrySet()) {
                 final BarBucketCollection.BarBucket bucket = bucketEntry.getValue();
-                ohlcvTickService.insertSkipDuplicates(new OhlcvTick(BarPeriod.M1,
+                ohlcvTickService.insertSkipDuplicates(new OhlcvTick(pushTicksSettings.getBarPeriod(),
                                                                     Instant.ofEpochMilli(bucketEntry.getKey()),
-                                                                    "EURUSD",
+                                                                    pushTicksSettings.getSymbol(),
                                                                     bucket.bidBar.getOpen(),
                                                                     bucket.bidBar.getLow(),
                                                                     bucket.bidBar.getHigh(),
@@ -80,8 +82,32 @@ public class FetchHistoricalDataStrategy implements IStrategy {
         isDone = true;
     }
 
-    private boolean reachedBottom(Instant latestDate, LocalDateTime earliestDate) {
-        return latestDate.isBefore(earliestDate.toInstant(ZoneOffset.UTC));
+    private Period resolvePeriod() {
+        switch (pushTicksSettings.getBarPeriod()) {
+            case M1:
+                return Period.ONE_MIN;
+            case M5:
+                return Period.FIVE_MINS;
+            case M15:
+                return Period.FIFTEEN_MINS;
+            case M30:
+                return Period.THIRTY_MINS;
+            case H1:
+                return Period.ONE_HOUR;
+            case H4:
+                return Period.FOUR_HOURS;
+            case D:
+                return Period.ONE_HOUR;
+        }
+        throw new IllegalArgumentException("Unsupported period: [" + pushTicksSettings.getBarPeriod() + "]");
+    }
+
+    private Instrument resolveInstrument() {
+        return Instrument.valueOf(pushTicksSettings.getSymbol());
+    }
+
+    private boolean reachedBottom(Instant latestDate, Instant earliestDate) {
+        return latestDate.isBefore(earliestDate);
     }
 
     private class BarBucketCollection {
