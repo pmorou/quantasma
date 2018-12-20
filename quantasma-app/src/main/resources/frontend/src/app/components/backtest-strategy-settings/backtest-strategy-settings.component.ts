@@ -30,12 +30,12 @@ export class BacktestStrategySettingsComponent implements OnInit {
     {name: '1 year', value: 'P1Y'}
   ];
 
-  constructor(private fb: FormBuilder, private backtestService: BacktestService) {
-    this.backtestForm = this.fb.group({
+  constructor(private formBuilder: FormBuilder, private backtestService: BacktestService) {
+    this.backtestForm = this.formBuilder.group({
       title: [],
-      time: this.fb.group({from: {}, window: {}}),
-      criterions: this.fb.array([this.fb.group({name: '', value: ''})]),
-      parameters: this.fb.array([this.fb.group({name: '', value: ''})])
+      time: this.formBuilder.group({from: {}, window: {}}),
+      criterions: this.formBuilder.array([this.formBuilder.group({name: '', value: ''})]),
+      parameters: this.formBuilder.array([this.formBuilder.group({name: '', value: ''})])
     });
   }
 
@@ -61,7 +61,7 @@ export class BacktestStrategySettingsComponent implements OnInit {
   }
 
   addParameter(name: string) {
-    this.parameters.push(this.fb.group({name: [name, Validators.required], value: ['', Validators.required]}));
+    this.parameters.push(this.formBuilder.group({name: [name, Validators.required], value: ['', Validators.required]}));
   }
 
   get criterions() {
@@ -69,7 +69,7 @@ export class BacktestStrategySettingsComponent implements OnInit {
   }
 
   addCriterion(name: string) {
-    this.criterions.push(this.fb.group({name: [name, Validators.required], value: ['true', Validators.required]}));
+    this.criterions.push(this.formBuilder.group({name: [name, Validators.required], value: ['true', Validators.required]}));
   }
 
   deleteCriterions(index: number) {
@@ -77,18 +77,18 @@ export class BacktestStrategySettingsComponent implements OnInit {
   }
 
   renderForm() {
-    this.backtestForm = this.fb.group({
+    this.backtestForm = this.formBuilder.group({
       title: [],
-      time: this.fb.group({
+      time: this.formBuilder.group({
         from: ['', Validators.required],
         window: ['', Validators.required]
       }),
-      criterions: this.fb.array([this.fb.group({name: ''})]
+      criterions: this.formBuilder.array([this.formBuilder.group({name: ''})]
       ),
-      parameters: this.fb.array(
+      parameters: this.formBuilder.array(
         this.availableParameters
         .map(param => Object.assign({value: ''}, {name: param.name}))
-        .map(obj => this.fb.group(obj))
+        .map(obj => this.formBuilder.group(obj))
       )
     });
   }
