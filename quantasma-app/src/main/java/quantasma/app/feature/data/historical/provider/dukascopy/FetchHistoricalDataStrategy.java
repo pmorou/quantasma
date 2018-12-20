@@ -46,11 +46,10 @@ public class FetchHistoricalDataStrategy implements IStrategy {
 
         while (!fetchTo.equals(pushTicksSettings.getFromDate())) {
             fetchFrom = rollWindow(fetchTo);
-
             log.info("Fetching bars - from: [{}], to: [{}]", fetchFrom, fetchTo);
 
-            final List<IBar> bidBars = history.getBars(resolveInstrument(), resolvePeriod(), OfferSide.BID, Filter.WEEKENDS, fetchFrom.toEpochMilli(), fetchTo.toEpochMilli());
-            final List<IBar> askBars = history.getBars(resolveInstrument(), resolvePeriod(), OfferSide.ASK, Filter.WEEKENDS, fetchFrom.toEpochMilli(), fetchTo.toEpochMilli());
+            final List<IBar> bidBars = fetchBars(fetchFrom, fetchTo, OfferSide.BID);
+            final List<IBar> askBars = fetchBars(fetchFrom, fetchTo, OfferSide.ASK);
             final BarsCollection bars = new BarsCollection(pushTicksSettings.getSymbol(), pushTicksSettings.getBarPeriod());
             bidBars.forEach(bars::insertBidBar);
             askBars.forEach(bars::insertAskBar);
@@ -66,11 +65,14 @@ public class FetchHistoricalDataStrategy implements IStrategy {
         isDone = true;
     }
 
+    private List<IBar> fetchBars(Instant fetchFrom, Instant fetchTo, OfferSide bid) throws JFException {
+        return history.getBars(resolveInstrument(), resolvePeriod(), bid, Filter.WEEKENDS, fetchFrom.toEpochMilli(), fetchTo.toEpochMilli());
+    }
+
     private Instant rollWindow(Instant fetchTo) {
         return Instant.ofEpochMilli(Math.max(pushTicksSettings.getFromDate().toEpochMilli(),
                                              fetchTo.minus(60, ChronoUnit.DAYS).toEpochMilli()));
     }
-
 
     private Instant getValidFetchTo() throws JFException {
         final long latestPossibleBar = history.getStartTimeOfCurrentBar(resolveInstrument(), resolvePeriod());
