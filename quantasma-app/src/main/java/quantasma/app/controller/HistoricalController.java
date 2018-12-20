@@ -1,6 +1,7 @@
 package quantasma.app.controller;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -23,13 +24,15 @@ public class HistoricalController {
 
     private final HistoricalDataService historicalDataService;
     private final HistoricalDataUpdater historicalDataUpdater;
+    private final boolean isHistoricServiceEnabled;
 
-    @Value("${service.historical-data.enabled}")
-    private boolean isHistoricServiceEnabled;
-
-    public HistoricalController(HistoricalDataService historicalDataService, HistoricalDataUpdater historicalDataUpdater) {
+    @Autowired
+    public HistoricalController(HistoricalDataService historicalDataService,
+                                HistoricalDataUpdater historicalDataUpdater,
+                                @Value("${service.historical-data.enabled}") boolean isHistoricServiceEnabled) {
         this.historicalDataService = historicalDataService;
         this.historicalDataUpdater = historicalDataUpdater;
+        this.isHistoricServiceEnabled = isHistoricServiceEnabled;
     }
 
     @RequestMapping("data/summary")

@@ -1,6 +1,7 @@
 package quantasma.app.service;
 
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 import quantasma.app.model.OhlcvTick;
@@ -21,6 +22,7 @@ public class HistoricalDataServiceImpl implements HistoricalDataService {
 
     private final HistoricalDataRepository historicalDataRepository;
 
+    @Autowired
     public HistoricalDataServiceImpl(HistoricalDataRepository historicalDataRepository) {
         this.historicalDataRepository = historicalDataRepository;
     }

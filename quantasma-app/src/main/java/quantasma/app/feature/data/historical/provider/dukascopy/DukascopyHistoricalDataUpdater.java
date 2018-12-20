@@ -14,15 +14,20 @@ import quantasma.integrations.data.provider.dukascopy.DukascopyApiClient;
 @Slf4j
 public class DukascopyHistoricalDataUpdater implements HistoricalDataUpdater {
 
-    @Autowired
-    private DukascopyApiClient dukascopyClient;
+    private final HistoricalDataService historicalDataService;
+    private final DukascopyApiClient dukascopyClient;
 
     @Autowired
-    private HistoricalDataService historicalDataService;
+    public DukascopyHistoricalDataUpdater(HistoricalDataService historicalDataService,
+                                          DukascopyApiClient dukascopyClient) {
+        this.historicalDataService = historicalDataService;
+        this.dukascopyClient = dukascopyClient;
+    }
 
     @Override
     public void update(FeedBarsSettings feedBarsSettings) {
-        final long processId = dukascopyClient.runStrategy(new FetchHistoricalDataStrategy(historicalDataService, feedBarsSettings));
+        final long processId = dukascopyClient.runStrategy(
+                new FetchHistoricalDataStrategy(historicalDataService, feedBarsSettings));
         dukascopyClient.stopStrategy(processId);
     }
 }
