@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { HistoricalDataSummary } from "../models/historical-data-summary.model";
 import { Observable } from "rxjs/index";
 import { map } from "rxjs/internal/operators";
@@ -14,5 +14,10 @@ export class HistoricalDataService {
   dataSummary(): Observable<HistoricalDataSummary> {
     return <Observable<HistoricalDataSummary>> this.http.get("api/backtest/ticks/summary").pipe(
       map(response => (<any>response)['data']));
+  }
+
+  update(json: string): Observable<string> {
+    return <Observable<string>> this.http.put("api/backtest/ticks", json,
+      {headers: new HttpHeaders({'Content-Type': 'application/json'})});
   }
 }

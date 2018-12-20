@@ -1,0 +1,31 @@
+<div class="component">
+  <h2>Update data:</h2>
+  <form [formGroup]="updateForm" (ngSubmit)="update()">
+    <div>
+      <label for="symbol">
+        Symbol: <input type="text" id="symbol" formControlName="symbol">
+      </label>
+    </div>
+
+    <div>
+      <label for="period">
+        Period: <input type="text" id="period" formControlName="period">
+      </label>
+    </div>
+
+    <div>
+      <label for="fromDate">
+        From date: <input type="date" id="fromDate" formControlName="fromDate">
+      </label>
+    </div>
+
+    <div>
+      <label for="toDate">
+        To date: <input type="date" id="toDate" formControlName="toDate">
+      </label>
+    </div>
+
+    <button type="submit">Update</button>
+    <p>Status: {{ status }}</p>
+  </form>
+</div>
