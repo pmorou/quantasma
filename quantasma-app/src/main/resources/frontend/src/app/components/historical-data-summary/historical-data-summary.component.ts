@@ -13,9 +13,12 @@ export class HistoricalDataSummaryComponent implements OnInit {
   constructor(private service: HistoricalDataService) { }
 
   ngOnInit() {
+    this.refresh();
+  }
+
+  refresh() {
     this.service.dataSummary().subscribe(value =>
       this.dataSummary = new HistoricalDataSummaryHolder(value)
     );
   }
-
 }

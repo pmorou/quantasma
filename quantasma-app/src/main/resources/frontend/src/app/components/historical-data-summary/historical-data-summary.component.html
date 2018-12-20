@@ -2,6 +2,11 @@
   <p>Loading...</p>
 </div>
 
+<div *ngIf="dataSummary != null">
+  <button (click)="refresh()">Refresh</button>
+  <br/>
+</div>
+
 <div *ngIf="dataSummary?.symbols().length == 0">
   <p>No data</p>
 </div>
