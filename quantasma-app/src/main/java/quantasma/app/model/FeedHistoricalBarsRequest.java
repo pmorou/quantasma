@@ -10,17 +10,17 @@ import java.time.LocalDate;
 import java.time.ZoneOffset;
 
 @Getter
-public class FeedSymbolTicksRequest {
+public class FeedHistoricalBarsRequest {
     private final String symbol;
     private final BarPeriod barPeriod;
     private final LocalDate fromDate;
     private final LocalDate toDate;
 
     @JsonCreator
-    public FeedSymbolTicksRequest(@JsonProperty("symbol") String symbol,
-                                  @JsonProperty("barPeriod") BarPeriod barPeriod,
-                                  @JsonProperty("fromDate") LocalDate fromDate,
-                                  @JsonProperty("toDate") LocalDate toDate) {
+    public FeedHistoricalBarsRequest(@JsonProperty("symbol") String symbol,
+                                     @JsonProperty("barPeriod") BarPeriod barPeriod,
+                                     @JsonProperty("fromDate") LocalDate fromDate,
+                                     @JsonProperty("toDate") LocalDate toDate) {
         this.symbol = symbol;
         this.barPeriod = barPeriod;
         this.fromDate = fromDate;

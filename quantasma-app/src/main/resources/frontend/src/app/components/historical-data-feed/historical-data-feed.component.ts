@@ -1,13 +1,13 @@
 import { Component, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from "@angular/forms";
-import {HistoricalDataService} from "../../services/historical-data.service";
+import { HistoricalDataService } from "../../services/historical-data.service";
 
 @Component({
-  selector: 'app-historical-data-update',
-  templateUrl: './historical-data-update.component.html',
-  styleUrls: ['./historical-data-update.component.scss']
+  selector: 'app-historical-data-feed',
+  templateUrl: './historical-data-feed.component.html',
+  styleUrls: ['./historical-data-feed.component.scss']
 })
-export class HistoricalDataUpdateComponent implements OnInit {
+export class HistoricalDataFeedComponent implements OnInit {
   updateForm: FormGroup = FormGroup.prototype;
   status: string = "ready";
 

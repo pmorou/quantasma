@@ -6,7 +6,7 @@ import quantasma.core.BarPeriod;
 import java.time.Instant;
 
 @Data
-public class SymbolTickSummary {
+public class HistoricalDataSummary {
     private final String symbol;
     private final BarPeriod period;
     private final Instant fromDate;

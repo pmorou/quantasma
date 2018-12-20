@@ -7,7 +7,7 @@ import org.ta4j.core.AnalysisCriterion;
 import org.ta4j.core.Order;
 import quantasma.app.config.service.backtest.CriterionsFactory;
 import quantasma.app.model.OhlcvTick;
-import quantasma.app.service.OhlcvTickService;
+import quantasma.app.service.HistoricalDataService;
 import quantasma.core.BarPeriod;
 import quantasma.core.BaseContext;
 import quantasma.core.Context;
@@ -43,12 +43,12 @@ public class RSIBacktest implements StrategyBacktest {
     private static final String SYMBOL = "EURUSD";
     private static final BarPeriod BASE_PERIOD = BarPeriod.M1;
 
-    private final OhlcvTickService tickService;
+    private final HistoricalDataService historicalDataService;
     private final CriterionsFactory criterionsFactory;
 
     @Autowired
-    public RSIBacktest(OhlcvTickService tickService, CriterionsFactory criterionsFactory) {
-        this.tickService = tickService;
+    public RSIBacktest(HistoricalDataService historicalDataService, CriterionsFactory criterionsFactory) {
+        this.historicalDataService = historicalDataService;
         this.criterionsFactory = criterionsFactory;
     }
 
@@ -79,8 +79,8 @@ public class RSIBacktest implements StrategyBacktest {
         };
 
         // implement strategies: close, open, 4 ticks ohlc
-        tickService.findBySymbolAndDateBetweenOrderByDate(SYMBOL, fromDate.toInstant(ZoneOffset.UTC), timeWindow)
-                   .forEach(loadTicks(testMarketData));
+        historicalDataService.findBySymbolAndDateBetweenOrderByDate(SYMBOL, fromDate.toInstant(ZoneOffset.UTC), timeWindow)
+                             .forEach(loadTicks(testMarketData));
 
         final TestManager testManager = new TestManager(testMarketData);
 

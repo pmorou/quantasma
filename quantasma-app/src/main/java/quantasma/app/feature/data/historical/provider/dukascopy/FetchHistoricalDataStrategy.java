@@ -13,8 +13,8 @@ import com.dukascopy.api.JFException;
 import com.dukascopy.api.OfferSide;
 import com.dukascopy.api.Period;
 import lombok.extern.slf4j.Slf4j;
-import quantasma.app.model.PushTicksSettings;
-import quantasma.app.service.OhlcvTickService;
+import quantasma.app.model.FeedBarsSettings;
+import quantasma.app.service.HistoricalDataService;
 
 import java.time.Instant;
 import java.time.temporal.ChronoUnit;
@@ -22,39 +22,39 @@ import java.util.List;
 
 @Slf4j
 public class FetchHistoricalDataStrategy implements IStrategy {
-    private final OhlcvTickService ohlcvTickService;
-    private final PushTicksSettings pushTicksSettings;
+    private final HistoricalDataService historicalDataService;
+    private final FeedBarsSettings feedBarsSettings;
 
     private IHistory history;
     private boolean isDone;
 
-    public FetchHistoricalDataStrategy(OhlcvTickService ohlcvTickService, PushTicksSettings pushTicksSettings) {
-        this.ohlcvTickService = ohlcvTickService;
-        this.pushTicksSettings = pushTicksSettings;
+    public FetchHistoricalDataStrategy(HistoricalDataService historicalDataService, FeedBarsSettings feedBarsSettings) {
+        this.historicalDataService = historicalDataService;
+        this.feedBarsSettings = feedBarsSettings;
     }
 
     public void onStart(IContext context) throws JFException {
         log.info("Strategy started");
         this.history = context.getHistory();
 
-        Instant fetchFrom = pushTicksSettings.getFromDate();
+        Instant fetchFrom = feedBarsSettings.getFromDate();
         Instant fetchTo = getValidFetchTo();
 
         if (fetchTo.isBefore(fetchFrom)) {
             throw new IllegalArgumentException(String.format("From date [%s] > to date [%s]", fetchFrom, fetchTo));
         }
 
-        while (!fetchTo.equals(pushTicksSettings.getFromDate())) {
+        while (!fetchTo.equals(feedBarsSettings.getFromDate())) {
             fetchFrom = rollWindow(fetchTo);
             log.info("Fetching bars - from: [{}], to: [{}]", fetchFrom, fetchTo);
 
             final List<IBar> bidBars = fetchBars(fetchFrom, fetchTo, OfferSide.BID);
             final List<IBar> askBars = fetchBars(fetchFrom, fetchTo, OfferSide.ASK);
-            final BarsCollection bars = new BarsCollection(pushTicksSettings.getSymbol(), pushTicksSettings.getBarPeriod());
+            final BarsCollection bars = new BarsCollection(feedBarsSettings.getSymbol(), feedBarsSettings.getBarPeriod());
             bidBars.forEach(bars::insertBidBar);
             askBars.forEach(bars::insertAskBar);
             bars.verifyIntegrity();
-            bars.getBars().forEach((key, value) -> ohlcvTickService.insertSkipDuplicates(value.toOhlcv()));
+            bars.getBars().forEach((key, value) -> historicalDataService.insertSkipDuplicates(value.toOhlcv()));
 
             if (bidBars.size() == 0 || askBars.size() == 0) {
                 log.info("No bar found for given date range, stopping fetch");
@@ -70,18 +70,18 @@ public class FetchHistoricalDataStrategy implements IStrategy {
     }
 
     private Instant rollWindow(Instant fetchTo) {
-        return Instant.ofEpochMilli(Math.max(pushTicksSettings.getFromDate().toEpochMilli(),
+        return Instant.ofEpochMilli(Math.max(feedBarsSettings.getFromDate().toEpochMilli(),
                                              fetchTo.minus(60, ChronoUnit.DAYS).toEpochMilli()));
     }
 
     private Instant getValidFetchTo() throws JFException {
         final long latestPossibleBar = history.getStartTimeOfCurrentBar(resolveInstrument(), resolvePeriod());
         return Instant.ofEpochMilli(Math.min(latestPossibleBar,
-                                             pushTicksSettings.getToDate().toEpochMilli()));
+                                             feedBarsSettings.getToDate().toEpochMilli()));
     }
 
     private Period resolvePeriod() {
-        switch (pushTicksSettings.getBarPeriod()) {
+        switch (feedBarsSettings.getBarPeriod()) {
             case M1:
                 return Period.ONE_MIN;
             case M5:
@@ -97,11 +97,11 @@ public class FetchHistoricalDataStrategy implements IStrategy {
             case D:
                 return Period.ONE_HOUR;
         }
-        throw new IllegalArgumentException("Unsupported period: [" + pushTicksSettings.getBarPeriod() + "]");
+        throw new IllegalArgumentException("Unsupported period: [" + feedBarsSettings.getBarPeriod() + "]");
     }
 
     private Instrument resolveInstrument() {
-        return Instrument.valueOf(pushTicksSettings.getSymbol());
+        return Instrument.valueOf(feedBarsSettings.getSymbol());
     }
 
     public boolean isDone() {

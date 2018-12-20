@@ -12,13 +12,13 @@ import quantasma.app.config.service.backtest.CriterionsFactory;
 import quantasma.app.feature.data.historical.provider.HistoricalDataUpdater;
 import quantasma.app.model.BacktestRequest;
 import quantasma.app.model.BacktestScenario;
-import quantasma.app.model.FeedSymbolTicksRequest;
-import quantasma.app.model.FeedSymbolTicksResponse;
+import quantasma.app.model.FeedHistoricalBarsRequest;
+import quantasma.app.model.FeedHistoricalBarsResponse;
 import quantasma.app.model.ParameterDescription;
-import quantasma.app.model.PushTicksSettings;
-import quantasma.app.model.SymbolTickSummary;
-import quantasma.app.model.SymbolTickSummaryResponse;
-import quantasma.app.service.OhlcvTickService;
+import quantasma.app.model.FeedBarsSettings;
+import quantasma.app.model.HistoricalDataSummary;
+import quantasma.app.model.HistoricalDataSummaryResponse;
+import quantasma.app.service.HistoricalDataService;
 import quantasma.core.analysis.BacktestResult;
 import quantasma.core.analysis.StrategyBacktest;
 
@@ -32,10 +32,9 @@ import java.util.stream.Collectors;
 @RequestMapping("api/backtest")
 @Slf4j
 public class BacktestController {
-
     private final List<StrategyBacktest> backtestList;
     private final CriterionsFactory criterionsFactory;
-    private final OhlcvTickService tickService;
+    private final HistoricalDataService historicalDataService;
     private final HistoricalDataUpdater historicalDataUpdater;
 
     @Value("${service.historical-data.enabled}")
@@ -44,11 +43,11 @@ public class BacktestController {
     @Autowired
     public BacktestController(List<StrategyBacktest> backtestList,
                               CriterionsFactory criterionsFactory,
-                              OhlcvTickService tickService,
+                              HistoricalDataService historicalDataService,
                               HistoricalDataUpdater historicalDataUpdater) {
         this.backtestList = backtestList;
         this.criterionsFactory = criterionsFactory;
-        this.tickService = tickService;
+        this.historicalDataService = historicalDataService;
         this.historicalDataUpdater = historicalDataUpdater;
     }
 
@@ -97,24 +96,24 @@ public class BacktestController {
     }
 
     @RequestMapping("ticks/summary")
-    public SymbolTickSummaryResponse tickSummary() {
-        return new SymbolTickSummaryResponse(tickService.symbolsTickSummary()
-                                                        .stream()
-                                                        .collect(Collectors.groupingBy(SymbolTickSummary::getSymbol)));
+    public HistoricalDataSummaryResponse dataSummary() {
+        return new HistoricalDataSummaryResponse(historicalDataService.dataSummary()
+                                                                      .stream()
+                                                                      .collect(Collectors.groupingBy(HistoricalDataSummary::getSymbol)));
     }
 
     @RequestMapping(value = "ticks", method = RequestMethod.PUT)
-    public FeedSymbolTicksResponse feedSymbolTicks(@RequestBody FeedSymbolTicksRequest request) {
+    public FeedHistoricalBarsResponse feedHistoricalBars(@RequestBody FeedHistoricalBarsRequest request) {
         if (!isHistoricServiceEnabled) {
             log.info("History service disabled");
-            return FeedSymbolTicksResponse.declined();
+            return FeedHistoricalBarsResponse.declined();
         }
-        historicalDataUpdater.update(new PushTicksSettings(request.getSymbol(),
-                                                           request.getBarPeriod(),
-                                                           request.fromDateAsUtc(),
-                                                           request.toDateAsUtc()));
+        historicalDataUpdater.update(new FeedBarsSettings(request.getSymbol(),
+                                                          request.getBarPeriod(),
+                                                          request.fromDateAsUtc(),
+                                                          request.toDateAsUtc()));
         log.info("Processing by historical service: [{}]", request);
-        return FeedSymbolTicksResponse.accepted();
+        return FeedHistoricalBarsResponse.accepted();
     }
 
 }

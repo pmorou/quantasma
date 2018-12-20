@@ -8,19 +8,19 @@ import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 import quantasma.app.config.service.historical.HistoricalDataServiceProperties;
 import quantasma.app.model.PersistentOhlcvTick;
-import quantasma.app.model.SymbolTickSummary;
+import quantasma.app.model.HistoricalDataSummary;
 
 import java.time.Instant;
 import java.util.List;
 
 @Repository
-public class OhlcvTickRepositoryImpl implements OhlcvTickRepository {
+public class HistoricalDataRepositoryImpl implements HistoricalDataRepository {
 
     private final HistoricalDataServiceProperties properties;
     private final MongoTemplate mongoTemplate;
 
     @Autowired
-    public OhlcvTickRepositoryImpl(HistoricalDataServiceProperties properties, MongoTemplate mongoTemplate) {
+    public HistoricalDataRepositoryImpl(HistoricalDataServiceProperties properties, MongoTemplate mongoTemplate) {
         this.properties = properties;
         this.mongoTemplate = mongoTemplate;
     }
@@ -46,7 +46,7 @@ public class OhlcvTickRepositoryImpl implements OhlcvTickRepository {
     }
 
     @Override
-    public List<SymbolTickSummary> symbolsTickSummary() {
+    public List<HistoricalDataSummary> symbolsTickSummary() {
         final Aggregation aggregation = Aggregation.newAggregation(
                 Aggregation.group("symbol", "period")
                            .first("symbol").as("symbol")
@@ -56,7 +56,7 @@ public class OhlcvTickRepositoryImpl implements OhlcvTickRepository {
                            .count().as("barCount"));
         return mongoTemplate.aggregate(aggregation,
                                        properties.collectionName(),
-                                       SymbolTickSummary.class)
+                                       HistoricalDataSummary.class)
                             .getMappedResults();
     }
 

@@ -19,7 +19,7 @@ import { ReactiveFormsModule } from "@angular/forms";
 import { BacktestStrategyResultComponent } from './components/backtest-strategy-result/backtest-strategy-result.component';
 import { HistoricalDataSummaryComponent } from './components/historical-data-summary/historical-data-summary.component';
 import { HistoricalDataViewComponent } from './components/historical-data-view/historical-data-view.component';
-import { HistoricalDataUpdateComponent } from './components/historical-data-update/historical-data-update.component';
+import { HistoricalDataFeedComponent } from './components/historical-data-feed/historical-data-feed.component';
 
 @NgModule({
   declarations: [
@@ -35,7 +35,7 @@ import { HistoricalDataUpdateComponent } from './components/historical-data-upda
     BacktestStrategyResultComponent,
     HistoricalDataSummaryComponent,
     HistoricalDataViewComponent,
-    HistoricalDataUpdateComponent
+    HistoricalDataFeedComponent
   ],
   imports: [
     BrowserModule,

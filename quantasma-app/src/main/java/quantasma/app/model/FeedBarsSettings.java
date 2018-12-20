@@ -8,7 +8,7 @@ import java.time.Instant;
 
 @Getter
 @AllArgsConstructor
-public class PushTicksSettings {
+public class FeedBarsSettings {
     private final String symbol;
     private final BarPeriod barPeriod;
     private final Instant fromDate;
