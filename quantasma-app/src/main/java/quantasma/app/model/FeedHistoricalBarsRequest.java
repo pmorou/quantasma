@@ -32,7 +32,7 @@ public class FeedHistoricalBarsRequest {
     }
 
     public Instant toDateAsUtc() {
-        return toDate.atStartOfDay().toInstant(ZoneOffset.UTC);
+        return toDate.atTime(23, 59, 59).toInstant(ZoneOffset.UTC);
     }
 
 }
