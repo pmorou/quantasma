@@ -3,7 +3,6 @@ package quantasma.app.feature.data.historical.provider.dukascopy;
 import com.dukascopy.api.Filter;
 import com.dukascopy.api.IAccount;
 import com.dukascopy.api.IBar;
-import com.dukascopy.api.IConsole;
 import com.dukascopy.api.IContext;
 import com.dukascopy.api.IHistory;
 import com.dukascopy.api.IMessage;
@@ -26,7 +25,6 @@ public class FetchHistoricalDataStrategy implements IStrategy {
     private final OhlcvTickService ohlcvTickService;
     private final PushTicksSettings pushTicksSettings;
 
-    private IConsole console;
     private IHistory history;
     private boolean isDone;
 
@@ -37,7 +35,6 @@ public class FetchHistoricalDataStrategy implements IStrategy {
 
     public void onStart(IContext context) throws JFException {
         log.info("Strategy started");
-        this.console = context.getConsole();
         this.history = context.getHistory();
 
         Instant fetchFrom = pushTicksSettings.getFromDate();
@@ -109,24 +106,20 @@ public class FetchHistoricalDataStrategy implements IStrategy {
         return isDone;
     }
 
-    public void onAccount(IAccount account) throws JFException {
+    public void onAccount(IAccount account) {
     }
 
-    public void onMessage(IMessage message) throws JFException {
+    public void onMessage(IMessage message) {
     }
 
-    public void onStop() throws JFException {
+    public void onStop() {
         log.info("Strategy stopped");
     }
 
-    public void onTick(Instrument instrument, ITick tick) throws JFException {
+    public void onTick(Instrument instrument, ITick tick) {
     }
 
-    public void onBar(Instrument instrument, Period period, IBar askBar, IBar bidBar) throws JFException {
-    }
-
-    public void print(String message) {
-        console.getOut().println(message);
+    public void onBar(Instrument instrument, Period period, IBar askBar, IBar bidBar) {
     }
 
 }
