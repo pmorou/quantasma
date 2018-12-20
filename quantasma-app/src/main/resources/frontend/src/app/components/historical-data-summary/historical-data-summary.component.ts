@@ -17,6 +17,7 @@ export class HistoricalDataSummaryComponent implements OnInit {
   }
 
   refresh() {
+    this.dataSummary = undefined;
     this.service.dataSummary().subscribe(value =>
       this.dataSummary = new HistoricalDataSummaryHolder(value)
     );
