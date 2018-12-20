@@ -12,12 +12,12 @@ export class HistoricalDataService {
   constructor(private http: HttpClient) { }
 
   dataSummary(): Observable<HistoricalDataSummary> {
-    return <Observable<HistoricalDataSummary>> this.http.get("api/backtest/ticks/summary").pipe(
+    return <Observable<HistoricalDataSummary>> this.http.get("api/historical/data/summary").pipe(
       map(response => (<any>response)['data']));
   }
 
   update(json: string): Observable<any> {
-    return <Observable<any>> this.http.put("api/backtest/ticks", json,
+    return <Observable<any>> this.http.put("api/historical/data/feed", json,
       {headers: new HttpHeaders({'Content-Type': 'application/json'})});
   }
 }
