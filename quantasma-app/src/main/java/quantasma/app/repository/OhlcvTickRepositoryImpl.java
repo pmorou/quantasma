@@ -53,7 +53,7 @@ public class OhlcvTickRepositoryImpl implements OhlcvTickRepository {
                            .first("period").as("period")
                            .min("date").as("fromDate")
                            .max("date").as("toDate")
-                           .count().as("ticksCount"));
+                           .count().as("barCount"));
         return mongoTemplate.aggregate(aggregation,
                                        properties.collectionName(),
                                        SymbolTickSummary.class)

@@ -11,5 +11,5 @@ public class SymbolTickSummary {
     private final BarPeriod period;
     private final Instant fromDate;
     private final Instant toDate;
-    private final long ticksCount;
+    private final long barCount;
 }
