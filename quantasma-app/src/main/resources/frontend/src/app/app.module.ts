@@ -13,7 +13,7 @@ import { BacktestViewComponent } from './components/backtest-view/backtest-view.
 import { BacktestStrategyViewComponent } from './components/backtest-strategy-view/backtest-strategy-view.component';
 import { BacktestStrategySettingsComponent } from './components/backtest-strategy-settings/backtest-strategy-settings.component';
 import { RouterModule } from "@angular/router";
-import { MaterialModule } from './material.module';
+import { MaterialModule } from './modules/material.module';
 import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
 import { ReactiveFormsModule } from "@angular/forms";
 import { BacktestStrategyResultComponent } from './components/backtest-strategy-result/backtest-strategy-result.component';
