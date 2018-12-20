@@ -16,8 +16,8 @@ export class HistoricalDataService {
       map(response => (<any>response)['data']));
   }
 
-  update(json: string): Observable<string> {
-    return <Observable<string>> this.http.put("api/backtest/ticks", json,
+  update(json: string): Observable<any> {
+    return <Observable<any>> this.http.put("api/backtest/ticks", json,
       {headers: new HttpHeaders({'Content-Type': 'application/json'})});
   }
 }

@@ -29,6 +29,6 @@ export class HistoricalDataUpdateComponent implements OnInit {
       return;
     }
 
-    this.service.update(JSON.stringify(this.updateForm.value)).subscribe(status => this.status = status);
+    this.service.update(JSON.stringify(this.updateForm.value)).subscribe(response => this.status = response.status);
   }
 }
