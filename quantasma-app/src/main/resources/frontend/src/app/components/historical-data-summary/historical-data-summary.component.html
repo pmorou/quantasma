@@ -1,0 +1,28 @@
+<h1>Available data</h1>
+
+<div *ngIf="dataSummary == null">
+  <p>Loading...</p>
+</div>
+
+<div *ngIf="dataSummary != null">
+  <button (click)="refresh()">Refresh summary</button>
+  <br/><br/>
+</div>
+
+<div *ngIf="dataSummary?.symbols().length == 0">
+  <p>No data</p>
+</div>
+
+<div *ngIf="dataSummary?.symbols().length > 0">
+  <ul>
+    <li *ngFor="let symbol of dataSummary?.symbols()">
+      <h2>{{ symbol }}</h2>
+      <div *ngFor="let summary of dataSummary?.ofSymbol(symbol)">
+        <p><strong>Period:</strong> {{ summary.period }}</p>
+        <p><strong>From date:</strong> {{ summary.fromDate }}</p>
+        <p><strong>To date:</strong> {{ summary.toDate }}</p>
+        <p><strong>Bar count: </strong> {{ summary.barCount }}</p>
+      </div>
+    </li>
+  </ul>
+</div>

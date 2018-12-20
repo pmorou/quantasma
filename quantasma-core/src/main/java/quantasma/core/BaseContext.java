@@ -23,7 +23,7 @@ public class BaseContext implements Context {
 
         public Builder() {
             orderService = new NullOrderService();
-            strategyControl = new BaseStrategyControl();
+            strategyControl = new InMemoryStrategyControl();
             dataService = new BaseDataService(new MarketData(MultipleTimeSeriesBuilder
                                                                      .basedOn(TimeSeriesDefinition.unlimited(BarPeriod.M1))
                                                                      .symbols("EURUSD")

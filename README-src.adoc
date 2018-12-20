@@ -11,12 +11,23 @@
 
 All-in-one algorithmic trading platform. Build your own backtested-strategy using Java, and execute along with support of continuous track and optimization modules.
 
-Library stands on top of link:{ta4jLink}[ta4j] providing additional features as:
+Modules short-description:
+
+* link:{quantasma-app/}[quantasma-app]: ready-to-use application based on below modules
+* link:{quantasma-core/}[quantasma-core]: trading library providing core mechanics
+* link:{quantasma-examples/}[quantasma-examples]: example usages
+* link:{quantasma-integrations/}[quantasma-integrations]: integrations with 3rd party APIs
+
+*NOTE: All modules are still in development. Use at your own risk.*
+
+Platform stands on top of link:{ta4jLink}[ta4j] providing additional features as:
 
 * bid and ask prices
 * multi-period time series
 * market-aware strategies
 * parametrized backtests
+
+You can use above platform or build your own based on link:{quantasma-core/}[quantasma-core] library.
 
 The aim is to provide any needed functionality to follow the ever-changing markets in the most efficient way.
 
@@ -26,11 +37,20 @@ The aim is to provide any needed functionality to follow the ever-changing marke
 
 >= Java 8
 
+Java 9 is comming shortly. The main goal is to migrate to Java 11 step by step.
+
 == Example Usage
 
-Creating a trading application is as simple as the following code.
+In case you decide to create your own trading application its as simple as the following code.
 
 [source,java,indent=0]
 ----
 include::{examplesDir}/TradeAppExample.java[tags=tradeAppExample]
+----
+
+Backtest parametrization:
+
+[source,java,indent=0]
+----
+include::{examplesDir}/ParametrizedBacktestExample.java[tags=parametrizedBacktestExample]
 ----

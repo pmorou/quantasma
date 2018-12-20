@@ -1,0 +1,35 @@
+<div id="account-state_summary">
+  <table>
+    <thead>
+    <tr>
+      <th>Equity</th>
+      <th>Balance</th>
+      <th>Positions P/L</th>
+      <th>Positions Amount</th>
+      <th>Used Margin</th>
+      <th>Currency</th>
+      <th>Leverage</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr *ngIf="accountState$ != null">
+      <td>{{ accountState$?.equity }}</td>
+      <td>{{ accountState$?.balance }}</td>
+      <td>{{ accountState$?.positionsProfitLoss }}</td>
+      <td>{{ accountState$?.positionsAmount }}</td>
+      <td>{{ accountState$?.usedMargin }}</td>
+      <td>{{ accountState$?.currency }}</td>
+      <td>{{ accountState$?.leverage }}</td>
+    </tr>
+    <tr *ngIf="accountState$ == null">
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+      <td>-</td>
+    </tr>
+    </tbody>
+  </table>
+</div>

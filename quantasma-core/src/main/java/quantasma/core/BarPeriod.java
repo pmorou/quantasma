@@ -25,7 +25,7 @@ public enum BarPeriod {
 
     public static BarPeriod get(String periodCode) {
         return Arrays.stream(values())
-                     .filter(barPeriod -> barPeriod.getPeriodCode().equals(periodCode))
+                     .filter(barPeriod -> barPeriod.getPeriodCode().equalsIgnoreCase(periodCode))
                      .findFirst()
                      .orElseThrow(RuntimeException::new);
     }

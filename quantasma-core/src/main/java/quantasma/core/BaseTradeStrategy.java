@@ -5,27 +5,34 @@ import lombok.Getter;
 import org.ta4j.core.BaseStrategy;
 import org.ta4j.core.Rule;
 import org.ta4j.core.Strategy;
-import org.ta4j.core.num.DoubleNum;
 import org.ta4j.core.num.Num;
+import org.ta4j.core.num.PrecisionNum;
+import quantasma.core.analysis.parametrize.Parameterizable;
+import quantasma.core.analysis.parametrize.Values;
 
 import java.util.Objects;
+import java.util.function.Function;
 
 public class BaseTradeStrategy extends BaseStrategy implements TradeStrategy {
     private final Context context;
+    private final Function<Number, Num> numFunction;
+    private final Values<?> parameterValues;
 
     private String tradeSymbol;
     private Num amount;
 
-    protected BaseTradeStrategy(Builder builder) {
+    protected BaseTradeStrategy(Builder<?, ?> builder) {
         super(builder.getName(), builder.getEntryRule(), builder.getExitRule(), builder.getUnstablePeriod());
         this.context = Objects.requireNonNull(builder.getContext());
         this.tradeSymbol = Objects.requireNonNull(builder.getTradeSymbol());
-        this.amount = DoubleNum.valueOf(0);
+        this.numFunction = Objects.requireNonNull(builder.getNumFunction());
+        this.amount = numFunction.apply(builder.getAmount());
+        this.parameterValues = builder.getParametersValues();
     }
 
     @Override
     public TradeStrategy opposite() {
-        return new Builder<>(context, tradeSymbol, getExitRule(), getEntryRule())
+        return new Builder<>(context, tradeSymbol, getExitRule(), getEntryRule(), parameterValues)
                 .withName("opposite(" + getName() + ")")
                 .withUnstablePeriod(getUnstablePeriod())
                 .build();
@@ -33,7 +40,7 @@ public class BaseTradeStrategy extends BaseStrategy implements TradeStrategy {
 
     @Override
     public TradeStrategy and(Strategy strategy) {
-        return new Builder<>(context, tradeSymbol, getEntryRule().and(strategy.getEntryRule()), getExitRule().and(strategy.getExitRule()))
+        return new Builder<>(context, tradeSymbol, getEntryRule().and(strategy.getEntryRule()), getExitRule().and(strategy.getExitRule()), parameterValues)
                 .withName("and(" + getName() + "," + strategy.getName() + ")")
                 .withUnstablePeriod(Math.max(getUnstablePeriod(), strategy.getUnstablePeriod()))
                 .build();
@@ -41,7 +48,7 @@ public class BaseTradeStrategy extends BaseStrategy implements TradeStrategy {
 
     @Override
     public TradeStrategy and(String name, Strategy strategy, int unstablePeriod) {
-        return new Builder<>(context, tradeSymbol, getEntryRule().and(strategy.getEntryRule()), getExitRule().and(strategy.getExitRule()))
+        return new Builder<>(context, tradeSymbol, getEntryRule().and(strategy.getEntryRule()), getExitRule().and(strategy.getExitRule()), parameterValues)
                 .withName(name)
                 .withUnstablePeriod(unstablePeriod)
                 .build();
@@ -49,7 +56,7 @@ public class BaseTradeStrategy extends BaseStrategy implements TradeStrategy {
 
     @Override
     public TradeStrategy or(Strategy strategy) {
-        return new Builder<>(context, tradeSymbol, getEntryRule().or(strategy.getEntryRule()), getExitRule().or(strategy.getExitRule()))
+        return new Builder<>(context, tradeSymbol, getEntryRule().or(strategy.getEntryRule()), getExitRule().or(strategy.getExitRule()), parameterValues)
                 .withName("or(" + getName() + "," + strategy.getName() + ")")
                 .withUnstablePeriod(Math.max(getUnstablePeriod(), strategy.getUnstablePeriod()))
                 .build();
@@ -57,7 +64,7 @@ public class BaseTradeStrategy extends BaseStrategy implements TradeStrategy {
 
     @Override
     public TradeStrategy or(String name, Strategy strategy, int unstablePeriod) {
-        return new Builder<>(context, tradeSymbol, getEntryRule().or(strategy.getEntryRule()), getExitRule().or(strategy.getExitRule()))
+        return new Builder<>(context, tradeSymbol, getEntryRule().or(strategy.getEntryRule()), getExitRule().or(strategy.getExitRule()), parameterValues)
                 .withName(name)
                 .withUnstablePeriod(unstablePeriod)
                 .build();
@@ -91,6 +98,20 @@ public class BaseTradeStrategy extends BaseStrategy implements TradeStrategy {
         return tradeSymbol;
     }
 
+    @Override
+    public Values<?> getParameterValues() {
+        return parameterValues;
+    }
+
+    @Override
+    public Parameterizable[] parameterizables() {
+        return new Parameterizable[0];
+    }
+
+    protected Function<Number, Num> getNumFunction() {
+        return numFunction;
+    }
+
     /**
      * Example of builder which preserves all methods of its parents<p>
      *
@@ -103,15 +124,19 @@ public class BaseTradeStrategy extends BaseStrategy implements TradeStrategy {
         private final String tradeSymbol;
         private final Rule entryRule;
         private final Rule exitRule;
+        private final Values<?> parametersValues;
 
         private String name = "unamed_series";
         private int unstablePeriod;
+        private Function<Number, Num> numFunction = PrecisionNum::valueOf;
+        private int amount = 100;
 
-        public Builder(Context context, String tradeSymbol, Rule entryRule, Rule exitRule) {
+        public Builder(Context context, String tradeSymbol, Rule entryRule, Rule exitRule, Values<?> parameterValues) {
             this.context = Objects.requireNonNull(context);
             this.tradeSymbol = Objects.requireNonNull(tradeSymbol);
             this.entryRule = Objects.requireNonNull(entryRule);
             this.exitRule = Objects.requireNonNull(exitRule);
+            this.parametersValues = Objects.requireNonNull(parameterValues);
         }
 
         public T withName(String name) {
@@ -121,6 +146,21 @@ public class BaseTradeStrategy extends BaseStrategy implements TradeStrategy {
 
         public T withUnstablePeriod(int unstablePeriod) {
             this.unstablePeriod = unstablePeriod;
+            return self();
+        }
+
+        public T withNumTypeOf(Function<Number, Num> numFunction) {
+            this.numFunction = numFunction;
+            return self();
+        }
+
+        public T withNumTypeOf(Num type) {
+            this.numFunction = type.function();
+            return self();
+        }
+
+        public T withAmount(int amount) {
+            this.amount = amount;
             return self();
         }
 

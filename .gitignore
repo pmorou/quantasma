@@ -1,4 +1,14 @@
+### compiled output ###
 */target/
+**/resources/public/
+*/dist
+*/tmp
+*/out-tsc
+
+### dependencies ##
+**/node_modules
+
+### jars ###
 !.mvn/wrapper/maven-wrapper.jar
 
 ### STS ###
@@ -23,3 +33,17 @@
 /dist/
 /nbdist/
 /.nb-gradle/
+
+### misc ###
+/.sass-cache
+/connect.lock
+/coverage
+/libpeerconnection.log
+npm-debug.log
+yarn-error.log
+testem.log
+/typings
+
+### System Files ##
+.DS_Store
+Thumbs.db

@@ -1,0 +1,10 @@
+<div class="component">
+  <h1>Backtest</h1>
+  <ul>
+    <li *ngFor="let backtest of backtests$">
+      <p><strong>Strategy:</strong> {{ backtest.strategy }}</p>
+      <p><strong>Parameters:</strong><span *ngFor="let parameter of backtest.parameters"> {{ parameter.name }}</span></p>
+      <a routerLink="{{ backtest.name }}">Inspect</a>
+    </li>
+  </ul>
+</div>

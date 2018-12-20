@@ -1,0 +1,20 @@
+<div class="component">
+  <h1>Backtest</h1>
+
+  <ul>
+    <li>
+      <p><strong>Strategy:</strong> {{ backtest?.strategy }}</p>
+
+      <app-backtest-strategy-settings #backtestSettings
+                                      [params]="availableParameters"
+                                      [crits]="availableCriterions"
+                                      [backtestName]="backtest?.name"
+                                      (testFinished)="testFinished($event)"></app-backtest-strategy-settings>
+
+      <br/>
+
+      <app-backtest-strategy-result #backtestResult></app-backtest-strategy-result>
+    </li>
+  </ul>
+
+</div>

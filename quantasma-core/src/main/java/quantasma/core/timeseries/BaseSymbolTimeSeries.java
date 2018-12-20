@@ -7,6 +7,7 @@ import org.ta4j.core.BaseTimeSeries;
 import org.ta4j.core.num.Num;
 import org.ta4j.core.num.PrecisionNum;
 import quantasma.core.BarPeriod;
+import quantasma.core.timeseries.bar.NaNBar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -22,6 +23,17 @@ public class BaseSymbolTimeSeries extends BaseTimeSeries implements SymbolTimeSe
         this.symbol = builder.getSymbol();
         this.barPeriod = builder.getBarPeriod();
         setMaximumBarCount(builder.getMaxBarCount());
+    }
+
+    @Override
+    public Bar getBar(int i) {
+        final int nthOldElement = getEndIndex() - i;
+
+        if (nthOldElement < getBarCount()) {
+            return super.getBar(i);
+        }
+
+        return NaNBar.NaN;
     }
 
     /**

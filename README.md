@@ -2,7 +2,19 @@
 
 All-in-one algorithmic trading platform. Build your own backtested-strategy using Java, and execute along with support of continuous track and optimization modules.
 
-Library stands on top of [ta4j](https://github.com/ta4j/ta4j) providing additional features as:
+Modules short-description:
+
+-   [quantasma-app]({quantasma-app/}): ready-to-use application based on below modules
+
+-   [quantasma-core]({quantasma-core/}): trading library providing core mechanics
+
+-   [quantasma-examples]({quantasma-examples/}): example usages
+
+-   [quantasma-integrations]({quantasma-integrations/}): integrations with 3rd party APIs
+
+**NOTE: All modules are still in development. Use at your own risk.**
+
+Platform stands on top of [ta4j](https://github.com/ta4j/ta4j) providing additional features as:
 
 -   bid and ask prices
 
@@ -12,6 +24,8 @@ Library stands on top of [ta4j](https://github.com/ta4j/ta4j) providing addition
 
 -   parametrized backtests
 
+You can use above platform or build your own based on [quantasma-core]({quantasma-core/}) library.
+
 The aim is to provide any needed functionality to follow the ever-changing markets in the most efficient way.
 
 # Getting Started
@@ -20,9 +34,11 @@ The aim is to provide any needed functionality to follow the ever-changing marke
 
 &gt;= Java 8
 
+Java 9 is comming shortly. The main goal is to migrate to Java 11 step by step.
+
 ## Example Usage
 
-Creating a trading application is as simple as the following code.
+In case you decide to create your own trading application its as simple as the following code.
 
 ``` java
 // Any strategy based on TradeStrategy interface needs a Context object
@@ -41,12 +57,18 @@ final Context context = new BaseContext.Builder()
         .withOrderService(new NullOrderService())
         .build();
 
-final TradeEngine tradeEngine = BaseTradeEngine.create(context);
-
-final TradeStrategy rsiStrategy = RSIStrategy.buildBullish(context, "EURUSD", BarPeriod.M1);
+final TradeStrategy rsiStrategy = RSIStrategy.buildBullish(context,
+                                                           parameterValues -> parameterValues
+                                                                 // Strings/Enums are allowed
+                                                                 .add(Parameter.TRADE_SYMBOL, "EURUSD")
+                                                                 .add(Parameter.RSI_PERIOD, 14)
+                                                                 .add(Parameter.RSI_LOWER_BOUND, 30)
+                                                                 .add(Parameter.RSI_UPPER_BOUND, 70));
 
 // Only registered strategies are given market data
 context.getStrategyControl().register(rsiStrategy);
+
+final TradeEngine tradeEngine = BaseTradeEngine.create(context);
 
 // Example call on market data change
 tradeEngine.process("EURUSD", ZonedDateTime.now(), 1.13757, 1.13767);

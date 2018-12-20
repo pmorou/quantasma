@@ -22,7 +22,7 @@ public class BaseTradeEngine implements TradeEngine {
     public void process(String symbol, ZonedDateTime date, double price) {
         dataService.getMarketData().add(symbol, date, price);
         final int latestBarIndex = dataService.getMarketData().lastBarIndex();
-        strategyControl.getActiveStrategies().forEach(strategy -> {
+        strategyControl.activeStrategies().forEach(strategy -> {
             if (!strategy.shouldEnter(latestBarIndex))
                 strategy.shouldExit(latestBarIndex);
         });
@@ -32,10 +32,14 @@ public class BaseTradeEngine implements TradeEngine {
     public void process(String symbol, ZonedDateTime date, double bid, double ask) {
         dataService.getMarketData().add(symbol, date, bid, ask);
         final int latestBarIndex = dataService.getMarketData().lastBarIndex();
-        strategyControl.getActiveStrategies().forEach(strategy -> {
+        strategyControl.activeStrategies().forEach(strategy -> {
             if (!strategy.shouldEnter(latestBarIndex))
                 strategy.shouldExit(latestBarIndex);
         });
     }
 
+    @Override
+    public void process(Quote quote) {
+        process(quote.getSymbol(), quote.getTime(), quote.getBid(), quote.getAsk());
+    }
 }

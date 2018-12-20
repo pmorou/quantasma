@@ -6,8 +6,9 @@ import org.ta4j.core.Order;
 import org.ta4j.core.Rule;
 import org.ta4j.core.Strategy;
 import org.ta4j.core.TradingRecord;
-import org.ta4j.core.num.DoubleNum;
 import org.ta4j.core.num.Num;
+import quantasma.core.analysis.parametrize.Parameterizable;
+import quantasma.core.analysis.parametrize.Values;
 import quantasma.core.timeseries.MainTimeSeries;
 import quantasma.core.timeseries.ManualIndexTimeSeries;
 
@@ -27,7 +28,7 @@ public class TestManager {
         return run(tradeStrategy, orderType, getMainTimeSeries(tradeStrategy).getBeginIndex(), getMainTimeSeries(tradeStrategy).getEndIndex());
     }
 
-    private MainTimeSeries getMainTimeSeries(TradeStrategy tradeStrategy) {
+    public MainTimeSeries getMainTimeSeries(TradeStrategy tradeStrategy) {
         return testMarketData.of(tradeStrategy.getTradeSymbol()).getMainTimeSeries();
     }
 
@@ -96,13 +97,12 @@ public class TestManager {
             manualIndexTimeSeriesSet.forEach(ManualIndexTimeSeries::resetIndexes);
         }
 
+        // decorator methods below
+
         @Override
         public Num getAmount() {
-            // unique values imitating possibility of changing an amount between trades
-            return DoubleNum.valueOf(Math.random());
+            return strategy.getAmount();
         }
-
-        // decorator methods below
 
         @Override
         public String getName() {
@@ -112,6 +112,16 @@ public class TestManager {
         @Override
         public String getTradeSymbol() {
             return strategy.getTradeSymbol();
+        }
+
+        @Override
+        public Values getParameterValues() {
+            return strategy.getParameterValues();
+        }
+
+        @Override
+        public Parameterizable[] parameterizables() {
+            return new Parameterizable[0];
         }
 
         @Override

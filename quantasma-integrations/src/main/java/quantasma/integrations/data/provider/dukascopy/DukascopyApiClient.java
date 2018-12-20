@@ -27,7 +27,7 @@ public class DukascopyApiClient {
         try {
             initializeClient();
         } catch (Exception e) {
-            log.error("{}", e);
+            log.error(e.getMessage(), e);
             throw new RuntimeException(e);
         }
     }
@@ -37,15 +37,12 @@ public class DukascopyApiClient {
 
             @Override
             public void onStart(long processId) {
-                log.info("Strategy started: " + processId);
+                log.info("Strategy started [processingId: {}]", processId);
             }
 
             @Override
             public void onStop(long processId) {
-                log.info("Strategy stopped: " + processId);
-                if (client.getStartedStrategies().size() == 0) {
-                    System.exit(0);
-                }
+                log.info("Strategy stopped [processingId: {}]", processId);
             }
 
             @Override
@@ -56,6 +53,7 @@ public class DukascopyApiClient {
 
             @Override
             public void onDisconnect() {
+                log.info("Disconnected");
                 tryToReconnect();
             }
         });
@@ -72,6 +70,7 @@ public class DukascopyApiClient {
     }
 
     private void tryToReconnect() {
+        log.info("Connecting...");
         Runnable runnable = new Runnable() {
             @Override
             public void run() {
@@ -87,7 +86,7 @@ public class DukascopyApiClient {
                             break;
                         }
                     } catch (Exception e) {
-                        log.error(e.getMessage(), e);
+                        log.error("Reconnecting failed", e);
                     }
                     sleep(60 * 1000);
                 }
@@ -97,7 +96,7 @@ public class DukascopyApiClient {
                 try {
                     Thread.sleep(millis);
                 } catch (InterruptedException e) {
-                    log.error(e.getMessage(), e);
+                    log.error("Sleep interrupted", e);
                 }
             }
         };
@@ -114,10 +113,9 @@ public class DukascopyApiClient {
     private void initializeClient() throws Exception {
         client = ClientFactory.getDefaultInstance();
         setSystemListener();
-        log.info("Connecting...");
+        log.info("Initializing client...");
         tryToConnect();
         if (!client.isConnected()) {
-            log.error("Failed to connect Dukascopy servers");
             throw new RuntimeException("Failed to connect Dukascopy servers");
         }
         subscribeToInstruments();
