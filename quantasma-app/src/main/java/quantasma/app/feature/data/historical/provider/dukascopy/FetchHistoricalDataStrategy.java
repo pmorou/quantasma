@@ -19,7 +19,7 @@ import quantasma.app.model.PushTicksSettings;
 import quantasma.app.service.OhlcvTickService;
 
 import java.time.Instant;
-import java.time.ZoneOffset;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -39,19 +39,24 @@ public class FetchHistoricalDataStrategy implements IStrategy {
     }
 
     public void onStart(IContext context) throws JFException {
+        log.info("Strategy started");
         this.console = context.getConsole();
         this.history = context.getHistory();
-        log.info("Strategy started");
 
-        final Instant earliestDate = pushTicksSettings.getFromDate();
-        final long startTimeOfCurrentBar = history.getStartTimeOfCurrentBar(resolveInstrument(), resolvePeriod());
+        Instant fetchFrom = pushTicksSettings.getFromDate();
+        Instant fetchTo = getValidFetchTo();
 
-        Instant latestDate = Instant.ofEpochMilli(startTimeOfCurrentBar);
+        if (fetchTo.isBefore(fetchFrom)) {
+            throw new IllegalArgumentException(String.format("From date [%s] > to date [%s]", fetchFrom, fetchTo));
+        }
 
-        while (!reachedBottom(latestDate, earliestDate)) {
-            log.info("Fetching 100_000 bars created <=" + latestDate.atZone(ZoneOffset.UTC));
-            final List<IBar> bidBars = history.getBars(resolveInstrument(), resolvePeriod(), OfferSide.BID, Filter.WEEKENDS, 50_000, latestDate.toEpochMilli(), 0);
-            final List<IBar> askBars = history.getBars(resolveInstrument(), resolvePeriod(), OfferSide.ASK, Filter.WEEKENDS, 50_000, latestDate.toEpochMilli(), 0);
+        while (!fetchTo.equals(pushTicksSettings.getFromDate())) {
+            fetchFrom = rollWindow(fetchTo);
+
+            log.info("Fetching bars - from: [{}], to: [{}]", fetchFrom, fetchTo);
+
+            final List<IBar> bidBars = history.getBars(resolveInstrument(), resolvePeriod(), OfferSide.BID, Filter.WEEKENDS, fetchFrom.toEpochMilli(), fetchTo.toEpochMilli());
+            final List<IBar> askBars = history.getBars(resolveInstrument(), resolvePeriod(), OfferSide.ASK, Filter.WEEKENDS, fetchFrom.toEpochMilli(), fetchTo.toEpochMilli());
 
             final BarBucketCollection collection = new BarBucketCollection();
             bidBars.forEach(collection::insertBidBar);
@@ -74,12 +79,25 @@ public class FetchHistoricalDataStrategy implements IStrategy {
                                                                     (int) (bucket.bidBar.getVolume() + bucket.askBar.getVolume())));
             }
 
-            if (bidBars.size() == 0 || bidBars.get(1).getTime() == latestDate.toEpochMilli()) {
-                break; // no more records
+            if (bidBars.size() == 0 || askBars.size() == 0) {
+                log.info("No bar found for given date range, stopping fetch");
+                break;
             }
-            latestDate = Instant.ofEpochMilli(bidBars.get(1).getTime());
+            fetchTo = fetchFrom;
         }
         isDone = true;
+    }
+
+    private Instant rollWindow(Instant fetchTo) {
+        return Instant.ofEpochMilli(Math.max(pushTicksSettings.getFromDate().toEpochMilli(),
+                                             fetchTo.minus(60, ChronoUnit.DAYS).toEpochMilli()));
+    }
+
+
+    private Instant getValidFetchTo() throws JFException {
+        final long latestPossibleBar = history.getStartTimeOfCurrentBar(resolveInstrument(), resolvePeriod());
+        return Instant.ofEpochMilli(Math.min(latestPossibleBar,
+                                             pushTicksSettings.getToDate().toEpochMilli()));
     }
 
     private Period resolvePeriod() {
@@ -104,10 +122,6 @@ public class FetchHistoricalDataStrategy implements IStrategy {
 
     private Instrument resolveInstrument() {
         return Instrument.valueOf(pushTicksSettings.getSymbol());
-    }
-
-    private boolean reachedBottom(Instant latestDate, Instant earliestDate) {
-        return latestDate.isBefore(earliestDate);
     }
 
     private class BarBucketCollection {
