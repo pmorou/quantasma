@@ -6,22 +6,33 @@ import lombok.Getter;
 import quantasma.core.BarPeriod;
 
 import java.time.Instant;
+import java.time.LocalDate;
+import java.time.ZoneOffset;
 
 @Getter
 public class FeedSymbolTicksRequest {
     private final String symbol;
     private final BarPeriod barPeriod;
-    private final Instant fromDate;
-    private final Instant toDate;
+    private final LocalDate fromDate;
+    private final LocalDate toDate;
 
     @JsonCreator
     public FeedSymbolTicksRequest(@JsonProperty("symbol") String symbol,
                                   @JsonProperty("barPeriod") BarPeriod barPeriod,
-                                  @JsonProperty("fromDate") Instant fromDate,
-                                  @JsonProperty("toDate") Instant toDate) {
+                                  @JsonProperty("fromDate") LocalDate fromDate,
+                                  @JsonProperty("toDate") LocalDate toDate) {
         this.symbol = symbol;
         this.barPeriod = barPeriod;
         this.fromDate = fromDate;
         this.toDate = toDate;
+    }
+
+    public Instant fromDateAsUtc() {
+        return fromDate.atStartOfDay().toInstant(ZoneOffset.UTC);
+    }
+
+
+    public Instant toDateAsUtc() {
+        return toDate.atStartOfDay().toInstant(ZoneOffset.UTC);
     }
 }

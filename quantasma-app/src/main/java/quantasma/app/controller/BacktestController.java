@@ -111,8 +111,8 @@ public class BacktestController {
         }
         historicalDataUpdater.update(new PushTicksSettings(request.getSymbol(),
                                                            request.getBarPeriod(),
-                                                           request.getFromDate(),
-                                                           request.getToDate()));
+                                                           request.fromDateAsUtc(),
+                                                           request.toDateAsUtc()));
         log.info("Processing by historical service: [{}]", request);
         return FeedSymbolTicksResponse.accepted();
     }
