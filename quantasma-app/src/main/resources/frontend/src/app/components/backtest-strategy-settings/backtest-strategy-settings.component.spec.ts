@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { BacktestStrategySettingsComponent } from './backtest-strategy-settings.component';
 
-describe('ProductFormComponent', () => {
+describe('BacktestStrategySettingsComponent', () => {
   let component: BacktestStrategySettingsComponent;
   let fixture: ComponentFixture<BacktestStrategySettingsComponent>;
 

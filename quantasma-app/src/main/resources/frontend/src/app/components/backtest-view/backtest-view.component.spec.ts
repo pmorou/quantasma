@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { BacktestViewComponent } from './backtest-view.component';
 
-describe('BacktestComponent', () => {
+describe('BacktestViewComponent', () => {
   let component: BacktestViewComponent;
   let fixture: ComponentFixture<BacktestViewComponent>;
 
