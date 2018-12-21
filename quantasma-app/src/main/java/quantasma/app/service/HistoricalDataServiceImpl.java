@@ -43,11 +43,6 @@ public class HistoricalDataServiceImpl implements HistoricalDataService {
     }
 
     @Override
-    public void insert(MongoOhlcvBar persistentOhlcvBar) {
-        historicalDataRepository.insert(persistentOhlcvBar);
-    }
-
-    @Override
     public void insertSkipDuplicates(OhlcvBar ohlcvBar) {
         final MongoOhlcvBar persistentOhlcvBar = MongoOhlcvBar.from(ohlcvBar);
         try {

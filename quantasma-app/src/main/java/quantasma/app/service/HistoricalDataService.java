@@ -2,7 +2,6 @@ package quantasma.app.service;
 
 import quantasma.app.model.HistoricalDataSummary;
 import quantasma.app.model.OhlcvBar;
-import quantasma.app.model.MongoOhlcvBar;
 
 import java.time.Instant;
 import java.time.temporal.TemporalAmount;
@@ -10,8 +9,6 @@ import java.util.List;
 
 public interface HistoricalDataService {
     void insert(OhlcvBar ohlcvBar);
-
-    void insert(MongoOhlcvBar persistentOhlcvBar);
 
     void insertSkipDuplicates(OhlcvBar ohlcvBar);
 
