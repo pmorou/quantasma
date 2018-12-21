@@ -10,14 +10,11 @@ import org.springframework.web.bind.annotation.RestController;
 import quantasma.app.config.service.backtest.CriterionsFactory;
 import quantasma.app.model.BacktestRequest;
 import quantasma.app.model.BacktestScenario;
-import quantasma.app.model.ParameterDescription;
 import quantasma.core.analysis.BacktestResult;
 import quantasma.core.analysis.StrategyBacktest;
 
-import java.util.Arrays;
 import java.util.List;
 import java.util.Set;
-import java.util.function.Function;
 import java.util.stream.Collectors;
 
 @RestController
@@ -38,7 +35,7 @@ public class BacktestController {
     @RequestMapping("all")
     public List<BacktestScenario> all() {
         return backtestList.stream()
-                           .map(toBacktestScenario())
+                           .map(BacktestScenario::from)
                            .collect(Collectors.toList());
     }
 
@@ -46,20 +43,9 @@ public class BacktestController {
     public BacktestScenario get(@PathVariable String name) {
         return backtestList.stream()
                            .filter(strategyBacktest -> strategyBacktest.getClass().getSimpleName().equalsIgnoreCase(name))
-                           .map(toBacktestScenario())
+                           .map(BacktestScenario::from)
                            .findFirst()
                            .orElseThrow(RuntimeException::new);
-    }
-
-    private static Function<StrategyBacktest, BacktestScenario> toBacktestScenario() {
-        return backtest -> new BacktestScenario(
-                backtest.getClass().getSimpleName(),
-                backtest.strategy().getSimpleName(),
-                Arrays.stream(backtest.parameterizables())
-                      .map(p -> new ParameterDescription(
-                              p.name(),
-                              p.clazz().getSimpleName()))
-                      .collect(Collectors.toList()));
     }
 
     @RequestMapping(value = "{name}", method = RequestMethod.POST)
