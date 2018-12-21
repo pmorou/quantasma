@@ -9,7 +9,6 @@ import quantasma.app.model.MongoOhlcvBar;
 import quantasma.app.model.HistoricalDataSummary;
 import quantasma.app.repository.HistoricalDataRepository;
 import quantasma.app.util.Util;
-import quantasma.core.BarPeriod;
 
 import java.time.Instant;
 import java.time.temporal.TemporalAmount;
@@ -28,10 +27,10 @@ public class HistoricalDataServiceImpl implements HistoricalDataService {
     }
 
     @Override
-    public void insert(OhlcvBar ohlcvBar, BarPeriod barPeriod, String symbol) {
-        historicalDataRepository.insert(new MongoOhlcvBar(barPeriod,
+    public void insert(OhlcvBar ohlcvBar) {
+        historicalDataRepository.insert(new MongoOhlcvBar(ohlcvBar.getPeriod(),
                                                           ohlcvBar.getDate(),
-                                                          symbol,
+                                                          ohlcvBar.getSymbol(),
                                                           ohlcvBar.getBidOpen(),
                                                           ohlcvBar.getBidLow(),
                                                           ohlcvBar.getBidHigh(),
