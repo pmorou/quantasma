@@ -13,5 +13,5 @@ public interface HistoricalDataRepository {
 
     long countBySymbol(String symbol);
 
-    List<HistoricalDataSummary> symbolsTickSummary();
+    List<HistoricalDataSummary> dataSummary();
 }

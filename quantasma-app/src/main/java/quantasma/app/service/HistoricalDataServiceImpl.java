@@ -84,7 +84,7 @@ public class HistoricalDataServiceImpl implements HistoricalDataService {
 
     @Override
     public List<HistoricalDataSummary> dataSummary() {
-        return historicalDataRepository.symbolsTickSummary();
+        return historicalDataRepository.dataSummary();
     }
 
 }

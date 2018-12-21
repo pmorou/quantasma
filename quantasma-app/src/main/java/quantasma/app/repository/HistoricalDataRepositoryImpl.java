@@ -46,7 +46,7 @@ public class HistoricalDataRepositoryImpl implements HistoricalDataRepository {
     }
 
     @Override
-    public List<HistoricalDataSummary> symbolsTickSummary() {
+    public List<HistoricalDataSummary> dataSummary() {
         final Aggregation aggregation = Aggregation.newAggregation(
                 Aggregation.group("symbol", "period")
                            .first("symbol").as("symbol")
