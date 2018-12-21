@@ -21,7 +21,6 @@ import quantasma.integrations.event.EventSink;
 import quantasma.integrations.event.OpenedPosition;
 import quantasma.integrations.util.MathUtils;
 
-import java.text.DecimalFormat;
 import java.time.Instant;
 import java.time.ZoneOffset;
 import java.util.LinkedList;

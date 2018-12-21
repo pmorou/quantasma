@@ -7,8 +7,8 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 import quantasma.app.config.service.historical.HistoricalDataServiceProperties;
-import quantasma.app.model.MongoOhlcvBar;
 import quantasma.app.model.HistoricalDataSummary;
+import quantasma.app.model.MongoOhlcvBar;
 
 import java.time.Instant;
 import java.util.List;
