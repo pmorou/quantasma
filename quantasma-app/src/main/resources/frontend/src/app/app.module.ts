@@ -1,21 +1,20 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
-
-import { AppComponent } from './app.component';
+import { RouterModule } from "@angular/router";
 import { AppRoutingModule } from './app-routing.module';
+import { HttpClientModule } from "@angular/common/http";
+import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
+import { ReactiveFormsModule } from "@angular/forms";
+import { MaterialModule } from './modules/material.module';
+import { AppComponent } from './app.component';
 import { SidebarComponent } from './components/sidebar/sidebar.component';
 import { StatusViewComponent } from './components/status-view/status-view.component';
-import { HttpClientModule } from "@angular/common/http";
 import { QuotesComponent } from './components/quotes/quotes.component';
 import { AccountStateComponent } from './components/account-state/account-state.component';
 import { OpenedPositionsComponent } from './components/opened-positions/opened-positions.component';
 import { BacktestViewComponent } from './components/backtest-view/backtest-view.component';
 import { BacktestStrategyViewComponent } from './components/backtest-strategy-view/backtest-strategy-view.component';
 import { BacktestStrategySettingsComponent } from './components/backtest-strategy-settings/backtest-strategy-settings.component';
-import { RouterModule } from "@angular/router";
-import { MaterialModule } from './modules/material.module';
-import { BrowserAnimationsModule } from "@angular/platform-browser/animations";
-import { ReactiveFormsModule } from "@angular/forms";
 import { BacktestStrategyResultComponent } from './components/backtest-strategy-result/backtest-strategy-result.component';
 import { HistoricalDataSummaryComponent } from './components/historical-data-summary/historical-data-summary.component';
 import { HistoricalDataViewComponent } from './components/historical-data-view/historical-data-view.component';
