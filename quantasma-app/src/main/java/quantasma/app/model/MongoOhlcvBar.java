@@ -62,4 +62,19 @@ public class MongoOhlcvBar implements Serializable {
                                  ohlcvBar.getAskClose(),
                                  ohlcvBar.getVolume());
     }
+
+    public OhlcvBar toOhlcvBar() {
+        return new OhlcvBar(getPeriod(),
+                            getDate(),
+                            getSymbol(),
+                            getBidOpen(),
+                            getBidLow(),
+                            getBidHigh(),
+                            getBidClose(),
+                            getAskOpen(),
+                            getAskLow(),
+                            getAskHigh(),
+                            getAskClose(),
+                            getVolume());
+    }
 }
