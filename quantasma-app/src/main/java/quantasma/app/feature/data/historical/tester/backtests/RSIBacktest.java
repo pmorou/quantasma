@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 import org.ta4j.core.AnalysisCriterion;
 import org.ta4j.core.Order;
 import quantasma.app.config.service.backtest.CriterionsFactory;
-import quantasma.app.model.OhlcvTick;
+import quantasma.app.model.OhlcvBar;
 import quantasma.app.service.HistoricalDataService;
 import quantasma.core.BarPeriod;
 import quantasma.core.BaseContext;
@@ -121,11 +121,11 @@ public class RSIBacktest implements StrategyBacktest {
                        .collect(Collectors.toList());
     }
 
-    private static Consumer<OhlcvTick> loadTicks(TestMarketData testMarketData) {
-        return ohlcvTick -> testMarketData.add(ohlcvTick.getSymbol(),
-                                               ohlcvTick.getDate().atZone(ZoneOffset.UTC),
-                                               ohlcvTick.getBidClose(),
-                                               ohlcvTick.getAskClose());
+    private static Consumer<OhlcvBar> loadTicks(TestMarketData testMarketData) {
+        return ohlcvBar -> testMarketData.add(ohlcvBar.getSymbol(),
+                                              ohlcvBar.getDate().atZone(ZoneOffset.UTC),
+                                              ohlcvBar.getBidClose(),
+                                              ohlcvBar.getAskClose());
     }
 
     private static TestMarketData createTestMarketData() {

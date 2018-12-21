@@ -6,7 +6,7 @@ import quantasma.core.BarPeriod;
 import java.time.Instant;
 
 @Data
-public class OhlcvTick {
+public class OhlcvBar {
 
     private final BarPeriod period;
     private final Instant date;

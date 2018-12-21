@@ -4,8 +4,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
-import quantasma.app.model.OhlcvTick;
-import quantasma.app.model.PersistentOhlcvTick;
+import quantasma.app.model.OhlcvBar;
+import quantasma.app.model.MongoOhlcvBar;
 import quantasma.app.model.HistoricalDataSummary;
 import quantasma.app.repository.HistoricalDataRepository;
 import quantasma.app.util.Util;
@@ -28,52 +28,52 @@ public class HistoricalDataServiceImpl implements HistoricalDataService {
     }
 
     @Override
-    public void insert(OhlcvTick ohlcvTick, BarPeriod barPeriod, String symbol) {
-        historicalDataRepository.insert(new PersistentOhlcvTick(barPeriod,
-                                                                ohlcvTick.getDate(),
-                                                                symbol,
-                                                                ohlcvTick.getBidOpen(),
-                                                                ohlcvTick.getBidLow(),
-                                                                ohlcvTick.getBidHigh(),
-                                                                ohlcvTick.getBidClose(),
-                                                                ohlcvTick.getAskOpen(),
-                                                                ohlcvTick.getAskLow(),
-                                                                ohlcvTick.getAskHigh(),
-                                                                ohlcvTick.getAskClose(),
-                                                                ohlcvTick.getVolume()));
+    public void insert(OhlcvBar ohlcvBar, BarPeriod barPeriod, String symbol) {
+        historicalDataRepository.insert(new MongoOhlcvBar(barPeriod,
+                                                          ohlcvBar.getDate(),
+                                                          symbol,
+                                                          ohlcvBar.getBidOpen(),
+                                                          ohlcvBar.getBidLow(),
+                                                          ohlcvBar.getBidHigh(),
+                                                          ohlcvBar.getBidClose(),
+                                                          ohlcvBar.getAskOpen(),
+                                                          ohlcvBar.getAskLow(),
+                                                          ohlcvBar.getAskHigh(),
+                                                          ohlcvBar.getAskClose(),
+                                                          ohlcvBar.getVolume()));
     }
 
     @Override
-    public void insert(PersistentOhlcvTick persistentOhlcvTick) {
-        historicalDataRepository.insert(persistentOhlcvTick);
+    public void insert(MongoOhlcvBar persistentOhlcvBar) {
+        historicalDataRepository.insert(persistentOhlcvBar);
     }
 
     @Override
-    public void insertSkipDuplicates(OhlcvTick ohlcvTick) {
-        final PersistentOhlcvTick persistentOhlcvTick = PersistentOhlcvTick.from(ohlcvTick);
+    public void insertSkipDuplicates(OhlcvBar ohlcvBar) {
+        final MongoOhlcvBar persistentOhlcvBar = MongoOhlcvBar.from(ohlcvBar);
         try {
-            historicalDataRepository.insert(persistentOhlcvTick);
+            historicalDataRepository.insert(persistentOhlcvBar);
         } catch (DuplicateKeyException e) {
-            log.warn("Exception [{}] while inserting [{}]", e.getMessage(), persistentOhlcvTick);
+            log.warn("Exception [{}] while inserting [{}]", e.getMessage(), persistentOhlcvBar);
         }
     }
 
     @Override
-    public List<OhlcvTick> findBySymbolAndDateBetweenOrderByDate(String symbol, Instant startDate, TemporalAmount window) {
+    public List<OhlcvBar> findBySymbolAndDateBetweenOrderByDate(String symbol, Instant startDate, TemporalAmount window) {
         return historicalDataRepository.findBySymbolAndDateBetweenOrderByDate(symbol, startDate, Util.instantPlusTemporalAmount(startDate, window))
                                        .stream()
-                                       .map(candlestick -> new OhlcvTick(candlestick.getPeriod(),
-                                                                    candlestick.getDate(),
-                                                                    candlestick.getSymbol(),
-                                                                    candlestick.getBidOpen(),
-                                                                    candlestick.getBidLow(),
-                                                                    candlestick.getBidHigh(),
-                                                                    candlestick.getBidClose(),
-                                                                    candlestick.getAskOpen(),
-                                                                    candlestick.getAskLow(),
-                                                                    candlestick.getAskHigh(),
-                                                                    candlestick.getAskClose(),
-                                                                    candlestick.getVolume()))
+                                       .map(candlestick -> new OhlcvBar(candlestick.getPeriod(),
+                                                                        candlestick.getDate(),
+                                                                        candlestick.getSymbol(),
+                                                                        candlestick.getBidOpen(),
+                                                                        candlestick.getBidLow(),
+                                                                        candlestick.getBidHigh(),
+                                                                        candlestick.getBidClose(),
+                                                                        candlestick.getAskOpen(),
+                                                                        candlestick.getAskLow(),
+                                                                        candlestick.getAskHigh(),
+                                                                        candlestick.getAskClose(),
+                                                                        candlestick.getVolume()))
                                        .collect(Collectors.toList());
     }
 
