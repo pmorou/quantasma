@@ -24,7 +24,7 @@ class StrategyControllerSpec extends Specification {
         service.all() >> []
 
         when:
-        mockMvc.perform(get("/strategy/all"))
+        mockMvc.perform(get("/api/strategy/all"))
                 .andExpect(status().isOk())
 
         then:
