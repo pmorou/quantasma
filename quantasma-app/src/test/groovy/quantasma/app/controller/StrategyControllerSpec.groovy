@@ -9,6 +9,7 @@ import quantasma.core.StrategyDescription
 import spock.lang.Specification
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*
 
 @WebMvcTest(StrategyController)
@@ -50,6 +51,17 @@ class StrategyControllerSpec extends Specification {
 
         then:
         noExceptionThrown()
+    }
+
+    def "should call activation method"() {
+        when:
+        mockMvc.perform(patch("/api/strategy/activate/1"))
+            .andExpect(status().isOk())
+
+        then:
+        noExceptionThrown()
+        1 * service.activate(1)
+        0 * service._
     }
 
 }
