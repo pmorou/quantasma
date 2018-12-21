@@ -16,6 +16,7 @@ import quantasma.core.analysis.StrategyBacktest;
 import java.util.List;
 import java.util.Set;
 import java.util.function.Predicate;
+import java.util.function.Supplier;
 import java.util.stream.Collectors;
 
 @RestController
@@ -46,7 +47,11 @@ public class BacktestController {
                            .filter(matchBacktest(name))
                            .map(BacktestScenario::from)
                            .findFirst()
-                           .orElseThrow(RuntimeException::new);
+                           .orElseThrow(unknownBacktest(name));
+    }
+
+    private Supplier<IllegalArgumentException> unknownBacktest(@PathVariable String name) {
+        return () -> new IllegalArgumentException(String.format("Unknown backtest: %s", name));
     }
 
     @RequestMapping(value = "{name}", method = RequestMethod.POST)
@@ -58,7 +63,7 @@ public class BacktestController {
                                                                          request.criterionNames(),
                                                                          request.getTime().getFrom().atStartOfDay(),
                                                                          request.getTime().getWindowAsPeriod()))
-                           .orElseThrow(RuntimeException::new);
+                           .orElseThrow(unknownBacktest(name));
     }
 
     private static Predicate<StrategyBacktest> matchBacktest(String name) {
