@@ -64,4 +64,15 @@ class StrategyControllerSpec extends Specification {
         0 * service._
     }
 
+    def "should call deactivation method"() {
+        when:
+        mockMvc.perform(patch("/api/strategy/deactivate/1"))
+                .andExpect(status().isOk())
+
+        then:
+        noExceptionThrown()
+        1 * service.deactivate(1)
+        0 * service._
+    }
+
 }
