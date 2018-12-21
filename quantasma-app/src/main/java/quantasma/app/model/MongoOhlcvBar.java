@@ -4,11 +4,10 @@ import lombok.Data;
 import org.bson.types.ObjectId;
 import quantasma.core.BarPeriod;
 
-import java.io.Serializable;
 import java.time.Instant;
 
 @Data
-public class MongoOhlcvBar implements Serializable {
+public class MongoOhlcvBar {
 
     private ObjectId id;
     private BarPeriod period;
