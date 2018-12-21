@@ -10,7 +10,9 @@ import org.springframework.test.web.reactive.server.WebTestClient
 import quantasma.app.service.EventsService
 import quantasma.core.Quote
 import quantasma.integrations.event.AccountState
+import quantasma.integrations.event.Direction
 import quantasma.integrations.event.Event
+import quantasma.integrations.event.OpenedPosition
 import reactor.core.publisher.Flux
 import reactor.util.function.Tuple2
 import spock.lang.Specification
@@ -87,6 +89,35 @@ class EventsControllerSpec extends Specification {
         new AccountState(tuple.getT1(), tuple.getT1(), tuple.getT1(), tuple.getT1(), tuple.getT1(), "currency", tuple.getT1())
     }
 
+    def "should return 3 unique opened positions"() {
+        given:
+        List<List<MappedOpenedPosition>> expectedResult = []
+        service.openedPositions() >> Flux.just(1, 2, 3)
+                .zipWith(Flux.interval(Duration.ofSeconds(1)))
+                .map({ tuple -> Event.openedPositions((expectedResult << createOpenedPosition(tuple)).last() as List<OpenedPosition>)
+        })
+
+        when:
+        def result = get("/api/events/openedPositions")
+                .accept(MediaType.TEXT_EVENT_STREAM)
+                .exchange()
+
+        then:
+        noExceptionThrown()
+        with(result) {
+            expectStatus().isOk()
+            def body = expectBodyList(MappedOpenedPosition[]).returnResult().getResponseBody()
+            body.eachWithIndex {
+                entry, i -> entry == expectedResult[i]
+            }
+            body.size() == 3
+        }
+    }
+
+    private static List<OpenedPosition> createOpenedPosition(Tuple2<Integer, Long> tuple) {
+        [new OpenedPosition("symbol", Direction.LONG, tuple.getT1(), tuple.getT1(), tuple.getT1(), tuple.getT1(), tuple.getT1(), tuple.getT1())]
+    }
+
     private WebTestClient.RequestBodyUriSpec get(String uri) {
         return webTestClient.get().uri(uri) as WebTestClient.RequestBodyUriSpec
     }
@@ -113,6 +144,21 @@ class EventsControllerSpec extends Specification {
                            @JsonProperty("currency") String currency,
                            @JsonProperty("leverage") double leverage) {
             super(equity, balance, positionsProfitLoss, positionsAmount, usedMargin, currency, leverage)
+        }
+    }
+
+    static class MappedOpenedPosition extends OpenedPosition {
+
+        @JsonCreator
+        MappedOpenedPosition(@JsonProperty("symbol") String symbol,
+                             @JsonProperty("direction") Direction direction,
+                             @JsonProperty("amount") double amount,
+                             @JsonProperty("price") double price,
+                             @JsonProperty("stopLoss") double stopLoss,
+                             @JsonProperty("takeProfit") double takeProfit,
+                             @JsonProperty("profitLossPips") double profitLossPips,
+                             @JsonProperty("profitLoss") double profitLoss) {
+            super(symbol, direction, amount, price, stopLoss, takeProfit, profitLossPips, profitLoss)
         }
     }
 }
