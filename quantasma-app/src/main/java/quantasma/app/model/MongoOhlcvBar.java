@@ -23,9 +23,6 @@ public class MongoOhlcvBar {
     private double askClose;
     private int volume;
 
-    public MongoOhlcvBar() {
-    }
-
     public MongoOhlcvBar(BarPeriod period, Instant date, String symbol, double bidOpen, double bidLow, double bidHigh, double bidClose, double askOpen, double askLow, double askHigh, double askClose, int volume) {
         this.period = period;
         this.date = date;
