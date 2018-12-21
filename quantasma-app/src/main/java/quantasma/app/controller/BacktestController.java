@@ -15,6 +15,7 @@ import quantasma.core.analysis.StrategyBacktest;
 
 import java.util.List;
 import java.util.Set;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 @RestController
@@ -42,7 +43,7 @@ public class BacktestController {
     @RequestMapping("{name}")
     public BacktestScenario get(@PathVariable String name) {
         return backtestList.stream()
-                           .filter(strategyBacktest -> strategyBacktest.getClass().getSimpleName().equalsIgnoreCase(name))
+                           .filter(matchBacktest(name))
                            .map(BacktestScenario::from)
                            .findFirst()
                            .orElseThrow(RuntimeException::new);
@@ -51,13 +52,17 @@ public class BacktestController {
     @RequestMapping(value = "{name}", method = RequestMethod.POST)
     public List<BacktestResult> test(@PathVariable String name, @RequestBody BacktestRequest request) {
         return backtestList.stream()
-                           .filter(strategyBacktest -> strategyBacktest.getClass().getSimpleName().equalsIgnoreCase(name))
+                           .filter(matchBacktest(name))
                            .findFirst()
                            .map(strategyBacktest -> strategyBacktest.run(request.parameters(strategyBacktest.parameterizables()),
                                                                          request.criterionNames(),
                                                                          request.getTime().getFrom().atStartOfDay(),
                                                                          request.getTime().getWindowAsPeriod()))
                            .orElseThrow(RuntimeException::new);
+    }
+
+    private static Predicate<StrategyBacktest> matchBacktest(String name) {
+        return strategyBacktest -> strategyBacktest.getClass().getSimpleName().equalsIgnoreCase(name);
     }
 
     @RequestMapping("criterions")
