@@ -9,6 +9,7 @@ import org.springframework.http.MediaType
 import org.springframework.test.web.reactive.server.WebTestClient
 import quantasma.app.service.EventsService
 import quantasma.core.Quote
+import quantasma.integrations.event.AccountState
 import quantasma.integrations.event.Event
 import reactor.core.publisher.Flux
 import reactor.util.function.Tuple2
@@ -57,6 +58,35 @@ class EventsControllerSpec extends Specification {
         new Quote("symbol", TIME, tuple.getT1(), tuple.getT1())
     }
 
+    def "should return 3 unique account states"() {
+        given:
+        List<MappedAccountState> expectedResult = []
+        service.accountState() >> Flux.just(1, 2, 3)
+                .zipWith(Flux.interval(Duration.ofSeconds(1)))
+                .map({ tuple -> Event.accountState((expectedResult << createAccountState(tuple)).last() as AccountState)
+        })
+
+        when:
+        def result = get("/api/events/accountState")
+                .accept(MediaType.TEXT_EVENT_STREAM)
+                .exchange()
+
+        then:
+        noExceptionThrown()
+        with(result) {
+            expectStatus().isOk()
+            def body = expectBodyList(MappedAccountState).returnResult().getResponseBody()
+            body.eachWithIndex {
+                entry, i -> entry == expectedResult[i]
+            }
+            body.size() == 3
+        }
+    }
+
+    private static AccountState createAccountState(Tuple2<Integer, Long> tuple) {
+        new AccountState(tuple.getT1(), tuple.getT1(), tuple.getT1(), tuple.getT1(), tuple.getT1(), "currency", tuple.getT1())
+    }
+
     private WebTestClient.RequestBodyUriSpec get(String uri) {
         return webTestClient.get().uri(uri) as WebTestClient.RequestBodyUriSpec
     }
@@ -69,6 +99,20 @@ class EventsControllerSpec extends Specification {
                     @JsonProperty("bid") double bid,
                     @JsonProperty("ask") double ask) {
             super(symbol, time, bid, ask)
+        }
+    }
+
+    static class MappedAccountState extends AccountState {
+
+        @JsonCreator
+        MappedAccountState(@JsonProperty("entity") double equity,
+                           @JsonProperty("balance") double balance,
+                           @JsonProperty("positionsProfitLoss") double positionsProfitLoss,
+                           @JsonProperty("positionsAmount") double positionsAmount,
+                           @JsonProperty("usedMargin") double usedMargin,
+                           @JsonProperty("currency") String currency,
+                           @JsonProperty("leverage") double leverage) {
+            super(equity, balance, positionsProfitLoss, positionsAmount, usedMargin, currency, leverage)
         }
     }
 }
