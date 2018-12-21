@@ -80,7 +80,7 @@ public class RSIBacktest implements StrategyBacktest {
 
         // implement strategies: close, open, 4 ticks ohlc
         historicalDataService.findBySymbolAndDateBetweenOrderByDate(SYMBOL, fromDate.toInstant(ZoneOffset.UTC), timeWindow)
-                             .forEach(loadTicks(testMarketData));
+                             .forEach(loadBars(testMarketData));
 
         final TestManager testManager = new TestManager(testMarketData);
 
@@ -121,7 +121,7 @@ public class RSIBacktest implements StrategyBacktest {
                        .collect(Collectors.toList());
     }
 
-    private static Consumer<OhlcvBar> loadTicks(TestMarketData testMarketData) {
+    private static Consumer<OhlcvBar> loadBars(TestMarketData testMarketData) {
         return ohlcvBar -> testMarketData.add(ohlcvBar.getSymbol(),
                                               ohlcvBar.getDate().atZone(ZoneOffset.UTC),
                                               ohlcvBar.getBidClose(),
