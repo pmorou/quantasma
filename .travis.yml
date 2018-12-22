@@ -1,5 +1,5 @@
 before_install:
-  - ./install_dependencies.sh
+  - ./scripts/install_dependencies.sh
 language: java
 jdk:
   - oraclejdk8

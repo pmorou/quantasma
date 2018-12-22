@@ -69,7 +69,7 @@
                             <goal>exec</goal>
                         </goals>
                         <configuration>
-                            <executable>generate_readme.sh</executable>
+                            <executable>./scripts/generate_readme.sh</executable>
                         </configuration>
                     </execution>
                 </executions>
