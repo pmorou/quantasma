@@ -76,3 +76,38 @@ tradeEngine.process("EURUSD", ZonedDateTime.now(), 1.13757, 1.13767);
 // Will fail silently because the symbol wasn't registered within time series definitions
 tradeEngine.process("EURJPY", ZonedDateTime.now(), 129.653, 129.663);
 ```
+
+Backtest parametrization:
+
+``` java
+    final TestMarketData testMarketData = new TestMarketData(
+            MultipleTimeSeriesBuilder.basedOn(TimeSeriesDefinition.unlimited(BarPeriod.M1))
+                                     .symbols("EURUSD")
+                                     .aggregate(TimeSeriesDefinition.Group.of("EURUSD")
+                                                                          .add(TimeSeriesDefinition.unlimited(BarPeriod.M5)))
+                                     .wrap(ReflectionManualIndexTimeSeries::wrap)
+                                     .build());
+
+    final Context context = new BaseContext.Builder()
+            .withMarketData(testMarketData)
+            .build();
+
+    final Function<Variables<Parameter>, TradeStrategy> recipe = var -> {
+        var._int(Parameter.RSI_PERIOD).values(10, 14);
+        var._int(Parameter.RSI_LOWER_BOUND).with(range(10, 40, 10));
+        var._int(Parameter.RSI_UPPER_BOUND).with(range(90, 60, 10));
+        var._String(Parameter.TRADE_SYMBOL).with("EURUSD");
+        return RSIStrategy.buildBullish(context, var.getParameterValues());
+    };
+
+    // Feed historical data by calling testMarketData.add()
+
+    final TestManager testManager = new TestManager(testMarketData);
+    Producer.from(recipe)
+            .stream()
+            .forEach(tradeStrategy -> {
+                final TradingRecord result = testManager.run(tradeStrategy, Order.OrderType.BUY);
+                // Proper criterion can be used now on the result
+            });
+}
+```
