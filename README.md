@@ -32,9 +32,9 @@ The aim is to provide any needed functionality to follow the ever-changing marke
 
 ## Requirements
 
-&gt;= Java 8
+&gt;= Java 9
 
-Java 9 is comming shortly. The main goal is to migrate to Java 11 step by step.
+The main goal is to migrate to Java 11 step by step.
 
 ## Example Usage
 
