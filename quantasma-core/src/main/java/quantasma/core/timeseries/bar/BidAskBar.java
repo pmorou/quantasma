@@ -9,6 +9,8 @@ import java.util.function.Function;
 
 public interface BidAskBar extends Bar {
 
+    BidAskBar NaN = NaNBar.getInstance();
+
     default Num getOpenPrice() {
         return getBidOpenPrice();
     }

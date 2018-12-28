@@ -7,7 +7,7 @@ import org.ta4j.core.BaseTimeSeries;
 import org.ta4j.core.num.Num;
 import org.ta4j.core.num.PrecisionNum;
 import quantasma.core.BarPeriod;
-import quantasma.core.timeseries.bar.NaNBar;
+import quantasma.core.timeseries.bar.BidAskBar;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -33,7 +33,7 @@ public class BaseSymbolTimeSeries extends BaseTimeSeries implements SymbolTimeSe
             return super.getBar(i);
         }
 
-        return NaNBar.NaN;
+        return BidAskBar.NaN;
     }
 
     /**

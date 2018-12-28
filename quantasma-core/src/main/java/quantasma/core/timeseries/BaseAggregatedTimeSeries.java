@@ -4,7 +4,7 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import org.ta4j.core.Bar;
 import quantasma.core.BarPeriod;
-import quantasma.core.timeseries.bar.NaNBar;
+import quantasma.core.timeseries.bar.BidAskBar;
 
 public class BaseAggregatedTimeSeries extends BaseSymbolTimeSeries implements AggregatedTimeSeries {
     @Getter
@@ -44,7 +44,7 @@ public class BaseAggregatedTimeSeries extends BaseSymbolTimeSeries implements Ag
             return super.getBar(getEndIndex() - nthOldElement);
         }
 
-        return NaNBar.NaN;
+        return BidAskBar.NaN;
     }
 
     public static class Builder<T extends Builder<T, R>, R extends BaseAggregatedTimeSeries> extends BaseSymbolTimeSeries.Builder<T, R> {
