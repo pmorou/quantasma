@@ -53,6 +53,7 @@ public class HistoricalDataRepositoryImpl implements HistoricalDataRepository {
                            .min("date").as("fromDate")
                            .max("date").as("toDate")
                            .count().as("barCount"));
+
         return mongoTemplate.aggregate(aggregation,
                                        properties.collectionName(),
                                        HistoricalDataSummary.class)
