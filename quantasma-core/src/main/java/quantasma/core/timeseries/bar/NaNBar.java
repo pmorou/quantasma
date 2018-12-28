@@ -6,13 +6,16 @@ import org.ta4j.core.num.Num;
 import java.time.Duration;
 import java.time.ZonedDateTime;
 
-public class NaNBar implements BidAskBar {
+final class NaNBar implements BidAskBar {
 
-    public static final BidAskBar NaN = new NaNBar();
-
+    private static final BidAskBar NaN = new NaNBar();
     private static final Num Num_NaN = org.ta4j.core.num.NaN.NaN;
 
     private NaNBar() {
+    }
+
+    static BidAskBar getInstance() {
+        return NaN;
     }
 
     @Override
