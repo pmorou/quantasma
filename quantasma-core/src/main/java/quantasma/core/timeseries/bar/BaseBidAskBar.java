@@ -17,16 +17,16 @@ public class BaseBidAskBar implements BidAskBar {
     private Duration timePeriod;
     private ZonedDateTime endTime;
     private ZonedDateTime beginTime;
-    private Num bidOpenPrice = NaN.NaN;
-    private Num bidMaxPrice = NaN.NaN;
-    private Num bidMinPrice = NaN.NaN;
-    private Num bidClosePrice = NaN.NaN;
-    private Num askOpenPrice = NaN.NaN;
-    private Num askMaxPrice = NaN.NaN;
-    private Num askMinPrice = NaN.NaN;
-    private Num askClosePrice = NaN.NaN;
-    private Num amount = NaN.NaN;
-    private Num volume = NaN.NaN;
+    private Num bidOpenPrice = NumNaN();
+    private Num bidMaxPrice = NumNaN();
+    private Num bidMinPrice = NumNaN();
+    private Num bidClosePrice = NumNaN();
+    private Num askOpenPrice = NumNaN();
+    private Num askMaxPrice = NumNaN();
+    private Num askMinPrice = NumNaN();
+    private Num askClosePrice = NumNaN();
+    private Num amount = NumNaN();
+    private Num volume = NumNaN();
     private int trades;
 
     public BaseBidAskBar(Duration timePeriod, ZonedDateTime endTime, Function<Number, Num> numFunction) {
@@ -237,7 +237,11 @@ public class BaseBidAskBar implements BidAskBar {
     }
 
     private boolean isNaN(Num bidOpenPrice) {
-        return bidOpenPrice == NaN.NaN;
+        return bidOpenPrice == NumNaN();
+    }
+
+    private static Num NumNaN() {
+        return org.ta4j.core.num.NaN.NaN;
     }
 
     @Override
