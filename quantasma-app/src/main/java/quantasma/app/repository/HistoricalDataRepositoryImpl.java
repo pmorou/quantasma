@@ -35,8 +35,7 @@ public class HistoricalDataRepositoryImpl implements HistoricalDataRepository {
 
     @Override
     public MongoOhlcvBar insert(MongoOhlcvBar ohlcvBar) {
-        mongoTemplate.insert(ohlcvBar, properties.collectionName());
-        return null;
+        return mongoTemplate.insert(ohlcvBar, properties.collectionName());
     }
 
     @Override
