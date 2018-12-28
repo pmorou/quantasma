@@ -23,10 +23,10 @@ class FinishDepositCriterionSpec extends Specification {
         def timeSeries = createTimeSeriesWithBars()
 
         when:
-        def result = new BaseTradingRecord(Order.buyAt(1, timeSeries, DoubleNum.valueOf(amount)),
-                Order.sellAt(2, timeSeries, DoubleNum.valueOf(amount)),
-                Order.buyAt(4, timeSeries, DoubleNum.valueOf(amount)),
-                Order.sellAt(6, timeSeries, DoubleNum.valueOf(amount)))
+        def result = new BaseTradingRecord(Order.buyAt(1, timeSeries, timeSeries.numOf(amount)),
+                Order.sellAt(2, timeSeries, timeSeries.numOf(amount)),
+                Order.buyAt(4, timeSeries, timeSeries.numOf(amount)),
+                Order.sellAt(6, timeSeries, timeSeries.numOf(amount)))
 
         then:
         finishDepositCriterion.calculate(timeSeries, result).delegate == expectedDeposit
