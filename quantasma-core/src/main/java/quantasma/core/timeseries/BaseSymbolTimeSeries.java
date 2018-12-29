@@ -14,7 +14,7 @@ import java.util.List;
 import java.util.function.Function;
 
 @Getter
-public class BaseSymbolTimeSeries extends BaseTimeSeries implements SymbolTimeSeries {
+public class BaseSymbolTimeSeries extends BaseTimeSeries implements UniversalTimeSeries {
     private final String symbol;
     private final BarPeriod barPeriod;
 

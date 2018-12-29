@@ -1,6 +1,6 @@
 package quantasma.core.timeseries;
 
-public interface AggregatedTimeSeries extends SymbolTimeSeries {
+public interface AggregatedTimeSeries extends UniversalTimeSeries {
 
     MainTimeSeries getMainTimeSeries();
 

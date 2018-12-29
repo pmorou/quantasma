@@ -232,7 +232,7 @@ class ReflectionManualIndexTimeSeriesSpec extends Specification {
             @Override
             BiFunction<Integer, BarPeriod, ReflectionManualIndexTimeSeries> function() {
                 { Integer barsCount, BarPeriod barPeriod ->
-                    final SymbolTimeSeries timeSeries = new BaseSymbolTimeSeries.Builder("symbol", BarPeriod.M5).build()
+                    final UniversalTimeSeries timeSeries = new BaseSymbolTimeSeries.Builder("symbol", BarPeriod.M5).build()
                     for (int i = 0; i < barsCount; i++) {
                         if (i % barPeriod.getPeriod().toMinutes() == 0) {
                             timeSeries.addBar(createBar(timeSeries, i, Duration.ofMinutes(i)))
