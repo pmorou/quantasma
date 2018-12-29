@@ -14,7 +14,7 @@ class BaseSymbolTimeSeriesSpec extends Specification {
 
     def "given time series limited to 2 bars when added 3 bars should return NaN for first one only"() {
         given:
-        def timeseries = new BaseSymbolTimeSeries.Builder("symbol", BarPeriod.M1).withMaxBarCount(2).build()
+        def timeseries = new BaseUniversalTimeSeries.Builder("symbol", BarPeriod.M1).withMaxBarCount(2).build()
 
         when:
         3.times {
@@ -28,7 +28,7 @@ class BaseSymbolTimeSeriesSpec extends Specification {
         timeseries.getBar(2).getClosePrice().doubleValue() == 2
     }
 
-    private BaseBar bar(BaseSymbolTimeSeries timeseries, Integer number) {
+    private BaseBar bar(BaseUniversalTimeSeries timeseries, Integer number) {
         new BaseBar(Duration.ofMinutes(1), time.plusMinutes(number), timeseries.numOf(number), timeseries.numOf(number), timeseries.numOf(number), timeseries.numOf(number), timeseries.numOf(number), timeseries.numOf(number))
     }
 }

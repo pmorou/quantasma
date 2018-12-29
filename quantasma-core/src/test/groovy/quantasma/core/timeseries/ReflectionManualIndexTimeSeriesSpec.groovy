@@ -29,8 +29,8 @@ class ReflectionManualIndexTimeSeriesSpec extends Specification {
         where:
         className                                | barPeriod    | factory
         BaseTimeSeries.getName()                 | BarPeriod.M1 | BASE_TIME_SERIES
-        BaseSymbolTimeSeries.getName()           | BarPeriod.M1 | BASE_SYMBOL_TIME_SERIES
-        BaseSymbolTimeSeries.class.getName()     | BarPeriod.M5 | BASE_SYMBOL_TIME_SERIES
+        BaseUniversalTimeSeries.getName()        | BarPeriod.M1 | BASE_UNIVERSAL_TIME_SERIES
+        BaseUniversalTimeSeries.class.getName()  | BarPeriod.M5 | BASE_UNIVERSAL_TIME_SERIES
         BaseMainTimeSeries.class.getName()       | BarPeriod.M1 | BASE_MAIN_TIME_SERIES
         BaseMainTimeSeries.class.getName()       | BarPeriod.M5 | BASE_MAIN_TIME_SERIES
         BaseAggregatedTimeSeries.class.getName() | BarPeriod.M1 | BASE_AGGREGATED_TIME_SERIES
@@ -52,8 +52,8 @@ class ReflectionManualIndexTimeSeriesSpec extends Specification {
         where:
         className                                | barPeriod    | factory
         BaseTimeSeries.getName()                 | BarPeriod.M1 | BASE_TIME_SERIES
-        BaseSymbolTimeSeries.getName()           | BarPeriod.M1 | BASE_SYMBOL_TIME_SERIES
-        BaseSymbolTimeSeries.class.getName()     | BarPeriod.M5 | BASE_SYMBOL_TIME_SERIES
+        BaseUniversalTimeSeries.getName()        | BarPeriod.M1 | BASE_UNIVERSAL_TIME_SERIES
+        BaseUniversalTimeSeries.class.getName()  | BarPeriod.M5 | BASE_UNIVERSAL_TIME_SERIES
         BaseMainTimeSeries.class.getName()       | BarPeriod.M1 | BASE_MAIN_TIME_SERIES
         BaseMainTimeSeries.class.getName()       | BarPeriod.M5 | BASE_MAIN_TIME_SERIES
         BaseAggregatedTimeSeries.class.getName() | BarPeriod.M1 | BASE_AGGREGATED_TIME_SERIES
@@ -74,8 +74,8 @@ class ReflectionManualIndexTimeSeriesSpec extends Specification {
         where:
         className                                | barPeriod    | factory
         BaseTimeSeries.getName()                 | BarPeriod.M1 | BASE_TIME_SERIES
-        BaseSymbolTimeSeries.getName()           | BarPeriod.M1 | BASE_SYMBOL_TIME_SERIES
-        BaseSymbolTimeSeries.class.getName()     | BarPeriod.M5 | BASE_SYMBOL_TIME_SERIES
+        BaseUniversalTimeSeries.getName()        | BarPeriod.M1 | BASE_UNIVERSAL_TIME_SERIES
+        BaseUniversalTimeSeries.class.getName()  | BarPeriod.M5 | BASE_UNIVERSAL_TIME_SERIES
         BaseMainTimeSeries.class.getName()       | BarPeriod.M1 | BASE_MAIN_TIME_SERIES
         BaseMainTimeSeries.class.getName()       | BarPeriod.M5 | BASE_MAIN_TIME_SERIES
         BaseAggregatedTimeSeries.class.getName() | BarPeriod.M1 | BASE_AGGREGATED_TIME_SERIES
@@ -98,8 +98,8 @@ class ReflectionManualIndexTimeSeriesSpec extends Specification {
         where:
         className                                | barPeriod    | factory                     || expectedEndIndex
         BaseTimeSeries.getName()                 | BarPeriod.M1 | BASE_TIME_SERIES            || 2
-        BaseSymbolTimeSeries.getName()           | BarPeriod.M1 | BASE_SYMBOL_TIME_SERIES     || 2
-        BaseSymbolTimeSeries.class.getName()     | BarPeriod.M5 | BASE_SYMBOL_TIME_SERIES     || 0
+        BaseUniversalTimeSeries.getName()        | BarPeriod.M1 | BASE_UNIVERSAL_TIME_SERIES  || 2
+        BaseUniversalTimeSeries.class.getName()  | BarPeriod.M5 | BASE_UNIVERSAL_TIME_SERIES  || 0
         BaseMainTimeSeries.class.getName()       | BarPeriod.M1 | BASE_MAIN_TIME_SERIES       || 2
         BaseMainTimeSeries.class.getName()       | BarPeriod.M5 | BASE_MAIN_TIME_SERIES       || 0
         BaseAggregatedTimeSeries.class.getName() | BarPeriod.M1 | BASE_AGGREGATED_TIME_SERIES || 2
@@ -121,8 +121,8 @@ class ReflectionManualIndexTimeSeriesSpec extends Specification {
         where:
         className                                | barPeriod    | factory
         BaseTimeSeries.getName()                 | BarPeriod.M1 | BASE_TIME_SERIES
-        BaseSymbolTimeSeries.getName()           | BarPeriod.M1 | BASE_SYMBOL_TIME_SERIES
-        BaseSymbolTimeSeries.class.getName()     | BarPeriod.M5 | BASE_SYMBOL_TIME_SERIES
+        BaseUniversalTimeSeries.getName()        | BarPeriod.M1 | BASE_UNIVERSAL_TIME_SERIES
+        BaseUniversalTimeSeries.class.getName()  | BarPeriod.M5 | BASE_UNIVERSAL_TIME_SERIES
         BaseMainTimeSeries.class.getName()       | BarPeriod.M1 | BASE_MAIN_TIME_SERIES
         BaseMainTimeSeries.class.getName()       | BarPeriod.M5 | BASE_MAIN_TIME_SERIES
         BaseAggregatedTimeSeries.class.getName() | BarPeriod.M1 | BASE_AGGREGATED_TIME_SERIES
@@ -145,8 +145,8 @@ class ReflectionManualIndexTimeSeriesSpec extends Specification {
         where:
         className                                | barPeriod    | factory
         BaseTimeSeries.getName()                 | BarPeriod.M1 | BASE_TIME_SERIES
-        BaseSymbolTimeSeries.getName()           | BarPeriod.M1 | BASE_SYMBOL_TIME_SERIES
-        BaseSymbolTimeSeries.class.getName()     | BarPeriod.M5 | BASE_SYMBOL_TIME_SERIES
+        BaseUniversalTimeSeries.getName()        | BarPeriod.M1 | BASE_UNIVERSAL_TIME_SERIES
+        BaseUniversalTimeSeries.class.getName()  | BarPeriod.M5 | BASE_UNIVERSAL_TIME_SERIES
         BaseMainTimeSeries.class.getName()       | BarPeriod.M1 | BASE_MAIN_TIME_SERIES
         BaseMainTimeSeries.class.getName()       | BarPeriod.M5 | BASE_MAIN_TIME_SERIES
         BaseAggregatedTimeSeries.class.getName() | BarPeriod.M1 | BASE_AGGREGATED_TIME_SERIES
@@ -167,8 +167,8 @@ class ReflectionManualIndexTimeSeriesSpec extends Specification {
         where:
         className                                | barPeriod    | factory
         BaseTimeSeries.getName()                 | BarPeriod.M1 | BASE_TIME_SERIES
-        BaseSymbolTimeSeries.getName()           | BarPeriod.M1 | BASE_SYMBOL_TIME_SERIES
-        BaseSymbolTimeSeries.class.getName()     | BarPeriod.M5 | BASE_SYMBOL_TIME_SERIES
+        BaseUniversalTimeSeries.getName()        | BarPeriod.M1 | BASE_UNIVERSAL_TIME_SERIES
+        BaseUniversalTimeSeries.class.getName()  | BarPeriod.M5 | BASE_UNIVERSAL_TIME_SERIES
         BaseMainTimeSeries.class.getName()       | BarPeriod.M1 | BASE_MAIN_TIME_SERIES
         BaseMainTimeSeries.class.getName()       | BarPeriod.M5 | BASE_MAIN_TIME_SERIES
         BaseAggregatedTimeSeries.class.getName() | BarPeriod.M1 | BASE_AGGREGATED_TIME_SERIES
@@ -190,8 +190,8 @@ class ReflectionManualIndexTimeSeriesSpec extends Specification {
         where:
         className                                | barPeriod    | factory
         BaseTimeSeries.getName()                 | BarPeriod.M1 | BASE_TIME_SERIES
-        BaseSymbolTimeSeries.getName()           | BarPeriod.M1 | BASE_SYMBOL_TIME_SERIES
-        BaseSymbolTimeSeries.class.getName()     | BarPeriod.M5 | BASE_SYMBOL_TIME_SERIES
+        BaseUniversalTimeSeries.getName()        | BarPeriod.M1 | BASE_UNIVERSAL_TIME_SERIES
+        BaseUniversalTimeSeries.class.getName()  | BarPeriod.M5 | BASE_UNIVERSAL_TIME_SERIES
         BaseMainTimeSeries.class.getName()       | BarPeriod.M1 | BASE_MAIN_TIME_SERIES
         BaseMainTimeSeries.class.getName()       | BarPeriod.M5 | BASE_MAIN_TIME_SERIES
         BaseAggregatedTimeSeries.class.getName() | BarPeriod.M1 | BASE_AGGREGATED_TIME_SERIES
@@ -228,11 +228,11 @@ class ReflectionManualIndexTimeSeriesSpec extends Specification {
             }
         }
 
-        ManualIndexTimeSeriesFactory<ReflectionManualIndexTimeSeries> BASE_SYMBOL_TIME_SERIES = new ManualIndexTimeSeriesFactory<ReflectionManualIndexTimeSeries>() {
+        ManualIndexTimeSeriesFactory<ReflectionManualIndexTimeSeries> BASE_UNIVERSAL_TIME_SERIES = new ManualIndexTimeSeriesFactory<ReflectionManualIndexTimeSeries>() {
             @Override
             BiFunction<Integer, BarPeriod, ReflectionManualIndexTimeSeries> function() {
                 { Integer barsCount, BarPeriod barPeriod ->
-                    final UniversalTimeSeries timeSeries = new BaseSymbolTimeSeries.Builder("symbol", BarPeriod.M5).build()
+                    final UniversalTimeSeries timeSeries = new BaseUniversalTimeSeries.Builder("symbol", BarPeriod.M5).build()
                     for (int i = 0; i < barsCount; i++) {
                         if (i % barPeriod.getPeriod().toMinutes() == 0) {
                             timeSeries.addBar(createBar(timeSeries, i, Duration.ofMinutes(i)))

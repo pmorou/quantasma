@@ -1,6 +1,7 @@
 package quantasma.examples.builders;
 
 import quantasma.core.BarPeriod;
+import quantasma.core.timeseries.BaseUniversalTimeSeries;
 
 public class BaseMainTimeSeriesGrandChild extends BaseMainTimeSeriesChild {
     protected BaseMainTimeSeriesGrandChild(Builder builder) {
@@ -8,7 +9,7 @@ public class BaseMainTimeSeriesGrandChild extends BaseMainTimeSeriesChild {
     }
 
     /**
-     * @see quantasma.core.timeseries.BaseSymbolTimeSeries.Builder
+     * @see BaseUniversalTimeSeries.Builder
      */
     public static class Builder<T extends Builder<T, R>, R extends BaseMainTimeSeriesGrandChild> extends BaseMainTimeSeriesChild.Builder<T, R> {
 

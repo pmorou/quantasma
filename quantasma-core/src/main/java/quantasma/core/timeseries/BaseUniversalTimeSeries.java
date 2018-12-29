@@ -14,15 +14,19 @@ import java.util.List;
 import java.util.function.Function;
 
 @Getter
-public class BaseSymbolTimeSeries extends BaseTimeSeries implements UniversalTimeSeries {
+public class BaseUniversalTimeSeries extends ForwardingTimeSeries implements UniversalTimeSeries {
     private final String symbol;
     private final BarPeriod barPeriod;
 
-    protected BaseSymbolTimeSeries(Builder<?, ?> builder) {
-        super(builder.getName(), builder.getBars(), builder.getNumFunction());
+    protected BaseUniversalTimeSeries(Builder<?, ?> builder) {
+        super(new BaseTimeSeries.SeriesBuilder()
+                      .withName(builder.getName())
+                      .withBars(builder.getBars())
+                      .withNumTypeOf(builder.getNumFunction())
+                      .withMaxBarCount(builder.getMaxBarCount())
+                      .build());
         this.symbol = builder.getSymbol();
         this.barPeriod = builder.getBarPeriod();
-        setMaximumBarCount(builder.getMaxBarCount());
     }
 
     @Override
@@ -30,7 +34,7 @@ public class BaseSymbolTimeSeries extends BaseTimeSeries implements UniversalTim
         final int nthOldElement = getEndIndex() - i;
 
         if (nthOldElement < getBarCount()) {
-            return super.getBar(i);
+            return delegate().getBar(i);
         }
 
         return BidAskBar.NaN;
@@ -43,7 +47,7 @@ public class BaseSymbolTimeSeries extends BaseTimeSeries implements UniversalTim
      * @param <R> {@code build()} return type
      */
     @Getter(value = AccessLevel.PROTECTED)
-    public static class Builder<T extends Builder<T, R>, R extends BaseSymbolTimeSeries> {
+    public static class Builder<T extends Builder<T, R>, R extends BaseUniversalTimeSeries> {
         private final String symbol;
         private final BarPeriod barPeriod;
 
@@ -93,7 +97,7 @@ public class BaseSymbolTimeSeries extends BaseTimeSeries implements UniversalTim
          * Every builder subclass should implement this method
          */
         public R build() {
-            return (R) new BaseSymbolTimeSeries(this);
+            return (R) new BaseUniversalTimeSeries(this);
         }
 
     }

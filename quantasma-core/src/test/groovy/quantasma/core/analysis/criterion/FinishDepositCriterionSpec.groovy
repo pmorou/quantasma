@@ -3,10 +3,9 @@ package quantasma.core.analysis.criterion
 import org.ta4j.core.BaseBar
 import org.ta4j.core.BaseTradingRecord
 import org.ta4j.core.Order
-import org.ta4j.core.num.DoubleNum
 import org.ta4j.core.num.PrecisionNum
 import quantasma.core.BarPeriod
-import quantasma.core.timeseries.BaseSymbolTimeSeries
+import quantasma.core.timeseries.BaseUniversalTimeSeries
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -39,8 +38,8 @@ class FinishDepositCriterionSpec extends Specification {
         10      || 1000.002
     }
 
-    private BaseSymbolTimeSeries createTimeSeriesWithBars() {
-        final BaseSymbolTimeSeries timeSeries = new BaseSymbolTimeSeries.Builder("symbol", BarPeriod.M1).build()
+    private BaseUniversalTimeSeries createTimeSeriesWithBars() {
+        final BaseUniversalTimeSeries timeSeries = new BaseUniversalTimeSeries.Builder("symbol", BarPeriod.M1).build()
         timeSeries.addBar(createM1Bar(0, "1.0000"))
         timeSeries.addBar(createM1Bar(1, "1.0000")) // open #1
         timeSeries.addBar(createM1Bar(2, "1.0001")) // close #1
