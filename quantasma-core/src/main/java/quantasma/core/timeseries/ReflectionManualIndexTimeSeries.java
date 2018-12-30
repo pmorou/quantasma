@@ -110,23 +110,23 @@ public class ReflectionManualIndexTimeSeries implements ManualIndexTimeSeries {
         }
     }
 
-    private Class<?> getBaseTimeSeriesClassRef(TimeSeries target) {
-        Class<?> clazz = target.getClass();
-        while (clazz != BaseTimeSeries.class) {
-            clazz = clazz.getSuperclass();
-            if (clazz == Object.class) {
-                throw new RuntimeException();
-            }
-        }
-        return clazz;
+    private boolean isForwardingTimeSeries() {
+        return timeSeries instanceof ForwardingTimeSeries;
     }
 
     private TimeSeries getDelegate() {
         return ((ForwardingTimeSeries) timeSeries).delegate();
     }
 
-    private boolean isForwardingTimeSeries() {
-        return timeSeries instanceof ForwardingTimeSeries;
+    private Class<?> getBaseTimeSeriesClassRef(TimeSeries target) {
+        Class<?> clazz = target.getClass();
+        while (clazz != BaseTimeSeries.class) {
+            clazz = clazz.getSuperclass();
+            if (clazz == Object.class) {
+                throw new RuntimeException(String.format("Wrapped time series [%s] aren't related to BaseTimeSeries", target));
+            }
+        }
+        return clazz;
     }
 
     // methods below do not modify delegate's logic
