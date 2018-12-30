@@ -10,7 +10,7 @@ import quantasma.core.TestManager;
 import quantasma.core.TradeStrategy;
 import quantasma.core.analysis.parametrize.Producer;
 import quantasma.core.analysis.parametrize.Variables;
-import quantasma.core.timeseries.MarketDataBuilder;
+import quantasma.core.MarketDataBuilder;
 import quantasma.core.timeseries.ReflectionManualIndexTimeSeries;
 import quantasma.core.timeseries.TimeSeriesDefinition;
 import quantasma.core.timeseries.bar.BidAskBar;

@@ -8,7 +8,7 @@ import quantasma.core.Context;
 import quantasma.core.MarketData;
 import quantasma.core.TestManager;
 import quantasma.core.TradeStrategy;
-import quantasma.core.timeseries.MarketDataBuilder;
+import quantasma.core.MarketDataBuilder;
 import quantasma.core.timeseries.ReflectionManualIndexTimeSeries;
 import quantasma.core.timeseries.TimeSeriesDefinition;
 import quantasma.core.timeseries.bar.BidAskBar;

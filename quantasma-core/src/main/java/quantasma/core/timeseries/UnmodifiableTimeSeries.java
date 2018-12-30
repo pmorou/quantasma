@@ -3,7 +3,7 @@ package quantasma.core.timeseries;
 import org.ta4j.core.Bar;
 import org.ta4j.core.TimeSeries;
 import org.ta4j.core.num.Num;
-import quantasma.core.timeseries.bar.wrapper.UnmodifiableBar;
+import quantasma.core.timeseries.bar.UnmodifiableBar;
 
 import java.time.Duration;
 import java.time.ZonedDateTime;
@@ -12,6 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public final class UnmodifiableTimeSeries extends ForwardingTimeSeries {
+
     public UnmodifiableTimeSeries(TimeSeries timeSeries) {
         super(timeSeries);
     }
@@ -69,4 +70,5 @@ public final class UnmodifiableTimeSeries extends ForwardingTimeSeries {
     public Bar getBar(int i) {
         return new UnmodifiableBar(delegate().getBar(i));
     }
+
 }

@@ -10,7 +10,7 @@ import org.ta4j.core.num.PrecisionNum;
 import quantasma.core.BarPeriod;
 import quantasma.core.timeseries.bar.BidAskBar;
 import quantasma.core.timeseries.bar.OneSidedBar;
-import quantasma.core.timeseries.bar.factory.BarFactory;
+import quantasma.core.timeseries.bar.BarFactory;
 
 import java.util.ArrayList;
 import java.util.List;

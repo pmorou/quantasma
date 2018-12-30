@@ -1,4 +1,4 @@
-package quantasma.core.timeseries.factory;
+package quantasma.core.timeseries;
 
 import quantasma.core.timeseries.TimeSeriesDefinition;
 import quantasma.core.timeseries.UniversalTimeSeries;

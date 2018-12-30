@@ -11,7 +11,7 @@ import quantasma.core.NullOrderService;
 import quantasma.core.OrderService;
 import quantasma.core.StrategyControl;
 import quantasma.core.TradeEngine;
-import quantasma.core.timeseries.MarketDataBuilder;
+import quantasma.core.MarketDataBuilder;
 import quantasma.core.timeseries.TimeSeriesDefinition;
 
 @Configuration

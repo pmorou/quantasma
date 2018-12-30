@@ -9,7 +9,7 @@ import quantasma.core.timeseries.BaseUniversalTimeSeries
 import quantasma.core.timeseries.UniversalTimeSeries
 import quantasma.core.timeseries.bar.BaseOneSidedBar
 import quantasma.core.timeseries.bar.OneSidedBar
-import quantasma.core.timeseries.bar.factory.OneSidedBarFactory
+import quantasma.core.timeseries.bar.OneSidedBarFactory
 import spock.lang.Specification
 import spock.lang.Unroll
 

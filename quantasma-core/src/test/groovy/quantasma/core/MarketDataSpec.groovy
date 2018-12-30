@@ -4,7 +4,6 @@ import org.ta4j.core.indicators.RSIIndicator
 import org.ta4j.core.indicators.helpers.ClosePriceIndicator
 import org.ta4j.core.trading.rules.IsEqualRule
 import org.ta4j.core.trading.rules.OverIndicatorRule
-import quantasma.core.timeseries.MarketDataBuilder
 import quantasma.core.timeseries.TimeSeriesDefinition
 import quantasma.core.timeseries.UniversalTimeSeries
 import spock.lang.Specification

@@ -1,4 +1,4 @@
-package quantasma.core.timeseries.bar.factory;
+package quantasma.core.timeseries.bar;
 
 import org.ta4j.core.num.Num;
 import quantasma.core.BarPeriod;

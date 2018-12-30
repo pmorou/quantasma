@@ -1,10 +1,8 @@
-package quantasma.core.timeseries.bar.factory;
+package quantasma.core.timeseries.bar;
 
 import org.ta4j.core.num.Num;
 import quantasma.core.BarPeriod;
 import quantasma.core.DateUtils;
-import quantasma.core.timeseries.bar.BaseBidAskBar;
-import quantasma.core.timeseries.bar.BidAskBar;
 
 import java.time.ZonedDateTime;
 import java.util.function.Function;

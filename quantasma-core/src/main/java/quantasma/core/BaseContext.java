@@ -1,7 +1,6 @@
 package quantasma.core;
 
 import lombok.Getter;
-import quantasma.core.timeseries.MarketDataBuilder;
 import quantasma.core.timeseries.TimeSeriesDefinition;
 
 @Getter

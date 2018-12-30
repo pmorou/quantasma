@@ -4,8 +4,8 @@ import quantasma.core.BarPeriod;
 import quantasma.core.timeseries.BaseMainTimeSeries;
 import quantasma.core.timeseries.BaseUniversalTimeSeries;
 import quantasma.core.timeseries.bar.OneSidedBar;
-import quantasma.core.timeseries.bar.factory.BarFactory;
-import quantasma.core.timeseries.bar.factory.BidAskBarFactory;
+import quantasma.core.timeseries.bar.BarFactory;
+import quantasma.core.timeseries.bar.BidAskBarFactory;
 
 public class BaseMainTimeSeriesChild<B extends OneSidedBar> extends BaseMainTimeSeries<B> {
     protected BaseMainTimeSeriesChild(Builder builder) {

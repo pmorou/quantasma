@@ -5,7 +5,7 @@ import org.ta4j.core.num.Num;
 import quantasma.core.BarPeriod;
 import quantasma.core.Quote;
 import quantasma.core.timeseries.bar.OneSidedBar;
-import quantasma.core.timeseries.bar.factory.BarFactory;
+import quantasma.core.timeseries.bar.BarFactory;
 
 import java.time.ZonedDateTime;
 import java.util.Comparator;

@@ -4,7 +4,7 @@ import org.ta4j.core.BaseBar
 import quantasma.core.BarPeriod
 import quantasma.core.timeseries.bar.BaseOneSidedBar
 import quantasma.core.timeseries.bar.OneSidedBar
-import quantasma.core.timeseries.bar.factory.OneSidedBarFactory
+import quantasma.core.timeseries.bar.OneSidedBarFactory
 import spock.lang.Specification
 import spock.lang.Unroll
 

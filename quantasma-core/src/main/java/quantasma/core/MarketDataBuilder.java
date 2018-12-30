@@ -1,10 +1,13 @@
-package quantasma.core.timeseries;
+package quantasma.core;
 
-import quantasma.core.MarketData;
+import quantasma.core.timeseries.BaseMultipleTimeSeries;
+import quantasma.core.timeseries.MultipleTimeSeries;
+import quantasma.core.timeseries.TimeSeriesDefinition;
+import quantasma.core.timeseries.UniversalTimeSeries;
 import quantasma.core.timeseries.bar.BidAskBar;
 import quantasma.core.timeseries.bar.OneSidedBar;
-import quantasma.core.timeseries.bar.factory.BarFactory;
-import quantasma.core.timeseries.bar.factory.BidAskBarFactory;
+import quantasma.core.timeseries.bar.BarFactory;
+import quantasma.core.timeseries.bar.BidAskBarFactory;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -54,8 +57,8 @@ public class MarketDataBuilder<B extends OneSidedBar> {
 
     public MarketData<B> build() {
         final Map<String, MultipleTimeSeries<B>> baseTimeSeries = symbols.stream()
-                                                                      .map(symbol -> BaseMultipleTimeSeries.create(symbol, baseTimeSeriesDefinition, barFactory, wrapper))
-                                                                      .collect(Collectors.toMap(BaseMultipleTimeSeries::getSymbol, Function.identity()));
+                                                                         .map(symbol -> BaseMultipleTimeSeries.create(symbol, baseTimeSeriesDefinition, barFactory, wrapper))
+                                                                         .collect(Collectors.toMap(BaseMultipleTimeSeries::getSymbol, Function.identity()));
 
         for (TimeSeriesDefinition.Group groupDefinition : aggregatedTimeSeriesDefinitions) {
             for (String symbol : groupDefinition.getSymbols()) {

@@ -2,8 +2,7 @@ package quantasma.core.timeseries;
 
 import quantasma.core.BarPeriod;
 import quantasma.core.timeseries.bar.OneSidedBar;
-import quantasma.core.timeseries.bar.factory.BarFactory;
-import quantasma.core.timeseries.factory.AggregatedTimeSeriesFactory;
+import quantasma.core.timeseries.bar.BarFactory;
 
 public class BaseMainTimeSeries<B extends OneSidedBar> extends BaseUniversalTimeSeries<B> implements MainTimeSeries<B> {
 

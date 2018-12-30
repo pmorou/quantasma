@@ -21,7 +21,7 @@ import quantasma.core.analysis.TradeScenario;
 import quantasma.core.analysis.parametrize.Parameterizable;
 import quantasma.core.analysis.parametrize.Producer;
 import quantasma.core.analysis.parametrize.Variables;
-import quantasma.core.timeseries.MarketDataBuilder;
+import quantasma.core.MarketDataBuilder;
 import quantasma.core.timeseries.ReflectionManualIndexTimeSeries;
 import quantasma.core.timeseries.TimeSeriesDefinition;
 import quantasma.core.timeseries.bar.BidAskBar;

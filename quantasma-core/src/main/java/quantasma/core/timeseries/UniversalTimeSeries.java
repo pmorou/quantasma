@@ -4,7 +4,7 @@ import org.ta4j.core.TimeSeries;
 import org.ta4j.core.num.Num;
 import quantasma.core.BarPeriod;
 import quantasma.core.timeseries.bar.OneSidedBar;
-import quantasma.core.timeseries.bar.factory.BarFactory;
+import quantasma.core.timeseries.bar.BarFactory;
 
 import java.math.BigDecimal;
 import java.time.format.DateTimeFormatter;

@@ -9,7 +9,7 @@ import quantasma.core.NullOrderService;
 import quantasma.core.Quote;
 import quantasma.core.TradeEngine;
 import quantasma.core.TradeStrategy;
-import quantasma.core.timeseries.MarketDataBuilder;
+import quantasma.core.MarketDataBuilder;
 import quantasma.core.timeseries.TimeSeriesDefinition;
 import quantasma.core.timeseries.bar.BidAskBar;
 import quantasma.examples.RSIStrategy.Parameter;
