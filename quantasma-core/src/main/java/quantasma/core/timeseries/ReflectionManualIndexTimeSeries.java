@@ -79,29 +79,39 @@ public class ReflectionManualIndexTimeSeries implements ManualIndexTimeSeries {
     }
 
     private Object getField(String fieldName) {
+        TimeSeries target = timeSeries;
+        if (isForwardingTimeSeries()) {
+            target = getDelegate();
+        }
+        Class<?> clazz = getBaseTimeSeriesClassRef(target);
+
         try {
-            Class<?> clazz = getBaseTimeSeriesClassRef();
             final Field field = clazz.getDeclaredField(fieldName);
             field.setAccessible(true);
-            return field.get(timeSeries);
+            return field.get(target);
         } catch (NoSuchFieldException | IllegalAccessException e) {
             throw new RuntimeException("Checked exception", e);
         }
     }
 
     private void setField(String fieldName, Object value) {
+        TimeSeries target = timeSeries;
+        if (isForwardingTimeSeries()) {
+            target = getDelegate();
+        }
+        Class<?> clazz = getBaseTimeSeriesClassRef(target);
+
         try {
-            Class<?> clazz = getBaseTimeSeriesClassRef();
             final Field field = clazz.getDeclaredField(fieldName);
             field.setAccessible(true);
-            field.set(timeSeries, value);
+            field.set(target, value);
         } catch (NoSuchFieldException | IllegalAccessException e) {
             throw new RuntimeException("Checked exception", e);
         }
     }
 
-    private Class<?> getBaseTimeSeriesClassRef() {
-        Class<?> clazz = timeSeries.getClass();
+    private Class<?> getBaseTimeSeriesClassRef(TimeSeries target) {
+        Class<?> clazz = target.getClass();
         while (clazz != BaseTimeSeries.class) {
             clazz = clazz.getSuperclass();
             if (clazz == Object.class) {
@@ -109,6 +119,14 @@ public class ReflectionManualIndexTimeSeries implements ManualIndexTimeSeries {
             }
         }
         return clazz;
+    }
+
+    private TimeSeries getDelegate() {
+        return ((ForwardingTimeSeries) timeSeries).delegate();
+    }
+
+    private boolean isForwardingTimeSeries() {
+        return timeSeries instanceof ForwardingTimeSeries;
     }
 
     // methods below do not modify delegate's logic

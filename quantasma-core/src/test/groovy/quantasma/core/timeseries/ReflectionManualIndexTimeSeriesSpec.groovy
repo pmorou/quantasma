@@ -12,8 +12,8 @@ import java.time.Duration
 import java.time.ZonedDateTime
 import java.util.function.BiFunction
 
+import static quantasma.core.timeseries.ReflectionManualIndexTimeSeriesSpec.createBar
 import static quantasma.core.timeseries.ReflectionManualIndexTimeSeriesSpec.ManualIndexTimeSeriesFactory.*
-import static ReflectionManualIndexTimeSeriesSpec.createBar
 
 class ReflectionManualIndexTimeSeriesSpec extends Specification {
 
@@ -202,14 +202,14 @@ class ReflectionManualIndexTimeSeriesSpec extends Specification {
         return factory.function().apply(barsCount, barPeriod)
     }
 
-    private static BaseBar createBar(TimeSeries timeSeries, int i, Duration timePeriod) {
+    static Bar createBar(TimeSeries timeSeries, Integer i, Duration timePeriod) {
         return new BaseBar(timePeriod, TIME_REF.plusMinutes(i), timeSeries.function())
     }
 
     private static final ZonedDateTime TIME_REF = ZonedDateTime.now()
 
     @FunctionalInterface
-    private interface ManualIndexTimeSeriesFactory<T extends ManualIndexTimeSeries> {
+    interface ManualIndexTimeSeriesFactory<T extends ManualIndexTimeSeries> {
 
         BiFunction<Integer, BarPeriod, T> function()
 
