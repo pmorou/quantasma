@@ -1,12 +1,12 @@
 package quantasma.core
 
-import org.ta4j.core.TimeSeries
 import org.ta4j.core.indicators.RSIIndicator
 import org.ta4j.core.indicators.helpers.ClosePriceIndicator
 import org.ta4j.core.trading.rules.IsEqualRule
 import org.ta4j.core.trading.rules.OverIndicatorRule
 import quantasma.core.timeseries.MarketDataBuilder
 import quantasma.core.timeseries.TimeSeriesDefinition
+import quantasma.core.timeseries.UniversalTimeSeries
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -237,7 +237,7 @@ class MarketDataSpec extends Specification {
         MIDNIGHT.plusMinutes(5) | 11              | 17        || 11               | [6, 6, 6, 6, 6, 6, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
     }
 
-    private static void assertNaNClosedPrices(TimeSeries m1TimeSeries, int m1BarsCount) {
+    private static void assertNaNClosedPrices(UniversalTimeSeries m1TimeSeries, int m1BarsCount) {
         m1TimeSeries.getBarCount() == m1BarsCount
         final int latestIndex = m1TimeSeries.getEndIndex()
         for (int i = 0; i <= latestIndex; i++) {
@@ -245,7 +245,7 @@ class MarketDataSpec extends Specification {
         }
     }
 
-    private MarketData createTwoSymbolMarketData(int oneMinutePeriod) {
+    private static MarketData createTwoSymbolMarketData(int oneMinutePeriod) {
         return MarketDataBuilder.basedOn(TimeSeriesDefinition.limited(ONE_MINUTE_PERIOD, oneMinutePeriod))
                         .symbols("symbol1", "symbol2")
                         .build()
