@@ -11,17 +11,22 @@ import quantasma.core.analysis.parametrize.Parameterizable;
 import quantasma.core.analysis.parametrize.Values;
 import quantasma.core.timeseries.MainTimeSeries;
 import quantasma.core.timeseries.ManualIndexTimeSeries;
+import quantasma.core.timeseries.bar.OneSideBar;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
-public class TestManager {
+public class TestManager<B extends OneSideBar> {
     private final Set<ManualIndexTimeSeries> manualIndexTimeSeriesSet;
-    private final TestMarketData testMarketData;
+    private final MarketData<B> marketData;
 
-    public TestManager(TestMarketData testMarketData) {
-        this.testMarketData = testMarketData;
-        this.manualIndexTimeSeriesSet = testMarketData.manualIndexTimeSeres();
+    public TestManager(MarketData<B> marketData) {
+        this.marketData = marketData;
+        this.manualIndexTimeSeriesSet = marketData.allTimeSeries()
+                                                      .stream()
+                                                      .map(o -> (ManualIndexTimeSeries) o)
+                                                      .collect(Collectors.toSet());
     }
 
     public TradingRecord run(TradeStrategy tradeStrategy, Order.OrderType orderType) {
@@ -29,7 +34,7 @@ public class TestManager {
     }
 
     public MainTimeSeries getMainTimeSeries(TradeStrategy tradeStrategy) {
-        return testMarketData.of(tradeStrategy.getTradeSymbol()).getMainTimeSeries();
+        return marketData.of(tradeStrategy.getTradeSymbol()).getMainTimeSeries();
     }
 
     private TradingRecord run(TradeStrategy tradeStrategy, Order.OrderType orderType, int startIndex, int finishIndex) {

@@ -8,7 +8,7 @@ import quantasma.core.NullOrderService;
 import quantasma.core.Quote;
 import quantasma.core.TradeEngine;
 import quantasma.core.TradeStrategy;
-import quantasma.core.timeseries.MultipleTimeSeriesBuilder;
+import quantasma.core.timeseries.MarketDataBuilder;
 import quantasma.core.timeseries.TimeSeriesDefinition;
 import quantasma.examples.RSIStrategy.Parameter;
 
@@ -19,15 +19,15 @@ public class TradeAppExample {
         // tag::tradeAppExample[]
         // Any strategy based on TradeStrategy interface needs a Context object
         final Context context = new BaseContext.Builder()
-                .withTimeSeries(
-                        MultipleTimeSeriesBuilder.basedOn(
+                .withMarketData(
+                        MarketDataBuilder.basedOn(
                                 // Smallest accessible time window for all defined below symbols
                                 TimeSeriesDefinition.limited(BarPeriod.M1, 100))
-                                                 .symbols("EURUSD", "EURGBP")
-                                                 // You can define any number of additional time windows for above symbols
-                                                 .aggregate(TimeSeriesDefinition.Group.of("EURUSD")
-                                                                                      .add(TimeSeriesDefinition.limited(BarPeriod.M5, 100))
-                                                                                      .add(TimeSeriesDefinition.limited(BarPeriod.M30, 100)))
+                                         .symbols("EURUSD", "EURGBP")
+                                         // You can define any number of additional time windows for above symbols
+                                         .aggregate(TimeSeriesDefinition.Group.of("EURUSD")
+                                                                              .add(TimeSeriesDefinition.limited(BarPeriod.M5, 100))
+                                                                              .add(TimeSeriesDefinition.limited(BarPeriod.M30, 100)))
                 )
                 // OrderService implementations integrate an app with external APIs
                 .withOrderService(new NullOrderService())

@@ -5,14 +5,15 @@ import org.ta4j.core.TradingRecord;
 import quantasma.core.BarPeriod;
 import quantasma.core.BaseContext;
 import quantasma.core.Context;
+import quantasma.core.MarketData;
 import quantasma.core.TestManager;
-import quantasma.core.TestMarketData;
 import quantasma.core.TradeStrategy;
 import quantasma.core.analysis.parametrize.Producer;
 import quantasma.core.analysis.parametrize.Variables;
-import quantasma.core.timeseries.MultipleTimeSeriesBuilder;
+import quantasma.core.timeseries.MarketDataBuilder;
 import quantasma.core.timeseries.ReflectionManualIndexTimeSeries;
 import quantasma.core.timeseries.TimeSeriesDefinition;
+import quantasma.core.timeseries.bar.BidAskBar;
 import quantasma.examples.RSIStrategy.Parameter;
 
 import java.util.function.Function;
@@ -22,16 +23,16 @@ import static quantasma.core.analysis.parametrize.generators.Ints.range;
 public class ParametrizedBacktestExample {
     public static void main(String[] args) {
         // tag::parametrizedBacktestExample[]
-        final TestMarketData testMarketData = new TestMarketData(
-                MultipleTimeSeriesBuilder.basedOn(new BidAskBarFactory(), TimeSeriesDefinition.unlimited(BarPeriod.M1))
-                                         .symbols("EURUSD")
-                                         .aggregate(TimeSeriesDefinition.Group.of("EURUSD")
-                                                                              .add(TimeSeriesDefinition.unlimited(BarPeriod.M5)))
-                                         .wrap(ReflectionManualIndexTimeSeries::wrap)
-                                         .build());
+        final MarketData<BidAskBar> marketData =
+                MarketDataBuilder.basedOn(TimeSeriesDefinition.unlimited(BarPeriod.M1))
+                                 .symbols("EURUSD")
+                                 .aggregate(TimeSeriesDefinition.Group.of("EURUSD")
+                                                                      .add(TimeSeriesDefinition.unlimited(BarPeriod.M5)))
+                                 .wrap(ReflectionManualIndexTimeSeries::wrap)
+                                 .build();
 
         final Context context = new BaseContext.Builder()
-                .withMarketData(testMarketData)
+                .withMarketData(marketData)
                 .build();
 
         final Function<Variables<Parameter>, TradeStrategy> recipe = var -> {
@@ -42,9 +43,9 @@ public class ParametrizedBacktestExample {
             return RSIStrategy.buildBullish(context, var.getParameterValues());
         };
 
-        // Feed historical data by calling testMarketData.add()
+        // Feed historical data by calling marketData.add()
 
-        final TestManager testManager = new TestManager(testMarketData);
+        final TestManager testManager = new TestManager<>(marketData);
         Producer.from(recipe)
                 .stream()
                 .forEach(tradeStrategy -> {

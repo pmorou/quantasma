@@ -1,7 +1,7 @@
 package quantasma.core;
 
 import lombok.Getter;
-import quantasma.core.timeseries.MultipleTimeSeriesBuilder;
+import quantasma.core.timeseries.MarketDataBuilder;
 import quantasma.core.timeseries.TimeSeriesDefinition;
 
 @Getter
@@ -24,10 +24,10 @@ public class BaseContext implements Context {
         public Builder() {
             orderService = new NullOrderService();
             strategyControl = new InMemoryStrategyControl();
-            dataService = new BaseDataService(new MarketData<>(MultipleTimeSeriesBuilder
-                                                                       .basedOn(TimeSeriesDefinition.unlimited(BarPeriod.M1))
-                                                                       .symbols("EURUSD")
-                                                                       .build()));
+            dataService = new BaseDataService(
+                    MarketDataBuilder.basedOn(TimeSeriesDefinition.unlimited(BarPeriod.M1))
+                                     .symbols("EURUSD")
+                                     .build());
         }
 
         public static Builder builder() {
@@ -49,8 +49,8 @@ public class BaseContext implements Context {
             return this;
         }
 
-        public Builder withTimeSeries(MultipleTimeSeriesBuilder multipleTimeSeriesBuilder) {
-            this.dataService = new BaseDataService(new MarketData(multipleTimeSeriesBuilder.build()));
+        public Builder withMarketData(MarketDataBuilder<?> marketDataBuilder) {
+            withMarketData(marketDataBuilder.build());
             return this;
         }
 

@@ -4,8 +4,7 @@ import lombok.Getter;
 import org.ta4j.core.num.Num;
 import quantasma.core.BarPeriod;
 import quantasma.core.DateUtils;
-import quantasma.core.timeseries.bar.BaseBidAskBar;
-import quantasma.core.timeseries.bar.BidAskBar;
+import quantasma.core.Quote;
 import quantasma.core.timeseries.bar.OneSideBar;
 import quantasma.core.timeseries.bar.factory.BarFactory;
 
@@ -24,6 +23,7 @@ public class BaseMultipleTimeSeries<B extends OneSideBar> implements MultipleTim
     private final String symbol;
     @Getter
     private final MainTimeSeries<B> mainTimeSeries;
+
     private final Map<BarPeriod, UniversalTimeSeries<B>> periodTimeSeriesMap;
     private final BarFactory<B> barFactory;
     private final UnaryOperator<UniversalTimeSeries<B>> wrapper;
@@ -62,24 +62,13 @@ public class BaseMultipleTimeSeries<B extends OneSideBar> implements MultipleTim
     }
 
     @Override
-    public void updateBar(ZonedDateTime priceDate, double bid, double ask) {
+    public void updateBar(Quote quote) {
         periodTimeSeriesMap.forEach((barPeriod, timeSeries) -> {
-            if (empty(timeSeries) || isEqualOrAfter(priceDate, timeSeries.getLastBar().getEndTime())) {
-                insertNewBar(priceDate, barPeriod, timeSeries);
+            if (empty(timeSeries) || isEqualOrAfter(quote.getTime(), timeSeries.getLastBar().getEndTime())) {
+                insertNewBar(quote.getTime(), barPeriod, timeSeries);
             }
-            final B lastBar = timeSeries.getLastBar();
-            lastBar.addPrice(timeSeries.numOf(bid), timeSeries.numOf(ask));
-        });
-    }
-
-    @Override
-    public void updateBar(ZonedDateTime priceDate, double price) {
-        periodTimeSeriesMap.forEach((barPeriod, timeSeries) -> {
-            if (empty(timeSeries) || isEqualOrAfter(priceDate, timeSeries.getLastBar().getEndTime())) {
-                insertNewBar(priceDate, barPeriod, timeSeries);
-            }
-            final Bar lastBar = timeSeries.getLastBar();
-            lastBar.addPrice(timeSeries.numOf(price));
+            timeSeries.getLastBar()
+                      .updateBar(quote, timeSeries.function());
         });
     }
 
@@ -98,18 +87,18 @@ public class BaseMultipleTimeSeries<B extends OneSideBar> implements MultipleTim
         return timeSeries.getBarCount() == 0;
     }
 
-    private void insertNewBar(ZonedDateTime priceDate, BarPeriod barPeriod, UniversalTimeSeries<? super BidAskBar> timeSeries) {
-        timeSeries.addBar(new BaseBidAskBar(barPeriod.getPeriod(),
-                                            DateUtils.createEndDate(priceDate, barPeriod),
-                                            timeSeries.function()));
+    private void insertNewBar(ZonedDateTime priceDate, BarPeriod barPeriod, UniversalTimeSeries<? super B> timeSeries) {
+        timeSeries.addBar(createBar(barPeriod, DateUtils.createEndDate(priceDate, barPeriod), timeSeries));
     }
 
-    private void insertNewBarWithLastPrice(ZonedDateTime priceDate, BarPeriod barPeriod, UniversalTimeSeries<? super BidAskBar> timeSeries) {
+    private void insertNewBarWithLastPrice(ZonedDateTime priceDate, BarPeriod barPeriod, UniversalTimeSeries<? super B> timeSeries) {
         final Num lastPrice = timeSeries.getLastBar().getClosePrice();
-        timeSeries.addBar(new BaseBidAskBar(barPeriod.getPeriod(),
-                                            DateUtils.createEndDate(priceDate, barPeriod),
-                                            timeSeries.function()));
+        timeSeries.addBar(createBar(barPeriod, priceDate, timeSeries));
         timeSeries.addPrice(lastPrice);
+    }
+
+    private B createBar(BarPeriod barPeriod, ZonedDateTime endDate, UniversalTimeSeries<? super B> timeSeries) {
+        return barFactory.create(barPeriod, endDate, timeSeries.function());
     }
 
     private static boolean isEqualOrAfter(ZonedDateTime date, ZonedDateTime withThis) {

@@ -1,6 +1,7 @@
 package quantasma.core.timeseries;
 
 import quantasma.core.BarPeriod;
+import quantasma.core.Quote;
 import quantasma.core.timeseries.bar.OneSideBar;
 
 import java.io.Serializable;
@@ -10,9 +11,7 @@ import java.util.List;
 public interface MultipleTimeSeries<B extends OneSideBar> extends Serializable {
     MultipleTimeSeries<B> aggregate(TimeSeriesDefinition timeSeriesDefinition);
 
-    void updateBar(ZonedDateTime priceDate, double bid, double ask);
-
-    void updateBar(ZonedDateTime priceDate, double price);
+    void updateBar(Quote quote);
 
     void createBar(ZonedDateTime priceDate);
 

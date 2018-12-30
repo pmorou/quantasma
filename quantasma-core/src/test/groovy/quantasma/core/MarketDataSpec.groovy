@@ -5,7 +5,7 @@ import org.ta4j.core.indicators.RSIIndicator
 import org.ta4j.core.indicators.helpers.ClosePriceIndicator
 import org.ta4j.core.trading.rules.IsEqualRule
 import org.ta4j.core.trading.rules.OverIndicatorRule
-import quantasma.core.timeseries.MultipleTimeSeriesBuilder
+import quantasma.core.timeseries.MarketDataBuilder
 import quantasma.core.timeseries.TimeSeriesDefinition
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -163,9 +163,9 @@ class MarketDataSpec extends Specification {
         return time.plus(minutes, ChronoUnit.MINUTES)
     }
 
-    private static MarketData createTimeSeriesFor(String... symbols) {
-        return new MarketData(
-                MultipleTimeSeriesBuilder.basedOn(new BidAskBarFactory(), TimeSeriesDefinition.limited(ONE_MINUTE_PERIOD, 2))
+    private static BidAskMarketData createTimeSeriesFor(String... symbols) {
+        return new BidAskMarketData(
+                MarketDataBuilder.basedOn(new BidAskBarFactory(), TimeSeriesDefinition.limited(ONE_MINUTE_PERIOD, 2))
                         .symbols(symbols)
                         .build())
     }
@@ -246,9 +246,9 @@ class MarketDataSpec extends Specification {
         }
     }
 
-    private MarketData createTwoSymbolMarketData(int oneMinutePeriod) {
-        return new MarketData(
-                MultipleTimeSeriesBuilder.basedOn(new BidAskBarFactory(), TimeSeriesDefinition.limited(ONE_MINUTE_PERIOD, oneMinutePeriod))
+    private BidAskMarketData createTwoSymbolMarketData(int oneMinutePeriod) {
+        return new BidAskMarketData(
+                MarketDataBuilder.basedOn(new BidAskBarFactory(), TimeSeriesDefinition.limited(ONE_MINUTE_PERIOD, oneMinutePeriod))
                         .symbols("symbol1", "symbol2")
                         .build())
     }

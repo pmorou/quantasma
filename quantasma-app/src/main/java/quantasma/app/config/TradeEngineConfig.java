@@ -11,7 +11,7 @@ import quantasma.core.NullOrderService;
 import quantasma.core.OrderService;
 import quantasma.core.StrategyControl;
 import quantasma.core.TradeEngine;
-import quantasma.core.timeseries.MultipleTimeSeriesBuilder;
+import quantasma.core.timeseries.MarketDataBuilder;
 import quantasma.core.timeseries.TimeSeriesDefinition;
 
 @Configuration
@@ -30,8 +30,8 @@ public class TradeEngineConfig {
     @Bean
     public Context context(StrategyControl strategyControl, OrderService orderService) {
         return BaseContext.Builder.builder()
-                                  .withTimeSeries(MultipleTimeSeriesBuilder.basedOn(TimeSeriesDefinition.limited(BarPeriod.M1, 100))
-                                                                           .symbols("EURUSD"))
+                                  .withMarketData(MarketDataBuilder.basedOn(TimeSeriesDefinition.limited(BarPeriod.M1, 100))
+                                                                   .symbols("EURUSD"))
                                   .withOrderService(orderService)
                                   .withStrategyControl(strategyControl)
                                   .build();

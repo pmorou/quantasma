@@ -11,8 +11,9 @@ import quantasma.app.service.HistoricalDataService;
 import quantasma.core.BarPeriod;
 import quantasma.core.BaseContext;
 import quantasma.core.Context;
+import quantasma.core.MarketData;
+import quantasma.core.Quote;
 import quantasma.core.TestManager;
-import quantasma.core.TestMarketData;
 import quantasma.core.TradeStrategy;
 import quantasma.core.analysis.BacktestResult;
 import quantasma.core.analysis.StrategyBacktest;
@@ -20,9 +21,10 @@ import quantasma.core.analysis.TradeScenario;
 import quantasma.core.analysis.parametrize.Parameterizable;
 import quantasma.core.analysis.parametrize.Producer;
 import quantasma.core.analysis.parametrize.Variables;
-import quantasma.core.timeseries.MultipleTimeSeriesBuilder;
+import quantasma.core.timeseries.MarketDataBuilder;
 import quantasma.core.timeseries.ReflectionManualIndexTimeSeries;
 import quantasma.core.timeseries.TimeSeriesDefinition;
+import quantasma.core.timeseries.bar.BidAskBar;
 import quantasma.examples.RSIStrategy;
 import quantasma.examples.RSIStrategy.Parameter;
 
@@ -64,10 +66,10 @@ public class RSIBacktest implements StrategyBacktest {
 
     @Override
     public List<BacktestResult> run(Map<String, Object[]> backtestParameters, List<String> analysisCriterions, LocalDateTime fromDate, TemporalAmount timeWindow) {
-        final TestMarketData testMarketData = createTestMarketData();
+        final MarketData<BidAskBar> marketData = createMarketData();
 
         final Context context = new BaseContext.Builder()
-                .withMarketData(testMarketData)
+                .withMarketData(marketData)
                 .build();
 
         final Function<Variables<Parameter>, TradeStrategy> recipe = var -> {
@@ -80,9 +82,9 @@ public class RSIBacktest implements StrategyBacktest {
 
         // implement strategies: close, open, 4 ticks ohlc
         historicalDataService.findBySymbolAndDateBetweenOrderByDate(SYMBOL, fromDate.toInstant(ZoneOffset.UTC), timeWindow)
-                             .forEach(loadBars(testMarketData));
+                             .forEach(loadBars(marketData));
 
-        final TestManager testManager = new TestManager(testMarketData);
+        final TestManager testManager = new TestManager<>(marketData);
 
         final List<TradeScenario> tradeScenarios = prepareTradeScenarios(recipe, testManager);
 
@@ -121,19 +123,19 @@ public class RSIBacktest implements StrategyBacktest {
                        .collect(Collectors.toList());
     }
 
-    private static Consumer<OhlcvBar> loadBars(TestMarketData testMarketData) {
-        return ohlcvBar -> testMarketData.add(ohlcvBar.getSymbol(),
-                                              ohlcvBar.getDate().atZone(ZoneOffset.UTC),
-                                              ohlcvBar.getBidClose(),
-                                              ohlcvBar.getAskClose());
+    private static Consumer<OhlcvBar> loadBars(MarketData marketData) {
+        return ohlcvBar -> marketData.add(
+                Quote.bidAsk(ohlcvBar.getSymbol(),
+                             ohlcvBar.getDate().atZone(ZoneOffset.UTC),
+                             ohlcvBar.getBidClose(),
+                             ohlcvBar.getAskClose()));
     }
 
-    private static TestMarketData createTestMarketData() {
-        return new TestMarketData<>(
-                MultipleTimeSeriesBuilder.basedOn(TimeSeriesDefinition.unlimited(BASE_PERIOD))
-                                         .symbols(SYMBOL)
-                                         .wrap(ReflectionManualIndexTimeSeries::wrap)
-                                         .build());
+    private static MarketData<BidAskBar> createMarketData() {
+        return MarketDataBuilder.basedOn(TimeSeriesDefinition.unlimited(BASE_PERIOD))
+                                .symbols(SYMBOL)
+                                .wrap(ReflectionManualIndexTimeSeries::wrap)
+                                .build();
     }
 
 }
