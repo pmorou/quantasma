@@ -79,8 +79,8 @@ public class ReflectionManualIndexTimeSeries<B extends OneSideBar> implements Ma
 
     private Object getField(String fieldName) {
         TimeSeries target = timeSeries.timeSeries();
-        if (isForwardingTimeSeries()) {
-            target = getDelegate();
+        if (isForwardingTimeSeries(target)) {
+            target = getDelegate(target);
         }
         Class<?> clazz = getBaseTimeSeriesClassRef(target);
 
@@ -95,8 +95,8 @@ public class ReflectionManualIndexTimeSeries<B extends OneSideBar> implements Ma
 
     private void setField(String fieldName, Object value) {
         TimeSeries target = timeSeries.timeSeries();
-        if (isForwardingTimeSeries()) {
-            target = getDelegate();
+        if (isForwardingTimeSeries(target)) {
+            target = getDelegate(target);
         }
         Class<?> clazz = getBaseTimeSeriesClassRef(target);
 
@@ -109,12 +109,12 @@ public class ReflectionManualIndexTimeSeries<B extends OneSideBar> implements Ma
         }
     }
 
-    private boolean isForwardingTimeSeries() {
-        return timeSeries instanceof ForwardingTimeSeries;
+    private boolean isForwardingTimeSeries(TimeSeries target) {
+        return target instanceof ForwardingTimeSeries;
     }
 
-    private TimeSeries getDelegate() {
-        return ((ForwardingTimeSeries) timeSeries).delegate();
+    private TimeSeries getDelegate(TimeSeries target) {
+        return ((ForwardingTimeSeries) target).delegate();
     }
 
     private Class<?> getBaseTimeSeriesClassRef(TimeSeries target) {
