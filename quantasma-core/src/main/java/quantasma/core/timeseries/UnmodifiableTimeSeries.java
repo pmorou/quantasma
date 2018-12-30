@@ -11,8 +11,8 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-public class UnmodifiableTimeSeries extends ForwardingTimeSeries {
-    protected UnmodifiableTimeSeries(TimeSeries timeSeries) {
+public final class UnmodifiableTimeSeries extends ForwardingTimeSeries {
+    public UnmodifiableTimeSeries(TimeSeries timeSeries) {
         super(timeSeries);
     }
 

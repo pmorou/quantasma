@@ -10,18 +10,18 @@ import quantasma.core.timeseries.bar.factory.BarFactory;
 import java.lang.reflect.Field;
 import java.util.function.Function;
 
-public class ReflectionManualIndexTimeSeries<B extends OneSidedBar> implements ManualIndexTimeSeries<B> {
+public final class ReflectionManualIndexTimeSeries<B extends OneSidedBar> implements ManualIndexTimeSeries<B> {
     protected final UniversalTimeSeries<B> timeSeries;
 
-    protected ReflectionManualIndexTimeSeries(UniversalTimeSeries<B> timeSeries) {
+    private boolean isIndexModified;
+
+    private ReflectionManualIndexTimeSeries(UniversalTimeSeries<B> timeSeries) {
         this.timeSeries = timeSeries;
     }
 
     public static <B extends OneSidedBar> ReflectionManualIndexTimeSeries wrap(UniversalTimeSeries<B> timeSeries) {
         return new ReflectionManualIndexTimeSeries<>(timeSeries);
     }
-
-    protected boolean isIndexModified;
 
     @Override
     public void addBar(B bar, boolean replace) {
