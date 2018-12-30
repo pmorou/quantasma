@@ -175,6 +175,7 @@ class ReflectionManualIndexTimeSeriesSpec extends Specification {
         BaseAggregatedTimeSeries.class.getName() | BarPeriod.M5 | BASE_AGGREGATED_TIME_SERIES
     }
 
+    @Unroll
     def 'given time series with 3 bars for bar period (#barPeriod) and implementation (#className) and resetIndex() when adding new bar should throw an exception'() {
         given:
         def manualTimeSeries = createManualTimeSeries(factory, 3, barPeriod)
