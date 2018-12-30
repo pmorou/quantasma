@@ -14,15 +14,18 @@ public class OneSidedBarFactory implements BarFactory<OneSidedBar> {
 
     @Override
     public OneSidedBar create(BarPeriod barPeriod, Function<Number, Num> numFunction) {
-        return new BaseOneSidedBar(new BaseBar(barPeriod.getPeriod(),
-                                               DateUtils.createEndDate(ZonedDateTime.now(), barPeriod),
-                                               numFunction));
+        return create(barPeriod, numFunction, ZonedDateTime.now());
     }
 
     @Override
-    public OneSidedBar create(BarPeriod barPeriod, ZonedDateTime time, Function<Number, Num> numFunction) {
+    public OneSidedBar create(BarPeriod barPeriod, Function<Number, Num> numFunction, ZonedDateTime time) {
+        return createInstance(barPeriod, numFunction, time);
+    }
+
+    private static BaseOneSidedBar createInstance(BarPeriod barPeriod, Function<Number, Num> numFunction, ZonedDateTime now) {
         return new BaseOneSidedBar(new BaseBar(barPeriod.getPeriod(),
-                                               DateUtils.createEndDate(time, barPeriod),
+                                               DateUtils.createEndDate(now, barPeriod),
                                                numFunction));
     }
+
 }

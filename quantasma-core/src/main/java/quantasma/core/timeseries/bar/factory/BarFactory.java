@@ -11,6 +11,6 @@ public interface BarFactory<B extends OneSidedBar> {
 
     B create(BarPeriod barPeriod, Function<Number, Num> numFunction);
 
-    B create(BarPeriod barPeriod, ZonedDateTime time, Function<Number, Num> numFunction);
+    B create(BarPeriod barPeriod, Function<Number, Num> numFunction, ZonedDateTime time);
 
 }

@@ -13,13 +13,15 @@ public class BidAskBarFactory implements BarFactory<BidAskBar> {
 
     @Override
     public BidAskBar create(BarPeriod barPeriod, Function<Number, Num> numFunction) {
-        return new BaseBidAskBar(barPeriod.getPeriod(),
-                                 DateUtils.createEndDate(ZonedDateTime.now(), barPeriod),
-                                 numFunction);
+        return create(barPeriod, numFunction, ZonedDateTime.now());
     }
 
     @Override
-    public BidAskBar create(BarPeriod barPeriod, ZonedDateTime time, Function<Number, Num> numFunction) {
+    public BidAskBar create(BarPeriod barPeriod, Function<Number, Num> numFunction, ZonedDateTime time) {
+        return createInstance(barPeriod, numFunction, time);
+    }
+
+    private static BaseBidAskBar createInstance(BarPeriod barPeriod, Function<Number, Num> numFunction, ZonedDateTime time) {
         return new BaseBidAskBar(barPeriod.getPeriod(),
                                  DateUtils.createEndDate(time, barPeriod),
                                  numFunction);

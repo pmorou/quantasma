@@ -97,7 +97,7 @@ public class BaseMultipleTimeSeries<B extends OneSidedBar> implements MultipleTi
     }
 
     private B createBar(BarPeriod barPeriod, ZonedDateTime endDate, UniversalTimeSeries<? super B> timeSeries) {
-        return barFactory.create(barPeriod, endDate, timeSeries.function());
+        return barFactory.create(barPeriod, timeSeries.function(), endDate);
     }
 
     private static boolean isEqualOrAfter(ZonedDateTime date, ZonedDateTime withThis) {
