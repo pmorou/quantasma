@@ -3,7 +3,8 @@ package quantasma.core.timeseries.bar;
 import org.ta4j.core.Bar;
 import org.ta4j.core.num.Num;
 
-public class UnmodifiableBar extends ForwardingBar {
+public final class UnmodifiableBar extends ForwardingBar {
+
     public UnmodifiableBar(Bar bar) {
         super(bar);
     }
@@ -17,4 +18,5 @@ public class UnmodifiableBar extends ForwardingBar {
     public void addPrice(Num price) {
         throw new UnsupportedOperationException();
     }
+
 }
