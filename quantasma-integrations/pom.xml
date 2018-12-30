@@ -37,6 +37,18 @@
             <groupId>com.dukascopy.dds2</groupId>
             <artifactId>DDS2-jClient-JForex</artifactId>
             <version>3.4.13</version>
+            <exclusions>
+                <!--
+                    This dependency uses JMockit 1.5 which interrupts tests with following stacktrace:
+                    Caused by: java.lang.IllegalStateException: JMockit requires a Java 5+ VM
+                        at mockit.internal.startup.AgentInitialization.initializeAccordingToJDKVersion(AgentInitialization.java:29)
+                        at mockit.internal.startup.Startup.initializeIfPossible(Startup.java:234)
+                -->
+                <exclusion>
+                    <groupId>com.googlecode.jmockit</groupId>
+                    <artifactId>jmockit</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
         <dependency>
             <groupId>com.dukascopy.api</groupId>
