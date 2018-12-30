@@ -8,6 +8,7 @@ import com.oanda.v20.pricing.PricingGetRequest;
 import com.oanda.v20.pricing.PricingGetResponse;
 import com.oanda.v20.primitives.DateTime;
 import lombok.extern.slf4j.Slf4j;
+import quantasma.core.Quote;
 import quantasma.core.TradeEngine;
 import quantasma.integrations.data.provider.AbstractLiveDataProvider;
 
@@ -60,10 +61,11 @@ public class OandaLiveDataProvider extends AbstractLiveDataProvider {
                 for (ClientPrice price : resp.getPrices()) {
                     log.info("Oanda API: {}", price);
 
-                    tradeEngine.process(price.getInstrument().toString().replace("_", ""),
-                                        ZonedDateTime.parse(price.getTime()),
-                                        price.getBids().get(0).getPrice().doubleValue(),
-                                        price.getAsks().get(0).getPrice().doubleValue());
+                    tradeEngine.process(Quote.bidAsk(
+                            price.getInstrument().toString().replace("_", ""),
+                            ZonedDateTime.parse(price.getTime()),
+                            price.getBids().get(0).getPrice().doubleValue(),
+                            price.getAsks().get(0).getPrice().doubleValue()));
                 }
                 since = resp.getTime();
 

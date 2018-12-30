@@ -57,7 +57,7 @@ class EventsControllerSpec extends Specification {
     }
 
     private static Quote createQuote(Tuple2<Integer, Long> tuple) {
-        new Quote("symbol", TIME, tuple.getT1(), tuple.getT1())
+        Quote.bidAsk("symbol", TIME, tuple.getT1(), tuple.getT1())
     }
 
     def "should return 3 unique account states"() {
