@@ -4,40 +4,116 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import org.ta4j.core.Bar;
 import org.ta4j.core.BaseTimeSeries;
+import org.ta4j.core.TimeSeries;
 import org.ta4j.core.num.Num;
 import org.ta4j.core.num.PrecisionNum;
 import quantasma.core.BarPeriod;
+import quantasma.core.timeseries.bar.BaseBidAskBar;
 import quantasma.core.timeseries.bar.BidAskBar;
 
+import java.time.Duration;
+import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
-@Getter
-public class BaseUniversalTimeSeries extends ForwardingTimeSeries implements UniversalTimeSeries {
+public class BaseUniversalTimeSeries<B extends Bar> implements UniversalTimeSeries<B> {
+    private final TimeSeries timeSeries;
+    @Getter
     private final String symbol;
+    @Getter
     private final BarPeriod barPeriod;
 
     protected BaseUniversalTimeSeries(Builder<?, ?> builder) {
-        super(new BaseTimeSeries.SeriesBuilder()
+        this.timeSeries = new BaseTimeSeries.SeriesBuilder()
                       .withName(builder.getName())
                       .withBars(builder.getBars())
                       .withNumTypeOf(builder.getNumFunction())
                       .withMaxBarCount(builder.getMaxBarCount())
-                      .build());
+                      .build();
         this.symbol = builder.getSymbol();
         this.barPeriod = builder.getBarPeriod();
     }
 
     @Override
-    public Bar getBar(int i) {
+    public TimeSeries timeSeries() {
+        return new UnmodifiableTimeSeries(timeSeries);
+    }
+
+    @Override
+    public B getBar(int i) {
         final int nthOldElement = getEndIndex() - i;
 
         if (nthOldElement < getBarCount()) {
-            return delegate().getBar(i);
+            return (B) timeSeries.getBar(i);
         }
 
-        return BidAskBar.NaN;
+        return (B) BidAskBar.NaN; // TODO: provide generic method
+    }
+
+    @Override
+    public void addBar(B bar, boolean replace) {
+        timeSeries.addBar(bar, replace);
+    }
+
+    @Override
+    public void addBar(Duration timePeriod, ZonedDateTime endTime) {
+        addBar((B) new BaseBidAskBar(timePeriod, endTime, this::numOf)); // TODO: provide generic method
+    }
+
+    @Override
+    public void addTrade(Num tradeVolume, Num tradePrice) {
+        timeSeries.addTrade(tradeVolume, tradePrice);
+    }
+
+    @Override
+    public void addPrice(Num price) {
+        timeSeries.addPrice(price);
+    }
+
+    @Override
+    public String getName() {
+        return timeSeries.getName();
+    }
+
+    @Override
+    public int getBarCount() {
+        return timeSeries.getBarCount();
+    }
+
+    @Override
+    public int getBeginIndex() {
+        return timeSeries.getBeginIndex();
+    }
+
+    @Override
+    public int getEndIndex() {
+        return timeSeries.getEndIndex();
+    }
+
+    @Override
+    public void setMaximumBarCount(int maximumBarCount) {
+        timeSeries.setMaximumBarCount(maximumBarCount);
+    }
+
+    @Override
+    public int getMaximumBarCount() {
+        return timeSeries.getMaximumBarCount();
+    }
+
+    @Override
+    public int getRemovedBarsCount() {
+        return timeSeries.getRemovedBarsCount();
+    }
+
+    @Override
+    public Num numOf(Number number) {
+        return timeSeries.numOf(number);
+    }
+
+    @Override
+    public Function<Number, Num> function() {
+        return timeSeries.function();
     }
 
     /**
