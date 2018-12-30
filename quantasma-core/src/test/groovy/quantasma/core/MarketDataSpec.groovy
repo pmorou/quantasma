@@ -33,7 +33,7 @@ class MarketDataSpec extends Specification {
 
         when:
         barsToAdd.times {
-            marketData.add("symbol1", addMinutes(time, it), 1 + it)
+            marketData.add(Quote.bidAsk("symbol1", addMinutes(time, it), 1 + it, 1 + it))
         }
 
         then:
@@ -80,13 +80,13 @@ class MarketDataSpec extends Specification {
         def isEqualToOneRule = new IsEqualRule(targetClosePriceIndicator, 1)
 
         and:
-        marketData.add("targetSymbol", time, 0.5)
+        marketData.add(Quote.bidAsk("targetSymbol", time, 0.5, 0.5))
         assert !isEqualToOneRule.isSatisfied(0)
-        marketData.add("targetSymbol", addMinutes(time, 1), 1)
+        marketData.add(Quote.bidAsk("targetSymbol", addMinutes(time, 1), 1, 1))
         assert isEqualToOneRule.isSatisfied(1)
 
         when:
-        marketData.add("symbol2", addMinutes(time, 2), 0)
+        marketData.add(Quote.bidAsk("symbol2", addMinutes(time, 2), 0, 0))
 
         then:
         isEqualToOneRule.isSatisfied(targetTimeSeries.getEndIndex())
@@ -105,27 +105,27 @@ class MarketDataSpec extends Specification {
         def rule2 = new OverIndicatorRule(new RSIIndicator(new ClosePriceIndicator(targetTimeSeries), 2), 70)
 
         and:
-        marketData.add("referenceSymbol", time, 0)
-        marketData.add("targetSymbol", time, 0)
+        marketData.add(Quote.bidAsk("referenceSymbol", time, 0, 0))
+        marketData.add(Quote.bidAsk("targetSymbol", time, 0, 0))
         assert !rule1.isSatisfied(referenceTimeSeries.getEndIndex())
         assert !rule2.isSatisfied(targetTimeSeries.getEndIndex())
 
         when:
-        marketData.add("referenceSymbol", addMinutes(time, 1), 1)
+        marketData.add(Quote.bidAsk("referenceSymbol", addMinutes(time, 1), 1, 1))
 
         then:
         rule1.isSatisfied(referenceTimeSeries.getEndIndex())
         !rule2.isSatisfied(targetTimeSeries.getEndIndex())
 
         and:
-        marketData.add("referenceSymbol", addMinutes(time, 2), 0.9)
-        marketData.add("targetSymbol", addMinutes(time, 2), 1)
+        marketData.add(Quote.bidAsk("referenceSymbol", addMinutes(time, 2), 0.9, 0.9))
+        marketData.add(Quote.bidAsk("targetSymbol", addMinutes(time, 2), 1, 1))
         rule1.isSatisfied(referenceTimeSeries.getEndIndex())
         rule2.isSatisfied(targetTimeSeries.getEndIndex())
 
         and:
-        marketData.add("referenceSymbol", addMinutes(time, 3), 0.8)
-        marketData.add("targetSymbol", addMinutes(time, 3), 0.9)
+        marketData.add(Quote.bidAsk("referenceSymbol", addMinutes(time, 3), 0.8, 0.8))
+        marketData.add(Quote.bidAsk("targetSymbol", addMinutes(time, 3), 0.9, 0.9))
         !rule1.isSatisfied(referenceTimeSeries.getEndIndex())
         rule2.isSatisfied(targetTimeSeries.getEndIndex())
 
@@ -139,7 +139,7 @@ class MarketDataSpec extends Specification {
         def marketData = createTimeSeriesFor("knownSymbol")
 
         when:
-        marketData.add("unknownSymbol", time, 1.0)
+        marketData.add(Quote.bidAsk("unknownSymbol", time, 1.0, 1.0))
 
         then:
         marketData.of('knownSymbol').getMainTimeSeries().getBarCount() == 0
@@ -163,11 +163,10 @@ class MarketDataSpec extends Specification {
         return time.plus(minutes, ChronoUnit.MINUTES)
     }
 
-    private static BidAskMarketData createTimeSeriesFor(String... symbols) {
-        return new BidAskMarketData(
-                MarketDataBuilder.basedOn(new BidAskBarFactory(), TimeSeriesDefinition.limited(ONE_MINUTE_PERIOD, 2))
+    private static MarketData createTimeSeriesFor(String... symbols) {
+        return MarketDataBuilder.basedOn(TimeSeriesDefinition.limited(ONE_MINUTE_PERIOD, 2))
                         .symbols(symbols)
-                        .build())
+                        .build()
     }
 
     @Unroll
@@ -179,7 +178,7 @@ class MarketDataSpec extends Specification {
 
         when:
         barsToAdd.times {
-            marketData.add("symbol1", addMinutes(time, it), it)
+            marketData.add(Quote.bidAsk("symbol1", addMinutes(time, it), it, it))
         }
 
         then:
@@ -246,11 +245,10 @@ class MarketDataSpec extends Specification {
         }
     }
 
-    private BidAskMarketData createTwoSymbolMarketData(int oneMinutePeriod) {
-        return new BidAskMarketData(
-                MarketDataBuilder.basedOn(new BidAskBarFactory(), TimeSeriesDefinition.limited(ONE_MINUTE_PERIOD, oneMinutePeriod))
+    private MarketData createTwoSymbolMarketData(int oneMinutePeriod) {
+        return MarketDataBuilder.basedOn(TimeSeriesDefinition.limited(ONE_MINUTE_PERIOD, oneMinutePeriod))
                         .symbols("symbol1", "symbol2")
-                        .build())
+                        .build()
     }
 
     private static ZonedDateTime utc(LocalDateTime localDateTime) {

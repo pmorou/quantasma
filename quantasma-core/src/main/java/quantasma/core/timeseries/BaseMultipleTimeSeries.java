@@ -3,7 +3,6 @@ package quantasma.core.timeseries;
 import lombok.Getter;
 import org.ta4j.core.num.Num;
 import quantasma.core.BarPeriod;
-import quantasma.core.DateUtils;
 import quantasma.core.Quote;
 import quantasma.core.timeseries.bar.OneSideBar;
 import quantasma.core.timeseries.bar.factory.BarFactory;
@@ -88,7 +87,7 @@ public class BaseMultipleTimeSeries<B extends OneSideBar> implements MultipleTim
     }
 
     private void insertNewBar(ZonedDateTime priceDate, BarPeriod barPeriod, UniversalTimeSeries<? super B> timeSeries) {
-        timeSeries.addBar(createBar(barPeriod, DateUtils.createEndDate(priceDate, barPeriod), timeSeries));
+        timeSeries.addBar(createBar(barPeriod, priceDate, timeSeries));
     }
 
     private void insertNewBarWithLastPrice(ZonedDateTime priceDate, BarPeriod barPeriod, UniversalTimeSeries<? super B> timeSeries) {
