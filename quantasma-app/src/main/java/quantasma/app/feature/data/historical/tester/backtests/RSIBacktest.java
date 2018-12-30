@@ -115,7 +115,7 @@ public class RSIBacktest implements StrategyBacktest {
     private static List<TradeScenario> prepareTradeScenarios(Function<Variables<Parameter>, TradeStrategy> recipe, TestManager testManager) {
         return Producer.from(recipe)
                        .stream()
-                       .map(tradeStrategy -> new TradeScenario(testManager.getMainTimeSeries(tradeStrategy),
+                       .map(tradeStrategy -> new TradeScenario(testManager.getMainTimeSeries(tradeStrategy).timeSeries(),
                                                                tradeStrategy.getParameterValues(),
                                                                testManager.run(tradeStrategy, Order.OrderType.BUY)))
                        .collect(Collectors.toList());

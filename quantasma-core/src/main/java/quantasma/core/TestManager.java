@@ -54,7 +54,7 @@ public class TestManager {
         }
 
         if (!tradingRecord.isClosed()) {
-            final int seriesMaxSize = Math.max(mainTimeSeries.getEndIndex() + 1, mainTimeSeries.getBarData().size());
+            final int seriesMaxSize = Math.max(mainTimeSeries.getEndIndex() + 1, mainTimeSeries.getBarCount());
             for (int i = runEndIndex + 1; i < seriesMaxSize; i++) {
                 if (tradeStrategy.shouldOperate(i, tradingRecord)) {
                     tradingRecord.operate(i, mainTimeSeries.getBar(i).getClosePrice(), tradeStrategy.getAmount());
