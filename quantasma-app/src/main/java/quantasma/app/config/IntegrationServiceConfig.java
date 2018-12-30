@@ -61,6 +61,27 @@ public class IntegrationServiceConfig {
         return new DukascopyLiveDataApiProvider(tradeEngine, dukascopyClient, eventSink);
     }
 
+    @Bean
+    @Profile("mock")
+    public LiveDataProvider mockLiveDataProvider() {
+        return new LiveDataProvider() {
+            @Override
+            public void run() {
+                // mock
+            }
+
+            @Override
+            public void stop() {
+                // mock
+            }
+
+            @Override
+            public boolean isRunning() {
+                return false;
+            }
+        };
+    }
+
     @Autowired
     public void runLiveDataProvider(@Value("${service.live-data.enabled}") boolean isLiveDataEnabled, LiveDataProvider liveDataProvider) {
         log.info("Is live data enabled: {}", isLiveDataEnabled);

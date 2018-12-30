@@ -18,3 +18,11 @@ spring:
       database: historical
   profiles:
     active: dukascopy
+
+---
+
+spring:
+  profiles: mock
+service:
+  historical-data:
+    prefix: mock
