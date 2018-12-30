@@ -1,10 +1,10 @@
 package quantasma.core.timeseries;
 
-import org.ta4j.core.Bar;
+import quantasma.core.timeseries.bar.OneSideBar;
 
 import java.util.function.Function;
 
-public class AggregatedTimeSeriesFactory<B extends Bar> implements TimeSeriesFactory<AggregatedTimeSeries<B>> {
+public class AggregatedTimeSeriesFactory<B extends OneSideBar> implements TimeSeriesFactory<AggregatedTimeSeries<B>> {
 
     private final MainTimeSeries mainTimeSeries;
 
@@ -12,7 +12,7 @@ public class AggregatedTimeSeriesFactory<B extends Bar> implements TimeSeriesFac
         this.mainTimeSeries = mainTimeSeries;
     }
 
-    public static <B extends Bar> AggregatedTimeSeriesFactory<B> from(MainTimeSeries<B> timeSeries) {
+    public static <B extends OneSideBar> AggregatedTimeSeriesFactory<B> from(MainTimeSeries<B> timeSeries) {
         return new AggregatedTimeSeriesFactory<>(timeSeries);
     }
 

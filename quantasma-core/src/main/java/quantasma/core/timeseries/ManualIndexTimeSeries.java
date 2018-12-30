@@ -1,8 +1,8 @@
 package quantasma.core.timeseries;
 
-import org.ta4j.core.Bar;
+import quantasma.core.timeseries.bar.OneSideBar;
 
-public interface ManualIndexTimeSeries<B extends Bar> extends UniversalTimeSeries<B> {
+public interface ManualIndexTimeSeries<B extends OneSideBar> extends UniversalTimeSeries<B> {
     void resetIndexes();
 
     void nextIndex();

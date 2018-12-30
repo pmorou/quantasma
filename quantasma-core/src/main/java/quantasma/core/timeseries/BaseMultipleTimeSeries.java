@@ -1,12 +1,12 @@
 package quantasma.core.timeseries;
 
 import lombok.Getter;
-import org.ta4j.core.Bar;
 import org.ta4j.core.num.Num;
 import quantasma.core.BarPeriod;
 import quantasma.core.DateUtils;
 import quantasma.core.timeseries.bar.BaseBidAskBar;
 import quantasma.core.timeseries.bar.BidAskBar;
+import quantasma.core.timeseries.bar.OneSideBar;
 import quantasma.core.timeseries.bar.factory.BarFactory;
 
 import java.time.ZonedDateTime;
@@ -17,7 +17,7 @@ import java.util.TreeMap;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
-public class BaseMultipleTimeSeries<B extends Bar> implements MultipleTimeSeries<B> {
+public class BaseMultipleTimeSeries<B extends OneSideBar> implements MultipleTimeSeries<B> {
     private static final long serialVersionUID = -8768456438053526527L;
 
     @Getter
@@ -36,11 +36,11 @@ public class BaseMultipleTimeSeries<B extends Bar> implements MultipleTimeSeries
         this.periodTimeSeriesMap = createPeriodTimeSeriesMap(timeSeriesDefinition.getBarPeriod());
     }
 
-    public static <B extends Bar> BaseMultipleTimeSeries<B> create(String symbol, TimeSeriesDefinition timeSeriesDefinition, BarFactory<B> barFactory, UnaryOperator<UniversalTimeSeries<B>> wrapper) {
+    public static <B extends OneSideBar> BaseMultipleTimeSeries<B> create(String symbol, TimeSeriesDefinition timeSeriesDefinition, BarFactory<B> barFactory, UnaryOperator<UniversalTimeSeries<B>> wrapper) {
         return new BaseMultipleTimeSeries<>(symbol, timeSeriesDefinition, barFactory, wrapper);
     }
 
-    public static <B extends Bar> BaseMultipleTimeSeries<B> create(String symbol, TimeSeriesDefinition timeSeriesDefinition, BarFactory<B> barFactory) {
+    public static <B extends OneSideBar> BaseMultipleTimeSeries<B> create(String symbol, TimeSeriesDefinition timeSeriesDefinition, BarFactory<B> barFactory) {
         return new BaseMultipleTimeSeries<>(symbol, timeSeriesDefinition, barFactory, UnaryOperator.identity());
     }
 

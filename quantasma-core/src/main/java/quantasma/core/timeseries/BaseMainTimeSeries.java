@@ -1,16 +1,16 @@
 package quantasma.core.timeseries;
 
-import org.ta4j.core.Bar;
 import quantasma.core.BarPeriod;
+import quantasma.core.timeseries.bar.OneSideBar;
 import quantasma.core.timeseries.bar.factory.BarFactory;
 
-public class BaseMainTimeSeries<B extends Bar> extends BaseUniversalTimeSeries<B> implements MainTimeSeries<B> {
+public class BaseMainTimeSeries<B extends OneSideBar> extends BaseUniversalTimeSeries<B> implements MainTimeSeries<B> {
 
     protected BaseMainTimeSeries(Builder builder) {
         super(builder);
     }
 
-    public static <B extends Bar> MainTimeSeries<B> create(TimeSeriesDefinition timeSeriesDefinition, String symbol, BarFactory<B> barFactory) {
+    public static <B extends OneSideBar> MainTimeSeries<B> create(TimeSeriesDefinition timeSeriesDefinition, String symbol, BarFactory<B> barFactory) {
         return new BaseMainTimeSeries.Builder<>(symbol, timeSeriesDefinition.getBarPeriod(), barFactory)
                 .withName(timeSeriesDefinition.getBarPeriod().getPeriodCode())
                 .withMaxBarCount(timeSeriesDefinition.getMaxBarCount())

@@ -1,23 +1,23 @@
 package quantasma.core.timeseries;
 
-import org.ta4j.core.Bar;
 import org.ta4j.core.BaseTimeSeries;
 import org.ta4j.core.TimeSeries;
 import org.ta4j.core.num.Num;
 import quantasma.core.BarPeriod;
+import quantasma.core.timeseries.bar.OneSideBar;
 import quantasma.core.timeseries.bar.factory.BarFactory;
 
 import java.lang.reflect.Field;
 import java.util.function.Function;
 
-public class ReflectionManualIndexTimeSeries<B extends Bar> implements ManualIndexTimeSeries<B> {
+public class ReflectionManualIndexTimeSeries<B extends OneSideBar> implements ManualIndexTimeSeries<B> {
     protected final UniversalTimeSeries<B> timeSeries;
 
     protected ReflectionManualIndexTimeSeries(UniversalTimeSeries<B> timeSeries) {
         this.timeSeries = timeSeries;
     }
 
-    public static <B extends Bar> ReflectionManualIndexTimeSeries wrap(UniversalTimeSeries<B> timeSeries) {
+    public static <B extends OneSideBar> ReflectionManualIndexTimeSeries wrap(UniversalTimeSeries<B> timeSeries) {
         return new ReflectionManualIndexTimeSeries<>(timeSeries);
     }
 

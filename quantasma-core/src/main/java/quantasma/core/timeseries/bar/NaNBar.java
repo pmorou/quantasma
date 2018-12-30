@@ -2,9 +2,11 @@ package quantasma.core.timeseries.bar;
 
 import org.ta4j.core.Order;
 import org.ta4j.core.num.Num;
+import quantasma.core.Quote;
 
 import java.time.Duration;
 import java.time.ZonedDateTime;
+import java.util.function.Function;
 
 final class NaNBar implements BidAskBar {
 
@@ -105,6 +107,11 @@ final class NaNBar implements BidAskBar {
 
     @Override
     public void addPrice(Num price) {
+        // do nothing
+    }
+
+    @Override
+    public void updateBar(Quote quote, Function<Number, Num> numFunction) {
         // do nothing
     }
 }

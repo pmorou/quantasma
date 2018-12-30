@@ -1,16 +1,16 @@
 package quantasma.core.timeseries;
 
-import org.ta4j.core.Bar;
 import org.ta4j.core.TimeSeries;
 import org.ta4j.core.num.Num;
 import quantasma.core.BarPeriod;
+import quantasma.core.timeseries.bar.OneSideBar;
 import quantasma.core.timeseries.bar.factory.BarFactory;
 
 import java.math.BigDecimal;
 import java.time.format.DateTimeFormatter;
 import java.util.function.Function;
 
-public interface UniversalTimeSeries<B extends Bar> {
+public interface UniversalTimeSeries<B extends OneSideBar> {
 
     /**
      * Simple {@see org.ta4j.core.Bar} typed TimeSeries useful when passing further to ta4j inner logic
@@ -81,8 +81,8 @@ public interface UniversalTimeSeries<B extends Bar> {
     default String getSeriesPeriodDescription() {
         StringBuilder sb = new StringBuilder();
         if (!isEmpty()) {
-            Bar firstBar = getFirstBar();
-            Bar lastBar = getLastBar();
+            OneSideBar firstBar = getFirstBar();
+            OneSideBar lastBar = getLastBar();
             sb.append(firstBar.getEndTime().format(DateTimeFormatter.ISO_DATE_TIME))
               .append(" - ")
               .append(lastBar.getEndTime().format(DateTimeFormatter.ISO_DATE_TIME));

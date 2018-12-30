@@ -1,15 +1,19 @@
 package quantasma.core.timeseries.bar;
 
-import org.ta4j.core.Bar;
 import org.ta4j.core.Order;
 import org.ta4j.core.num.Num;
+import quantasma.core.Quote;
 
 import java.math.BigDecimal;
 import java.util.function.Function;
 
-public interface BidAskBar extends Bar {
+public interface BidAskBar extends OneSideBar {
 
     BidAskBar NaN = NaNBar.getInstance();
+
+    default void updateBar(Quote quote, Function<Number, Num> numFunction) {
+        addPrice(numFunction.apply(quote.getBid()), numFunction.apply(quote.getAsk()));
+    }
 
     default Num getOpenPrice() {
         return getBidOpenPrice();
