@@ -53,7 +53,7 @@ public class UnmodifiableTimeSeries extends ForwardingTimeSeries {
 
     @Override
     public TimeSeries getSubSeries(int startIndex, int endIndex) {
-        return new UnmodifiableTimeSeries(super.getSubSeries(startIndex, endIndex));
+        return new UnmodifiableTimeSeries(delegate().getSubSeries(startIndex, endIndex));
     }
 
     @Override
