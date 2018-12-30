@@ -16,7 +16,7 @@ import quantasma.examples.RSIStrategy.Parameter;
 public class BacktestExample {
     public static void main(String[] args) {
         // tag::BacktestExample[]
-        final TestMarketData testMarketData = new TestMarketData(
+        final TestMarketData testMarketData = new TestMarketData<>(
                 MultipleTimeSeriesBuilder.basedOn(TimeSeriesDefinition.unlimited(BarPeriod.M1))
                                          .symbols("EURUSD")
                                          .aggregate(TimeSeriesDefinition.Group.of("EURUSD")

@@ -24,7 +24,7 @@ class BaseAggregatedTimeSeriesSpec extends Specification {
     @Unroll
     def 'given 1 M5 and 1 M1 bars at time (#time) should return unique bar at index 0'() {
         setup:
-        def mainTimeSeries = BaseMainTimeSeries.create(TimeSeriesDefinition.unlimited(BarPeriod.M1), "symbol")
+        def mainTimeSeries = BaseMainTimeSeries.create(TimeSeriesDefinition.unlimited(BarPeriod.M1), "symbol", barFactory)
         def aggregatedTimeSeries = createBaseAggregatedTimeSeries(mainTimeSeries)
         createM1Bar(0, mainTimeSeries)
         mainTimeSeries.addPrice(1)
@@ -41,7 +41,7 @@ class BaseAggregatedTimeSeriesSpec extends Specification {
     @Unroll
     def 'given 1 M5 and 2 M1 bars at time (#time) should return unique bar at index 1'() {
         given:
-        def mainTimeSeries = BaseMainTimeSeries.create(TimeSeriesDefinition.unlimited(BarPeriod.M1), "symbol")
+        def mainTimeSeries = BaseMainTimeSeries.create(TimeSeriesDefinition.unlimited(BarPeriod.M1), "symbol", barFactory)
         def aggregatedTimeSeries = createBaseAggregatedTimeSeries(mainTimeSeries)
         2.times {
             createM1Bar(it, mainTimeSeries)
@@ -67,7 +67,7 @@ class BaseAggregatedTimeSeriesSpec extends Specification {
     @Unroll
     def 'given 2 M5 bars at time (#time) should return unique bars from index 1 to 0'() {
         setup:
-        def mainTimeSeries = BaseMainTimeSeries.create(TimeSeriesDefinition.unlimited(BarPeriod.M1), "symbol")
+        def mainTimeSeries = BaseMainTimeSeries.create(TimeSeriesDefinition.unlimited(BarPeriod.M1), "symbol", barFactory)
         def aggregatedTimeSeries = createBaseAggregatedTimeSeries(mainTimeSeries)
         6.times {
             createM1Bar(it, mainTimeSeries)
@@ -95,7 +95,7 @@ class BaseAggregatedTimeSeriesSpec extends Specification {
     @Unroll
     def 'given 3 M5 bars should return correct first and last created bar'() {
         setup:
-        def mainTimeSeries = BaseMainTimeSeries.create(TimeSeriesDefinition.unlimited(BarPeriod.M1), "symbol")
+        def mainTimeSeries = BaseMainTimeSeries.create(TimeSeriesDefinition.unlimited(BarPeriod.M1), "symbol", barFactory)
         def aggregatedTimeSeries = createBaseAggregatedTimeSeries(mainTimeSeries)
         def firstM5Bar = null, secondM5Bar = null, thirdM5Bar = null
 

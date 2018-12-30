@@ -23,7 +23,7 @@ public class ParametrizedBacktestExample {
     public static void main(String[] args) {
         // tag::parametrizedBacktestExample[]
         final TestMarketData testMarketData = new TestMarketData(
-                MultipleTimeSeriesBuilder.basedOn(TimeSeriesDefinition.unlimited(BarPeriod.M1))
+                MultipleTimeSeriesBuilder.basedOn(new BidAskBarFactory(), TimeSeriesDefinition.unlimited(BarPeriod.M1))
                                          .symbols("EURUSD")
                                          .aggregate(TimeSeriesDefinition.Group.of("EURUSD")
                                                                               .add(TimeSeriesDefinition.unlimited(BarPeriod.M5)))

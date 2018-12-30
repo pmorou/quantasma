@@ -8,17 +8,17 @@ import org.ta4j.core.TimeSeries;
 import org.ta4j.core.num.Num;
 import org.ta4j.core.num.PrecisionNum;
 import quantasma.core.BarPeriod;
-import quantasma.core.timeseries.bar.BaseBidAskBar;
 import quantasma.core.timeseries.bar.BidAskBar;
+import quantasma.core.timeseries.bar.factory.BarFactory;
 
-import java.time.Duration;
-import java.time.ZonedDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
 public class BaseUniversalTimeSeries<B extends Bar> implements UniversalTimeSeries<B> {
     private final TimeSeries timeSeries;
+    @Getter
+    private final BarFactory<B> barFactory;
     @Getter
     private final String symbol;
     @Getter
@@ -31,6 +31,7 @@ public class BaseUniversalTimeSeries<B extends Bar> implements UniversalTimeSeri
                       .withNumTypeOf(builder.getNumFunction())
                       .withMaxBarCount(builder.getMaxBarCount())
                       .build();
+        this.barFactory = (BarFactory<B>) builder.getBarFactory();
         this.symbol = builder.getSymbol();
         this.barPeriod = builder.getBarPeriod();
     }
@@ -54,11 +55,6 @@ public class BaseUniversalTimeSeries<B extends Bar> implements UniversalTimeSeri
     @Override
     public void addBar(B bar, boolean replace) {
         timeSeries.addBar(bar, replace);
-    }
-
-    @Override
-    public void addBar(Duration timePeriod, ZonedDateTime endTime) {
-        addBar((B) new BaseBidAskBar(timePeriod, endTime, this::numOf)); // TODO: provide generic method
     }
 
     @Override
@@ -126,15 +122,17 @@ public class BaseUniversalTimeSeries<B extends Bar> implements UniversalTimeSeri
     public static class Builder<T extends Builder<T, R>, R extends BaseUniversalTimeSeries> {
         private final String symbol;
         private final BarPeriod barPeriod;
+        private final BarFactory<?> barFactory;
 
         private String name = "unamed_series";
         private List<Bar> bars = new ArrayList<>();
         private int maxBarCount = Integer.MAX_VALUE;
         private Function<Number, Num> numFunction = PrecisionNum::valueOf;
 
-        public Builder(String symbol, BarPeriod barPeriod) {
+        public Builder(String symbol, BarPeriod barPeriod, BarFactory<?> barFactory) {
             this.symbol = symbol;
             this.barPeriod = barPeriod;
+            this.barFactory = barFactory;
         }
 
         public T withName(String name) {

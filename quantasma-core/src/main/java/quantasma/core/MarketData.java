@@ -1,5 +1,6 @@
 package quantasma.core;
 
+import org.ta4j.core.Bar;
 import quantasma.core.timeseries.MultipleTimeSeries;
 
 import java.time.ZonedDateTime;
@@ -7,18 +8,18 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public class MarketData {
+public class MarketData<B extends Bar> {
 
-    protected final Map<String, MultipleTimeSeries> multipleTimeSeriesMap = new HashMap<>();
+    protected final Map<String, MultipleTimeSeries<B>> multipleTimeSeriesMap = new HashMap<>();
 
-    public MarketData(Collection<? extends MultipleTimeSeries> multipleTimeSeries) {
-        for (MultipleTimeSeries each : multipleTimeSeries) {
+    public MarketData(Collection<? extends MultipleTimeSeries<B>> multipleTimeSeries) {
+        for (MultipleTimeSeries<B> each : multipleTimeSeries) {
             this.multipleTimeSeriesMap.put(each.getSymbol(), each);
         }
     }
 
-    public MultipleTimeSeries of(String symbol) {
-        final MultipleTimeSeries multipleTimeSeries = multipleTimeSeriesMap.get(symbol);
+    public MultipleTimeSeries<B> of(String symbol) {
+        final MultipleTimeSeries<B> multipleTimeSeries = multipleTimeSeriesMap.get(symbol);
         if (isUnknownSymbol(multipleTimeSeries)) {
             throw new IllegalArgumentException(String.format("[%s] is an unknown symbol", symbol));
         }
@@ -26,7 +27,7 @@ public class MarketData {
     }
 
     public void add(String symbol, ZonedDateTime date, double price) {
-        final MultipleTimeSeries multipleTimeSeries = multipleTimeSeriesMap.get(symbol);
+        final MultipleTimeSeries<B> multipleTimeSeries = multipleTimeSeriesMap.get(symbol);
         if (isUnknownSymbol(multipleTimeSeries)) {
             return;
         }
@@ -35,7 +36,7 @@ public class MarketData {
     }
 
     public void add(String symbol, ZonedDateTime date, double bid, double ask) {
-        final MultipleTimeSeries multipleTimeSeries = multipleTimeSeriesMap.get(symbol);
+        final MultipleTimeSeries<B> multipleTimeSeries = multipleTimeSeriesMap.get(symbol);
         if (isUnknownSymbol(multipleTimeSeries)) {
             return;
         }
@@ -43,7 +44,7 @@ public class MarketData {
         ensureSameBarsNumberOverAllTimeSeries(symbol, date);
     }
 
-    private static boolean isUnknownSymbol(MultipleTimeSeries multipleTimeSeries) {
+    private static <B extends Bar> boolean isUnknownSymbol(MultipleTimeSeries<B> multipleTimeSeries) {
         return multipleTimeSeries == null;
     }
 

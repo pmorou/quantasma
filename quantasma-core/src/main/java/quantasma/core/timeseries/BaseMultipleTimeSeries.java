@@ -2,12 +2,12 @@ package quantasma.core.timeseries;
 
 import lombok.Getter;
 import org.ta4j.core.Bar;
-import org.ta4j.core.TimeSeries;
 import org.ta4j.core.num.Num;
 import quantasma.core.BarPeriod;
 import quantasma.core.DateUtils;
 import quantasma.core.timeseries.bar.BaseBidAskBar;
 import quantasma.core.timeseries.bar.BidAskBar;
+import quantasma.core.timeseries.bar.factory.BarFactory;
 
 import java.time.ZonedDateTime;
 import java.util.Comparator;
@@ -17,94 +17,95 @@ import java.util.TreeMap;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
-public class BaseMultipleTimeSeries implements MultipleTimeSeries {
+public class BaseMultipleTimeSeries<B extends Bar> implements MultipleTimeSeries<B> {
     private static final long serialVersionUID = -8768456438053526527L;
 
     @Getter
     private final String symbol;
     @Getter
-    private final MainTimeSeries mainTimeSeries;
-    private final Map<BarPeriod, TypedTimeSeries<BidAskBar>> periodTimeSeriesMap;
-    private final UnaryOperator<TimeSeries> wrapper;
+    private final MainTimeSeries<B> mainTimeSeries;
+    private final Map<BarPeriod, UniversalTimeSeries<B>> periodTimeSeriesMap;
+    private final BarFactory<B> barFactory;
+    private final UnaryOperator<UniversalTimeSeries<B>> wrapper;
 
-    private BaseMultipleTimeSeries(String symbol, TimeSeriesDefinition timeSeriesDefinition, UnaryOperator<TimeSeries> wrapper) {
+    private BaseMultipleTimeSeries(String symbol, TimeSeriesDefinition timeSeriesDefinition, BarFactory<B> barFactory, UnaryOperator<UniversalTimeSeries<B>> wrapper) {
         this.symbol = symbol;
+        this.barFactory = barFactory;
         this.wrapper = wrapper;
-        this.mainTimeSeries = BaseMainTimeSeries.create(timeSeriesDefinition, symbol);
+        this.mainTimeSeries = BaseMainTimeSeries.create(timeSeriesDefinition, symbol, barFactory);
         this.periodTimeSeriesMap = createPeriodTimeSeriesMap(timeSeriesDefinition.getBarPeriod());
     }
 
-    public static BaseMultipleTimeSeries create(String symbol, TimeSeriesDefinition timeSeriesDefinition, UnaryOperator<TimeSeries> wrapper) {
-        return new BaseMultipleTimeSeries(symbol, timeSeriesDefinition, wrapper);
+    public static <B extends Bar> BaseMultipleTimeSeries<B> create(String symbol, TimeSeriesDefinition timeSeriesDefinition, BarFactory<B> barFactory, UnaryOperator<UniversalTimeSeries<B>> wrapper) {
+        return new BaseMultipleTimeSeries<>(symbol, timeSeriesDefinition, barFactory, wrapper);
     }
 
-    public static BaseMultipleTimeSeries create(String symbol, TimeSeriesDefinition timeSeriesDefinition) {
-        return new BaseMultipleTimeSeries(symbol, timeSeriesDefinition, UnaryOperator.identity());
+    public static <B extends Bar> BaseMultipleTimeSeries<B> create(String symbol, TimeSeriesDefinition timeSeriesDefinition, BarFactory<B> barFactory) {
+        return new BaseMultipleTimeSeries<>(symbol, timeSeriesDefinition, barFactory, UnaryOperator.identity());
     }
 
-    private Map<BarPeriod, TypedTimeSeries<BidAskBar>> createPeriodTimeSeriesMap(BarPeriod barPeriod) {
-        final Map<BarPeriod, TypedTimeSeries<BidAskBar>> timeSeriesMap = new TreeMap<>(Comparator.comparing(BarPeriod::getPeriod)); // first period should save value first
-        timeSeriesMap.put(barPeriod, TypedTimeSeries.create(BidAskBar.class, wrap(mainTimeSeries.timeSeries())));
+    private Map<BarPeriod, UniversalTimeSeries<B>> createPeriodTimeSeriesMap(BarPeriod barPeriod) {
+        final Map<BarPeriod, UniversalTimeSeries<B>> timeSeriesMap = new TreeMap<>(Comparator.comparing(BarPeriod::getPeriod)); // first period should save value first
+        timeSeriesMap.put(barPeriod, wrap(mainTimeSeries));
         return timeSeriesMap;
     }
 
     @Override
-    public MultipleTimeSeries aggregate(TimeSeriesDefinition timeSeriesDefinition) {
-        final AggregatedTimeSeries timeSeries = mainTimeSeries.aggregate(timeSeriesDefinition);
-        periodTimeSeriesMap.put(timeSeriesDefinition.getBarPeriod(), TypedTimeSeries.create(BidAskBar.class, wrap(timeSeries.timeSeries())));
+    public MultipleTimeSeries<B> aggregate(TimeSeriesDefinition timeSeriesDefinition) {
+        final AggregatedTimeSeries<B> timeSeries = mainTimeSeries.aggregate(timeSeriesDefinition);
+        periodTimeSeriesMap.put(timeSeriesDefinition.getBarPeriod(), wrap(timeSeries));
         return this;
     }
 
-    private TimeSeries wrap(TimeSeries timeSeries) {
+    private UniversalTimeSeries<B> wrap(UniversalTimeSeries<B> timeSeries) {
         return wrapper.apply(timeSeries);
     }
 
     @Override
     public void updateBar(ZonedDateTime priceDate, double bid, double ask) {
-        periodTimeSeriesMap.forEach((barPeriod, typedTimeSeries) -> {
-            if (empty(typedTimeSeries) || isEqualOrAfter(priceDate, typedTimeSeries.getLastBar().getEndTime())) {
-                insertNewBar(priceDate, barPeriod, typedTimeSeries);
+        periodTimeSeriesMap.forEach((barPeriod, timeSeries) -> {
+            if (empty(timeSeries) || isEqualOrAfter(priceDate, timeSeries.getLastBar().getEndTime())) {
+                insertNewBar(priceDate, barPeriod, timeSeries);
             }
-            final BidAskBar lastBar = typedTimeSeries.getLastBar();
-            lastBar.addPrice(typedTimeSeries.getTimeSeries().numOf(bid), typedTimeSeries.getTimeSeries().numOf(ask));
+            final B lastBar = timeSeries.getLastBar();
+            lastBar.addPrice(timeSeries.numOf(bid), timeSeries.numOf(ask));
         });
     }
 
     @Override
     public void updateBar(ZonedDateTime priceDate, double price) {
-        periodTimeSeriesMap.forEach((barPeriod, typedTimeSeries) -> {
-            if (empty(typedTimeSeries) || isEqualOrAfter(priceDate, typedTimeSeries.getLastBar().getEndTime())) {
-                insertNewBar(priceDate, barPeriod, typedTimeSeries);
+        periodTimeSeriesMap.forEach((barPeriod, timeSeries) -> {
+            if (empty(timeSeries) || isEqualOrAfter(priceDate, timeSeries.getLastBar().getEndTime())) {
+                insertNewBar(priceDate, barPeriod, timeSeries);
             }
-            final Bar lastBar = typedTimeSeries.getLastBar();
-            lastBar.addPrice(typedTimeSeries.getTimeSeries().numOf(price));
+            final Bar lastBar = timeSeries.getLastBar();
+            lastBar.addPrice(timeSeries.numOf(price));
         });
     }
 
     @Override
     public void createBar(ZonedDateTime priceDate) {
-        periodTimeSeriesMap.forEach((barPeriod, typedTimeSeries) -> {
-            if (empty(typedTimeSeries)) {
-                insertNewBar(priceDate, barPeriod, typedTimeSeries);
-            } else if (isEqualOrAfter(priceDate, typedTimeSeries.getLastBar().getEndTime())) {
-                insertNewBarWithLastPrice(priceDate, barPeriod, typedTimeSeries);
+        periodTimeSeriesMap.forEach((barPeriod, timeSeries) -> {
+            if (empty(timeSeries)) {
+                insertNewBar(priceDate, barPeriod, timeSeries);
+            } else if (isEqualOrAfter(priceDate, timeSeries.getLastBar().getEndTime())) {
+                insertNewBarWithLastPrice(priceDate, barPeriod, timeSeries);
             }
         });
     }
 
-    private boolean empty(TypedTimeSeries<? extends Bar> typedTimeSeries) {
-        return typedTimeSeries.getTimeSeries().getBarCount() == 0;
+    private boolean empty(UniversalTimeSeries timeSeries) {
+        return timeSeries.getBarCount() == 0;
     }
 
-    private void insertNewBar(ZonedDateTime priceDate, BarPeriod barPeriod, TypedTimeSeries<? super BidAskBar> typedTimeSeries) {
-        typedTimeSeries.addBar(new BaseBidAskBar(barPeriod.getPeriod(),
-                                                 DateUtils.createEndDate(priceDate, barPeriod),
-                                                 typedTimeSeries.getTimeSeries().function()));
+    private void insertNewBar(ZonedDateTime priceDate, BarPeriod barPeriod, UniversalTimeSeries<? super BidAskBar> timeSeries) {
+        timeSeries.addBar(new BaseBidAskBar(barPeriod.getPeriod(),
+                                            DateUtils.createEndDate(priceDate, barPeriod),
+                                            timeSeries.function()));
     }
 
-    private void insertNewBarWithLastPrice(ZonedDateTime priceDate, BarPeriod barPeriod, TypedTimeSeries<? super BidAskBar> typedTimeSeries) {
-        final Num lastPrice = typedTimeSeries.getLastBar().getClosePrice();
-        final TimeSeries timeSeries = typedTimeSeries.getTimeSeries();
+    private void insertNewBarWithLastPrice(ZonedDateTime priceDate, BarPeriod barPeriod, UniversalTimeSeries<? super BidAskBar> timeSeries) {
+        final Num lastPrice = timeSeries.getLastBar().getClosePrice();
         timeSeries.addBar(new BaseBidAskBar(barPeriod.getPeriod(),
                                             DateUtils.createEndDate(priceDate, barPeriod),
                                             timeSeries.function()));
@@ -121,20 +122,19 @@ public class BaseMultipleTimeSeries implements MultipleTimeSeries {
                                   .stream()
                                   .findFirst()
                                   .map(entry -> entry.getValue()
-                                                     .getTimeSeries()
                                                      .getEndIndex())
                                   .orElse(-1);
     }
 
     @Override
-    public TimeSeries getTimeSeries(BarPeriod period) {
-        return periodTimeSeriesMap.get(period).getTimeSeries();
+    public UniversalTimeSeries<B> getTimeSeries(BarPeriod period) {
+        return periodTimeSeriesMap.get(period);
     }
 
     @Override
-    public List<TimeSeries> getTimeSeries() {
+    public List<UniversalTimeSeries<B>> getTimeSeries() {
         return periodTimeSeriesMap.entrySet().stream()
-                                  .map(barPeriodTypedTimeSeriesEntry -> barPeriodTypedTimeSeriesEntry.getValue().getTimeSeries())
+                                  .map(Map.Entry::getValue)
                                   .collect(Collectors.toList());
     }
 

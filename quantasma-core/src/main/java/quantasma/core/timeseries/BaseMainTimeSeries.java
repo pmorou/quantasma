@@ -2,6 +2,7 @@ package quantasma.core.timeseries;
 
 import org.ta4j.core.Bar;
 import quantasma.core.BarPeriod;
+import quantasma.core.timeseries.bar.factory.BarFactory;
 
 public class BaseMainTimeSeries<B extends Bar> extends BaseUniversalTimeSeries<B> implements MainTimeSeries<B> {
 
@@ -9,15 +10,15 @@ public class BaseMainTimeSeries<B extends Bar> extends BaseUniversalTimeSeries<B
         super(builder);
     }
 
-    public static MainTimeSeries create(TimeSeriesDefinition timeSeriesDefinition, String symbol) {
-        return new BaseMainTimeSeries.Builder<>(symbol, timeSeriesDefinition.getBarPeriod())
+    public static <B extends Bar> MainTimeSeries<B> create(TimeSeriesDefinition timeSeriesDefinition, String symbol, BarFactory<B> barFactory) {
+        return new BaseMainTimeSeries.Builder<>(symbol, timeSeriesDefinition.getBarPeriod(), barFactory)
                 .withName(timeSeriesDefinition.getBarPeriod().getPeriodCode())
                 .withMaxBarCount(timeSeriesDefinition.getMaxBarCount())
                 .build();
     }
 
     @Override
-    public AggregatedTimeSeries aggregate(TimeSeriesDefinition timeSeriesDefinition) {
+    public AggregatedTimeSeries<B> aggregate(TimeSeriesDefinition timeSeriesDefinition) {
         return AggregatedTimeSeriesFactory.from(this).createInstance(timeSeriesDefinition);
     }
 
@@ -29,8 +30,8 @@ public class BaseMainTimeSeries<B extends Bar> extends BaseUniversalTimeSeries<B
      */
     public static class Builder<T extends Builder<T, R>, R extends BaseMainTimeSeries> extends BaseUniversalTimeSeries.Builder<T, R> {
 
-        public Builder(String symbol, BarPeriod barPeriod) {
-            super(symbol, barPeriod);
+        public Builder(String symbol, BarPeriod barPeriod, BarFactory<?> barFactory) {
+            super(symbol, barPeriod, barFactory);
         }
 
         @Override

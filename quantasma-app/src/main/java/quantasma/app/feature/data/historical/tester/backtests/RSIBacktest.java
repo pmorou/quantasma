@@ -129,7 +129,7 @@ public class RSIBacktest implements StrategyBacktest {
     }
 
     private static TestMarketData createTestMarketData() {
-        return new TestMarketData(
+        return new TestMarketData<>(
                 MultipleTimeSeriesBuilder.basedOn(TimeSeriesDefinition.unlimited(BASE_PERIOD))
                                          .symbols(SYMBOL)
                                          .wrap(ReflectionManualIndexTimeSeries::wrap)

@@ -1,14 +1,14 @@
 package quantasma.core.timeseries;
 
-import org.ta4j.core.TimeSeries;
+import org.ta4j.core.Bar;
 import quantasma.core.BarPeriod;
 
 import java.io.Serializable;
 import java.time.ZonedDateTime;
 import java.util.List;
 
-public interface MultipleTimeSeries extends Serializable {
-    MultipleTimeSeries aggregate(TimeSeriesDefinition timeSeriesDefinition);
+public interface MultipleTimeSeries<B extends Bar> extends Serializable {
+    MultipleTimeSeries<B> aggregate(TimeSeriesDefinition timeSeriesDefinition);
 
     void updateBar(ZonedDateTime priceDate, double bid, double ask);
 
@@ -20,9 +20,9 @@ public interface MultipleTimeSeries extends Serializable {
 
     String getSymbol();
 
-    TimeSeries getTimeSeries(BarPeriod period);
+    UniversalTimeSeries<B> getTimeSeries(BarPeriod period);
 
-    List<TimeSeries> getTimeSeries();
+    List<UniversalTimeSeries<B>> getTimeSeries();
 
-    MainTimeSeries getMainTimeSeries();
+    MainTimeSeries<B> getMainTimeSeries();
 }

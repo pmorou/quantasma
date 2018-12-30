@@ -165,7 +165,7 @@ class MarketDataSpec extends Specification {
 
     private static MarketData createTimeSeriesFor(String... symbols) {
         return new MarketData(
-                MultipleTimeSeriesBuilder.basedOn(TimeSeriesDefinition.limited(ONE_MINUTE_PERIOD, 2))
+                MultipleTimeSeriesBuilder.basedOn(new BidAskBarFactory(), TimeSeriesDefinition.limited(ONE_MINUTE_PERIOD, 2))
                         .symbols(symbols)
                         .build())
     }
@@ -248,7 +248,7 @@ class MarketDataSpec extends Specification {
 
     private MarketData createTwoSymbolMarketData(int oneMinutePeriod) {
         return new MarketData(
-                MultipleTimeSeriesBuilder.basedOn(TimeSeriesDefinition.limited(ONE_MINUTE_PERIOD, oneMinutePeriod))
+                MultipleTimeSeriesBuilder.basedOn(new BidAskBarFactory(), TimeSeriesDefinition.limited(ONE_MINUTE_PERIOD, oneMinutePeriod))
                         .symbols("symbol1", "symbol2")
                         .build())
     }

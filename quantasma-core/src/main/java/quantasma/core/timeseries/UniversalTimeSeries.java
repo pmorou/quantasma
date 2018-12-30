@@ -4,10 +4,9 @@ import org.ta4j.core.Bar;
 import org.ta4j.core.TimeSeries;
 import org.ta4j.core.num.Num;
 import quantasma.core.BarPeriod;
+import quantasma.core.timeseries.bar.factory.BarFactory;
 
 import java.math.BigDecimal;
-import java.time.Duration;
-import java.time.ZonedDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.function.Function;
 
@@ -16,15 +15,16 @@ public interface UniversalTimeSeries<B extends Bar> {
     /**
      * Simple {@see org.ta4j.core.Bar} typed TimeSeries useful when passing further to ta4j inner logic
      *
-     * @implSpec Returns unmodifiable TimeSeries
-     *
      * @return TimeSeries
+     * @implSpec Returns unmodifiable TimeSeries
      */
     TimeSeries timeSeries();
 
     BarPeriod getBarPeriod();
 
     String getSymbol();
+
+    BarFactory<B> getBarFactory();
 
     B getBar(int i);
 
@@ -36,13 +36,15 @@ public interface UniversalTimeSeries<B extends Bar> {
         return getBar(getEndIndex());
     }
 
+    default void addBar() {
+        addBar(getBarFactory().create(getBarPeriod(), function()));
+    }
+
     default void addBar(B bar) {
         addBar(bar, false);
     }
 
     void addBar(B bar, boolean replace);
-
-    void addBar(Duration timePeriod, ZonedDateTime endTime);
 
     default void addTrade(Number tradeVolume, Number tradePrice) {
         addTrade(numOf(tradeVolume), numOf(tradePrice));

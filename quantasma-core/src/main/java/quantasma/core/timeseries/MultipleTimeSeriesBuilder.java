@@ -1,6 +1,9 @@
 package quantasma.core.timeseries;
 
-import org.ta4j.core.TimeSeries;
+import org.ta4j.core.Bar;
+import quantasma.core.timeseries.bar.BidAskBar;
+import quantasma.core.timeseries.bar.factory.BarFactory;
+import quantasma.core.timeseries.bar.factory.BidAskBarFactory;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -11,40 +14,47 @@ import java.util.function.Function;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
-public class MultipleTimeSeriesBuilder {
+public class MultipleTimeSeriesBuilder<B extends Bar> {
 
     private final TimeSeriesDefinition baseTimeSeriesDefinition;
     private final Set<TimeSeriesDefinition.Group> aggregatedTimeSeriesDefinitions = new HashSet<>();
     private final Set<String> symbols = new HashSet<>();
 
-    private UnaryOperator<TimeSeries> wrapper = timeSeries -> timeSeries;
+    private BarFactory<B> barFactory;
+    private UnaryOperator<UniversalTimeSeries<B>> wrapper = timeSeries -> timeSeries;
 
-    private MultipleTimeSeriesBuilder(TimeSeriesDefinition baseTimeSeriesDefinition) {
+    private MultipleTimeSeriesBuilder(BarFactory<B> barFactory, TimeSeriesDefinition baseTimeSeriesDefinition) {
+        this.barFactory = barFactory;
         this.baseTimeSeriesDefinition = baseTimeSeriesDefinition;
     }
 
-    public static MultipleTimeSeriesBuilder basedOn(TimeSeriesDefinition timeSeriesDefinition) {
-        return new MultipleTimeSeriesBuilder(timeSeriesDefinition);
+    public static MultipleTimeSeriesBuilder<BidAskBar> basedOn(TimeSeriesDefinition timeSeriesDefinition) {
+        return new MultipleTimeSeriesBuilder<>(new BidAskBarFactory(), timeSeriesDefinition);
     }
 
-    public MultipleTimeSeriesBuilder aggregate(TimeSeriesDefinition.Group definitions) {
+    public static <B extends Bar> MultipleTimeSeriesBuilder<B> basedOn(BarFactory<B> barFactory,
+                                                                       TimeSeriesDefinition timeSeriesDefinition) {
+        return new MultipleTimeSeriesBuilder<>(barFactory, timeSeriesDefinition);
+    }
+
+    public MultipleTimeSeriesBuilder<B> aggregate(TimeSeriesDefinition.Group definitions) {
         this.aggregatedTimeSeriesDefinitions.add(definitions);
         return this;
     }
 
-    public MultipleTimeSeriesBuilder symbols(String... symbols) {
+    public MultipleTimeSeriesBuilder<B> symbols(String... symbols) {
         this.symbols.addAll(Arrays.asList(symbols));
         return this;
     }
 
-    public MultipleTimeSeriesBuilder wrap(UnaryOperator<TimeSeries> wrapper) {
+    public MultipleTimeSeriesBuilder<B> wrap(UnaryOperator<UniversalTimeSeries<B>> wrapper) {
         this.wrapper = wrapper;
         return this;
     }
 
-    public Collection<? extends MultipleTimeSeries> build() {
-        final Map<String, MultipleTimeSeries> baseTimeSeries = symbols.stream()
-                                                                      .map(symbol -> BaseMultipleTimeSeries.create(symbol, baseTimeSeriesDefinition, wrapper))
+    public Collection<? extends MultipleTimeSeries<B>> build() {
+        final Map<String, MultipleTimeSeries<B>> baseTimeSeries = symbols.stream()
+                                                                      .map(symbol -> BaseMultipleTimeSeries.create(symbol, baseTimeSeriesDefinition, barFactory, wrapper))
                                                                       .collect(Collectors.toMap(BaseMultipleTimeSeries::getSymbol, Function.identity()));
 
         for (TimeSeriesDefinition.Group groupDefinition : aggregatedTimeSeriesDefinitions) {
@@ -60,5 +70,4 @@ public class MultipleTimeSeriesBuilder {
 
         return baseTimeSeries.values();
     }
-
 }
