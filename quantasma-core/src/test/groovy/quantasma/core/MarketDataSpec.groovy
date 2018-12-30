@@ -76,7 +76,7 @@ class MarketDataSpec extends Specification {
         given:
         def marketData = createTimeSeriesFor("targetSymbol", "symbol2")
         def targetTimeSeries = marketData.of("targetSymbol").getTimeSeries(ONE_MINUTE_PERIOD)
-        def targetClosePriceIndicator = new ClosePriceIndicator(targetTimeSeries)
+        def targetClosePriceIndicator = new ClosePriceIndicator(targetTimeSeries.timeSeries())
         def isEqualToOneRule = new IsEqualRule(targetClosePriceIndicator, 1)
 
         and:
@@ -101,8 +101,8 @@ class MarketDataSpec extends Specification {
         def marketData = createTimeSeriesFor("referenceSymbol", "targetSymbol")
         def referenceTimeSeries = marketData.of("referenceSymbol").getTimeSeries(ONE_MINUTE_PERIOD)
         def targetTimeSeries = marketData.of("targetSymbol").getTimeSeries(ONE_MINUTE_PERIOD)
-        def rule1 = new OverIndicatorRule(new RSIIndicator(new ClosePriceIndicator(referenceTimeSeries), 2), 70)
-        def rule2 = new OverIndicatorRule(new RSIIndicator(new ClosePriceIndicator(targetTimeSeries), 2), 70)
+        def rule1 = new OverIndicatorRule(new RSIIndicator(new ClosePriceIndicator(referenceTimeSeries.timeSeries()), 2), 70)
+        def rule2 = new OverIndicatorRule(new RSIIndicator(new ClosePriceIndicator(targetTimeSeries.timeSeries()), 2), 70)
 
         and:
         marketData.add(Quote.bidAsk("referenceSymbol", time, 0, 0))
