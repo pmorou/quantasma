@@ -4,8 +4,6 @@ import quantasma.core.BarPeriod;
 import quantasma.core.timeseries.BaseMainTimeSeries;
 import quantasma.core.timeseries.BaseUniversalTimeSeries;
 import quantasma.core.timeseries.bar.OneSidedBar;
-import quantasma.core.timeseries.bar.BarFactory;
-import quantasma.core.timeseries.bar.BidAskBarFactory;
 
 public class BaseMainTimeSeriesChild<B extends OneSidedBar> extends BaseMainTimeSeries<B> {
     protected BaseMainTimeSeriesChild(Builder builder) {
@@ -17,8 +15,8 @@ public class BaseMainTimeSeriesChild<B extends OneSidedBar> extends BaseMainTime
      */
     public static class Builder<T extends Builder<T, R>, R extends BaseMainTimeSeriesChild> extends BaseMainTimeSeries.Builder<T, R> {
 
-        public Builder(String symbol, BarPeriod barPeriod, BarFactory<?> barFactory) {
-            super(symbol, barPeriod, barFactory);
+        public Builder(String symbol, BarPeriod barPeriod) {
+            super(symbol, barPeriod);
         }
 
         public T withChild() {
@@ -37,7 +35,7 @@ public class BaseMainTimeSeriesChild<B extends OneSidedBar> extends BaseMainTime
     }
 
     public static void main(String[] args) {
-        final BaseMainTimeSeriesChild example = new Builder<>("example", BarPeriod.M1, new BidAskBarFactory())
+        final BaseMainTimeSeriesChild example = new Builder<>("example", BarPeriod.M1)
                 .withName("from mother of all builders")
                 .withChild() // Current builder, type preserved
                 .build();

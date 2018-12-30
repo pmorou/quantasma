@@ -9,7 +9,6 @@ import quantasma.core.timeseries.BaseUniversalTimeSeries
 import quantasma.core.timeseries.UniversalTimeSeries
 import quantasma.core.timeseries.bar.BaseOneSidedBar
 import quantasma.core.timeseries.bar.OneSidedBar
-import quantasma.core.timeseries.bar.OneSidedBarFactory
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -45,7 +44,7 @@ class FinishDepositCriterionSpec extends Specification {
     }
 
     private static BaseUniversalTimeSeries createTimeSeriesWithBars() {
-        final BaseUniversalTimeSeries timeSeries = new BaseUniversalTimeSeries.Builder("symbol", BarPeriod.M1, new OneSidedBarFactory())
+        final BaseUniversalTimeSeries timeSeries = new BaseUniversalTimeSeries.Builder("symbol", BarPeriod.M1)
                 .withNumTypeOf(NUM_FUNC)
                 .build()
 

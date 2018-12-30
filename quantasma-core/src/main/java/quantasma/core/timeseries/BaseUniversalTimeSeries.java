@@ -8,9 +8,10 @@ import org.ta4j.core.TimeSeries;
 import org.ta4j.core.num.Num;
 import org.ta4j.core.num.PrecisionNum;
 import quantasma.core.BarPeriod;
+import quantasma.core.timeseries.bar.BarFactory;
 import quantasma.core.timeseries.bar.BidAskBar;
 import quantasma.core.timeseries.bar.OneSidedBar;
-import quantasma.core.timeseries.bar.BarFactory;
+import quantasma.core.timeseries.bar.OneSidedBarFactory;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -123,17 +124,16 @@ public class BaseUniversalTimeSeries<B extends OneSidedBar> implements Universal
     public static class Builder<T extends Builder<T, R>, R extends BaseUniversalTimeSeries> {
         private final String symbol;
         private final BarPeriod barPeriod;
-        private final BarFactory<?> barFactory;
 
         private String name = "unamed_series";
         private List<Bar> bars = new ArrayList<>();
         private int maxBarCount = Integer.MAX_VALUE;
+        private BarFactory<?> barFactory = new OneSidedBarFactory();
         private Function<Number, Num> numFunction = PrecisionNum::valueOf;
 
-        public Builder(String symbol, BarPeriod barPeriod, BarFactory<?> barFactory) {
+        public Builder(String symbol, BarPeriod barPeriod) {
             this.symbol = symbol;
             this.barPeriod = barPeriod;
-            this.barFactory = barFactory;
         }
 
         public T withName(String name) {
@@ -158,6 +158,11 @@ public class BaseUniversalTimeSeries<B extends OneSidedBar> implements Universal
 
         public T withMaxBarCount(int maxBarCount) {
             this.maxBarCount = maxBarCount;
+            return self();
+        }
+
+        public T withBarFactory(BarFactory<?> barFactory) {
+            this.barFactory = barFactory;
             return self();
         }
 

@@ -5,7 +5,6 @@ import quantasma.core.BarPeriod
 import quantasma.core.timeseries.bar.BaseOneSidedBar
 import quantasma.core.timeseries.bar.NaNBar
 import quantasma.core.timeseries.bar.OneSidedBar
-import quantasma.core.timeseries.bar.OneSidedBarFactory
 import spock.lang.Specification
 
 import java.time.Duration
@@ -17,7 +16,7 @@ class BaseUniversalTimeSeriesSpec extends Specification {
 
     def "given time series limited to 2 bars when added 3 bars should return NaN for first one only"() {
         given:
-        def timeseries = new BaseUniversalTimeSeries.Builder("symbol", BarPeriod.M1, new OneSidedBarFactory()).withMaxBarCount(2).build()
+        def timeseries = new BaseUniversalTimeSeries.Builder("symbol", BarPeriod.M1).withMaxBarCount(2).build()
 
         when:
         3.times {

@@ -20,10 +20,10 @@ public class AggregatedTimeSeriesFactory<B extends OneSidedBar> implements TimeS
     public Function<TimeSeriesDefinition, AggregatedTimeSeries<B>> function() {
         return timeSeriesDefinition -> new BaseAggregatedTimeSeries.Builder<>(mainTimeSeries.getSymbol(),
                                                                               timeSeriesDefinition.getBarPeriod(),
-                                                                              mainTimeSeries,
-                                                                              mainTimeSeries.getBarFactory())
+                                                                              mainTimeSeries)
                 .withMaxBarCount(timeSeriesDefinition.getMaxBarCount())
                 .withName(timeSeriesDefinition.getBarPeriod().getPeriodCode())
+                .withBarFactory(mainTimeSeries.getBarFactory())
                 .build();
     }
 }
