@@ -58,7 +58,7 @@ public class ReflectionManualIndexTimeSeries<B extends OneSideBar> implements Ma
     }
 
     protected int totalBarsCount() {
-        return getDelegate().getBarCount();
+        return timeSeries.timeSeries().getBarData().size();
     }
 
     protected int stealBeginIndex() {
