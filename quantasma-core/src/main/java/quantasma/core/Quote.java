@@ -15,7 +15,7 @@ public class Quote {
     private final double ask;
 
     public static Quote price(String symbol, ZonedDateTime time, double price) {
-        return new Quote(symbol, time, price, 0.0d);
+        return new Quote(symbol, time, price, Double.NaN);
     }
 
     public static Quote bidAsk(String symbol, ZonedDateTime time, double bid, double ask) {
