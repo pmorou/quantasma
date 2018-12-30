@@ -56,9 +56,10 @@ public class MarketDataBuilder<B extends OneSidedBar> {
     }
 
     public MarketData<B> build() {
-        final Map<String, MultipleTimeSeries<B>> baseTimeSeries = symbols.stream()
-                                                                         .map(symbol -> BaseMultipleTimeSeries.create(symbol, baseTimeSeriesDefinition, barFactory, wrapper))
-                                                                         .collect(Collectors.toMap(BaseMultipleTimeSeries::getSymbol, Function.identity()));
+        final Map<String, MultipleTimeSeries<B>> baseTimeSeries =
+                symbols.stream()
+                       .map(symbol -> BaseMultipleTimeSeries.create(symbol, baseTimeSeriesDefinition, barFactory, wrapper))
+                       .collect(Collectors.toMap(BaseMultipleTimeSeries::getSymbol, Function.identity()));
 
         for (TimeSeriesDefinition.Group groupDefinition : aggregatedTimeSeriesDefinitions) {
             for (String symbol : groupDefinition.getSymbols()) {
@@ -66,7 +67,8 @@ public class MarketDataBuilder<B extends OneSidedBar> {
                     if (!baseTimeSeries.containsKey(symbol)) {
                         throw new RuntimeException(String.format("Cannot aggregate undefined symbol [%s]", symbol));
                     }
-                    baseTimeSeries.compute(symbol, (ignored, multipleTimeSeries) -> multipleTimeSeries.aggregate(timeSeriesDefinition));
+                    baseTimeSeries.compute(symbol,
+                                           (ignored, multipleTimeSeries) -> multipleTimeSeries.aggregate(timeSeriesDefinition));
                 }
             }
         }
