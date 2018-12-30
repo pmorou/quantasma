@@ -32,7 +32,7 @@ public class MarketDataBuilder<B extends OneSidedBar> {
     }
 
     public static MarketDataBuilder<BidAskBar> basedOn(TimeSeriesDefinition timeSeriesDefinition) {
-        return new MarketDataBuilder<>(new BidAskBarFactory(), timeSeriesDefinition);
+        return basedOn(new BidAskBarFactory(), timeSeriesDefinition);
     }
 
     public static <B extends OneSidedBar> MarketDataBuilder<B> basedOn(BarFactory<B> barFactory,

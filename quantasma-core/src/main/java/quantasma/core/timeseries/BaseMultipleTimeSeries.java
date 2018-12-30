@@ -4,8 +4,8 @@ import lombok.Getter;
 import org.ta4j.core.num.Num;
 import quantasma.core.BarPeriod;
 import quantasma.core.Quote;
-import quantasma.core.timeseries.bar.OneSidedBar;
 import quantasma.core.timeseries.bar.BarFactory;
+import quantasma.core.timeseries.bar.OneSidedBar;
 
 import java.time.ZonedDateTime;
 import java.util.Comparator;
@@ -40,7 +40,7 @@ public class BaseMultipleTimeSeries<B extends OneSidedBar> implements MultipleTi
     }
 
     public static <B extends OneSidedBar> BaseMultipleTimeSeries<B> create(String symbol, TimeSeriesDefinition timeSeriesDefinition, BarFactory<B> barFactory) {
-        return new BaseMultipleTimeSeries<>(symbol, timeSeriesDefinition, barFactory, UnaryOperator.identity());
+        return create(symbol, timeSeriesDefinition, barFactory, UnaryOperator.identity());
     }
 
     private Map<BarPeriod, UniversalTimeSeries<B>> createPeriodTimeSeriesMap(BarPeriod barPeriod) {
