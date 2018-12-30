@@ -1,11 +1,13 @@
 package quantasma.examples.builders;
 
-import org.ta4j.core.Bar;
 import quantasma.core.BarPeriod;
 import quantasma.core.timeseries.BaseMainTimeSeries;
 import quantasma.core.timeseries.BaseUniversalTimeSeries;
+import quantasma.core.timeseries.bar.OneSideBar;
+import quantasma.core.timeseries.bar.factory.BarFactory;
+import quantasma.core.timeseries.bar.factory.BidAskBarFactory;
 
-public class BaseMainTimeSeriesChild<B extends Bar> extends BaseMainTimeSeries<B> {
+public class BaseMainTimeSeriesChild<B extends OneSideBar> extends BaseMainTimeSeries<B> {
     protected BaseMainTimeSeriesChild(Builder builder) {
         super(builder);
     }
@@ -15,8 +17,8 @@ public class BaseMainTimeSeriesChild<B extends Bar> extends BaseMainTimeSeries<B
      */
     public static class Builder<T extends Builder<T, R>, R extends BaseMainTimeSeriesChild> extends BaseMainTimeSeries.Builder<T, R> {
 
-        public Builder(String symbol, BarPeriod barPeriod) {
-            super(symbol, barPeriod);
+        public Builder(String symbol, BarPeriod barPeriod, BarFactory<?> barFactory) {
+            super(symbol, barPeriod, barFactory);
         }
 
         public T withChild() {
@@ -35,7 +37,7 @@ public class BaseMainTimeSeriesChild<B extends Bar> extends BaseMainTimeSeries<B
     }
 
     public static void main(String[] args) {
-        final BaseMainTimeSeriesChild example = new Builder<>("example", BarPeriod.M1)
+        final BaseMainTimeSeriesChild example = new Builder<>("example", BarPeriod.M1, new BidAskBarFactory())
                 .withName("from mother of all builders")
                 .withChild() // Current builder, type preserved
                 .build();
