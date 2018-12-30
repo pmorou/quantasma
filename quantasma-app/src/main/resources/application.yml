@@ -17,7 +17,7 @@ spring:
       port: 27017
       database: historical
   profiles:
-    active: dukascopy
+    active: mock
 
 ---
 
