@@ -3,7 +3,7 @@ package quantasma.core.timeseries;
 import org.ta4j.core.Bar;
 import org.ta4j.core.TimeSeries;
 import org.ta4j.core.num.Num;
-import quantasma.core.timeseries.bar.UnmodifiableBar;
+import quantasma.core.timeseries.bar.wrapper.UnmodifiableBar;
 
 import java.time.Duration;
 import java.time.ZonedDateTime;
