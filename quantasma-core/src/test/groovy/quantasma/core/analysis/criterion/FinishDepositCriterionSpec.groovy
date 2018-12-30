@@ -13,7 +13,7 @@ import java.time.ZonedDateTime
 
 class FinishDepositCriterionSpec extends Specification {
 
-    private final ZonedDateTime time = ZonedDateTime.now()
+    private static final ZonedDateTime TIME = ZonedDateTime.now()
 
     @Unroll
     def 'given 1_000 deposit when close 2 trades each (amount) lot should return (#expectedDeposit) deposit'() {
@@ -54,7 +54,7 @@ class FinishDepositCriterionSpec extends Specification {
     private final def numValueOf = { n -> PrecisionNum.valueOf(n) }
 
     private BaseBar createM1Bar(int rollMinutes, String closePrice) {
-        final BaseBar baseBar = new BaseBar(BarPeriod.M1.getPeriod(), time.plusMinutes(rollMinutes), numValueOf)
+        final BaseBar baseBar = new BaseBar(BarPeriod.M1.getPeriod(), TIME.plusMinutes(rollMinutes), numValueOf)
         baseBar.addPrice(numValueOf(closePrice))
         return baseBar
     }
