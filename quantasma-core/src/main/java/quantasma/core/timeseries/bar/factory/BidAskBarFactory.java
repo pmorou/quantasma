@@ -18,4 +18,11 @@ public class BidAskBarFactory implements BarFactory<BidAskBar> {
                                  numFunction);
     }
 
+    @Override
+    public BidAskBar create(BarPeriod barPeriod, ZonedDateTime time, Function<Number, Num> numFunction) {
+        return new BaseBidAskBar(barPeriod.getPeriod(),
+                                 DateUtils.createEndDate(time, barPeriod),
+                                 numFunction);
+    }
+
 }
