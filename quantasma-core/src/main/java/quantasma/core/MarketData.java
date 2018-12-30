@@ -2,7 +2,7 @@ package quantasma.core;
 
 import quantasma.core.timeseries.MultipleTimeSeries;
 import quantasma.core.timeseries.UniversalTimeSeries;
-import quantasma.core.timeseries.bar.OneSideBar;
+import quantasma.core.timeseries.bar.OneSidedBar;
 
 import java.time.ZonedDateTime;
 import java.util.Collection;
@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public class MarketData<B extends OneSideBar> {
+public class MarketData<B extends OneSidedBar> {
     protected final Map<String, MultipleTimeSeries<B>> multipleTimeSeriesMap = new HashMap<>();
 
     public MarketData(Collection<? extends MultipleTimeSeries<B>> multipleTimeSeries) {

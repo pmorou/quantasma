@@ -2,11 +2,11 @@ package quantasma.examples.builders;
 
 import quantasma.core.BarPeriod;
 import quantasma.core.timeseries.BaseUniversalTimeSeries;
-import quantasma.core.timeseries.bar.OneSideBar;
+import quantasma.core.timeseries.bar.OneSidedBar;
 import quantasma.core.timeseries.bar.factory.BarFactory;
 import quantasma.core.timeseries.bar.factory.BidAskBarFactory;
 
-public class BaseMainTimeSeriesGrandChild<B extends OneSideBar> extends BaseMainTimeSeriesChild<B> {
+public class BaseMainTimeSeriesGrandChild<B extends OneSidedBar> extends BaseMainTimeSeriesChild<B> {
     protected BaseMainTimeSeriesGrandChild(Builder builder) {
         super(builder);
     }

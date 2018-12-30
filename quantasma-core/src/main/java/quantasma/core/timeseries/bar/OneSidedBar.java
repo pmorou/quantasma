@@ -6,7 +6,7 @@ import quantasma.core.Quote;
 
 import java.util.function.Function;
 
-public interface OneSideBar extends Bar {
+public interface OneSidedBar extends Bar {
 
     default void updateBar(Quote quote, Function<Number, Num> numFunction) {
         addPrice(numFunction.apply(quote.getBid()));

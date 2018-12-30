@@ -2,9 +2,9 @@ package quantasma.core.timeseries
 
 import org.ta4j.core.BaseBar
 import quantasma.core.BarPeriod
-import quantasma.core.timeseries.bar.BaseOneSideBar
-import quantasma.core.timeseries.bar.OneSideBar
-import quantasma.core.timeseries.bar.factory.OneSideBarFactory
+import quantasma.core.timeseries.bar.BaseOneSidedBar
+import quantasma.core.timeseries.bar.OneSidedBar
+import quantasma.core.timeseries.bar.factory.OneSidedBarFactory
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -195,8 +195,8 @@ class ReflectionManualIndexTimeSeriesSpec extends Specification {
         return factory.function().apply(barsCount, barPeriod)
     }
 
-    static OneSideBar createBar(UniversalTimeSeries timeSeries, Integer i, Duration timePeriod) {
-        new BaseOneSideBar(new BaseBar(timePeriod, TIME_REF.plusMinutes(i), timeSeries.function()))
+    static OneSidedBar createBar(UniversalTimeSeries timeSeries, Integer i, Duration timePeriod) {
+        new BaseOneSidedBar(new BaseBar(timePeriod, TIME_REF.plusMinutes(i), timeSeries.function()))
     }
 
     private static final ZonedDateTime TIME_REF = ZonedDateTime.now()
@@ -210,7 +210,7 @@ class ReflectionManualIndexTimeSeriesSpec extends Specification {
             @Override
             BiFunction<Integer, BarPeriod, ReflectionManualIndexTimeSeries> function() {
                 { Integer barsCount, BarPeriod barPeriod ->
-                    final UniversalTimeSeries timeSeries = new BaseUniversalTimeSeries.Builder("symbol", BarPeriod.M5, new OneSideBarFactory()).build()
+                    final UniversalTimeSeries timeSeries = new BaseUniversalTimeSeries.Builder("symbol", BarPeriod.M5, new OneSidedBarFactory()).build()
                     for (int i = 0; i < barsCount; i++) {
                         if (i % barPeriod.getPeriod().toMinutes() == 0) {
                             timeSeries.addBar(createBar(timeSeries, i, Duration.ofMinutes(i)))
@@ -226,7 +226,7 @@ class ReflectionManualIndexTimeSeriesSpec extends Specification {
             @Override
             BiFunction<Integer, BarPeriod, ReflectionManualIndexTimeSeries> function() {
                 { barsCount, barPeriod ->
-                    final MainTimeSeries timeSeries = new BaseMainTimeSeries.Builder("test", BarPeriod.M5, new OneSideBarFactory()).build()
+                    final MainTimeSeries timeSeries = new BaseMainTimeSeries.Builder("test", BarPeriod.M5, new OneSidedBarFactory()).build()
                     for (int i = 0; i < barsCount; i++) {
                         if (i % barPeriod.getPeriod().toMinutes() == 0) {
                             timeSeries.addBar(createBar(timeSeries, i, Duration.ofMinutes(i)))
@@ -242,8 +242,8 @@ class ReflectionManualIndexTimeSeriesSpec extends Specification {
             @Override
             BiFunction<Integer, BarPeriod, ReflectionManualIndexTimeSeries> function() {
                 { barsCount, barPeriod ->
-                    final MainTimeSeries mainTimeSeries = new BaseMainTimeSeries.Builder("test", BarPeriod.M1, new OneSideBarFactory()).build()
-                    final AggregatedTimeSeries aggregatedTimeSeries = new BaseAggregatedTimeSeries.Builder("symbol", BarPeriod.M1, mainTimeSeries, new OneSideBarFactory()).build()
+                    final MainTimeSeries mainTimeSeries = new BaseMainTimeSeries.Builder("test", BarPeriod.M1, new OneSidedBarFactory()).build()
+                    final AggregatedTimeSeries aggregatedTimeSeries = new BaseAggregatedTimeSeries.Builder("symbol", BarPeriod.M1, mainTimeSeries, new OneSidedBarFactory()).build()
                     for (int i = 0; i < barsCount; i++) {
                         if (i % barPeriod.getPeriod().toMinutes() == 0) {
                             aggregatedTimeSeries.addBar(createBar(aggregatedTimeSeries, i, barPeriod.getPeriod()))

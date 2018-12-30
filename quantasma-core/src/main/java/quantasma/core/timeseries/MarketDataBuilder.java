@@ -2,7 +2,7 @@ package quantasma.core.timeseries;
 
 import quantasma.core.MarketData;
 import quantasma.core.timeseries.bar.BidAskBar;
-import quantasma.core.timeseries.bar.OneSideBar;
+import quantasma.core.timeseries.bar.OneSidedBar;
 import quantasma.core.timeseries.bar.factory.BarFactory;
 import quantasma.core.timeseries.bar.factory.BidAskBarFactory;
 
@@ -14,7 +14,7 @@ import java.util.function.Function;
 import java.util.function.UnaryOperator;
 import java.util.stream.Collectors;
 
-public class MarketDataBuilder<B extends OneSideBar> {
+public class MarketDataBuilder<B extends OneSidedBar> {
 
     private final TimeSeriesDefinition baseTimeSeriesDefinition;
     private final Set<TimeSeriesDefinition.Group> aggregatedTimeSeriesDefinitions = new HashSet<>();
@@ -32,8 +32,8 @@ public class MarketDataBuilder<B extends OneSideBar> {
         return new MarketDataBuilder<>(new BidAskBarFactory(), timeSeriesDefinition);
     }
 
-    public static <B extends OneSideBar> MarketDataBuilder<B> basedOn(BarFactory<B> barFactory,
-                                                               TimeSeriesDefinition timeSeriesDefinition) {
+    public static <B extends OneSidedBar> MarketDataBuilder<B> basedOn(BarFactory<B> barFactory,
+                                                                       TimeSeriesDefinition timeSeriesDefinition) {
         return new MarketDataBuilder<>(barFactory, timeSeriesDefinition);
     }
 

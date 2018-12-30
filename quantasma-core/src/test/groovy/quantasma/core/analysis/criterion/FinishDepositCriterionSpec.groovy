@@ -3,14 +3,13 @@ package quantasma.core.analysis.criterion
 import org.ta4j.core.BaseBar
 import org.ta4j.core.BaseTradingRecord
 import org.ta4j.core.Order
-import org.ta4j.core.TimeSeries
 import org.ta4j.core.num.PrecisionNum
 import quantasma.core.BarPeriod
 import quantasma.core.timeseries.BaseUniversalTimeSeries
 import quantasma.core.timeseries.UniversalTimeSeries
-import quantasma.core.timeseries.bar.BaseOneSideBar
-import quantasma.core.timeseries.bar.OneSideBar
-import quantasma.core.timeseries.bar.factory.OneSideBarFactory
+import quantasma.core.timeseries.bar.BaseOneSidedBar
+import quantasma.core.timeseries.bar.OneSidedBar
+import quantasma.core.timeseries.bar.factory.OneSidedBarFactory
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -46,7 +45,7 @@ class FinishDepositCriterionSpec extends Specification {
     }
 
     private static BaseUniversalTimeSeries createTimeSeriesWithBars() {
-        final BaseUniversalTimeSeries timeSeries = new BaseUniversalTimeSeries.Builder("symbol", BarPeriod.M1, new OneSideBarFactory())
+        final BaseUniversalTimeSeries timeSeries = new BaseUniversalTimeSeries.Builder("symbol", BarPeriod.M1, new OneSidedBarFactory())
                 .withNumTypeOf(NUM_FUNC)
                 .build()
 
@@ -62,7 +61,7 @@ class FinishDepositCriterionSpec extends Specification {
     }
 
     private static void addM1Bar(int rollMinutes, String closePrice, UniversalTimeSeries timeSeries) {
-        final OneSideBar bar = new BaseOneSideBar(new BaseBar(BarPeriod.M1.getPeriod(), TIME.plusMinutes(rollMinutes), NUM_FUNC))
+        final OneSidedBar bar = new BaseOneSidedBar(new BaseBar(BarPeriod.M1.getPeriod(), TIME.plusMinutes(rollMinutes), NUM_FUNC))
         bar.addPrice(NUM_FUNC.apply(new BigDecimal(closePrice)))
         timeSeries.addBar(bar)
     }

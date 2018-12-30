@@ -7,7 +7,7 @@ import org.ta4j.core.num.PrecisionNum
 import quantasma.core.timeseries.MainTimeSeries
 import quantasma.core.timeseries.ManualIndexTimeSeries
 import quantasma.core.timeseries.MultipleTimeSeries
-import quantasma.core.timeseries.bar.OneSideBar
+import quantasma.core.timeseries.bar.OneSidedBar
 import spock.lang.Specification
 
 class TestManagerSpec extends Specification {
@@ -25,7 +25,7 @@ class TestManagerSpec extends Specification {
             getAmount() >> PrecisionNum.valueOf(Math.random()) // unique values imitating possibility of changing an amount between trades
         })
 
-        bar = Stub(OneSideBar, {
+        bar = Stub(OneSidedBar, {
             getClosePrice() >>> [DoubleNum.valueOf(0), DoubleNum.valueOf(1), DoubleNum.valueOf(2)]
         })
 

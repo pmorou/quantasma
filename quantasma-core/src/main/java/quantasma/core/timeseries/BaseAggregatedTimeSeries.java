@@ -4,10 +4,10 @@ import lombok.AccessLevel;
 import lombok.Getter;
 import quantasma.core.BarPeriod;
 import quantasma.core.timeseries.bar.BidAskBar;
-import quantasma.core.timeseries.bar.OneSideBar;
+import quantasma.core.timeseries.bar.OneSidedBar;
 import quantasma.core.timeseries.bar.factory.BarFactory;
 
-public class BaseAggregatedTimeSeries<B extends OneSideBar> extends BaseUniversalTimeSeries<B> implements AggregatedTimeSeries<B> {
+public class BaseAggregatedTimeSeries<B extends OneSidedBar> extends BaseUniversalTimeSeries<B> implements AggregatedTimeSeries<B> {
     @Getter
     private final MainTimeSeries mainTimeSeries;
 

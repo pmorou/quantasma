@@ -7,7 +7,7 @@ import quantasma.core.Quote;
 import java.math.BigDecimal;
 import java.util.function.Function;
 
-public interface BidAskBar extends OneSideBar {
+public interface BidAskBar extends OneSidedBar {
 
     BidAskBar NaN = NaNBar.getInstance();
 

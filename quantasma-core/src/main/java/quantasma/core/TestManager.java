@@ -11,13 +11,13 @@ import quantasma.core.analysis.parametrize.Parameterizable;
 import quantasma.core.analysis.parametrize.Values;
 import quantasma.core.timeseries.MainTimeSeries;
 import quantasma.core.timeseries.ManualIndexTimeSeries;
-import quantasma.core.timeseries.bar.OneSideBar;
+import quantasma.core.timeseries.bar.OneSidedBar;
 
 import java.util.Set;
 import java.util.stream.Collectors;
 
 @Slf4j
-public class TestManager<B extends OneSideBar> {
+public class TestManager<B extends OneSidedBar> {
     private final Set<ManualIndexTimeSeries> manualIndexTimeSeriesSet;
     private final MarketData<B> marketData;
 

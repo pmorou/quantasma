@@ -2,10 +2,10 @@ package quantasma.core.timeseries
 
 import org.ta4j.core.BaseBar
 import quantasma.core.BarPeriod
-import quantasma.core.timeseries.bar.BaseOneSideBar
+import quantasma.core.timeseries.bar.BaseOneSidedBar
 import quantasma.core.timeseries.bar.NaNBar
-import quantasma.core.timeseries.bar.OneSideBar
-import quantasma.core.timeseries.bar.factory.OneSideBarFactory
+import quantasma.core.timeseries.bar.OneSidedBar
+import quantasma.core.timeseries.bar.factory.OneSidedBarFactory
 import spock.lang.Specification
 
 import java.time.Duration
@@ -17,7 +17,7 @@ class BaseUniversalTimeSeriesSpec extends Specification {
 
     def "given time series limited to 2 bars when added 3 bars should return NaN for first one only"() {
         given:
-        def timeseries = new BaseUniversalTimeSeries.Builder("symbol", BarPeriod.M1, new OneSideBarFactory()).withMaxBarCount(2).build()
+        def timeseries = new BaseUniversalTimeSeries.Builder("symbol", BarPeriod.M1, new OneSidedBarFactory()).withMaxBarCount(2).build()
 
         when:
         3.times {
@@ -31,8 +31,8 @@ class BaseUniversalTimeSeriesSpec extends Specification {
         timeseries.getBar(2).getClosePrice().doubleValue() == 2
     }
 
-    private OneSideBar bar(BaseUniversalTimeSeries timeseries, Integer number) {
-        new BaseOneSideBar(new BaseBar(
+    private OneSidedBar bar(BaseUniversalTimeSeries timeseries, Integer number) {
+        new BaseOneSidedBar(new BaseBar(
                 Duration.ofMinutes(1),
                 time.plusMinutes(number),
                 timeseries.numOf(number),

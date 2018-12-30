@@ -9,14 +9,14 @@ import org.ta4j.core.num.Num;
 import org.ta4j.core.num.PrecisionNum;
 import quantasma.core.BarPeriod;
 import quantasma.core.timeseries.bar.BidAskBar;
-import quantasma.core.timeseries.bar.OneSideBar;
+import quantasma.core.timeseries.bar.OneSidedBar;
 import quantasma.core.timeseries.bar.factory.BarFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
-public class BaseUniversalTimeSeries<B extends OneSideBar> implements UniversalTimeSeries<B> {
+public class BaseUniversalTimeSeries<B extends OneSidedBar> implements UniversalTimeSeries<B> {
     private final TimeSeries timeSeries;
     @Getter
     private final BarFactory<B> barFactory;
