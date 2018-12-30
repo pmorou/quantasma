@@ -1,10 +1,12 @@
 package quantasma.core.timeseries
 
 import org.ta4j.core.BaseBar
-import org.ta4j.core.TimeSeries
 import quantasma.core.BarPeriod
 import quantasma.core.DateUtils
+import quantasma.core.timeseries.bar.BaseOneSideBar
 import quantasma.core.timeseries.bar.NaNBar
+import quantasma.core.timeseries.bar.OneSideBar
+import quantasma.core.timeseries.bar.factory.OneSideBarFactory
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -24,7 +26,7 @@ class BaseAggregatedTimeSeriesSpec extends Specification {
     @Unroll
     def 'given 1 M5 and 1 M1 bars at time (#time) should return unique bar at index 0'() {
         setup:
-        def mainTimeSeries = BaseMainTimeSeries.create(TimeSeriesDefinition.unlimited(BarPeriod.M1), "symbol", barFactory)
+        def mainTimeSeries = BaseMainTimeSeries.create(TimeSeriesDefinition.unlimited(BarPeriod.M1), "symbol", new OneSideBarFactory())
         def aggregatedTimeSeries = createBaseAggregatedTimeSeries(mainTimeSeries)
         createM1Bar(0, mainTimeSeries)
         mainTimeSeries.addPrice(1)
@@ -41,7 +43,7 @@ class BaseAggregatedTimeSeriesSpec extends Specification {
     @Unroll
     def 'given 1 M5 and 2 M1 bars at time (#time) should return unique bar at index 1'() {
         given:
-        def mainTimeSeries = BaseMainTimeSeries.create(TimeSeriesDefinition.unlimited(BarPeriod.M1), "symbol", barFactory)
+        def mainTimeSeries = BaseMainTimeSeries.create(TimeSeriesDefinition.unlimited(BarPeriod.M1), "symbol", new OneSideBarFactory())
         def aggregatedTimeSeries = createBaseAggregatedTimeSeries(mainTimeSeries)
         2.times {
             createM1Bar(it, mainTimeSeries)
@@ -67,7 +69,7 @@ class BaseAggregatedTimeSeriesSpec extends Specification {
     @Unroll
     def 'given 2 M5 bars at time (#time) should return unique bars from index 1 to 0'() {
         setup:
-        def mainTimeSeries = BaseMainTimeSeries.create(TimeSeriesDefinition.unlimited(BarPeriod.M1), "symbol", barFactory)
+        def mainTimeSeries = BaseMainTimeSeries.create(TimeSeriesDefinition.unlimited(BarPeriod.M1), "symbol", new OneSideBarFactory())
         def aggregatedTimeSeries = createBaseAggregatedTimeSeries(mainTimeSeries)
         6.times {
             createM1Bar(it, mainTimeSeries)
@@ -95,7 +97,7 @@ class BaseAggregatedTimeSeriesSpec extends Specification {
     @Unroll
     def 'given 3 M5 bars should return correct first and last created bar'() {
         setup:
-        def mainTimeSeries = BaseMainTimeSeries.create(TimeSeriesDefinition.unlimited(BarPeriod.M1), "symbol", barFactory)
+        def mainTimeSeries = BaseMainTimeSeries.create(TimeSeriesDefinition.unlimited(BarPeriod.M1), "symbol", new OneSideBarFactory())
         def aggregatedTimeSeries = createBaseAggregatedTimeSeries(mainTimeSeries)
         def firstM5Bar = null, secondM5Bar = null, thirdM5Bar = null
 
@@ -126,19 +128,19 @@ class BaseAggregatedTimeSeriesSpec extends Specification {
     }
 
     private static BaseAggregatedTimeSeries createBaseAggregatedTimeSeries(MainTimeSeries mainTimeSeries) {
-        return new BaseAggregatedTimeSeries.Builder<?, ?>("symbol", BarPeriod.M5, mainTimeSeries).build()
+        return new BaseAggregatedTimeSeries.Builder<?, ?>("symbol", BarPeriod.M5, mainTimeSeries, new OneSideBarFactory()).build()
     }
 
-    private void createM1Bar(int minutesOffset, TimeSeries timeSeries) {
+    private static void createM1Bar(int minutesOffset, UniversalTimeSeries timeSeries) {
         timeSeries.addBar(createBar(minutesOffset, timeSeries, BarPeriod.M1))
     }
 
-    private void createM5Bar(int minutesOffset, TimeSeries timeSeries) {
+    private static void createM5Bar(int minutesOffset, UniversalTimeSeries timeSeries) {
         timeSeries.addBar(createBar(minutesOffset, timeSeries, BarPeriod.M5))
     }
 
-    private BaseBar createBar(int minutesOffset, TimeSeries timeSeries, BarPeriod period) {
-        return new BaseBar(period.getPeriod(), DateUtils.createEndDate(MIDNIGHT.plus(minutesOffset, ChronoUnit.MINUTES), period), timeSeries.function())
+    private static OneSideBar createBar(int minutesOffset, UniversalTimeSeries timeSeries, BarPeriod period) {
+        return new BaseOneSideBar(new BaseBar(period.getPeriod(), DateUtils.createEndDate(MIDNIGHT.plus(minutesOffset, ChronoUnit.MINUTES), period), timeSeries.function()))
     }
 
     private static ZonedDateTime utc(LocalDateTime localDateTime) {
