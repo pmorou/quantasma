@@ -1,5 +1,9 @@
-package quantasma.core.timeseries;
+package quantasma.core.timeseries.factory;
 
+import quantasma.core.timeseries.AggregatedTimeSeries;
+import quantasma.core.timeseries.BaseAggregatedTimeSeries;
+import quantasma.core.timeseries.MainTimeSeries;
+import quantasma.core.timeseries.TimeSeriesDefinition;
 import quantasma.core.timeseries.bar.OneSidedBar;
 
 import java.util.function.Function;

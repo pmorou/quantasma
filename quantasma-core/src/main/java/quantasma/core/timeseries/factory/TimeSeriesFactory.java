@@ -1,4 +1,7 @@
-package quantasma.core.timeseries;
+package quantasma.core.timeseries.factory;
+
+import quantasma.core.timeseries.TimeSeriesDefinition;
+import quantasma.core.timeseries.UniversalTimeSeries;
 
 import java.util.function.Function;
 
