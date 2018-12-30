@@ -3,6 +3,7 @@ package quantasma.core.analysis.criterion
 import org.ta4j.core.BaseBar
 import org.ta4j.core.BaseTradingRecord
 import org.ta4j.core.Order
+import org.ta4j.core.TimeSeries
 import org.ta4j.core.num.PrecisionNum
 import quantasma.core.BarPeriod
 import quantasma.core.timeseries.BaseUniversalTimeSeries
@@ -10,10 +11,12 @@ import spock.lang.Specification
 import spock.lang.Unroll
 
 import java.time.ZonedDateTime
+import java.util.function.Function
 
 class FinishDepositCriterionSpec extends Specification {
 
     private static final ZonedDateTime TIME = ZonedDateTime.now()
+    private static final Function<Number, PrecisionNum> NUM_FUNC = { n -> PrecisionNum.valueOf(n) }
 
     @Unroll
     def 'given 1_000 deposit when close 2 trades each (amount) lot should return (#expectedDeposit) deposit'() {
@@ -38,24 +41,26 @@ class FinishDepositCriterionSpec extends Specification {
         10      || 1000.002
     }
 
-    private BaseUniversalTimeSeries createTimeSeriesWithBars() {
-        final BaseUniversalTimeSeries timeSeries = new BaseUniversalTimeSeries.Builder("symbol", BarPeriod.M1).build()
-        timeSeries.addBar(createM1Bar(0, "1.0000"))
-        timeSeries.addBar(createM1Bar(1, "1.0000")) // open #1
-        timeSeries.addBar(createM1Bar(2, "1.0001")) // close #1
-        timeSeries.addBar(createM1Bar(3, "1.0001"))
-        timeSeries.addBar(createM1Bar(4, "1.0001")) // open #2
-        timeSeries.addBar(createM1Bar(5, "1.0002"))
-        timeSeries.addBar(createM1Bar(6, "1.0002")) // close #2
-        timeSeries.addBar(createM1Bar(7, "1.0002"))
+    private static BaseUniversalTimeSeries createTimeSeriesWithBars() {
+        final BaseUniversalTimeSeries timeSeries = new BaseUniversalTimeSeries.Builder("symbol", BarPeriod.M1)
+                .withNumTypeOf(NUM_FUNC)
+                .build()
+
+        addM1Bar(0, "1.0000", timeSeries)
+        addM1Bar(1, "1.0000", timeSeries) // open #1
+        addM1Bar(2, "1.0001", timeSeries) // close #1
+        addM1Bar(3, "1.0001", timeSeries)
+        addM1Bar(4, "1.0001", timeSeries) // open #2
+        addM1Bar(5, "1.0002", timeSeries)
+        addM1Bar(6, "1.0002", timeSeries) // close #2
+        addM1Bar(7, "1.0002", timeSeries)
         return timeSeries
     }
 
-    private final def numValueOf = { n -> PrecisionNum.valueOf(n) }
-
-    private BaseBar createM1Bar(int rollMinutes, String closePrice) {
-        final BaseBar baseBar = new BaseBar(BarPeriod.M1.getPeriod(), TIME.plusMinutes(rollMinutes), numValueOf)
-        baseBar.addPrice(numValueOf(closePrice))
-        return baseBar
+    private static void addM1Bar(int rollMinutes, String closePrice, TimeSeries timeSeries) {
+        final BaseBar baseBar = new BaseBar(BarPeriod.M1.getPeriod(), TIME.plusMinutes(rollMinutes), NUM_FUNC)
+        baseBar.addPrice(NUM_FUNC.apply(new BigDecimal(closePrice)))
+        timeSeries.addBar(baseBar)
     }
+
 }
