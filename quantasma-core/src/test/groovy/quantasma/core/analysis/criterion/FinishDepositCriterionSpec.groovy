@@ -7,6 +7,10 @@ import org.ta4j.core.TimeSeries
 import org.ta4j.core.num.PrecisionNum
 import quantasma.core.BarPeriod
 import quantasma.core.timeseries.BaseUniversalTimeSeries
+import quantasma.core.timeseries.UniversalTimeSeries
+import quantasma.core.timeseries.bar.BaseOneSideBar
+import quantasma.core.timeseries.bar.OneSideBar
+import quantasma.core.timeseries.bar.factory.OneSideBarFactory
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -22,7 +26,7 @@ class FinishDepositCriterionSpec extends Specification {
     def 'given 1_000 deposit when close 2 trades each (amount) lot should return (#expectedDeposit) deposit'() {
         given:
         def finishDepositCriterion = new FinishDepositCriterion(1000, 0.0001)
-        def timeSeries = createTimeSeriesWithBars()
+        def timeSeries = createTimeSeriesWithBars().timeSeries()
 
         when:
         def result = new BaseTradingRecord(Order.buyAt(1, timeSeries, timeSeries.numOf(amount)),
@@ -42,7 +46,7 @@ class FinishDepositCriterionSpec extends Specification {
     }
 
     private static BaseUniversalTimeSeries createTimeSeriesWithBars() {
-        final BaseUniversalTimeSeries timeSeries = new BaseUniversalTimeSeries.Builder("symbol", BarPeriod.M1)
+        final BaseUniversalTimeSeries timeSeries = new BaseUniversalTimeSeries.Builder("symbol", BarPeriod.M1, new OneSideBarFactory())
                 .withNumTypeOf(NUM_FUNC)
                 .build()
 
@@ -57,10 +61,10 @@ class FinishDepositCriterionSpec extends Specification {
         return timeSeries
     }
 
-    private static void addM1Bar(int rollMinutes, String closePrice, TimeSeries timeSeries) {
-        final BaseBar baseBar = new BaseBar(BarPeriod.M1.getPeriod(), TIME.plusMinutes(rollMinutes), NUM_FUNC)
-        baseBar.addPrice(NUM_FUNC.apply(new BigDecimal(closePrice)))
-        timeSeries.addBar(baseBar)
+    private static void addM1Bar(int rollMinutes, String closePrice, UniversalTimeSeries timeSeries) {
+        final OneSideBar bar = new BaseOneSideBar(new BaseBar(BarPeriod.M1.getPeriod(), TIME.plusMinutes(rollMinutes), NUM_FUNC))
+        bar.addPrice(NUM_FUNC.apply(new BigDecimal(closePrice)))
+        timeSeries.addBar(bar)
     }
 
 }

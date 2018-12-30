@@ -7,7 +7,7 @@ import lombok.Data;
 import java.time.ZonedDateTime;
 
 @Data
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
 public class Quote {
     private final String symbol;
     private final ZonedDateTime time;
