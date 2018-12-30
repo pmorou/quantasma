@@ -31,7 +31,8 @@ public class TradeEngineConfig {
     public Context context(StrategyControl strategyControl, OrderService orderService) {
         return BaseContext.Builder.builder()
                                   .withMarketData(MarketDataBuilder.basedOn(TimeSeriesDefinition.limited(BarPeriod.M1, 100))
-                                                                   .symbols("EURUSD"))
+                                                                   .symbols("EURUSD")
+                                                                   .build())
                                   .withOrderService(orderService)
                                   .withStrategyControl(strategyControl)
                                   .build();

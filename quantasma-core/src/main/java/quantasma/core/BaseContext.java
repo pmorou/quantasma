@@ -49,11 +49,6 @@ public class BaseContext implements Context {
             return this;
         }
 
-        public Builder withMarketData(MarketDataBuilder<?> marketDataBuilder) {
-            withMarketData(marketDataBuilder.build());
-            return this;
-        }
-
         public Builder withMarketData(MarketData marketData) {
             this.dataService = new BaseDataService(marketData);
             return this;
