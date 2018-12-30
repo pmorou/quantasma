@@ -1,6 +1,8 @@
 package quantasma.core.timeseries;
 
-public interface AggregatedTimeSeries extends UniversalTimeSeries {
+import org.ta4j.core.Bar;
+
+public interface AggregatedTimeSeries<B extends Bar> extends UniversalTimeSeries<B> {
 
     MainTimeSeries getMainTimeSeries();
 

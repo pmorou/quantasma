@@ -1,10 +1,11 @@
 package quantasma.examples.builders;
 
+import org.ta4j.core.Bar;
 import quantasma.core.BarPeriod;
 import quantasma.core.timeseries.BaseMainTimeSeries;
 import quantasma.core.timeseries.BaseUniversalTimeSeries;
 
-public class BaseMainTimeSeriesChild extends BaseMainTimeSeries {
+public class BaseMainTimeSeriesChild<B extends Bar> extends BaseMainTimeSeries<B> {
     protected BaseMainTimeSeriesChild(Builder builder) {
         super(builder);
     }

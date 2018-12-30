@@ -1,8 +1,9 @@
 package quantasma.core.timeseries;
 
+import org.ta4j.core.Bar;
 import quantasma.core.BarPeriod;
 
-public class BaseMainTimeSeries extends BaseUniversalTimeSeries implements MainTimeSeries {
+public class BaseMainTimeSeries<B extends Bar> extends BaseUniversalTimeSeries<B> implements MainTimeSeries<B> {
 
     protected BaseMainTimeSeries(Builder builder) {
         super(builder);

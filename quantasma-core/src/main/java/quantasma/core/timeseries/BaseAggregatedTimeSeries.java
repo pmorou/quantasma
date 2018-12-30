@@ -6,7 +6,7 @@ import org.ta4j.core.Bar;
 import quantasma.core.BarPeriod;
 import quantasma.core.timeseries.bar.BidAskBar;
 
-public class BaseAggregatedTimeSeries extends BaseUniversalTimeSeries implements AggregatedTimeSeries {
+public class BaseAggregatedTimeSeries<B extends Bar> extends BaseUniversalTimeSeries<B> implements AggregatedTimeSeries<B> {
     @Getter
     private final MainTimeSeries mainTimeSeries;
 
@@ -16,24 +16,24 @@ public class BaseAggregatedTimeSeries extends BaseUniversalTimeSeries implements
     }
 
     @Override
-    public void addBar(Bar bar, boolean replace) {
+    public void addBar(B bar, boolean replace) {
         super.addBar(bar, replace);
     }
 
     @Override
-    public Bar getFirstBar() {
+    public B getFirstBar() {
         // avoid index manipulation
         return super.getBar(getBeginIndex());
     }
 
     @Override
-    public Bar getLastBar() {
+    public B getLastBar() {
         // avoid index manipulation
         return super.getBar(getEndIndex());
     }
 
     @Override
-    public Bar getBar(int index) {
+    public B getBar(int index) {
         if (index == mainTimeSeries.getEndIndex()) {
             return getLastBar();
         }
@@ -44,7 +44,7 @@ public class BaseAggregatedTimeSeries extends BaseUniversalTimeSeries implements
             return super.getBar(getEndIndex() - nthOldElement);
         }
 
-        return BidAskBar.NaN;
+        return (B) BidAskBar.NaN; // TODO: provide generic method
     }
 
     public static class Builder<T extends Builder<T, R>, R extends BaseAggregatedTimeSeries> extends BaseUniversalTimeSeries.Builder<T, R> {
