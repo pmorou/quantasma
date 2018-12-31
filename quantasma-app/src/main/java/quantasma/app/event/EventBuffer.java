@@ -1,5 +1,6 @@
 package quantasma.app.event;
 
+import lombok.AllArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.reactivestreams.Publisher;
 import org.reactivestreams.Subscriber;
@@ -42,34 +43,34 @@ public class EventBuffer<E extends Event> {
         return false;
     }
 
+    @AllArgsConstructor
     private class EventPublisher<E> implements Publisher<E> {
         private final BlockingQueue<E> events;
 
-        EventPublisher(BlockingQueue<E> events) {
-            this.events = events;
+        @Override
+        public void subscribe(Subscriber<? super E> subscriber) {
+            log.info("New subscription of [{}] registered", typeHolder.getName());
+            subscriber.onSubscribe(new EventSubscription<>(events, subscriber));
+        }
+    }
+
+    @AllArgsConstructor
+    private class EventSubscription<E> implements Subscription {
+        private final BlockingQueue<E> events;
+        private final Subscriber<? super E> subscriber;
+
+        @Override
+        public void request(long n) {
+            try {
+                subscriber.onNext(events.take());
+            } catch (InterruptedException e) {
+                log.error(String.format("Subscription of [%s] encountered exception while request", typeHolder.getName()), e);
+            }
         }
 
         @Override
-        public void subscribe(Subscriber<? super E> s) {
-            log.info("New subscription of [{}] registered", typeHolder.getName());
-
-            class EventSubscription implements Subscription {
-                @Override
-                public void request(long n) {
-                    try {
-                        s.onNext(events.take());
-                    } catch (InterruptedException e) {
-                        log.error(String.format("Subscription of [%s] encountered exception while request", typeHolder.getName()), e);
-                    }
-                }
-
-                @Override
-                public void cancel() {
-                    log.info("Subscription of [{}] canceled", typeHolder.getName());
-                }
-            }
-
-            s.onSubscribe(new EventSubscription());
+        public void cancel() {
+            log.info("Subscription of [{}] canceled", typeHolder.getName());
         }
     }
 }
