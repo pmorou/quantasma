@@ -39,6 +39,20 @@ Maven repository support soon. Right now fork/clone this repository and start us
 
 Upgrade to Java 10 is comming soon.
 
+Before project compilation few dependencies must be installed, it can be done through script.
+
+[source]
+----
+./scripts/install_dependencies.sh
+----
+
+Compilation should run now smoothly.
+
+[source]
+----
+mvn clean compile
+----
+
 == Example Usage
 
 In case you decide to create your own trading application its as simple as the following code.
