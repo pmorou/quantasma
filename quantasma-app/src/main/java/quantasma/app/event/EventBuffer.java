@@ -59,7 +59,7 @@ public class EventBuffer<E extends Event> {
                     try {
                         s.onNext(events.take());
                     } catch (InterruptedException e) {
-                        e.printStackTrace();
+                        log.error(String.format("Subscription of [%s] encountered exception while request", typeHolder.getName()), e);
                     }
                 }
 
