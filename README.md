@@ -1,8 +1,8 @@
 # Quantasma ![Build Status](https://travis-ci.com/pmorou/quantasma.svg?branch=master)
 
-All-in-one algorithmic trading platform. Build your own backtested-strategy using Java, and execute along with support of continuous track and optimization modules.
+All-in-one algorithmic trading platform. Build your own backtested-strategy using Java, and execute along with support of continuous track and optimization mechanics.
 
-Modules short-description:
+Modules:
 
 -   [quantasma-app]({quantasma-app/}): ready-to-use application based on below modules
 
@@ -12,58 +12,67 @@ Modules short-description:
 
 -   [quantasma-integrations]({quantasma-integrations/}): integrations with 3rd party APIs
 
-**NOTE: All modules are still in development. Use at your own risk.**
+**NOTE: Provided modules might solve your problems, however, they are still in development. Use at your own risk.**
 
-Platform stands on top of [ta4j](https://github.com/ta4j/ta4j) providing additional features as:
+These solutions at its core stands on top of the modern technical analysis library [ta4j](https://github.com/ta4j/ta4j) providing many additional features as:
 
--   bid and ask prices
+-   generic bar implementations, eg. BID and ASK prices
 
--   multi-period time series
+-   user-defined multi-period time series
 
--   market-aware strategies
+-   flexible market-aware strategies
 
--   parametrized backtests
-
-You can use above platform or build your own based on [quantasma-core]({quantasma-core/}) library.
+-   programmable parametrized backtests
 
 The aim is to provide any needed functionality to follow the ever-changing markets in the most efficient way.
 
 # Getting Started
 
+Maven repository support soon. Right now fork/clone this repository and start using anything you need.
+
 ## Requirements
 
 &gt;= Java 9
 
-The main goal is to migrate to Java 11 step by step.
+Upgrade to Java 10 is comming soon.
+
+Before project compilation few dependencies must be installed, it can be done through script.
+
+    ./scripts/install_dependencies.sh
+
+Compilation should run now smoothly.
+
+    mvn clean compile
 
 ## Example Usage
 
 In case you decide to create your own trading application its as simple as the following code.
 
 ``` java
+final MarketData<BidAskBar> marketData =
+        MarketDataBuilder.basedOn(// Smallest accessible bar resolution for all defined below symbols
+                                  TimeSeriesDefinition.limited(BarPeriod.M1, 100))
+                         .symbols("EURUSD", "EURGBP")
+                         // You can define any number of additional bars resolutions for above symbols
+                         .aggregate(TimeSeriesDefinition.Group.of("EURUSD")
+                                                              .add(TimeSeriesDefinition.limited(BarPeriod.M5, 100))
+                                                              .add(TimeSeriesDefinition.limited(BarPeriod.M30, 100)))
+                         .build();
+
 // Any strategy based on TradeStrategy interface needs a Context object
 final Context context = new BaseContext.Builder()
-        .withTimeSeries(
-                MultipleTimeSeriesBuilder.basedOn(
-                        // Smallest accessible time window for all defined below symbols
-                        TimeSeriesDefinition.limited(BarPeriod.M1, 100))
-                                         .symbols("EURUSD", "EURGBP")
-                                         // You can define any number of additional time windows for above symbols
-                                         .aggregate(TimeSeriesDefinition.Group.of("EURUSD")
-                                                                              .add(TimeSeriesDefinition.limited(BarPeriod.M5, 100))
-                                                                              .add(TimeSeriesDefinition.limited(BarPeriod.M30, 100)))
-        )
+        .withMarketData(marketData)
         // OrderService implementations integrate an app with external APIs
         .withOrderService(new NullOrderService())
         .build();
 
 final TradeStrategy rsiStrategy = RSIStrategy.buildBullish(context,
                                                            parameterValues -> parameterValues
-                                                                 // Strings/Enums are allowed
-                                                                 .add(Parameter.TRADE_SYMBOL, "EURUSD")
-                                                                 .add(Parameter.RSI_PERIOD, 14)
-                                                                 .add(Parameter.RSI_LOWER_BOUND, 30)
-                                                                 .add(Parameter.RSI_UPPER_BOUND, 70));
+                                                                   // Strings/Enums are allowed
+                                                                   .add(Parameter.TRADE_SYMBOL, "EURUSD")
+                                                                   .add(Parameter.RSI_PERIOD, 14)
+                                                                   .add(Parameter.RSI_LOWER_BOUND, 30)
+                                                                   .add(Parameter.RSI_UPPER_BOUND, 70));
 
 // Only registered strategies are given market data
 context.getStrategyControl().register(rsiStrategy);
@@ -71,25 +80,31 @@ context.getStrategyControl().register(rsiStrategy);
 final TradeEngine tradeEngine = BaseTradeEngine.create(context);
 
 // Example call on market data change
-tradeEngine.process("EURUSD", ZonedDateTime.now(), 1.13757, 1.13767);
+tradeEngine.process(Quote.bidAsk("EURUSD",
+                                 ZonedDateTime.now(),
+                                 1.13757,
+                                 1.13767));
 
 // Will fail silently because the symbol wasn't registered within time series definitions
-tradeEngine.process("EURJPY", ZonedDateTime.now(), 129.653, 129.663);
+tradeEngine.process(Quote.bidAsk("EURJPY",
+                                 ZonedDateTime.now(),
+                                 129.653,
+                                 129.663));
 ```
 
 Backtest parametrization:
 
 ``` java
-    final TestMarketData testMarketData = new TestMarketData(
-            MultipleTimeSeriesBuilder.basedOn(TimeSeriesDefinition.unlimited(BarPeriod.M1))
-                                     .symbols("EURUSD")
-                                     .aggregate(TimeSeriesDefinition.Group.of("EURUSD")
-                                                                          .add(TimeSeriesDefinition.unlimited(BarPeriod.M5)))
-                                     .wrap(ReflectionManualIndexTimeSeries::wrap)
-                                     .build());
+    final MarketData<BidAskBar> marketData =
+            MarketDataBuilder.basedOn(TimeSeriesDefinition.unlimited(BarPeriod.M1))
+                             .symbols("EURUSD")
+                             .aggregate(TimeSeriesDefinition.Group.of("EURUSD")
+                                                                  .add(TimeSeriesDefinition.unlimited(BarPeriod.M5)))
+                             .wrap(ReflectionManualIndexTimeSeries::wrap)
+                             .build();
 
     final Context context = new BaseContext.Builder()
-            .withMarketData(testMarketData)
+            .withMarketData(marketData)
             .build();
 
     final Function<Variables<Parameter>, TradeStrategy> recipe = var -> {
@@ -100,9 +115,9 @@ Backtest parametrization:
         return RSIStrategy.buildBullish(context, var.getParameterValues());
     };
 
-    // Feed historical data by calling testMarketData.add()
+    // Feed historical data by calling marketData.add()
 
-    final TestManager testManager = new TestManager(testMarketData);
+    final TestManager testManager = new TestManager<>(marketData);
     Producer.from(recipe)
             .stream()
             .forEach(tradeStrategy -> {
