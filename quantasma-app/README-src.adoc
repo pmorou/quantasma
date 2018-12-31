@@ -4,6 +4,10 @@
 
 = Quantasma application
 
+== Compilation
+
+Follow parent link:{../README.md}[README].
+
 == Before first run
 
 Application requires MongoDB service.
@@ -13,7 +17,7 @@ Application requires MongoDB service.
 ./src/main/resources/scripts/install_service.sh
 ----
 
-== First run
+== Start application
 
 Run services.
 
@@ -22,7 +26,7 @@ Run services.
 ./src/main/resources/scripts/start_service.sh
 ----
 
-All dependencies are in the place. Next step is application itself. Pick right spring profile, eg.
+All dependencies are in the place. Next step is application itself. Pick the right spring profile and run jar file, eg.
 
 [source]
 ----

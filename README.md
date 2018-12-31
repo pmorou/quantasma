@@ -36,7 +36,7 @@ Maven repository support soon. Right now fork/clone this repository and start us
 
 Upgrade to Java 10 is comming soon.
 
-Before project compilation few dependencies must be installed, it can be done through script.
+Before project compilation few dependencies must be installed, it can be done through the script.
 
     ./scripts/install_dependencies.sh
 
