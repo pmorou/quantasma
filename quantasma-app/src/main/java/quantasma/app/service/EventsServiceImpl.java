@@ -27,6 +27,7 @@ public class EventsServiceImpl implements EventsService {
         return Flux.from(eventBuffers.publisherFor(QuoteEvent.class));
     }
 
+    @Override
     public void publish(QuoteEvent quoteEvent) {
         tradeEngine.process(quoteEvent.data());
         eventBuffers.next(quoteEvent);
