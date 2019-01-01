@@ -93,14 +93,13 @@ public class BaseOneSidedBar extends ForwardingBar implements OneSidedBar {
         public BaseOneSidedBar build(Duration timePeriod, ZonedDateTime endTime,
                                      T openPrice, T highPrice, T lowPrice, T closePrice,
                                      T volume, T amount) {
-            return new BaseOneSidedBar(timePeriod,
-                                       endTime,
-                                       toNumberOrPassNum.andThen(toNum).apply(openPrice),
-                                       toNumberOrPassNum.andThen(toNum).apply(highPrice),
-                                       toNumberOrPassNum.andThen(toNum).apply(lowPrice),
-                                       toNumberOrPassNum.andThen(toNum).apply(closePrice),
-                                       toNumberOrPassNum.andThen(toNum).apply(volume),
-                                       toNumberOrPassNum.andThen(toNum).apply(amount));
+            return new BaseOneSidedBar(timePeriod, endTime,
+                                       transform(openPrice), transform(highPrice), transform(lowPrice), transform(closePrice),
+                                       transform(volume), transform(amount));
+        }
+
+        private Num transform(T openPrice) {
+            return toNumberOrPassNum.andThen(toNum).apply(openPrice);
         }
 
         public static class From {
