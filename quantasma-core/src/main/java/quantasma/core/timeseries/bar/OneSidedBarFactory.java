@@ -1,6 +1,5 @@
 package quantasma.core.timeseries.bar;
 
-import org.ta4j.core.BaseBar;
 import org.ta4j.core.num.Num;
 import quantasma.core.BarPeriod;
 import quantasma.core.DateUtils;
@@ -21,9 +20,11 @@ public class OneSidedBarFactory implements BarFactory<OneSidedBar> {
     }
 
     private static BaseOneSidedBar createInstance(BarPeriod barPeriod, Function<Number, Num> numFunction, ZonedDateTime now) {
-        return new BaseOneSidedBar(new BaseBar(barPeriod.getPeriod(),
-                                               DateUtils.createEndDate(now, barPeriod),
-                                               numFunction));
+        return new BaseOneSidedBar(barPeriod.getPeriod(),
+                                   DateUtils.createEndDate(now, barPeriod),
+                                   numFunction);
+    }
+
     }
 
 }
