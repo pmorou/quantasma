@@ -18,7 +18,7 @@ public interface UniversalTimeSeries<B extends OneSidedBar> {
      * @return TimeSeries
      * @implSpec Returns unmodifiable TimeSeries
      */
-    TimeSeries timeSeries();
+    TimeSeries plainTimeSeries();
 
     BarPeriod getBarPeriod();
 

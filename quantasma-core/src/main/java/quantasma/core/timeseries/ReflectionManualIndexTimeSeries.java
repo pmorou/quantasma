@@ -58,7 +58,7 @@ public final class ReflectionManualIndexTimeSeries<B extends OneSidedBar> implem
     }
 
     protected int totalBarsCount() {
-        return timeSeries.timeSeries().getBarData().size();
+        return timeSeries.plainTimeSeries().getBarData().size();
     }
 
     protected int stealBeginIndex() {
@@ -78,7 +78,7 @@ public final class ReflectionManualIndexTimeSeries<B extends OneSidedBar> implem
     }
 
     private Object getField(String fieldName) {
-        TimeSeries target = timeSeries.timeSeries();
+        TimeSeries target = timeSeries.plainTimeSeries();
         if (isForwardingTimeSeries(target)) {
             target = getDelegate(target);
         }
@@ -94,7 +94,7 @@ public final class ReflectionManualIndexTimeSeries<B extends OneSidedBar> implem
     }
 
     private void setField(String fieldName, Object value) {
-        TimeSeries target = timeSeries.timeSeries();
+        TimeSeries target = timeSeries.plainTimeSeries();
         if (isForwardingTimeSeries(target)) {
             target = getDelegate(target);
         }
@@ -136,8 +136,8 @@ public final class ReflectionManualIndexTimeSeries<B extends OneSidedBar> implem
     }
 
     @Override
-    public TimeSeries timeSeries() {
-        return timeSeries.timeSeries();
+    public TimeSeries plainTimeSeries() {
+        return timeSeries.plainTimeSeries();
     }
 
     @Override

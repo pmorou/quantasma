@@ -10,7 +10,7 @@ public class BidClosePriceIndicator extends CachedIndicator<Num> {
     private final UniversalTimeSeries<BidAskBar> timeSeries;
 
     public BidClosePriceIndicator(UniversalTimeSeries<BidAskBar> timeSeries) {
-        super(timeSeries.timeSeries());
+        super(timeSeries.plainTimeSeries());
         this.timeSeries = timeSeries;
     }
 

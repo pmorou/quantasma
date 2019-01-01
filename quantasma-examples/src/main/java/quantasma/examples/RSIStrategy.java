@@ -81,7 +81,7 @@ public class RSIStrategy extends BaseTradeStrategy {
         final TimeSeries timeSeries = context.getDataService().getMarketData()
                                              .of((String) parameterValues.get(Parameter.TRADE_SYMBOL))
                                              .getTimeSeries(BarPeriod.M1)
-                                             .timeSeries();
+                                             .plainTimeSeries();
         final ClosePriceIndicator closePrice = new ClosePriceIndicator(timeSeries);
         return new RSIIndicator(closePrice, (Integer) parameterValues.get(Parameter.RSI_PERIOD));
     }

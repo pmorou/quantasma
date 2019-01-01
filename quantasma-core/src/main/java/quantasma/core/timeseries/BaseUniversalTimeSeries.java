@@ -39,7 +39,7 @@ public class BaseUniversalTimeSeries<B extends OneSidedBar> implements Universal
     }
 
     @Override
-    public TimeSeries timeSeries() {
+    public TimeSeries plainTimeSeries() {
         return new UnmodifiableTimeSeries(timeSeries);
     }
 

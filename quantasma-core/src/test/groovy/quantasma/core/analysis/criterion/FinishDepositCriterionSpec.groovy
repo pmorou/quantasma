@@ -24,16 +24,16 @@ class FinishDepositCriterionSpec extends Specification {
     def 'given 1_000 deposit when close 2 trades each (amount) lot should return (#expectedDeposit) deposit'() {
         given:
         def finishDepositCriterion = new FinishDepositCriterion(1000, 0.0001)
-        def timeSeries = createTimeSeriesWithBars().timeSeries()
+        def plainTimeSeries = createTimeSeriesWithBars().plainTimeSeries()
 
         when:
-        def result = new BaseTradingRecord(Order.buyAt(1, timeSeries, timeSeries.numOf(amount)),
-                Order.sellAt(2, timeSeries, timeSeries.numOf(amount)),
-                Order.buyAt(4, timeSeries, timeSeries.numOf(amount)),
-                Order.sellAt(6, timeSeries, timeSeries.numOf(amount)))
+        def result = new BaseTradingRecord(Order.buyAt(1, plainTimeSeries, plainTimeSeries.numOf(amount)),
+                Order.sellAt(2, plainTimeSeries, plainTimeSeries.numOf(amount)),
+                Order.buyAt(4, plainTimeSeries, plainTimeSeries.numOf(amount)),
+                Order.sellAt(6, plainTimeSeries, plainTimeSeries.numOf(amount)))
 
         then:
-        finishDepositCriterion.calculate(timeSeries, result).delegate == expectedDeposit
+        finishDepositCriterion.calculate(plainTimeSeries, result).delegate == expectedDeposit
 
         where:
         amount  || expectedDeposit

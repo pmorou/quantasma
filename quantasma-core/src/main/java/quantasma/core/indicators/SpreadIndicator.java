@@ -11,7 +11,7 @@ public class SpreadIndicator extends CachedIndicator<Num> {
     private final DifferenceIndicator differenceIndicator;
 
     public SpreadIndicator(UniversalTimeSeries timeSeries, Indicator<Num> askIndicator, Indicator<Num> bidIndicator) {
-        super(timeSeries.timeSeries());
+        super(timeSeries.plainTimeSeries());
         this.differenceIndicator = new DifferenceIndicator(askIndicator, bidIndicator);
     }
 
