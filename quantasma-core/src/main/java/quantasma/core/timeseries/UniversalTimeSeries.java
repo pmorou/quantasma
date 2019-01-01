@@ -13,10 +13,11 @@ import java.util.function.Function;
 public interface UniversalTimeSeries<B extends OneSidedBar> {
 
     /**
-     * Simple {@see org.ta4j.core.Bar} typed TimeSeries useful when passing further to ta4j inner logic
+     * Returns unmodifiable view of plain {@link org.ta4j.core.TimeSeries} based on {@link org.ta4j.core.Bar}.
+     *
+     * @implSpec Any mutation or replace action on inner objects (eg. {@code Bar}) will result in {@code UnsupportedOperationException}
      *
      * @return TimeSeries
-     * @implSpec Returns unmodifiable TimeSeries
      */
     TimeSeries plainTimeSeries();
 
