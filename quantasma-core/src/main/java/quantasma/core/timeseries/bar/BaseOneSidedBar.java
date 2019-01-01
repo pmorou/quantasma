@@ -6,6 +6,7 @@ import org.ta4j.core.num.Num;
 
 import java.math.BigDecimal;
 import java.time.Duration;
+import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.function.Function;
 
@@ -67,6 +68,17 @@ public class BaseOneSidedBar extends ForwardingBar implements OneSidedBar {
     @Override
     public Function<Number, Num> function() {
         return numFunction;
+    }
+
+    @Override
+    public String toString() {
+        return String.format("{end time: %1s, close price: %2$f, open price: %3$f, min price: %4$f, max price: %5$f, volume: %6$f}",
+                             getEndTime().withZoneSameInstant(ZoneId.systemDefault()),
+                             getClosePrice().doubleValue(),
+                             getOpenPrice().doubleValue(),
+                             getMinPrice().doubleValue(),
+                             getMaxPrice().doubleValue(),
+                             getVolume().doubleValue());
     }
 
     protected static class Builder<T> {
