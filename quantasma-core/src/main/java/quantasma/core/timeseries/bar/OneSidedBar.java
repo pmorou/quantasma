@@ -12,4 +12,13 @@ public interface OneSidedBar extends Bar {
         addPrice(numFunction.apply(quote.getBid()));
     }
 
+    Function<Number, Num> function();
+
+    Num getOpenPrice();
+
+    Num getMinPrice();
+
+    Num getMaxPrice();
+
+    Num getClosePrice();
 }
