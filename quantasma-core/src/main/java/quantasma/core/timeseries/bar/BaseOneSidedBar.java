@@ -19,8 +19,8 @@ public class BaseOneSidedBar extends ForwardingBar implements OneSidedBar {
         this.numFunction = numFunction;
     }
 
-    public BaseOneSidedBar(Duration timePeriod, ZonedDateTime endTime, Num openPrice, Num highPrice, Num lowPrice,
-                           Num closePrice, Num volume, Num amount) {
+    protected BaseOneSidedBar(Duration timePeriod, ZonedDateTime endTime, Num openPrice, Num highPrice, Num lowPrice,
+                            Num closePrice, Num volume, Num amount) {
         super(new BaseBar(timePeriod, endTime, openPrice, highPrice, lowPrice, closePrice, volume, amount));
         this.numFunction = openPrice.function();
     }
@@ -81,7 +81,7 @@ public class BaseOneSidedBar extends ForwardingBar implements OneSidedBar {
                              getVolume().doubleValue());
     }
 
-    protected static class Builder<T> {
+    public static class Builder<T> {
         private Function<T, Object> toNumberOrPassNum;
         private Function<Object, Num> toNum;
 
@@ -101,7 +101,7 @@ public class BaseOneSidedBar extends ForwardingBar implements OneSidedBar {
                                        toNumberOrPassNum.andThen(toNum).apply(amount));
         }
 
-        protected static class From {
+        public static class From {
             public Builder<String> fromString() {
                 return new Builder<>(BigDecimal::new);
             }
