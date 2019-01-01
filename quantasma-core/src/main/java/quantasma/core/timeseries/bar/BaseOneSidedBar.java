@@ -19,8 +19,9 @@ public class BaseOneSidedBar extends ForwardingBar implements OneSidedBar {
         this.numFunction = numFunction;
     }
 
-    protected BaseOneSidedBar(Duration timePeriod, ZonedDateTime endTime, Num openPrice, Num highPrice, Num lowPrice,
-                            Num closePrice, Num volume, Num amount) {
+    protected BaseOneSidedBar(Duration timePeriod, ZonedDateTime endTime,
+                              Num openPrice, Num highPrice, Num lowPrice, Num closePrice,
+                              Num volume, Num amount) {
         super(new BaseBar(timePeriod, endTime, openPrice, highPrice, lowPrice, closePrice, volume, amount));
         this.numFunction = openPrice.function();
     }
@@ -89,8 +90,9 @@ public class BaseOneSidedBar extends ForwardingBar implements OneSidedBar {
             this.toNumberOrPassNum = toNumberOrPassNum;
         }
 
-        public BaseOneSidedBar build(Duration timePeriod, ZonedDateTime endTime, T openPrice, T highPrice, T lowPrice,
-                                     T closePrice, T volume, T amount) {
+        public BaseOneSidedBar build(Duration timePeriod, ZonedDateTime endTime,
+                                     T openPrice, T highPrice, T lowPrice, T closePrice,
+                                     T volume, T amount) {
             return new BaseOneSidedBar(timePeriod,
                                        endTime,
                                        toNumberOrPassNum.andThen(toNum).apply(openPrice),
