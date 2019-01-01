@@ -1,7 +1,5 @@
 package quantasma.core.timeseries.bar;
 
-import org.ta4j.core.Order;
-import org.ta4j.core.num.NaN;
 import org.ta4j.core.num.Num;
 
 import java.math.BigDecimal;
@@ -10,255 +8,65 @@ import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.function.Function;
 
-public class BaseBidAskBar implements BidAskBar {
+public class BaseBidAskBar extends BaseOneSidedBar implements BidAskBar {
 
     private static final long serialVersionUID = 8038383777467488148L;
 
-    private Duration timePeriod;
-    private ZonedDateTime endTime;
-    private ZonedDateTime beginTime;
-    private Num bidOpenPrice = NumNaN();
-    private Num bidMaxPrice = NumNaN();
-    private Num bidMinPrice = NumNaN();
-    private Num bidClosePrice = NumNaN();
-    private Num askOpenPrice = NumNaN();
-    private Num askMaxPrice = NumNaN();
-    private Num askMinPrice = NumNaN();
-    private Num askClosePrice = NumNaN();
-    private Num amount = NumNaN();
-    private Num volume = NumNaN();
-    private int trades;
+    private Num askOpenPrice;
+    private Num askMaxPrice;
+    private Num askMinPrice;
+    private Num askClosePrice;
 
     public BaseBidAskBar(Duration timePeriod, ZonedDateTime endTime, Function<Number, Num> numFunction) {
-        checkTimeArguments(timePeriod, endTime);
-        this.timePeriod = timePeriod;
-        this.endTime = endTime;
-        this.beginTime = endTime.minus(timePeriod);
-        this.volume = numFunction.apply(0);
-        this.amount = numFunction.apply(0);
+        super(timePeriod, endTime, numFunction);
     }
 
-    public BaseBidAskBar(ZonedDateTime endTime, double openPrice, double highPrice, double lowPrice, double closePrice, double volume, Function<Number, Num> numFunction) {
-        this(endTime,
-             numFunction.apply(openPrice),
-             numFunction.apply(highPrice),
-             numFunction.apply(lowPrice),
-             numFunction.apply(closePrice),
-             numFunction.apply(volume), numFunction.apply(0));
-    }
-
-    public BaseBidAskBar(ZonedDateTime endTime, String openPrice, String highPrice, String lowPrice, String closePrice, String volume, Function<Number, Num> numFunction) {
-        this(endTime,
-             numFunction.apply(new BigDecimal(openPrice)),
-             numFunction.apply(new BigDecimal(highPrice)),
-             numFunction.apply(new BigDecimal(lowPrice)),
-             numFunction.apply(new BigDecimal(closePrice)),
-             numFunction.apply(new BigDecimal(volume)),
-             numFunction.apply(0));
-    }
-
-    public BaseBidAskBar(Duration timePeriod, ZonedDateTime endTime, String bidOpenPrice, String bidHighPrice, String bidLowPrice, String bidClosePrice,
-                         String askOpenPrice, String askHighPrice, String askLowPrice, String askClosePrice, String volume, Function<Number, Num> numFunction) {
-        this(timePeriod,
-             endTime,
-             numFunction.apply(new BigDecimal(bidOpenPrice)),
-             numFunction.apply(new BigDecimal(bidHighPrice)),
-             numFunction.apply(new BigDecimal(bidLowPrice)),
-             numFunction.apply(new BigDecimal(bidClosePrice)),
-             numFunction.apply(new BigDecimal(askOpenPrice)),
-             numFunction.apply(new BigDecimal(askHighPrice)),
-             numFunction.apply(new BigDecimal(askLowPrice)),
-             numFunction.apply(new BigDecimal(askClosePrice)),
-             numFunction.apply(new BigDecimal(volume)),
-             numFunction.apply(0));
-    }
-
-    public BaseBidAskBar(Duration timePeriod, ZonedDateTime endTime, double bidOpenPrice, double bidHighPrice, double bidLowPrice, double bidClosePrice,
-                         double askOpenPrice, double askHighPrice, double askLowPrice, double askClosePrice, double volume, Function<Number, Num> numFunction) {
-        this(timePeriod,
-             endTime,
-             numFunction.apply(bidOpenPrice),
-             numFunction.apply(bidHighPrice),
-             numFunction.apply(bidLowPrice),
-             numFunction.apply(bidClosePrice),
-             numFunction.apply(askOpenPrice),
-             numFunction.apply(askHighPrice),
-             numFunction.apply(askLowPrice),
-             numFunction.apply(askClosePrice),
-             numFunction.apply(volume),
-             numFunction.apply(0));
-    }
-
-    public BaseBidAskBar(ZonedDateTime endTime, Num openPrice, Num highPrice, Num lowPrice, Num closePrice, Num volume, Num amount) {
-        this(Duration.ofDays(1), endTime, openPrice, highPrice, lowPrice, closePrice, volume, amount);
-    }
-
-    public BaseBidAskBar(Duration timePeriod, ZonedDateTime endTime, Num openPrice, Num highPrice, Num lowPrice, Num closePrice, Num volume, Num amount) {
-        checkTimeArguments(timePeriod, endTime);
-        this.timePeriod = timePeriod;
-        this.endTime = endTime;
-        this.beginTime = endTime.minus(timePeriod);
-        this.bidOpenPrice = openPrice;
-        this.bidMaxPrice = highPrice;
-        this.bidMinPrice = lowPrice;
-        this.bidClosePrice = closePrice;
-        this.volume = volume;
-        this.amount = amount;
-    }
-
-    public BaseBidAskBar(Duration timePeriod, ZonedDateTime endTime, Num bidOpenPrice, Num bidHighPrice, Num bidLowPrice, Num bidClosePrice,
-                         Num askOpenPrice, Num askHighPrice, Num askLowPrice, Num askClosePrice, Num volume, Num amount) {
-        checkTimeArguments(timePeriod, endTime);
-        this.timePeriod = timePeriod;
-        this.endTime = endTime;
-        this.beginTime = endTime.minus(timePeriod);
-        this.bidOpenPrice = bidOpenPrice;
-        this.bidMaxPrice = bidHighPrice;
-        this.bidMinPrice = bidLowPrice;
-        this.bidClosePrice = bidClosePrice;
+    protected BaseBidAskBar(Duration timePeriod, ZonedDateTime endTime,
+                            Num bidOpenPrice, Num bidHighPrice, Num bidLowPrice, Num bidClosePrice,
+                            Num askOpenPrice, Num askMaxPrice, Num askMinPrice, Num askClosePrice,
+                            Num volume, Num amount) {
+        super(timePeriod, endTime, bidOpenPrice, bidHighPrice, bidLowPrice, bidClosePrice, volume, amount);
         this.askOpenPrice = askOpenPrice;
-        this.askMaxPrice = askHighPrice;
-        this.askMinPrice = askLowPrice;
+        this.askMaxPrice = askMaxPrice;
+        this.askMinPrice = askMinPrice;
         this.askClosePrice = askClosePrice;
-        this.volume = volume;
-        this.amount = amount;
-    }
-
-    @Override
-    public Num getBidOpenPrice() {
-        return bidOpenPrice;
-    }
-
-    @Override
-    public Num getBidMaxPrice() {
-        return bidMaxPrice;
-    }
-
-    @Override
-    public Num getBidMinPrice() {
-        return bidMinPrice;
-    }
-
-    @Override
-    public Num getBidClosePrice() {
-        return bidClosePrice;
     }
 
     @Override
     public Num getAskOpenPrice() {
-        return askOpenPrice;
+        return nonNull(askOpenPrice);
     }
 
     @Override
     public Num getAskMaxPrice() {
-        return askMaxPrice;
+        return nonNull(askMaxPrice);
     }
 
     @Override
     public Num getAskMinPrice() {
-        return askMinPrice;
+        return nonNull(askMinPrice);
     }
 
     @Override
     public Num getAskClosePrice() {
-        return askClosePrice;
-    }
-
-    @Override
-    public Num getVolume() {
-        return volume;
-    }
-
-    @Override
-    public int getTrades() {
-        return trades;
-    }
-
-    @Override
-    public Num getAmount() {
-        return amount;
-    }
-
-    @Override
-    public Duration getTimePeriod() {
-        return timePeriod;
-    }
-
-    @Override
-    public ZonedDateTime getBeginTime() {
-        return beginTime;
-    }
-
-    @Override
-    public ZonedDateTime getEndTime() {
-        return endTime;
-    }
-
-    @Override
-    public void addTrade(Num tradeVolume, Num tradePrice) {
-        addPrice(tradePrice);
-
-        volume = volume.plus(tradeVolume);
-        amount = amount.plus(tradeVolume.multipliedBy(tradePrice));
-        trades++;
-    }
-
-    @Override
-    public void addTrade(Num volume, Num bid, Num ask, Order.OrderType orderType) {
-        addPrice(bid, ask);
-
-        volume = volume.plus(volume);
-        if (orderType == Order.OrderType.BUY) {
-            amount = amount.plus(volume.multipliedBy(bid));
-        } else {
-            amount = amount.plus(volume.multipliedBy(ask));
-
-        }
-        trades++;
-    }
-
-    @Override
-    public void addPrice(Num price) {
-        if (isNaN(bidOpenPrice)) {
-            bidOpenPrice = price;
-        }
-
-        bidClosePrice = price;
-        if (isNaN(bidMaxPrice)) {
-            bidMaxPrice = price;
-        } else if (bidMaxPrice.isLessThan(price)) {
-            bidMaxPrice = price;
-        }
-        if (isNaN(bidMinPrice)) {
-            bidMinPrice = price;
-        } else if (bidMinPrice.isGreaterThan(price)) {
-            bidMinPrice = price;
-        }
-    }
-
-    private boolean isNaN(Num bidOpenPrice) {
-        return bidOpenPrice == NumNaN();
-    }
-
-    private static Num NumNaN() {
-        return org.ta4j.core.num.NaN.NaN;
+        return nonNull(askClosePrice);
     }
 
     @Override
     public void addPrice(Num bid, Num ask) {
         addPrice(bid);
 
-        if (isNaN(askOpenPrice)) {
+        if (askOpenPrice == null) {
             askOpenPrice = ask;
         }
 
         askClosePrice = ask;
-        if (isNaN(askMaxPrice)) {
+        if (askMaxPrice == null) {
             askMaxPrice = ask;
         } else if (askMaxPrice.isLessThan(ask)) {
             askMaxPrice = ask;
         }
-        if (isNaN(askMinPrice)) {
+        if (askMinPrice == null) {
             askMinPrice = ask;
         } else if (askMinPrice.isGreaterThan(ask)) {
             askMinPrice = ask;
@@ -269,24 +77,52 @@ public class BaseBidAskBar implements BidAskBar {
     public String toString() {
         return String.format("{end time: %1s, bid close price: %2$f, bid open price: %3$f, bid min price: %4$f, bid max price: %5$f, "
                              + "ask close price: %6$f, ask open price: %7$f, ask min price: %8$f, ask max price: %9$f, volume: %10$f}",
-                             endTime.withZoneSameInstant(ZoneId.systemDefault()),
-                             bidClosePrice.doubleValue(),
-                             bidOpenPrice.doubleValue(),
-                             bidMinPrice.doubleValue(),
-                             bidMaxPrice.doubleValue(),
-                             askClosePrice.doubleValue(),
-                             askOpenPrice.doubleValue(),
-                             askMinPrice.doubleValue(),
-                             askMaxPrice.doubleValue(),
-                             volume.doubleValue());
+                             getEndTime().withZoneSameInstant(ZoneId.systemDefault()),
+                             getClosePrice().doubleValue(),
+                             getOpenPrice().doubleValue(),
+                             getMinPrice().doubleValue(),
+                             getMaxPrice().doubleValue(),
+                             getAskClosePrice().doubleValue(),
+                             getAskOpenPrice().doubleValue(),
+                             getAskMinPrice().doubleValue(),
+                             getAskMaxPrice().doubleValue(),
+                             getVolume().doubleValue());
     }
 
-    private static void checkTimeArguments(Duration timePeriod, ZonedDateTime endTime) {
-        if (timePeriod == null) {
-            throw new IllegalArgumentException("Time period cannot be null");
+    protected static class Builder<T> {
+        private Function<T, Object> toNumberOrPassNum;
+        private Function<Object, Num> toNum;
+
+        private Builder(Function<T, Object> toNumberOrPassNum) {
+            this.toNumberOrPassNum = toNumberOrPassNum;
         }
-        if (endTime == null) {
-            throw new IllegalArgumentException("End time cannot be null");
+
+        public BaseBidAskBar build(Duration timePeriod, ZonedDateTime endTime,
+                                   T bidOpenPrice, T bidHighPrice, T bidLowPrice, T bidClosePrice,
+                                   T askOpenPrice, T askHighPrice, T askLowPrice, T askClosePrice,
+                                   T volume, T amount) {
+            return new BaseBidAskBar(timePeriod, endTime,
+                                     transform(bidOpenPrice), transform(bidHighPrice), transform(bidLowPrice), transform(bidClosePrice),
+                                     transform(askOpenPrice), transform(askHighPrice), transform(askLowPrice), transform(askClosePrice),
+                                     transform(volume), transform(amount));
+        }
+
+        private Num transform(T openPrice) {
+            return toNumberOrPassNum.andThen(toNum).apply(openPrice);
+        }
+
+        protected static class From {
+            public BaseBidAskBar.Builder<String> fromString() {
+                return new BaseBidAskBar.Builder<>(BigDecimal::new);
+            }
+
+            public BaseBidAskBar.Builder<Double> fromDouble() {
+                return new BaseBidAskBar.Builder<>(o -> o);
+            }
+
+            public BaseBidAskBar.Builder<Num> fromNum() {
+                return new BaseBidAskBar.Builder<>(o -> o);
+            }
         }
     }
 }
