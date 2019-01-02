@@ -116,4 +116,84 @@ public class BaseOneSidedBar extends ForwardingBar implements OneSidedBar {
             }
         }
     }
+
+    static class NaNBar implements OneSidedBar {
+        private static final NaNBar INSTANCE = new NaNBar();
+
+        protected final Num NaN() {
+            return org.ta4j.core.num.NaN.NaN;
+        }
+
+        protected NaNBar() {
+        }
+
+        public static OneSidedBar getInstance() {
+            return INSTANCE;
+        }
+
+        @Override
+        public Function<Number, Num> function() {
+            return NaN().function();
+        }
+
+        @Override
+        public Num getOpenPrice() {
+            return NaN();
+        }
+
+        @Override
+        public Num getMinPrice() {
+            return NaN();
+        }
+
+        @Override
+        public Num getMaxPrice() {
+            return NaN();
+        }
+
+        @Override
+        public Num getClosePrice() {
+            return NaN();
+        }
+
+        @Override
+        public Num getVolume() {
+            return NaN();
+        }
+
+        @Override
+        public int getTrades() {
+            return 0;
+        }
+
+        @Override
+        public Num getAmount() {
+            return NaN();
+        }
+
+        @Override
+        public Duration getTimePeriod() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public ZonedDateTime getBeginTime() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public ZonedDateTime getEndTime() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public void addTrade(Num tradeVolume, Num tradePrice) {
+            // do nothing
+        }
+
+        @Override
+        public void addPrice(Num price) {
+            // do nothing
+        }
+    }
 }
