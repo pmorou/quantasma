@@ -13,6 +13,6 @@ public interface BarFactory<B extends OneSidedBar> {
 
     B create(BarPeriod barPeriod, Function<Number, Num> numFunction, ZonedDateTime time);
 
-    B createNaNBar();
+    B getNaNBar();
 
 }

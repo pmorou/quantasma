@@ -50,7 +50,7 @@ public class BaseUniversalTimeSeries<B extends OneSidedBar> implements Universal
             return (B) timeSeries.getBar(i);
         }
 
-        return barFactory.createNaNBar();
+        return barFactory.getNaNBar();
     }
 
     @Override

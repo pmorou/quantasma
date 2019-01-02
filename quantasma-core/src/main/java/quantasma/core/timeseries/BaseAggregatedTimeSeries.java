@@ -43,7 +43,7 @@ public class BaseAggregatedTimeSeries<B extends OneSidedBar> extends BaseUnivers
             return super.getBar(getEndIndex() - nthOldElement);
         }
 
-        return getBarFactory().createNaNBar();
+        return getBarFactory().getNaNBar();
     }
 
     public static class Builder<T extends Builder<T, R>, R extends BaseAggregatedTimeSeries> extends BaseUniversalTimeSeries.Builder<T, R> {
