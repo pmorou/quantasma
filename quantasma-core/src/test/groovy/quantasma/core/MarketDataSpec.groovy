@@ -10,13 +10,12 @@ import spock.lang.Specification
 import spock.lang.Unroll
 
 import java.time.LocalDateTime
-import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
 
 class MarketDataSpec extends Specification {
 
-    private static final ZonedDateTime MIDNIGHT = utc(LocalDateTime.of(2018, 11, 20, 0, 0))
+    private static final ZonedDateTime MIDNIGHT = Utils.utc(LocalDateTime.of(2018, 11, 20, 0, 0))
     private static final BarPeriod ONE_MINUTE_PERIOD = BarPeriod.M1
 
     private static List<ZonedDateTime> 'minutes possibilities from 0:00 to 0:05'() {
@@ -249,9 +248,4 @@ class MarketDataSpec extends Specification {
                         .symbols("symbol1", "symbol2")
                         .build()
     }
-
-    private static ZonedDateTime utc(LocalDateTime localDateTime) {
-        return ZonedDateTime.of(localDateTime, ZoneOffset.UTC)
-    }
-
 }

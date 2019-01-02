@@ -3,19 +3,19 @@ package quantasma.core.timeseries
 import org.ta4j.core.BaseBar
 import quantasma.core.BarPeriod
 import quantasma.core.DateUtils
+import quantasma.core.Utils
 import quantasma.core.timeseries.bar.BaseOneSidedBar
 import quantasma.core.timeseries.bar.OneSidedBar
 import spock.lang.Specification
 import spock.lang.Unroll
 
 import java.time.LocalDateTime
-import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
 
 class BaseAggregatedTimeSeriesSpec extends Specification {
 
-    private static final ZonedDateTime MIDNIGHT = utc(LocalDateTime.of(2018, 11, 20, 0, 0))
+    private static final ZonedDateTime MIDNIGHT = Utils.utc(LocalDateTime.of(2018, 11, 20, 0, 0))
 
     private static List<ZonedDateTime> 'minutes possibilities from 0:00 to 0:05'() {
         (0..5).collect({ MIDNIGHT.plusMinutes(it) })
@@ -57,7 +57,7 @@ class BaseAggregatedTimeSeriesSpec extends Specification {
         def resultAtIndex1 = aggregatedTimeSeries.getBar(1)
 
         then:
-        resultAtIndex0 == mainTimeSeries.getBarFactory().createNaNBar()
+        resultAtIndex0 == Utils.nanBar(mainTimeSeries)
         resultAtIndex1.getClosePrice().doubleValue() == 1
 
         where:
@@ -80,10 +80,10 @@ class BaseAggregatedTimeSeriesSpec extends Specification {
 
         expect:
         verifyAll(aggregatedTimeSeries) {
-            getBar(0) == aggregatedTimeSeries.getBarFactory().createNaNBar()
-            getBar(1) == aggregatedTimeSeries.getBarFactory().createNaNBar()
-            getBar(2) == aggregatedTimeSeries.getBarFactory().createNaNBar()
-            getBar(3) == aggregatedTimeSeries.getBarFactory().createNaNBar()
+            getBar(0) == Utils.nanBar(aggregatedTimeSeries)
+            getBar(1) == Utils.nanBar(aggregatedTimeSeries)
+            getBar(2) == Utils.nanBar(aggregatedTimeSeries)
+            getBar(3) == Utils.nanBar(aggregatedTimeSeries)
             getBar(4).getClosePrice().doubleValue() == 4
             getBar(5).getClosePrice().doubleValue() == 5
         }
@@ -141,7 +141,5 @@ class BaseAggregatedTimeSeriesSpec extends Specification {
         return new BaseOneSidedBar(new BaseBar(period.getPeriod(), DateUtils.createEndDate(MIDNIGHT.plus(minutesOffset, ChronoUnit.MINUTES), period), timeSeries.function()))
     }
 
-    private static ZonedDateTime utc(LocalDateTime localDateTime) {
-        return ZonedDateTime.of(localDateTime, ZoneOffset.UTC)
-    }
+
 }
