@@ -25,6 +25,9 @@ public class OneSidedBarFactory implements BarFactory<OneSidedBar> {
                                    numFunction);
     }
 
+    @Override
+    public OneSidedBar createNaNBar() {
+        return BaseOneSidedBar.NaNBar.getInstance();
     }
 
 }

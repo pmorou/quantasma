@@ -25,4 +25,9 @@ public class BidAskBarFactory implements BarFactory<BidAskBar> {
                                  numFunction);
     }
 
+    @Override
+    public BidAskBar createNaNBar() {
+        return BaseBidAskBar.NaNBar.getInstance();
+    }
+
 }
