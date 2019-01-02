@@ -4,7 +4,6 @@ import org.ta4j.core.BaseBar
 import quantasma.core.BarPeriod
 import quantasma.core.DateUtils
 import quantasma.core.timeseries.bar.BaseOneSidedBar
-import quantasma.core.timeseries.bar.NaNBar
 import quantasma.core.timeseries.bar.OneSidedBar
 import spock.lang.Specification
 import spock.lang.Unroll
@@ -58,7 +57,7 @@ class BaseAggregatedTimeSeriesSpec extends Specification {
         def resultAtIndex1 = aggregatedTimeSeries.getBar(1)
 
         then:
-        resultAtIndex0 == NaNBar.NaN
+        resultAtIndex0 == mainTimeSeries.getBarFactory().createNaNBar()
         resultAtIndex1.getClosePrice().doubleValue() == 1
 
         where:
@@ -81,10 +80,10 @@ class BaseAggregatedTimeSeriesSpec extends Specification {
 
         expect:
         verifyAll(aggregatedTimeSeries) {
-            getBar(0) == NaNBar.NaN
-            getBar(1) == NaNBar.NaN
-            getBar(2) == NaNBar.NaN
-            getBar(3) == NaNBar.NaN
+            getBar(0) == aggregatedTimeSeries.getBarFactory().createNaNBar()
+            getBar(1) == aggregatedTimeSeries.getBarFactory().createNaNBar()
+            getBar(2) == aggregatedTimeSeries.getBarFactory().createNaNBar()
+            getBar(3) == aggregatedTimeSeries.getBarFactory().createNaNBar()
             getBar(4).getClosePrice().doubleValue() == 4
             getBar(5).getClosePrice().doubleValue() == 5
         }

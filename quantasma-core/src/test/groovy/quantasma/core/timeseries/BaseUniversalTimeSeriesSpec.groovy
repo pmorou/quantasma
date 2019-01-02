@@ -3,7 +3,6 @@ package quantasma.core.timeseries
 import org.ta4j.core.BaseBar
 import quantasma.core.BarPeriod
 import quantasma.core.timeseries.bar.BaseOneSidedBar
-import quantasma.core.timeseries.bar.NaNBar
 import quantasma.core.timeseries.bar.OneSidedBar
 import spock.lang.Specification
 
@@ -25,7 +24,7 @@ class BaseUniversalTimeSeriesSpec extends Specification {
 
         then:
         timeseries.getBarCount() + timeseries.getRemovedBarsCount() == 3
-        timeseries.getBar(0) == NaNBar.NaN
+        timeseries.getBar(0) == timeseries.getBarFactory().createNaNBar()
         timeseries.getBar(1).getClosePrice().doubleValue() == 1
         timeseries.getBar(2).getClosePrice().doubleValue() == 2
     }

@@ -7,8 +7,6 @@ import java.util.function.Function;
 
 public interface BidAskBar extends OneSidedBar {
 
-    BidAskBar NaN = NaNBar.getInstance();
-
     default void updateBar(Quote quote, Function<Number, Num> numFunction) {
         addPrice(numFunction.apply(quote.getBid()), numFunction.apply(quote.getAsk()));
     }

@@ -3,7 +3,6 @@ package quantasma.core.timeseries;
 import lombok.AccessLevel;
 import lombok.Getter;
 import quantasma.core.BarPeriod;
-import quantasma.core.timeseries.bar.BidAskBar;
 import quantasma.core.timeseries.bar.OneSidedBar;
 
 public class BaseAggregatedTimeSeries<B extends OneSidedBar> extends BaseUniversalTimeSeries<B> implements AggregatedTimeSeries<B> {
@@ -44,7 +43,7 @@ public class BaseAggregatedTimeSeries<B extends OneSidedBar> extends BaseUnivers
             return super.getBar(getEndIndex() - nthOldElement);
         }
 
-        return (B) BidAskBar.NaN; // TODO: provide generic method
+        return getBarFactory().createNaNBar();
     }
 
     public static class Builder<T extends Builder<T, R>, R extends BaseAggregatedTimeSeries> extends BaseUniversalTimeSeries.Builder<T, R> {

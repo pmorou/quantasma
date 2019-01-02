@@ -9,7 +9,6 @@ import org.ta4j.core.num.Num;
 import org.ta4j.core.num.PrecisionNum;
 import quantasma.core.BarPeriod;
 import quantasma.core.timeseries.bar.BarFactory;
-import quantasma.core.timeseries.bar.BidAskBar;
 import quantasma.core.timeseries.bar.OneSidedBar;
 import quantasma.core.timeseries.bar.OneSidedBarFactory;
 
@@ -51,7 +50,7 @@ public class BaseUniversalTimeSeries<B extends OneSidedBar> implements Universal
             return (B) timeSeries.getBar(i);
         }
 
-        return (B) BidAskBar.NaN; // TODO: provide generic method
+        return barFactory.createNaNBar();
     }
 
     @Override
