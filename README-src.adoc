@@ -37,7 +37,7 @@ Maven repository support soon. Right now fork/clone this repository and start us
 
 >= Java 9
 
-Upgrade to Java 10 is comming soon.
+Upgrade to Java 10 is coming soon.
 
 Before project compilation few dependencies must be installed, it can be done through the script.
 
