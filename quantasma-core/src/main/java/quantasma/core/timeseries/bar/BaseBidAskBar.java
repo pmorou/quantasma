@@ -125,4 +125,40 @@ public class BaseBidAskBar extends BaseOneSidedBar implements BidAskBar {
             }
         }
     }
+
+    static class NaNBar extends BaseOneSidedBar.NaNBar implements BidAskBar {
+        private static final NaNBar INSTANCE = new NaNBar();
+
+        protected NaNBar() {
+        }
+
+        public static BidAskBar getInstance() {
+            return INSTANCE;
+        }
+
+        @Override
+        public Num getAskOpenPrice() {
+            return NaN();
+        }
+
+        @Override
+        public Num getAskMinPrice() {
+            return NaN();
+        }
+
+        @Override
+        public Num getAskMaxPrice() {
+            return NaN();
+        }
+
+        @Override
+        public Num getAskClosePrice() {
+            return NaN();
+        }
+
+        @Override
+        public void addPrice(Num bid, Num ask) {
+            // do nothing
+        }
+    }
 }
