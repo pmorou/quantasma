@@ -30,9 +30,9 @@ public abstract class BarBuilder<T> {
             this.numberToNum = numFunction;
         }
 
-        final protected Num transform(T openPrice) {
+        final protected Num transform(T value) {
             return toNumber.andThen(numberToNum)
-                           .apply(openPrice);
+                           .apply(value);
         }
 
         public static class ArgumentType {
