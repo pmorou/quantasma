@@ -1,6 +1,8 @@
 package quantasma.core.timeseries.bar;
 
 import org.ta4j.core.num.Num;
+import quantasma.core.timeseries.bar.generic.Argument;
+import quantasma.core.timeseries.bar.generic.GenericNumMethod;
 
 import java.time.Duration;
 import java.time.ZoneId;
@@ -88,23 +90,23 @@ public class BaseBidAskBar extends BaseOneSidedBar implements BidAskBar {
                              getVolume().doubleValue());
     }
 
-    public static class Builder<T> extends BarBuilder<T> {
-        private Builder(BarBuilderContext<T> context) {
-            super(context);
+    public static class GenericConstructor<T> extends GenericNumMethod<T> {
+        protected GenericConstructor(Function<Number, Num> numFunction, Argument<T> context) {
+            super(numFunction, context);
         }
 
-        public BaseBidAskBar build(Duration timePeriod, ZonedDateTime endTime,
-                                   T bidOpenPrice, T bidHighPrice, T bidLowPrice, T bidClosePrice,
-                                   T askOpenPrice, T askHighPrice, T askLowPrice, T askClosePrice,
-                                   T volume, T amount) {
+        public BaseBidAskBar create(Duration timePeriod, ZonedDateTime endTime,
+                                    T bidOpenPrice, T bidHighPrice, T bidLowPrice, T bidClosePrice,
+                                    T askOpenPrice, T askHighPrice, T askLowPrice, T askClosePrice,
+                                    T volume, T amount) {
             return new BaseBidAskBar(timePeriod, endTime,
                                      transform(bidOpenPrice), transform(bidHighPrice), transform(bidLowPrice), transform(bidClosePrice),
                                      transform(askOpenPrice), transform(askHighPrice), transform(askLowPrice), transform(askClosePrice),
                                      transform(volume), transform(amount));
         }
 
-        public static <T> Builder<T> create(BarBuilderContext<T> context) {
-            return new Builder<>(context);
+        public static <T> GenericConstructor<T> from(Argument<T> context, Function<Number, Num> numFunction) {
+            return new GenericConstructor<>(numFunction, context);
         }
     }
 

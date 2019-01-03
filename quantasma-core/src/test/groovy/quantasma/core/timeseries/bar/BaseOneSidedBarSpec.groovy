@@ -1,6 +1,7 @@
 package quantasma.core.timeseries.bar
 
 import org.ta4j.core.num.PrecisionNum
+import quantasma.core.timeseries.bar.generic.Argument
 import spock.lang.Specification
 
 import java.time.Duration
@@ -14,7 +15,7 @@ class BaseOneSidedBarSpec extends Specification {
 
     def "build bar from String values"() {
         when:
-        def bar = BaseOneSidedBar.Builder.create(BarBuilder.create(numFunction()).fromString()).build(
+        def bar = BaseOneSidedBar.GenericConstructor.from(numFunction(), Argument.ofString()).create(
                 Duration.ofMinutes(1),
                 TIME,
                 "1.01",
@@ -31,7 +32,7 @@ class BaseOneSidedBarSpec extends Specification {
 
     def "build bar from Double values"() {
         when:
-        def bar = BaseOneSidedBar.Builder.create(BarBuilder.create(numFunction()).fromDouble()).build(
+        def bar = BaseOneSidedBar.GenericConstructor.from(numFunction(), Argument.ofDouble()).create(
                 Duration.ofMinutes(1),
                 TIME,
                 1.01d,
@@ -48,7 +49,7 @@ class BaseOneSidedBarSpec extends Specification {
 
     def "build bar from Integer values"() {
         when:
-        def bar = BaseOneSidedBar.Builder.create(BarBuilder.create(numFunction()).fromInteger()).build(
+        def bar = BaseOneSidedBar.GenericConstructor.from(numFunction(), Argument.ofInteger()).create(
                 Duration.ofMinutes(1),
                 TIME,
                 1,

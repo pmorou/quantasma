@@ -3,6 +3,8 @@ package quantasma.core.timeseries.bar;
 import org.ta4j.core.BaseBar;
 import org.ta4j.core.num.NaN;
 import org.ta4j.core.num.Num;
+import quantasma.core.timeseries.bar.generic.Argument;
+import quantasma.core.timeseries.bar.generic.GenericNumMethod;
 
 import java.time.Duration;
 import java.time.ZoneId;
@@ -81,21 +83,21 @@ public class BaseOneSidedBar extends ForwardingBar implements OneSidedBar {
                              getVolume().doubleValue());
     }
 
-    public static class Builder<T> extends BarBuilder<T> {
-        private Builder(BarBuilderContext<T> context) {
-            super(context);
+    public static class GenericConstructor<T> extends GenericNumMethod<T> {
+        protected GenericConstructor(Function<Number, Num> numFunction, Argument<T> context) {
+            super(numFunction, context);
         }
 
-        public BaseOneSidedBar build(Duration timePeriod, ZonedDateTime endTime,
-                                     T openPrice, T highPrice, T lowPrice, T closePrice,
-                                     T volume, T amount) {
+        public BaseOneSidedBar create(Duration timePeriod, ZonedDateTime endTime,
+                                      T openPrice, T highPrice, T lowPrice, T closePrice,
+                                      T volume, T amount) {
             return new BaseOneSidedBar(timePeriod, endTime,
                                        transform(openPrice), transform(highPrice), transform(lowPrice), transform(closePrice),
                                        transform(volume), transform(amount));
         }
 
-        public static <T> Builder<T> create(BarBuilderContext<T> context) {
-            return new Builder<>(context);
+        public static <T> GenericConstructor<T> from(Function<Number, Num> numFunction, Argument<T> context) {
+            return new GenericConstructor<>(numFunction, context);
         }
     }
 

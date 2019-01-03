@@ -2,6 +2,7 @@ package quantasma.core.timeseries.bar
 
 import org.ta4j.core.num.Num
 import org.ta4j.core.num.PrecisionNum
+import quantasma.core.timeseries.bar.generic.Argument
 import spock.lang.Specification
 
 import java.time.Duration
@@ -40,7 +41,7 @@ class BaseBidAskBarSpec extends Specification {
 
     def "build bar from String values"() {
         when:
-        def bar = BaseBidAskBar.Builder.create(BarBuilder.create(numFunction()).fromString()).build(
+        def bar = BaseBidAskBar.GenericConstructor.from(Argument.ofString(), numFunction()).create(
                 Duration.ofMinutes(1),
                 TIME,
                 "1.01",
@@ -61,7 +62,7 @@ class BaseBidAskBarSpec extends Specification {
 
     def "build bar from Double values"() {
         when:
-        def bar = BaseBidAskBar.Builder.create(BarBuilder.create(numFunction()).fromDouble()).build(
+        def bar = BaseBidAskBar.GenericConstructor.from(Argument.ofDouble(), numFunction()).create(
                 Duration.ofMinutes(1),
                 TIME,
                 1.01d,
@@ -82,7 +83,7 @@ class BaseBidAskBarSpec extends Specification {
 
     def "build bar from Integer values"() {
         when:
-        def bar = BaseBidAskBar.Builder.create(BarBuilder.create(numFunction()).fromInteger()).build(
+        def bar = BaseBidAskBar.GenericConstructor.from(Argument.ofInteger(), numFunction()).create(
                 Duration.ofMinutes(1),
                 TIME,
                 1,

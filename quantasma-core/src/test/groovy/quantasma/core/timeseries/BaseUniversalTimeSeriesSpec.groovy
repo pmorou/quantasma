@@ -2,9 +2,9 @@ package quantasma.core.timeseries
 
 import quantasma.core.BarPeriod
 import quantasma.core.Utils
-import quantasma.core.timeseries.bar.BarBuilder
 import quantasma.core.timeseries.bar.BaseOneSidedBar
 import quantasma.core.timeseries.bar.OneSidedBar
+import quantasma.core.timeseries.bar.generic.Argument
 import spock.lang.Specification
 
 import java.time.Duration
@@ -31,7 +31,7 @@ class BaseUniversalTimeSeriesSpec extends Specification {
     }
 
     private OneSidedBar bar(BaseUniversalTimeSeries timeseries, Integer number) {
-        BaseOneSidedBar.Builder.create(BarBuilder.create(timeseries.function()).fromInteger()).build(
+        BaseOneSidedBar.GenericConstructor.from(timeseries.function(), Argument.ofInteger()).create(
                 Duration.ofMinutes(1),
                 time.plusMinutes(number),
                 number,
