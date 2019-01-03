@@ -9,7 +9,7 @@ import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.function.Function;
 
-abstract public class ForwardingTimeSeries implements TimeSeries {
+public abstract class ForwardingTimeSeries implements TimeSeries {
 
     private final TimeSeries timeSeries;
 

@@ -4,7 +4,7 @@ import org.ta4j.core.num.Num;
 
 import java.util.function.Function;
 
-abstract public class GenericNumMethod<T> {
+public abstract class GenericNumMethod<T> {
     private final Function<Number, Num> numFunction;
     private final Argument<T> context;
 
@@ -13,7 +13,7 @@ abstract public class GenericNumMethod<T> {
         this.context = context;
     }
 
-    final protected Num transform(T value) {
+    protected final Num transform(T value) {
         return context.getToNumber()
                       .andThen(numFunction)
                       .apply(value);

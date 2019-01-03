@@ -63,7 +63,7 @@ public class BaseOneSidedBar extends ForwardingBar implements OneSidedBar {
      * @param num
      * @return Non-null Num
      */
-    final protected Num nonNull(Num num) {
+    protected final Num nonNull(Num num) {
         return num == null ? NaN.NaN : num;
     }
 

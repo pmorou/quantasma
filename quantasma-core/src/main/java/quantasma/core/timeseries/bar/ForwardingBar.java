@@ -6,7 +6,7 @@ import org.ta4j.core.num.Num;
 import java.time.Duration;
 import java.time.ZonedDateTime;
 
-abstract public class ForwardingBar implements Bar {
+public abstract class ForwardingBar implements Bar {
 
     private final Bar bar;
 
