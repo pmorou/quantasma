@@ -1,6 +1,5 @@
 package quantasma.core.timeseries
 
-import org.ta4j.core.BaseBar
 import quantasma.core.BarPeriod
 import quantasma.core.timeseries.bar.BaseOneSidedBar
 import quantasma.core.timeseries.bar.OneSidedBar
@@ -195,7 +194,7 @@ class ReflectionManualIndexTimeSeriesSpec extends Specification {
     }
 
     static OneSidedBar createBar(UniversalTimeSeries timeSeries, Integer i, Duration timePeriod) {
-        new BaseOneSidedBar(new BaseBar(timePeriod, TIME_REF.plusMinutes(i), timeSeries.function()))
+        new BaseOneSidedBar(timePeriod, TIME_REF.plusMinutes(i), timeSeries.function())
     }
 
     private static final ZonedDateTime TIME_REF = ZonedDateTime.now()

@@ -1,6 +1,5 @@
 package quantasma.core.timeseries
 
-import org.ta4j.core.BaseBar
 import quantasma.core.BarPeriod
 import quantasma.core.DateUtils
 import quantasma.core.Utils
@@ -138,7 +137,10 @@ class BaseAggregatedTimeSeriesSpec extends Specification {
     }
 
     private static OneSidedBar createBar(int minutesOffset, UniversalTimeSeries timeSeries, BarPeriod period) {
-        return new BaseOneSidedBar(new BaseBar(period.getPeriod(), DateUtils.createEndDate(MIDNIGHT.plus(minutesOffset, ChronoUnit.MINUTES), period), timeSeries.function()))
+        return new BaseOneSidedBar(
+                period.getPeriod(),
+                DateUtils.createEndDate(MIDNIGHT.plus(minutesOffset, ChronoUnit.MINUTES), period),
+                timeSeries.function())
     }
 
 

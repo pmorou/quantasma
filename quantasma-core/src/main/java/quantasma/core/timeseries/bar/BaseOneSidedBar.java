@@ -4,11 +4,9 @@ import org.ta4j.core.BaseBar;
 import org.ta4j.core.num.NaN;
 import org.ta4j.core.num.Num;
 
-import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
-import java.util.Objects;
 import java.util.function.Function;
 
 public class BaseOneSidedBar extends ForwardingBar implements OneSidedBar {

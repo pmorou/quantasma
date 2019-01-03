@@ -1,6 +1,5 @@
 package quantasma.core.analysis.criterion
 
-import org.ta4j.core.BaseBar
 import org.ta4j.core.BaseTradingRecord
 import org.ta4j.core.Order
 import org.ta4j.core.num.PrecisionNum
@@ -60,7 +59,7 @@ class FinishDepositCriterionSpec extends Specification {
     }
 
     private static void addM1Bar(int rollMinutes, String closePrice, UniversalTimeSeries timeSeries) {
-        final OneSidedBar bar = new BaseOneSidedBar(new BaseBar(BarPeriod.M1.getPeriod(), TIME.plusMinutes(rollMinutes), NUM_FUNC))
+        final OneSidedBar bar = new BaseOneSidedBar(BarPeriod.M1.getPeriod(), TIME.plusMinutes(rollMinutes), NUM_FUNC)
         bar.addPrice(NUM_FUNC.apply(new BigDecimal(closePrice)))
         timeSeries.addBar(bar)
     }

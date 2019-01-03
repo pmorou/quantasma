@@ -1,6 +1,5 @@
 package quantasma.core.timeseries
 
-import org.ta4j.core.BaseBar
 import quantasma.core.BarPeriod
 import quantasma.core.Utils
 import quantasma.core.timeseries.bar.BarBuilder
