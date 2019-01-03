@@ -8,12 +8,12 @@ import quantasma.core.timeseries.bar.BarFactory;
 import quantasma.core.timeseries.bar.OneSidedBar;
 
 import java.time.ZonedDateTime;
+import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 import java.util.function.UnaryOperator;
-import java.util.stream.Collectors;
 
 public class BaseMultipleTimeSeries<B extends OneSidedBar> implements MultipleTimeSeries<B> {
     private static final long serialVersionUID = -8768456438053526527L;
@@ -121,9 +121,7 @@ public class BaseMultipleTimeSeries<B extends OneSidedBar> implements MultipleTi
 
     @Override
     public List<UniversalTimeSeries<B>> getTimeSeries() {
-        return periodTimeSeriesMap.entrySet().stream()
-                                  .map(Map.Entry::getValue)
-                                  .collect(Collectors.toList());
+        return new ArrayList<>(periodTimeSeriesMap.values());
     }
 
 }
