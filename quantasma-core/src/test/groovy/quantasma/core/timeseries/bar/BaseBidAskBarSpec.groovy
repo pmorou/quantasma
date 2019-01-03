@@ -101,9 +101,9 @@ class BaseBidAskBarSpec extends Specification {
         correctBarValues(bar, 1.00d)
     }
 
-    def "build bar from Num values"() {
+    def "initialize bar from Num values"() {
         when:
-        def bar = BaseBidAskBar.Builder.create(BarBuilder.create(numFunction()).fromNum()).build(
+        def bar = new BaseBidAskBar(
                 Duration.ofMinutes(1),
                 TIME,
                 numFunction()(1.01),

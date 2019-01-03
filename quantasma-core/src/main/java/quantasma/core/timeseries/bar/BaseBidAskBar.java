@@ -20,10 +20,10 @@ public class BaseBidAskBar extends BaseOneSidedBar implements BidAskBar {
         super(timePeriod, endTime, numFunction);
     }
 
-    protected BaseBidAskBar(Duration timePeriod, ZonedDateTime endTime,
-                            Num bidOpenPrice, Num bidHighPrice, Num bidLowPrice, Num bidClosePrice,
-                            Num askOpenPrice, Num askMaxPrice, Num askMinPrice, Num askClosePrice,
-                            Num volume, Num amount) {
+    public BaseBidAskBar(Duration timePeriod, ZonedDateTime endTime,
+                         Num bidOpenPrice, Num bidHighPrice, Num bidLowPrice, Num bidClosePrice,
+                         Num askOpenPrice, Num askMaxPrice, Num askMinPrice, Num askClosePrice,
+                         Num volume, Num amount) {
         super(timePeriod, endTime, bidOpenPrice, bidHighPrice, bidLowPrice, bidClosePrice, volume, amount);
         this.askOpenPrice = askOpenPrice;
         this.askMaxPrice = askMaxPrice;

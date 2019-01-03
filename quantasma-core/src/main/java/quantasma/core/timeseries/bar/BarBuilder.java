@@ -59,10 +59,6 @@ public abstract class BarBuilder<T> {
                 return from(o -> o, numFunction);
             }
 
-            public BarBuilderContext<Num> fromNum() {
-                return from(Num::doubleValue, numFunction);
-            }
-
         }
 
     }
