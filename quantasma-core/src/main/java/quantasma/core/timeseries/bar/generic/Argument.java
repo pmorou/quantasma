@@ -29,6 +29,7 @@ public class Argument<T> {
         return of(o -> o);
     }
 
+    @SuppressWarnings("unused")
     public static <T extends Number> Argument<T> of(Class<T> numberClass) {
         return of(o -> o);
     }
