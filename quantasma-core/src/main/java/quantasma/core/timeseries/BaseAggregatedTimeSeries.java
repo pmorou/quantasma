@@ -15,11 +15,6 @@ public class BaseAggregatedTimeSeries<B extends OneSidedBar> extends BaseUnivers
     }
 
     @Override
-    public void addBar(B bar, boolean replace) {
-        super.addBar(bar, replace);
-    }
-
-    @Override
     public B getFirstBar() {
         // avoid index manipulation
         return super.getBar(getBeginIndex());
