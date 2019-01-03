@@ -13,7 +13,7 @@ public class Argument<T> {
         this.toNumber = toNumber;
     }
 
-    private static <T> Argument<T> of(Function<T, Number> toNumber) {
+    public static <T> Argument<T> of(Function<T, Number> toNumber) {
         return new Argument<>(toNumber);
     }
 

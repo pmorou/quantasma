@@ -81,6 +81,23 @@ class BaseOneSidedBarSpec extends Specification {
         correctBarValues(bar, 1.00d)
     }
 
+    def "build bar from Custom object values"() {
+        when:
+        def bar = BaseOneSidedBar.GenericConstructor.from(numFunction(), Argument.of({ CustomObject obj -> obj.value })).create(
+                Duration.ofMinutes(1),
+                TIME,
+                new CustomObject(value: 1.01d),
+                new CustomObject(value: 1.01d),
+                new CustomObject(value: 1.01d),
+                new CustomObject(value: 1.01d),
+                new CustomObject(value: 1.01d),
+                new CustomObject(value: 1.01d))
+
+        then:
+        noExceptionThrown()
+        correctBarValues(bar, 1.01d)
+    }
+
     def "initialize bar from Num values"() {
         when:
         def bar = new BaseOneSidedBar(
@@ -114,5 +131,9 @@ class BaseOneSidedBarSpec extends Specification {
             volume.doubleValue() == expectedValue
             amount.doubleValue() == expectedValue
         }
+    }
+
+    class CustomObject {
+        double value
     }
 }
