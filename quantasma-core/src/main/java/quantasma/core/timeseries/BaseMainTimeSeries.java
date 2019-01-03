@@ -47,6 +47,7 @@ public class BaseMainTimeSeries<B extends OneSidedBar> extends BaseUniversalTime
             return (T) this;
         }
 
+        @Override
         public R build() {
             return (R) new BaseMainTimeSeries(this);
         }
