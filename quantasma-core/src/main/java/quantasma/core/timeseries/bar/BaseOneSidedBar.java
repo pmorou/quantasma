@@ -8,6 +8,7 @@ import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.Objects;
 import java.util.function.Function;
 
 public class BaseOneSidedBar extends ForwardingBar implements OneSidedBar {
@@ -82,12 +83,9 @@ public class BaseOneSidedBar extends ForwardingBar implements OneSidedBar {
                              getVolume().doubleValue());
     }
 
-    public static class Builder<T> {
-        private Function<T, Object> toNumberOrPassNum;
-        private Function<Object, Num> toNum;
-
-        private Builder(Function<T, Object> toNumberOrPassNum) {
-            this.toNumberOrPassNum = toNumberOrPassNum;
+    public static class Builder<T> extends BarBuilder<T> {
+        private Builder(BarBuilderContext<T> context) {
+            super(context);
         }
 
         public BaseOneSidedBar build(Duration timePeriod, ZonedDateTime endTime,
@@ -98,22 +96,8 @@ public class BaseOneSidedBar extends ForwardingBar implements OneSidedBar {
                                        transform(volume), transform(amount));
         }
 
-        private Num transform(T openPrice) {
-            return toNumberOrPassNum.andThen(toNum).apply(openPrice);
-        }
-
-        public static class From {
-            public Builder<String> fromString() {
-                return new Builder<>(BigDecimal::new);
-            }
-
-            public Builder<Double> fromDouble() {
-                return new Builder<>(o -> o);
-            }
-
-            public Builder<Num> fromNum() {
-                return new Builder<>(o -> o);
-            }
+        public static <T> Builder<T> create(BarBuilderContext<T> context) {
+            return new Builder<>(context);
         }
     }
 

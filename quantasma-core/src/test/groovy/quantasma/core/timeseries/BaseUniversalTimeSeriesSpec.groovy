@@ -3,6 +3,7 @@ package quantasma.core.timeseries
 import org.ta4j.core.BaseBar
 import quantasma.core.BarPeriod
 import quantasma.core.Utils
+import quantasma.core.timeseries.bar.BarBuilder
 import quantasma.core.timeseries.bar.BaseOneSidedBar
 import quantasma.core.timeseries.bar.OneSidedBar
 import spock.lang.Specification
@@ -31,14 +32,15 @@ class BaseUniversalTimeSeriesSpec extends Specification {
     }
 
     private OneSidedBar bar(BaseUniversalTimeSeries timeseries, Integer number) {
-        new BaseOneSidedBar(new BaseBar(
+        BaseOneSidedBar.Builder.create(BarBuilder.create(timeseries.function()).fromInteger()).build(
                 Duration.ofMinutes(1),
                 time.plusMinutes(number),
-                timeseries.numOf(number),
-                timeseries.numOf(number),
-                timeseries.numOf(number),
-                timeseries.numOf(number),
-                timeseries.numOf(number),
-                timeseries.numOf(number)))
+                number,
+                number,
+                number,
+                number,
+                number,
+                number
+        )
     }
 }

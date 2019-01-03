@@ -2,7 +2,6 @@ package quantasma.core.timeseries.bar;
 
 import org.ta4j.core.num.Num;
 
-import java.math.BigDecimal;
 import java.time.Duration;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
@@ -89,12 +88,9 @@ public class BaseBidAskBar extends BaseOneSidedBar implements BidAskBar {
                              getVolume().doubleValue());
     }
 
-    protected static class Builder<T> {
-        private Function<T, Object> toNumberOrPassNum;
-        private Function<Object, Num> toNum;
-
-        private Builder(Function<T, Object> toNumberOrPassNum) {
-            this.toNumberOrPassNum = toNumberOrPassNum;
+    public static class Builder<T> extends BarBuilder<T> {
+        private Builder(BarBuilderContext<T> context) {
+            super(context);
         }
 
         public BaseBidAskBar build(Duration timePeriod, ZonedDateTime endTime,
@@ -107,22 +103,8 @@ public class BaseBidAskBar extends BaseOneSidedBar implements BidAskBar {
                                      transform(volume), transform(amount));
         }
 
-        private Num transform(T openPrice) {
-            return toNumberOrPassNum.andThen(toNum).apply(openPrice);
-        }
-
-        protected static class From {
-            public BaseBidAskBar.Builder<String> fromString() {
-                return new BaseBidAskBar.Builder<>(BigDecimal::new);
-            }
-
-            public BaseBidAskBar.Builder<Double> fromDouble() {
-                return new BaseBidAskBar.Builder<>(o -> o);
-            }
-
-            public BaseBidAskBar.Builder<Num> fromNum() {
-                return new BaseBidAskBar.Builder<>(o -> o);
-            }
+        public static <T> Builder<T> create(BarBuilderContext<T> context) {
+            return new Builder<>(context);
         }
     }
 
