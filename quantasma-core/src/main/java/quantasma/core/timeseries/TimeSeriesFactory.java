@@ -1,8 +1,5 @@
 package quantasma.core.timeseries;
 
-import quantasma.core.timeseries.TimeSeriesDefinition;
-import quantasma.core.timeseries.UniversalTimeSeries;
-
 import java.util.function.Function;
 
 @FunctionalInterface
