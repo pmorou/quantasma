@@ -6,7 +6,7 @@ Follow parent [README]({../README.md}).
 
 ## Before first run
 
-Application requires MongoDB service.
+Application requires MongoDB service for history data.
 
     ./src/main/resources/scripts/install_service.sh
 

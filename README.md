@@ -12,19 +12,19 @@ Modules:
 
 -   [quantasma-integrations]({quantasma-integrations/}): integrations with 3rd party APIs
 
-**NOTE: Provided modules might solve your problems, however, they are still in development. Use at your own risk.**
-
-These solutions at its core stands on top of the modern technical analysis library [ta4j](https://github.com/ta4j/ta4j) providing many additional features as:
+This solution at its core stands on top of the modern technical analysis library [ta4j](https://github.com/ta4j/ta4j) extending and providing many additional features as:
 
 -   generic bar implementations, eg. BID and ASK prices
 
 -   user-defined multi-period time series
 
--   flexible market-aware strategies
+-   flexible market-aware strategies with implicit unstable period
 
 -   programmable parametrized backtests
 
 The aim is to provide any needed functionality to follow the ever-changing markets in the most efficient way.
+
+**NOTE: Provided modules might solve your problems, however, they are still in development. Use at your own risk.**
 
 # Getting Started
 
