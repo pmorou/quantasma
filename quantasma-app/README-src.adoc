@@ -10,7 +10,7 @@ Follow parent link:{../README.md}[README].
 
 == Before first run
 
-Application requires MongoDB service.
+Application requires MongoDB service for history data.
 
 [source]
 ----
