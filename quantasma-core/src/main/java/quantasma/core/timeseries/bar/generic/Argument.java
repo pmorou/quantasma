@@ -28,4 +28,8 @@ public class Argument<T> {
     public static Argument<Integer> ofInteger() {
         return of(o -> o);
     }
+
+    public static <T extends Number> Argument<T> of(Class<T> numberClass) {
+        return of(o -> o);
+    }
 }

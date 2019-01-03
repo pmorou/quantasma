@@ -64,6 +64,23 @@ class BaseOneSidedBarSpec extends Specification {
         correctBarValues(bar, 1.00d)
     }
 
+    def "build bar from Long values"() {
+        when:
+        def bar = BaseOneSidedBar.GenericConstructor.from(numFunction(), Argument.of(Long)).create(
+                Duration.ofMinutes(1),
+                TIME,
+                1L,
+                1L,
+                1L,
+                1L,
+                1L,
+                1L)
+
+        then:
+        noExceptionThrown()
+        correctBarValues(bar, 1.00d)
+    }
+
     def "initialize bar from Num values"() {
         when:
         def bar = new BaseOneSidedBar(
