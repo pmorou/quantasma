@@ -5,6 +5,9 @@ import java.time.temporal.ChronoUnit;
 
 public class DateUtils {
 
+    private DateUtils() {
+    }
+
     public static ZonedDateTime createEndDate(ZonedDateTime date, BarPeriod barPeriod) {
         final int minute = date.getMinute();
         final int hour = date.getHour();
