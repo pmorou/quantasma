@@ -3,9 +3,10 @@ package quantasma.app.controller;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import quantasma.app.feature.data.historical.provider.HistoricalDataUpdater;
 import quantasma.app.model.FeedBarsSettings;
@@ -35,14 +36,14 @@ public class HistoricalController {
         this.isHistoricServiceEnabled = isHistoricServiceEnabled;
     }
 
-    @RequestMapping("data/summary")
+    @GetMapping("data/summary")
     public HistoricalDataSummaryResponse dataSummary() {
         return new HistoricalDataSummaryResponse(historicalDataService.dataSummary()
                                                                       .stream()
                                                                       .collect(Collectors.groupingBy(HistoricalDataSummary::getSymbol)));
     }
 
-    @RequestMapping(value = "data/feed", method = RequestMethod.PUT)
+    @PutMapping("data/feed")
     public FeedHistoricalBarsResponse feedHistoricalBars(@RequestBody FeedHistoricalBarsRequest request) {
         if (!isHistoricServiceEnabled) {
             log.info("History service disabled");

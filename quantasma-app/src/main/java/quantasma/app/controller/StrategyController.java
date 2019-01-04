@@ -1,9 +1,10 @@
 package quantasma.app.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PatchMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import quantasma.app.service.StrategyService;
 import quantasma.core.StrategyDescription;
@@ -21,17 +22,17 @@ public class StrategyController {
         this.strategyService = strategyService;
     }
 
-    @RequestMapping("all")
+    @GetMapping("all")
     public Set<StrategyDescription> all() {
         return strategyService.all();
     }
 
-    @RequestMapping(value = "activate/{id}", method = RequestMethod.PATCH)
+    @PatchMapping("activate/{id}")
     public void activate(@PathVariable Long id) {
         strategyService.activate(id);
     }
 
-    @RequestMapping(value = "deactivate/{id}", method = RequestMethod.PATCH)
+    @PatchMapping("deactivate/{id}")
     public void deactivate(@PathVariable Long id) {
         strategyService.deactivate(id);
     }
