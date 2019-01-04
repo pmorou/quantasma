@@ -4,19 +4,21 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ta4j.core.AnalysisCriterion;
 
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Component
 public class CriterionsFactory {
 
-    private final Map<String, AnalysisCriterion> criterionMap = new HashMap<>();
+    private final Map<String, AnalysisCriterion> criterionMap;
 
     @Autowired
-    private void collectCriterions(List<AnalysisCriterion> criterions) {
-        criterions.forEach(criterion -> criterionMap.put(criterion.getClass().getSimpleName(), criterion));
+    public CriterionsFactory(List<AnalysisCriterion> criterions) {
+        criterionMap = criterions.stream()
+                                 .collect(Collectors.toMap(criterion -> criterion.getClass().getSimpleName(),
+                                                           criterion -> criterion));
     }
 
     public Set<String> available() {
