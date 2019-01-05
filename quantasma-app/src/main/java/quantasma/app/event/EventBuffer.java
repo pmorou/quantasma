@@ -10,6 +10,7 @@ import quantasma.integrations.event.Event;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.TimeUnit;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 @Slf4j
 public class EventBuffer<E extends Event> {
@@ -58,9 +59,18 @@ public class EventBuffer<E extends Event> {
     private class EventSubscription<E> implements Subscription {
         private final BlockingQueue<E> events;
         private final Subscriber<? super E> subscriber;
+        private final AtomicBoolean closed = new AtomicBoolean(false);
 
         @Override
         public void request(long n) {
+            if (n <= 0) {
+                subscriber.onError(new IllegalArgumentException());
+            }
+
+            if (closed.get()) {
+                subscriber.onError(new IllegalAccessException());
+            }
+
             try {
                 subscriber.onNext(events.take());
             } catch (InterruptedException e) {
@@ -71,6 +81,7 @@ public class EventBuffer<E extends Event> {
         @Override
         public void cancel() {
             log.info("Subscription of [{}] canceled", typeHolder.getName());
+            closed.set(true);
         }
     }
 }
