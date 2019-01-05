@@ -33,6 +33,7 @@ public class FetchHistoricalDataStrategy implements IStrategy {
         this.feedBarsSettings = feedBarsSettings;
     }
 
+    @Override
     public void onStart(IContext context) throws JFException {
         log.info("Strategy started");
         this.history = context.getHistory();
@@ -108,19 +109,24 @@ public class FetchHistoricalDataStrategy implements IStrategy {
         return isDone;
     }
 
+    @Override
     public void onAccount(IAccount account) {
     }
 
+    @Override
     public void onMessage(IMessage message) {
     }
 
+    @Override
     public void onStop() {
         log.info("Strategy stopped");
     }
 
+    @Override
     public void onTick(Instrument instrument, ITick tick) {
     }
 
+    @Override
     public void onBar(Instrument instrument, Period period, IBar askBar, IBar bidBar) {
     }
 
