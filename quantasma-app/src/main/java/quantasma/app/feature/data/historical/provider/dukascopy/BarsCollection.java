@@ -16,16 +16,13 @@ class BarsCollection {
     private final BarPeriod barPeriod;
 
     class Bar {
-        private final String _symbol = symbol;
-        private final BarPeriod _barPeriod = barPeriod;
-
         private IBar bidBar;
         private IBar askBar;
 
         OhlcvBar toOhlcv() {
-            return new OhlcvBar(_barPeriod,
+            return new OhlcvBar(barPeriod,
                                 Instant.ofEpochMilli(bidBar.getTime()),
-                                _symbol,
+                                symbol,
                                 bidBar.getOpen(),
                                 bidBar.getLow(),
                                 bidBar.getHigh(),
