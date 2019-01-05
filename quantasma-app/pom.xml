@@ -60,6 +60,11 @@
             <artifactId>quantasma-integrations</artifactId>
             <version>0.0.1-SNAPSHOT</version>
         </dependency>
+        <dependency>
+            <groupId>quantasma</groupId>
+            <artifactId>quantasma-examples</artifactId>
+            <version>0.0.1-SNAPSHOT</version>
+        </dependency>
 
         <dependency>
             <groupId>org.springframework.boot</groupId>
@@ -84,11 +89,6 @@
             <artifactId>spock-spring</artifactId>
             <version>${spock.version}</version>
             <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>quantasma</groupId>
-            <artifactId>quantasma-examples</artifactId>
-            <version>0.0.1-SNAPSHOT</version>
         </dependency>
     </dependencies>
 
