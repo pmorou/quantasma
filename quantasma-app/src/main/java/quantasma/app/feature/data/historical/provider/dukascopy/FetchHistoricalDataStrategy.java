@@ -111,10 +111,12 @@ public class FetchHistoricalDataStrategy implements IStrategy {
 
     @Override
     public void onAccount(IAccount account) {
+        // ignore
     }
 
     @Override
     public void onMessage(IMessage message) {
+        // ignore
     }
 
     @Override
@@ -124,10 +126,12 @@ public class FetchHistoricalDataStrategy implements IStrategy {
 
     @Override
     public void onTick(Instrument instrument, ITick tick) {
+        // ignore
     }
 
     @Override
     public void onBar(Instrument instrument, Period period, IBar askBar, IBar bidBar) {
+        // ignore
     }
 
 }
