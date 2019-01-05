@@ -34,7 +34,7 @@ public class EventBuffer<E extends Event> {
         try {
             final boolean inserted = buffer.offer(quoteEvent, 1, TimeUnit.SECONDS);
             if (!inserted) {
-                // remove previous value to make room for the up to date value
+                // remove previous value to make room for the latest value
                 buffer.take();
             }
             return inserted;
