@@ -57,7 +57,7 @@ public class FetchHistoricalDataStrategy implements IStrategy {
             bars.verifyIntegrity();
             bars.getBars().forEach((key, value) -> historicalDataService.insertSkipDuplicates(value.toOhlcv()));
 
-            if (bidBars.size() == 0 || askBars.size() == 0) {
+            if (bidBars.isEmpty() || askBars.isEmpty()) {
                 log.info("No bar found for given date range, stopping fetch");
                 break;
             }
