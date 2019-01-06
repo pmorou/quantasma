@@ -40,6 +40,7 @@ public class TransferLiveDataStrategy implements IStrategy {
         this.eventSink = eventSink;
     }
 
+    @Override
     public void onStart(IContext context) {
         log.info("Starting live data strategy");
         engine = context.getEngine();
@@ -47,6 +48,7 @@ public class TransferLiveDataStrategy implements IStrategy {
         account = context.getAccount();
     }
 
+    @Override
     public void onAccount(IAccount account) throws JFException {
         double profitLoss = 0;
         double totalAmount = 0;
@@ -83,12 +85,15 @@ public class TransferLiveDataStrategy implements IStrategy {
                 order.getProfitLossInAccountCurrency());
     }
 
+    @Override
     public void onMessage(IMessage message) {
     }
 
+    @Override
     public void onStop() {
     }
 
+    @Override
     public void onTick(Instrument instrument, ITick tick) throws JFException {
         eventSink.flush(Event.quote(
                 Quote.bidAsk(symbol(instrument),
@@ -107,6 +112,7 @@ public class TransferLiveDataStrategy implements IStrategy {
         return Instant.ofEpochMilli(tick.getTime()).atZone(ZoneOffset.UTC);
     }
 
+    @Override
     public void onBar(Instrument instrument, Period period, IBar askBar, IBar bidBar) {
     }
 
