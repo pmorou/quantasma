@@ -57,6 +57,12 @@ public class MarketDataBuilder<B extends OneSidedBar> {
         for (TimeSeriesDefinition.Group groupDefinition : aggregatedTimeSeriesDefinitions) {
             for (String symbol : groupDefinition.getSymbols()) {
                 for (TimeSeriesDefinition timeSeriesDefinition : groupDefinition.getTimeSeriesDefinitions()) {
+                    if (isLteBaseBarPeriod(timeSeriesDefinition.getBarPeriod())) {
+                        throw new IllegalArgumentException(String.format("[%s] bar period for symbol [%s] =< base [%s]",
+                                                                         timeSeriesDefinition,
+                                                                         symbol,
+                                                                         baseTimeSeriesDefinition));
+                    }
                     if (!baseTimeSeries.containsKey(symbol)) {
                         throw new RuntimeException(String.format("Cannot aggregate undefined symbol [%s]", symbol));
                     }
@@ -67,5 +73,9 @@ public class MarketDataBuilder<B extends OneSidedBar> {
         }
 
         return new MarketData<>(baseTimeSeries.values());
+    }
+
+    private boolean isLteBaseBarPeriod(BarPeriod barPeriod) {
+        return barPeriod.getPeriod().compareTo(baseTimeSeriesDefinition.getBarPeriod().getPeriod()) <= 0;
     }
 }
