@@ -1,5 +1,6 @@
 package quantasma.app.config;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import quantasma.core.BarPeriod;
@@ -19,6 +20,7 @@ import quantasma.integrations.event.EventPublisher;
 import quantasma.integrations.event.QuoteEventSubscriber;
 
 @Configuration
+@Slf4j
 public class TradeEngineConfig {
 
     @Bean
@@ -49,7 +51,7 @@ public class TradeEngineConfig {
     }
 
     public void subscribeTradeEngine(EventPublisher eventPublisher, TradeEngine tradeEngine) {
-        System.out.println("subscribe trade engine");
+        log.info("Subscribing trade engine to quotes");
         eventPublisher.subscribe(new QuoteEventSubscriber(tradeEngine));
     }
 }
