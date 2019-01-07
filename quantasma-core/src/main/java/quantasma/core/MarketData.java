@@ -37,23 +37,22 @@ public class MarketData<B extends OneSidedBar> {
 
     public MultipleTimeSeries<B> of(String symbol) {
         final MultipleTimeSeries<B> multipleTimeSeries = multipleTimeSeriesMap.get(symbol);
-        if (isUnknownSymbol(multipleTimeSeries)) {
-            throw new IllegalArgumentException(String.format("[%s] is an unknown symbol", symbol));
+        if (isKnownSymbol(multipleTimeSeries)) {
+            return multipleTimeSeries;
         }
-        return multipleTimeSeries;
+        throw new IllegalArgumentException(String.format("[%s] is an unknown symbol", symbol));
     }
 
     public void add(Quote quote) {
         final MultipleTimeSeries<B> multipleTimeSeries = multipleTimeSeriesMap.get(quote.getSymbol());
-        if (isUnknownSymbol(multipleTimeSeries)) {
-            return;
+        if (isKnownSymbol(multipleTimeSeries)) {
+            multipleTimeSeries.updateBar(quote);
+            ensureSameBarsNumberOverAllTimeSeries(quote.getSymbol(), quote.getTime());
         }
-        multipleTimeSeries.updateBar(quote);
-        ensureSameBarsNumberOverAllTimeSeries(quote.getSymbol(), quote.getTime());
     }
 
-    private boolean isUnknownSymbol(MultipleTimeSeries<?> multipleTimeSeries) {
-        return multipleTimeSeries == null;
+    private boolean isKnownSymbol(MultipleTimeSeries<?> multipleTimeSeries) {
+        return multipleTimeSeries != null;
     }
 
     private void ensureSameBarsNumberOverAllTimeSeries(String skipSymbol, ZonedDateTime dateToBeCoveredByBar) {
