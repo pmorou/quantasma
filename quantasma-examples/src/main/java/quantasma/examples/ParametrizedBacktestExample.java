@@ -52,6 +52,6 @@ public class ParametrizedBacktestExample {
                     final TradingRecord result = testManager.run(tradeStrategy, Order.OrderType.BUY);
                     // Proper criterion can be used now on the result
                 });
+        // end::parametrizedBacktestExample[]
     }
-    // end::parametrizedBacktestExample[]
 }
