@@ -42,12 +42,12 @@ public class TradeAppExample {
                 .build();
 
         final TradeStrategy rsiStrategy = RSIStrategy.buildBullish(context,
-                                                                   parameterValues -> parameterValues
+                                                                   values -> values
                                                                            // String or Enum (for safety) is allowed
-                                                                           .add(Parameter.TRADE_SYMBOL, "EURUSD")
-                                                                           .add(Parameter.RSI_PERIOD, 14)
-                                                                           .add(Parameter.RSI_LOWER_BOUND, 30)
-                                                                           .add(Parameter.RSI_UPPER_BOUND, 70));
+                                                                           .set(Parameter.TRADE_SYMBOL, "EURUSD")
+                                                                           .set(Parameter.RSI_PERIOD, 14)
+                                                                           .set(Parameter.RSI_LOWER_BOUND, 30)
+                                                                           .set(Parameter.RSI_UPPER_BOUND, 70));
 
         // Only registered strategies are given market data
         context.getStrategyControl().register(rsiStrategy);

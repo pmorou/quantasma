@@ -26,10 +26,10 @@ public class IntegrationServiceConfig {
     public TradeStrategy rsiStrategy(StrategyControl strategyControl, Context context) {
         final Values<RSIStrategy.Parameter> parameterValues =
                 Values.of(RSIStrategy.Parameter.class)
-                      .add(RSIStrategy.Parameter.TRADE_SYMBOL, "EURUSD")
-                      .add(RSIStrategy.Parameter.RSI_PERIOD, 14)
-                      .add(RSIStrategy.Parameter.RSI_LOWER_BOUND, 30)
-                      .add(RSIStrategy.Parameter.RSI_UPPER_BOUND, 70);
+                      .set(RSIStrategy.Parameter.TRADE_SYMBOL, "EURUSD")
+                      .set(RSIStrategy.Parameter.RSI_PERIOD, 14)
+                      .set(RSIStrategy.Parameter.RSI_LOWER_BOUND, 30)
+                      .set(RSIStrategy.Parameter.RSI_UPPER_BOUND, 70);
         final TradeStrategy strategy = RSIStrategy.buildBullish(context, parameterValues);
         strategyControl.register(strategy);
         return strategy;
