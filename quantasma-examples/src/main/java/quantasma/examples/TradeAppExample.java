@@ -38,7 +38,7 @@ public class TradeAppExample {
 
         final TradeStrategy rsiStrategy = RSIStrategy.buildBullish(context,
                                                                    parameterValues -> parameterValues
-                                                                           // Strings/Enums are allowed
+                                                                           // String or Enum (for safety) is allowed
                                                                            .add(Parameter.TRADE_SYMBOL, "EURUSD")
                                                                            .add(Parameter.RSI_PERIOD, 14)
                                                                            .add(Parameter.RSI_LOWER_BOUND, 30)
@@ -55,7 +55,7 @@ public class TradeAppExample {
                                          1.13757,
                                          1.13767));
 
-        // Will fail silently because the symbol wasn't registered within time series definitions
+        // Fails silently because the symbol wasn't registered within time series definitions
         tradeEngine.process(Quote.bidAsk("EURJPY",
                                          ZonedDateTime.now(),
                                          129.653,
