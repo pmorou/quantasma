@@ -9,6 +9,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.function.Predicate;
 import java.util.stream.Collectors;
 
 public class MarketData<B extends OneSidedBar> {
@@ -58,9 +59,13 @@ public class MarketData<B extends OneSidedBar> {
     private void ensureSameBarsNumberOverAllTimeSeries(String skipSymbol, ZonedDateTime dateToBeCoveredByBar) {
         multipleTimeSeriesMap.entrySet()
                              .stream()
-                             .filter(s -> !s.getKey().equals(skipSymbol))
+                             .filter(skipTimeSeriesOf(skipSymbol))
                              .map(Map.Entry::getValue)
                              .forEach(multipleTimeSeries -> multipleTimeSeries.createBar(dateToBeCoveredByBar));
+    }
+
+    private Predicate<Map.Entry<String, MultipleTimeSeries<B>>> skipTimeSeriesOf(String skipSymbol) {
+        return s -> !s.getKey().equals(skipSymbol);
     }
 
 }
