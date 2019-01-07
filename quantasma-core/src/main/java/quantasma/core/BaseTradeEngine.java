@@ -19,10 +19,6 @@ public class BaseTradeEngine implements TradeEngine {
     @Override
     public void process(Quote quote) {
         dataService.getMarketData().add(quote);
-        final int latestBarIndex = dataService.getMarketData().lastBarIndex();
-        strategyControl.activeStrategies().forEach(strategy -> {
-            if (!strategy.shouldEnter(latestBarIndex))
-                strategy.shouldExit(latestBarIndex);
-        });
+        strategyControl.activeStrategies().forEach(TradeStrategy::perform);
     }
 }

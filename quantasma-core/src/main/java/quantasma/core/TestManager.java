@@ -130,6 +130,11 @@ public class TestManager<B extends OneSidedBar> {
         }
 
         @Override
+        public void perform() {
+            strategy.perform();
+        }
+
+        @Override
         public Rule getEntryRule() {
             return strategy.getEntryRule();
         }

@@ -13,4 +13,6 @@ public interface TradeStrategy extends Strategy {
     Values<?> getParameterValues();
 
     Parameterizable[] parameterizables();
+
+    void perform();
 }

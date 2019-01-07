@@ -108,6 +108,13 @@ public class BaseTradeStrategy extends BaseStrategy implements TradeStrategy {
         return new Parameterizable[0];
     }
 
+    @Override
+    public void perform() {
+        final int lastBarIndex = getMarketData().lastBarIndex(); // TODO: cache or calculate once
+        if (!shouldEnter(lastBarIndex))
+            shouldExit(lastBarIndex);
+    }
+
     protected Function<Number, Num> getNumFunction() {
         return numFunction;
     }
