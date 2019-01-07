@@ -26,19 +26,18 @@ public class MarketData<B extends OneSidedBar> {
                                     .collect(Collectors.toList());
     }
 
+    public int lastBarIndex() {
+        return multipleTimeSeriesMap.entrySet().stream().findFirst()
+                                    .map(entry -> entry.getValue().lastBarIndex())
+                                    .orElse(-1);
+    }
+
     public MultipleTimeSeries<B> of(String symbol) {
         final MultipleTimeSeries<B> multipleTimeSeries = multipleTimeSeriesMap.get(symbol);
         if (isUnknownSymbol(multipleTimeSeries)) {
             throw new IllegalArgumentException(String.format("[%s] is an unknown symbol", symbol));
         }
         return multipleTimeSeries;
-    }
-
-
-    public int lastBarIndex() {
-        return multipleTimeSeriesMap.entrySet().stream().findFirst()
-                                    .map(entry -> entry.getValue().lastBarIndex())
-                                    .orElse(-1);
     }
 
     public void add(Quote quote) {
