@@ -4,10 +4,8 @@ import quantasma.core.timeseries.BaseMultipleTimeSeries;
 import quantasma.core.timeseries.MultipleTimeSeries;
 import quantasma.core.timeseries.TimeSeriesDefinition;
 import quantasma.core.timeseries.UniversalTimeSeries;
-import quantasma.core.timeseries.bar.BidAskBar;
-import quantasma.core.timeseries.bar.OneSidedBar;
 import quantasma.core.timeseries.bar.BarFactory;
-import quantasma.core.timeseries.bar.BidAskBarFactory;
+import quantasma.core.timeseries.bar.OneSidedBar;
 
 import java.util.Arrays;
 import java.util.HashSet;
@@ -26,18 +24,13 @@ public class MarketDataBuilder<B extends OneSidedBar> {
     private BarFactory<B> barFactory;
     private UnaryOperator<UniversalTimeSeries<B>> wrapper = timeSeries -> timeSeries;
 
-    private MarketDataBuilder(BarFactory<B> barFactory, TimeSeriesDefinition baseTimeSeriesDefinition) {
-        this.barFactory = barFactory;
-        this.baseTimeSeriesDefinition = baseTimeSeriesDefinition;
+    private MarketDataBuilder(StructureDefinition<B> structure) {
+        this.barFactory = structure.getModel().getBarFactory();
+        this.baseTimeSeriesDefinition = structure.getResolution().getTimeSeriesDefinition();
     }
 
-    public static MarketDataBuilder<BidAskBar> basedOn(TimeSeriesDefinition timeSeriesDefinition) {
-        return basedOn(new BidAskBarFactory(), timeSeriesDefinition);
-    }
-
-    public static <B extends OneSidedBar> MarketDataBuilder<B> basedOn(BarFactory<B> barFactory,
-                                                                       TimeSeriesDefinition timeSeriesDefinition) {
-        return new MarketDataBuilder<>(barFactory, timeSeriesDefinition);
+    public static <B extends OneSidedBar> MarketDataBuilder<B> basedOn(StructureDefinition<B> structure) {
+        return new MarketDataBuilder<>(structure);
     }
 
     public MarketDataBuilder<B> aggregate(TimeSeriesDefinition.Group definitions) {

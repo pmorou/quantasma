@@ -5,13 +5,15 @@ import quantasma.core.BaseContext;
 import quantasma.core.BaseTradeEngine;
 import quantasma.core.Context;
 import quantasma.core.MarketData;
+import quantasma.core.MarketDataBuilder;
 import quantasma.core.NullOrderService;
 import quantasma.core.Quote;
+import quantasma.core.StructureDefinition;
 import quantasma.core.TradeEngine;
 import quantasma.core.TradeStrategy;
-import quantasma.core.MarketDataBuilder;
 import quantasma.core.timeseries.TimeSeriesDefinition;
 import quantasma.core.timeseries.bar.BidAskBar;
+import quantasma.core.timeseries.bar.BidAskBarFactory;
 import quantasma.examples.RSIStrategy.Parameter;
 
 import java.time.ZonedDateTime;
@@ -20,8 +22,11 @@ public class TradeAppExample {
     public static void main(String[] args) {
         // tag::tradeAppExample[]
         final MarketData<BidAskBar> marketData =
-                MarketDataBuilder.basedOn(// Smallest accessible bar resolution for all defined below symbols
-                                          TimeSeriesDefinition.limited(BarPeriod.M1, 100))
+                MarketDataBuilder.basedOn(StructureDefinition
+                                                  // Global Bar implementation factory
+                                                  .model(new BidAskBarFactory())
+                                                  // Smallest accessible bar resolution for all defined below symbols
+                                                  .resolution(TimeSeriesDefinition.limited(BarPeriod.M1, 100)))
                                  .symbols("EURUSD", "EURGBP")
                                  // You can define any number of additional bars resolutions for above symbols
                                  .aggregate(TimeSeriesDefinition.Group.of("EURUSD")

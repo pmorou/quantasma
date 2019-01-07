@@ -2,6 +2,7 @@ package quantasma.core;
 
 import lombok.Getter;
 import quantasma.core.timeseries.TimeSeriesDefinition;
+import quantasma.core.timeseries.bar.OneSidedBarFactory;
 
 @Getter
 public class BaseContext implements Context {
@@ -24,7 +25,8 @@ public class BaseContext implements Context {
             orderService = new NullOrderService();
             strategyControl = new InMemoryStrategyControl();
             dataService = new BaseDataService(
-                    MarketDataBuilder.basedOn(TimeSeriesDefinition.unlimited(BarPeriod.M1))
+                    MarketDataBuilder.basedOn(StructureDefinition.model(new OneSidedBarFactory())
+                                                                 .resolution(TimeSeriesDefinition.unlimited(BarPeriod.M1)))
                                      .symbols("EURUSD")
                                      .build());
         }

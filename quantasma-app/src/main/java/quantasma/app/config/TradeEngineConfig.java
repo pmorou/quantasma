@@ -10,9 +10,11 @@ import quantasma.core.InMemoryStrategyControl;
 import quantasma.core.NullOrderService;
 import quantasma.core.OrderService;
 import quantasma.core.StrategyControl;
+import quantasma.core.StructureDefinition;
 import quantasma.core.TradeEngine;
 import quantasma.core.MarketDataBuilder;
 import quantasma.core.timeseries.TimeSeriesDefinition;
+import quantasma.core.timeseries.bar.BidAskBarFactory;
 import quantasma.integrations.event.EventPublisher;
 import quantasma.integrations.event.QuoteEventSubscriber;
 
@@ -32,7 +34,8 @@ public class TradeEngineConfig {
     @Bean
     public Context context(StrategyControl strategyControl, OrderService orderService) {
         return BaseContext.Builder.builder()
-                                  .withMarketData(MarketDataBuilder.basedOn(TimeSeriesDefinition.limited(BarPeriod.M1, 100))
+                                  .withMarketData(MarketDataBuilder.basedOn(StructureDefinition.model(new BidAskBarFactory())
+                                                                                               .resolution(TimeSeriesDefinition.limited(BarPeriod.M1, 100)))
                                                                    .symbols("EURUSD")
                                                                    .build())
                                   .withOrderService(orderService)

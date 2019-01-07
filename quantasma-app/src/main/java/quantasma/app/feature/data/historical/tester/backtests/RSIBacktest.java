@@ -12,7 +12,9 @@ import quantasma.core.BarPeriod;
 import quantasma.core.BaseContext;
 import quantasma.core.Context;
 import quantasma.core.MarketData;
+import quantasma.core.MarketDataBuilder;
 import quantasma.core.Quote;
+import quantasma.core.StructureDefinition;
 import quantasma.core.TestManager;
 import quantasma.core.TradeStrategy;
 import quantasma.core.analysis.BacktestResult;
@@ -21,10 +23,10 @@ import quantasma.core.analysis.TradeScenario;
 import quantasma.core.analysis.parametrize.Parameterizable;
 import quantasma.core.analysis.parametrize.Producer;
 import quantasma.core.analysis.parametrize.Variables;
-import quantasma.core.MarketDataBuilder;
 import quantasma.core.timeseries.ReflectionManualIndexTimeSeries;
 import quantasma.core.timeseries.TimeSeriesDefinition;
 import quantasma.core.timeseries.bar.BidAskBar;
+import quantasma.core.timeseries.bar.BidAskBarFactory;
 import quantasma.examples.RSIStrategy;
 import quantasma.examples.RSIStrategy.Parameter;
 
@@ -132,7 +134,8 @@ public class RSIBacktest implements StrategyBacktest {
     }
 
     private static MarketData<BidAskBar> createMarketData() {
-        return MarketDataBuilder.basedOn(TimeSeriesDefinition.unlimited(BASE_PERIOD))
+        return MarketDataBuilder.basedOn(StructureDefinition.model(new BidAskBarFactory())
+                                                            .resolution(TimeSeriesDefinition.unlimited(BASE_PERIOD)))
                                 .symbols(SYMBOL)
                                 .wrap(ReflectionManualIndexTimeSeries::wrap)
                                 .build();
