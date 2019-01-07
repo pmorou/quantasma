@@ -82,7 +82,7 @@ public class RSIBacktest implements StrategyBacktest {
             return RSIStrategy.buildBullish(context, var.getParameterValues());
         };
 
-        // implement strategies: close, open, 4 ticks ohlc
+        // TODO: implement data strategies: close, open, 4 ticks ohlc
         historicalDataService.findBySymbolAndDateBetweenOrderByDate(SYMBOL, fromDate.toInstant(ZoneOffset.UTC), timeWindow)
                              .forEach(loadBars(marketData));
 
