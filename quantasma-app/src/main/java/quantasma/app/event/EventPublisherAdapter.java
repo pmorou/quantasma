@@ -5,11 +5,13 @@ import quantasma.integrations.event.EventPublisher;
 import reactor.adapter.JdkFlowAdapter;
 import reactor.core.publisher.Flux;
 
-public class FluxPublisher {
+public final class EventPublisherAdapter {
+    private EventPublisherAdapter() {
+    }
 
     @SuppressWarnings("uncheck")
-    public static <T extends Event> Flux<T> from(EventPublisher eventPublisher, Class<T> eventClass) {
+    public static <T extends Event> Flux<T> toFlux(EventPublisher eventPublisher, Class<T> filterEvents) {
         return (Flux<T>) JdkFlowAdapter.flowPublisherToFlux(eventPublisher)
-                                       .filter(eventClass::isInstance);
+                                       .filter(filterEvents::isInstance);
     }
 }
