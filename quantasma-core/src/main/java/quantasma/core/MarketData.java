@@ -12,7 +12,7 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 public class MarketData<B extends OneSidedBar> {
-    protected final Map<String, MultipleTimeSeries<B>> multipleTimeSeriesMap = new HashMap<>();
+    private final Map<String, MultipleTimeSeries<B>> multipleTimeSeriesMap = new HashMap<>();
 
     public MarketData(Collection<? extends MultipleTimeSeries<B>> multipleTimeSeries) {
         for (MultipleTimeSeries<B> each : multipleTimeSeries) {
@@ -34,17 +34,6 @@ public class MarketData<B extends OneSidedBar> {
         return multipleTimeSeries;
     }
 
-    protected void ensureSameBarsNumberOverAllTimeSeries(String skipSymbol, ZonedDateTime dateToBeCoveredByBar) {
-        multipleTimeSeriesMap.entrySet()
-                             .stream()
-                             .filter(s -> !s.getKey().equals(skipSymbol))
-                             .map(Map.Entry::getValue)
-                             .forEach(multipleTimeSeries -> multipleTimeSeries.createBar(dateToBeCoveredByBar));
-    }
-
-    protected boolean isUnknownSymbol(MultipleTimeSeries<?> multipleTimeSeries) {
-        return multipleTimeSeries == null;
-    }
 
     public int lastBarIndex() {
         return multipleTimeSeriesMap.entrySet().stream().findFirst()
@@ -59,6 +48,18 @@ public class MarketData<B extends OneSidedBar> {
         }
         multipleTimeSeries.updateBar(quote);
         ensureSameBarsNumberOverAllTimeSeries(quote.getSymbol(), quote.getTime());
+    }
+
+    private boolean isUnknownSymbol(MultipleTimeSeries<?> multipleTimeSeries) {
+        return multipleTimeSeries == null;
+    }
+
+    private void ensureSameBarsNumberOverAllTimeSeries(String skipSymbol, ZonedDateTime dateToBeCoveredByBar) {
+        multipleTimeSeriesMap.entrySet()
+                             .stream()
+                             .filter(s -> !s.getKey().equals(skipSymbol))
+                             .map(Map.Entry::getValue)
+                             .forEach(multipleTimeSeries -> multipleTimeSeries.createBar(dateToBeCoveredByBar));
     }
 
 }
