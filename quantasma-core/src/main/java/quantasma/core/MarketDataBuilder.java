@@ -64,7 +64,7 @@ public class MarketDataBuilder<B extends OneSidedBar> {
                                                                          baseTimeSeriesDefinition));
                     }
                     if (!baseTimeSeries.containsKey(symbol)) {
-                        throw new RuntimeException(String.format("Cannot aggregate undefined symbol [%s]", symbol));
+                        throw new IllegalArgumentException(String.format("Cannot aggregate undefined symbol [%s]", symbol));
                     }
                     baseTimeSeries.compute(symbol,
                                            (ignored, multipleTimeSeries) -> multipleTimeSeries.aggregate(timeSeriesDefinition));
