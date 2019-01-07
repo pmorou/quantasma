@@ -27,9 +27,11 @@ public class MarketData<B extends OneSidedBar> {
     }
 
     public int lastBarIndex() {
-        return multipleTimeSeriesMap.entrySet().stream().findFirst()
+        return multipleTimeSeriesMap.entrySet()
+                                    .stream()
+                                    .findFirst()
                                     .map(entry -> entry.getValue().lastBarIndex())
-                                    .orElse(-1);
+                                    .orElseThrow(IllegalStateException::new);
     }
 
     public MultipleTimeSeries<B> of(String symbol) {
