@@ -7,7 +7,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import quantasma.app.config.service.integration.DukascopyLiveDataConfig;
-import quantasma.app.service.EventsService;
 import quantasma.core.Context;
 import quantasma.core.StrategyControl;
 import quantasma.core.TradeEngine;
@@ -17,10 +16,7 @@ import quantasma.examples.RSIStrategy;
 import quantasma.integrations.data.provider.LiveDataProvider;
 import quantasma.integrations.data.provider.dukascopy.DukascopyApiClient;
 import quantasma.integrations.data.provider.dukascopy.DukascopyLiveDataApiProvider;
-import quantasma.integrations.event.AccountStateEvent;
-import quantasma.integrations.event.EventSink;
-import quantasma.integrations.event.OpenedPositionsEvent;
-import quantasma.integrations.event.QuoteEvent;
+import quantasma.integrations.event.EventPublisher;
 
 @Configuration
 @Slf4j
@@ -48,17 +44,14 @@ public class IntegrationServiceConfig {
     }
 
     @Bean
-    public EventSink eventSink(EventsService eventsService) {
-        return EventSink.instance()
-                        .pipe(QuoteEvent.class, eventsService::publish)
-                        .pipe(AccountStateEvent.class, eventsService::publish)
-                        .pipe(OpenedPositionsEvent.class, eventsService::publish);
+    public EventPublisher eventPublisher() {
+        return EventPublisher.instance();
     }
 
     @Bean
     @Profile("dukascopy")
-    public LiveDataProvider dukascopyLiveDataProvider(DukascopyApiClient dukascopyClient, TradeEngine tradeEngine, EventSink eventSink) {
-        return new DukascopyLiveDataApiProvider(tradeEngine, dukascopyClient, eventSink);
+    public LiveDataProvider dukascopyLiveDataProvider(DukascopyApiClient dukascopyClient, TradeEngine tradeEngine, EventPublisher eventPublisher) {
+        return new DukascopyLiveDataApiProvider(tradeEngine, dukascopyClient, eventPublisher);
     }
 
     @Autowired

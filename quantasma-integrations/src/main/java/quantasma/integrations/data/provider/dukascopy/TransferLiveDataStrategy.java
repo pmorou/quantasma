@@ -17,7 +17,7 @@ import quantasma.core.Quote;
 import quantasma.integrations.event.AccountState;
 import quantasma.integrations.event.Direction;
 import quantasma.integrations.event.Event;
-import quantasma.integrations.event.EventSink;
+import quantasma.integrations.event.EventPublisher;
 import quantasma.integrations.event.OpenedPosition;
 import quantasma.integrations.util.MathUtils;
 
@@ -30,14 +30,14 @@ import java.util.List;
 @Slf4j
 public class TransferLiveDataStrategy implements IStrategy {
 
-    private final EventSink eventSink;
+    private final EventPublisher eventPublisher;
 
     private IEngine engine;
     private IHistory history;
     private IAccount account;
 
-    public TransferLiveDataStrategy(EventSink eventSink) {
-        this.eventSink = eventSink;
+    public TransferLiveDataStrategy(EventPublisher eventPublisher) {
+        this.eventPublisher = eventPublisher;
     }
 
     @Override
@@ -62,8 +62,8 @@ public class TransferLiveDataStrategy implements IStrategy {
             }
         }
 
-        eventSink.flush(Event.openedPositions(openedPositions));
-        eventSink.flush(Event.accountState(
+        eventPublisher.publish(Event.openedPositions(openedPositions));
+        eventPublisher.publish(Event.accountState(
                 new AccountState(history.getEquity(),
                                  account.getBalance(),
                                  MathUtils.round(profitLoss, 2),
@@ -95,7 +95,7 @@ public class TransferLiveDataStrategy implements IStrategy {
 
     @Override
     public void onTick(Instrument instrument, ITick tick) throws JFException {
-        eventSink.flush(Event.quote(
+        eventPublisher.publish(Event.quote(
                 Quote.bidAsk(symbol(instrument),
                              time(tick),
                              tick.getBid(),

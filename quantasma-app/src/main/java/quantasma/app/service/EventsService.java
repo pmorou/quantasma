@@ -6,15 +6,11 @@ import quantasma.integrations.event.QuoteEvent;
 import reactor.core.publisher.Flux;
 
 public interface EventsService {
-    Flux<QuoteEvent> quote();
 
-    void publish(QuoteEvent quoteEvent);
+    Flux<QuoteEvent> quote();
 
     Flux<AccountStateEvent> accountState();
 
-    void publish(AccountStateEvent accountStateEvent);
-
     Flux<OpenedPositionsEvent> openedPositions();
 
-    void publish(OpenedPositionsEvent openedPositionsEvent);
 }

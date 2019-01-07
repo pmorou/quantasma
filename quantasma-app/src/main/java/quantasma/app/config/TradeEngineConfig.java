@@ -13,6 +13,8 @@ import quantasma.core.StrategyControl;
 import quantasma.core.TradeEngine;
 import quantasma.core.MarketDataBuilder;
 import quantasma.core.timeseries.TimeSeriesDefinition;
+import quantasma.integrations.event.EventPublisher;
+import quantasma.integrations.event.QuoteEventSubscriber;
 
 @Configuration
 public class TradeEngineConfig {
@@ -41,5 +43,10 @@ public class TradeEngineConfig {
     @Bean
     public TradeEngine tradeEngine(Context context) {
         return BaseTradeEngine.create(context);
+    }
+
+    public void subscribeTradeEngine(EventPublisher eventPublisher, TradeEngine tradeEngine) {
+        System.out.println("subscribe trade engine");
+        eventPublisher.subscribe(new QuoteEventSubscriber(tradeEngine));
     }
 }

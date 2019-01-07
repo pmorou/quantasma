@@ -3,25 +3,25 @@ package quantasma.integrations.data.provider.dukascopy;
 import lombok.extern.slf4j.Slf4j;
 import quantasma.core.TradeEngine;
 import quantasma.integrations.data.provider.AbstractLiveDataProvider;
-import quantasma.integrations.event.EventSink;
+import quantasma.integrations.event.EventPublisher;
 
 @Slf4j
 public class DukascopyLiveDataApiProvider extends AbstractLiveDataProvider {
 
     private final DukascopyApiClient dukascopyClient;
-    private final EventSink eventSink;
+    private final EventPublisher eventPublisher;
 
     private long strategyProcessId;
 
-    public DukascopyLiveDataApiProvider(TradeEngine tradeEngine, DukascopyApiClient dukascopyClient, EventSink eventSink) {
+    public DukascopyLiveDataApiProvider(TradeEngine tradeEngine, DukascopyApiClient dukascopyClient, EventPublisher eventPublisher) {
         super(tradeEngine);
         this.dukascopyClient = dukascopyClient;
-        this.eventSink = eventSink;
+        this.eventPublisher = eventPublisher;
     }
 
     @Override
     public void run() {
-        final TransferLiveDataStrategy liveDataStrategy = new TransferLiveDataStrategy(eventSink);
+        final TransferLiveDataStrategy liveDataStrategy = new TransferLiveDataStrategy(eventPublisher);
         strategyProcessId = dukascopyClient.runStrategy(liveDataStrategy);
     }
 

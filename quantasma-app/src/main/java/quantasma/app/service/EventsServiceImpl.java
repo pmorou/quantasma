@@ -3,9 +3,9 @@ package quantasma.app.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import quantasma.app.event.EventBuffers;
-import quantasma.core.TradeEngine;
+import quantasma.app.event.FluxPublisher;
 import quantasma.integrations.event.AccountStateEvent;
+import quantasma.integrations.event.EventPublisher;
 import quantasma.integrations.event.OpenedPositionsEvent;
 import quantasma.integrations.event.QuoteEvent;
 import reactor.core.publisher.Flux;
@@ -14,43 +14,26 @@ import reactor.core.publisher.Flux;
 @Slf4j
 public class EventsServiceImpl implements EventsService {
 
-    private final EventBuffers eventBuffers = new EventBuffers();
-    private final TradeEngine tradeEngine;
+    private final EventPublisher eventPublisher;
 
     @Autowired
-    public EventsServiceImpl(TradeEngine tradeEngine) {
-        this.tradeEngine = tradeEngine;
+    public EventsServiceImpl(EventPublisher eventPublisher) {
+        this.eventPublisher = eventPublisher;
     }
 
     @Override
     public Flux<QuoteEvent> quote() {
-        return Flux.from(eventBuffers.publisherFor(QuoteEvent.class));
-    }
-
-    @Override
-    public void publish(QuoteEvent quoteEvent) {
-        tradeEngine.process(quoteEvent.data());
-        eventBuffers.next(quoteEvent);
+        return FluxPublisher.from(eventPublisher, QuoteEvent.class);
     }
 
     @Override
     public Flux<AccountStateEvent> accountState() {
-        return Flux.from(eventBuffers.publisherFor(AccountStateEvent.class));
-    }
-
-    @Override
-    public void publish(AccountStateEvent accountStateEvent) {
-        eventBuffers.next(accountStateEvent);
+        return FluxPublisher.from(eventPublisher, AccountStateEvent.class);
     }
 
     @Override
     public Flux<OpenedPositionsEvent> openedPositions() {
-        return Flux.from(eventBuffers.publisherFor(OpenedPositionsEvent.class));
-    }
-
-    @Override
-    public void publish(OpenedPositionsEvent openedPositionsEvent) {
-        eventBuffers.next(openedPositionsEvent);
+        return FluxPublisher.from(eventPublisher, OpenedPositionsEvent.class);
     }
 
 }
