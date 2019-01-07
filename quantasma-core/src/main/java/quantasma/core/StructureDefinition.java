@@ -7,6 +7,8 @@ import quantasma.core.timeseries.TimeSeriesDefinition;
 import quantasma.core.timeseries.bar.BarFactory;
 import quantasma.core.timeseries.bar.OneSidedBar;
 
+import java.util.Objects;
+
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 public class StructureDefinition<B extends OneSidedBar> {
@@ -14,7 +16,7 @@ public class StructureDefinition<B extends OneSidedBar> {
     private final Resolution resolution;
 
     public static <B extends OneSidedBar> Model<B> model(BarFactory<B> barFactory) {
-        return new Model<>(barFactory);
+        return new Model<>(Objects.requireNonNull(barFactory));
     }
 
     @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -24,7 +26,7 @@ public class StructureDefinition<B extends OneSidedBar> {
 
         public StructureDefinition<B> resolution(TimeSeriesDefinition timeSeriesDefinition) {
             return new StructureDefinition<>(new Model<>(barFactory),
-                                             new Resolution(timeSeriesDefinition));
+                                             new Resolution(Objects.requireNonNull(timeSeriesDefinition)));
         }
     }
 
