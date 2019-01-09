@@ -33,7 +33,7 @@ public class RSIStrategy extends BaseTradeStrategy {
     public boolean shouldEnter(int index, TradingRecord tradingRecord) {
         if (super.shouldEnter(index, tradingRecord) && shouldOpenPosition()) {
             openedPositionsCounter++;
-            getOrderService().openPosition(new OpenMarketOrder(1, getTradeSymbol()));
+            getOrderService().execute(new OpenMarketOrder(1, getTradeSymbol()));
             return true;
         }
         return false;
@@ -47,7 +47,7 @@ public class RSIStrategy extends BaseTradeStrategy {
     public boolean shouldExit(int index, TradingRecord tradingRecord) {
         if (super.shouldExit(index, tradingRecord) && hasOpenedPosition()) {
             openedPositionsCounter--;
-            getOrderService().closePosition(new CloseMarkerOrder());
+            getOrderService().execute(new CloseMarkerOrder());
             return true;
         }
         return false;
