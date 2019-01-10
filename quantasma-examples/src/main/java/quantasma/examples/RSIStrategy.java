@@ -23,7 +23,7 @@ import java.util.function.UnaryOperator;
 @Slf4j
 public class RSIStrategy extends BaseTradeStrategy {
 
-    private Position position = new Position();
+    private final Position position = new Position();
 
     protected RSIStrategy(Builder builder) {
         super(builder);
