@@ -13,17 +13,17 @@ import quantasma.core.BaseTradeStrategy;
 import quantasma.core.Context;
 import quantasma.core.analysis.parametrize.Parameterizable;
 import quantasma.core.analysis.parametrize.Values;
-import quantasma.core.order.CloseMarkerOrder;
+import quantasma.core.order.CloseMarketOrder;
 import quantasma.core.order.OpenMarketOrder;
 
+import java.time.ZoneOffset;
+import java.time.ZonedDateTime;
 import java.util.function.UnaryOperator;
 
 @Slf4j
 public class RSIStrategy extends BaseTradeStrategy {
 
-    private static final int MAX_NUMBER_OF_POSITIONS = 1;
-
-    private int openedPositionsCounter = 0;
+    private Position position = new Position();
 
     protected RSIStrategy(Builder builder) {
         super(builder);
@@ -31,33 +31,23 @@ public class RSIStrategy extends BaseTradeStrategy {
 
     @Override
     public boolean shouldEnter(int index, TradingRecord tradingRecord) {
-        if (super.shouldEnter(index, tradingRecord) && shouldOpenPosition()) {
-            openedPositionsCounter++;
-            getOrderService().execute(new OpenMarketOrder(1, getTradeSymbol()));
+        if (super.shouldEnter(index, tradingRecord) && !position.hasOpenedPosition()) {
+            getOrderService().execute(position.openOrder(1));
             return true;
         }
         return false;
-    }
-
-    private boolean shouldOpenPosition() {
-        return openedPositionsCounter < MAX_NUMBER_OF_POSITIONS;
     }
 
     @Override
     public boolean shouldExit(int index, TradingRecord tradingRecord) {
-        if (super.shouldExit(index, tradingRecord) && hasOpenedPosition()) {
-            openedPositionsCounter--;
-            getOrderService().execute(new CloseMarkerOrder());
+        if (super.shouldExit(index, tradingRecord) && position.hasOpenedPosition()) {
+            getOrderService().execute(position.closeOrder());
             return true;
         }
         return false;
     }
 
-    private boolean hasOpenedPosition() {
-        return openedPositionsCounter > 0;
-    }
-
-    public static RSIStrategy buildBullish(Context context, Values<Parameter> parameterValues)  {
+    public static RSIStrategy buildBullish(Context context, Values<Parameter> parameterValues) {
         final Number rsiLowerBound = (Number) parameterValues.get(Parameter.RSI_LOWER_BOUND);
         final Number rsiUpperBound = (Number) parameterValues.get(Parameter.RSI_UPPER_BOUND);
         final RSIIndicator rsi = createRSIIndicator(context, parameterValues);
@@ -89,6 +79,29 @@ public class RSIStrategy extends BaseTradeStrategy {
     @Override
     public Parameterizable[] parameterizables() {
         return Parameter.values();
+    }
+
+    private class Position {
+        private String label;
+        private String symbol;
+
+        private Position() {
+            this.symbol = getTradeSymbol();
+        }
+
+        private boolean hasOpenedPosition() {
+            return label != null;
+        }
+
+        private OpenMarketOrder openOrder(double orderAmount) {
+            setAmount(getNumFunction().apply(orderAmount));
+            this.label = getClass().getSimpleName() + "_" + ZonedDateTime.now(ZoneOffset.UTC) + "_" + symbol + "_" + orderAmount;
+            return new OpenMarketOrder(label, orderAmount, symbol);
+        }
+
+        private CloseMarketOrder closeOrder() {
+            return new CloseMarketOrder(label);
+        }
     }
 
     /**

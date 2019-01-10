@@ -5,8 +5,6 @@ import lombok.Data;
 
 @Data
 @AllArgsConstructor
-public class OpenMarketOrder implements MarketOrder {
+public class CloseMarketOrder implements MarketOrder {
     private final String label;
-    private final double volume;
-    private final String symbol;
 }

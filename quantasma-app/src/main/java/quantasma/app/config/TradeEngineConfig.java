@@ -8,12 +8,11 @@ import quantasma.core.BaseContext;
 import quantasma.core.BaseTradeEngine;
 import quantasma.core.Context;
 import quantasma.core.InMemoryStrategyControl;
-import quantasma.core.NullOrderService;
+import quantasma.core.MarketDataBuilder;
 import quantasma.core.OrderService;
 import quantasma.core.StrategyControl;
 import quantasma.core.StructureDefinition;
 import quantasma.core.TradeEngine;
-import quantasma.core.MarketDataBuilder;
 import quantasma.core.timeseries.TimeSeriesDefinition;
 import quantasma.core.timeseries.bar.BidAskBarFactory;
 import quantasma.integrations.event.EventPublisher;
@@ -26,11 +25,6 @@ public class TradeEngineConfig {
     @Bean
     public StrategyControl strategyControl() {
         return new InMemoryStrategyControl();
-    }
-
-    @Bean
-    public OrderService orderService() {
-        return new NullOrderService();
     }
 
     @Bean

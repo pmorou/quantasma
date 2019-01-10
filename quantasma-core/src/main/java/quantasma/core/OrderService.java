@@ -1,10 +1,10 @@
 package quantasma.core;
 
-import quantasma.core.order.CloseMarkerOrder;
+import quantasma.core.order.CloseMarketOrder;
 import quantasma.core.order.OpenMarketOrder;
 
 public interface OrderService {
     void execute(OpenMarketOrder openMarketOrder);
 
-    void execute(CloseMarkerOrder closeMarkerOrder);
+    void execute(CloseMarketOrder closeMarkerOrder);
 }
