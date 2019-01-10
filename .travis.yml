@@ -3,7 +3,6 @@ before_install:
   - ./quantasma-app/src/main/resources/scripts/install_services.sh
 language: java
 jdk:
-  - openjdk10
   - openjdk11
   - oraclejdk11
 script: mvn test -B
