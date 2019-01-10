@@ -6,21 +6,22 @@ import quantasma.core.OrderService;
 import quantasma.core.order.CloseMarketOrder;
 import quantasma.core.order.MarketOrder;
 import quantasma.core.order.OpenMarketOrder;
+import quantasma.integrations.data.provider.dukascopy.strategy.OrderPublisher;
 
 @Slf4j
 public class DukascopyOrderService implements OrderService {
-    private final PushOrdersDukascopyStrategy pushOrdersStrategy;
+    private final OrderPublisher orderPublisher;
 
     public DukascopyOrderService(DukascopyApiClient dukascopyApiClient) {
-        this.pushOrdersStrategy = new PushOrdersDukascopyStrategy();
-        dukascopyApiClient.runStrategy(pushOrdersStrategy);
+        this.orderPublisher = new OrderPublisher();
+        dukascopyApiClient.runStrategy(orderPublisher);
     }
 
     @Override
     public void execute(OpenMarketOrder openMarketOrder) {
         log.info("Executing {}", openMarketOrder);
         try {
-            pushOrdersStrategy.submit(openMarketOrder);
+            orderPublisher.submit(openMarketOrder);
         } catch (JFException e) {
             logSubmitError(openMarketOrder, e);
         }
@@ -30,7 +31,7 @@ public class DukascopyOrderService implements OrderService {
     public void execute(CloseMarketOrder closeMarkerOrder) {
         log.info("Executing {}", closeMarkerOrder);
         try {
-            pushOrdersStrategy.submit(closeMarkerOrder);
+            orderPublisher.submit(closeMarkerOrder);
         } catch (JFException e) {
             logSubmitError(closeMarkerOrder, e);
         }

@@ -1,4 +1,4 @@
-package quantasma.integrations.data.provider.dukascopy;
+package quantasma.integrations.data.provider.dukascopy.strategy;
 
 import com.dukascopy.api.IAccount;
 import com.dukascopy.api.IBar;
@@ -16,7 +16,7 @@ import quantasma.core.order.CloseMarketOrder;
 import quantasma.core.order.OpenMarketOrder;
 
 @Slf4j
-public class PushOrdersDukascopyStrategy implements IStrategy {
+public class OrderPublisher implements IStrategy {
 
     private IEngine engine;
 

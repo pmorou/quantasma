@@ -1,4 +1,4 @@
-package quantasma.integrations.data.provider.dukascopy;
+package quantasma.integrations.data.provider.dukascopy.strategy;
 
 import com.dukascopy.api.IAccount;
 import com.dukascopy.api.IBar;
@@ -28,7 +28,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Slf4j
-public class PullDataDukascopyStrategy implements IStrategy {
+public class DataUpdateListener implements IStrategy {
 
     private final EventPublisher eventPublisher;
 
@@ -36,7 +36,7 @@ public class PullDataDukascopyStrategy implements IStrategy {
     private IHistory history;
     private IAccount account;
 
-    public PullDataDukascopyStrategy(EventPublisher eventPublisher) {
+    public DataUpdateListener(EventPublisher eventPublisher) {
         this.eventPublisher = eventPublisher;
     }
 

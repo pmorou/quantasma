@@ -2,6 +2,7 @@ package quantasma.integrations.data.provider.dukascopy;
 
 import lombok.extern.slf4j.Slf4j;
 import quantasma.integrations.data.provider.LiveDataProvider;
+import quantasma.integrations.data.provider.dukascopy.strategy.DataUpdateListener;
 import quantasma.integrations.event.EventPublisher;
 
 @Slf4j
@@ -19,8 +20,8 @@ public class DukascopyLiveDataProvider implements LiveDataProvider {
 
     @Override
     public void run() {
-        final PullDataDukascopyStrategy pullDataStrategy = new PullDataDukascopyStrategy(eventPublisher);
-        strategyProcessId = dukascopyClient.runStrategy(pullDataStrategy);
+        final DataUpdateListener dataUpdateListener = new DataUpdateListener(eventPublisher);
+        strategyProcessId = dukascopyClient.runStrategy(dataUpdateListener);
     }
 
     @Override
