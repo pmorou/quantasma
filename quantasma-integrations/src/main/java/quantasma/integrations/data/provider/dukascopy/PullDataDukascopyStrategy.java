@@ -28,7 +28,7 @@ import java.util.LinkedList;
 import java.util.List;
 
 @Slf4j
-public class TransferLiveDataStrategy implements IStrategy {
+public class PullDataDukascopyStrategy implements IStrategy {
 
     private final EventPublisher eventPublisher;
 
@@ -36,13 +36,13 @@ public class TransferLiveDataStrategy implements IStrategy {
     private IHistory history;
     private IAccount account;
 
-    public TransferLiveDataStrategy(EventPublisher eventPublisher) {
+    public PullDataDukascopyStrategy(EventPublisher eventPublisher) {
         this.eventPublisher = eventPublisher;
     }
 
     @Override
     public void onStart(IContext context) {
-        log.info("Starting live data strategy");
+        log.info("Starting pull data dukascopy strategy");
         engine = context.getEngine();
         history = context.getHistory();
         account = context.getAccount();
@@ -87,10 +87,12 @@ public class TransferLiveDataStrategy implements IStrategy {
 
     @Override
     public void onMessage(IMessage message) {
+        // ignore
     }
 
     @Override
     public void onStop() {
+        // ignore
     }
 
     @Override
@@ -114,6 +116,7 @@ public class TransferLiveDataStrategy implements IStrategy {
 
     @Override
     public void onBar(Instrument instrument, Period period, IBar askBar, IBar bidBar) {
+        // ignore
     }
 
 }

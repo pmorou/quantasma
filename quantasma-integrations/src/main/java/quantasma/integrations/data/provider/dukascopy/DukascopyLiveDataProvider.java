@@ -19,8 +19,8 @@ public class DukascopyLiveDataProvider implements LiveDataProvider {
 
     @Override
     public void run() {
-        final TransferLiveDataStrategy liveDataStrategy = new TransferLiveDataStrategy(eventPublisher);
-        strategyProcessId = dukascopyClient.runStrategy(liveDataStrategy);
+        final PullDataDukascopyStrategy pullDataStrategy = new PullDataDukascopyStrategy(eventPublisher);
+        strategyProcessId = dukascopyClient.runStrategy(pullDataStrategy);
     }
 
     @Override
