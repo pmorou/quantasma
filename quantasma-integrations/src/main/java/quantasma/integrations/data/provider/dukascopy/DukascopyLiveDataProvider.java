@@ -5,14 +5,14 @@ import quantasma.integrations.data.provider.LiveDataProvider;
 import quantasma.integrations.event.EventPublisher;
 
 @Slf4j
-public class DukascopyLiveDataApiProvider implements LiveDataProvider {
+public class DukascopyLiveDataProvider implements LiveDataProvider {
 
     private final DukascopyApiClient dukascopyClient;
     private final EventPublisher eventPublisher;
 
     private long strategyProcessId;
 
-    public DukascopyLiveDataApiProvider(DukascopyApiClient dukascopyClient, EventPublisher eventPublisher) {
+    public DukascopyLiveDataProvider(DukascopyApiClient dukascopyClient, EventPublisher eventPublisher) {
         this.dukascopyClient = dukascopyClient;
         this.eventPublisher = eventPublisher;
     }

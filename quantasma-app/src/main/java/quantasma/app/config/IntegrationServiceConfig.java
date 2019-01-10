@@ -14,7 +14,7 @@ import quantasma.core.analysis.parametrize.Values;
 import quantasma.examples.RSIStrategy;
 import quantasma.integrations.data.provider.LiveDataProvider;
 import quantasma.integrations.data.provider.dukascopy.DukascopyApiClient;
-import quantasma.integrations.data.provider.dukascopy.DukascopyLiveDataApiProvider;
+import quantasma.integrations.data.provider.dukascopy.DukascopyLiveDataProvider;
 import quantasma.integrations.event.EventPublisher;
 
 @Configuration
@@ -50,7 +50,7 @@ public class IntegrationServiceConfig {
     @Bean
     @Profile("dukascopy")
     public LiveDataProvider dukascopyLiveDataProvider(DukascopyApiClient dukascopyClient, EventPublisher eventPublisher) {
-        return new DukascopyLiveDataApiProvider(dukascopyClient, eventPublisher);
+        return new DukascopyLiveDataProvider(dukascopyClient, eventPublisher);
     }
 
     @Autowired
