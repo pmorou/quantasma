@@ -1,7 +1,5 @@
 package quantasma.app.config.service.integration;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -18,10 +16,10 @@ import quantasma.integrations.event.EventPublisher;
 public class DukascopyConfig {
 
     @Bean
-    public DukascopyApiClient dukascopyClient(DukascopyLiveDataConfig liveDataConfig) {
-        return new DukascopyApiClient(liveDataConfig.getUrl(),
-                                      liveDataConfig.getUserName(),
-                                      liveDataConfig.getPassword());
+    public DukascopyApiClient dukascopyClient(@Value("${live.data.provider.userName}") String userName,
+                                              @Value("${live.data.provider.password}") String password,
+                                              @Value("${live.data.provider.url}") String url) {
+        return new DukascopyApiClient(userName, password, url);
     }
 
     @Bean
@@ -32,21 +30,6 @@ public class DukascopyConfig {
     @Bean
     public OrderService dukascopyOrderService(DukascopyApiClient dukascopyApiClient) {
         return new DukascopyOrderService(dukascopyApiClient);
-    }
-
-    @Bean
-    public DukascopyLiveDataConfig dukascopyLiveDataConfig(@Value("${live.data.provider.userName}") String userName,
-                                                           @Value("${live.data.provider.password}") String password,
-                                                           @Value("${live.data.provider.url}") String url) {
-        return new DukascopyLiveDataConfig(userName, password, url);
-    }
-
-    @AllArgsConstructor
-    @Getter
-    public class DukascopyLiveDataConfig {
-        private final String userName;
-        private final String password;
-        private final String url;
     }
 
 }
