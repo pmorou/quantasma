@@ -27,10 +27,13 @@ public class PushOrdersDukascopyStrategy implements IStrategy {
     }
 
     public void submit(OpenMarketOrder openMarketOrder) throws JFException {
-        engine.submitOrder(openMarketOrder.getLabel(),
-                           Instrument.valueOf(openMarketOrder.getSymbol()),
-                           IEngine.OrderCommand.BUY,
-                           openMarketOrder.getVolume());
+        final IOrder executedOrder = engine.submitOrder(openMarketOrder.getLabel(),
+                                                 Instrument.valueOf(openMarketOrder.getSymbol()),
+                                                 IEngine.OrderCommand.BUY,
+                                                 openMarketOrder.getVolume());
+        if (executedOrder == null) {
+            throw new IllegalStateException(String.format("Order [%s] not executed", openMarketOrder));
+        }
     }
 
     public void submit(CloseMarketOrder closeMarkerOrder) throws JFException {
