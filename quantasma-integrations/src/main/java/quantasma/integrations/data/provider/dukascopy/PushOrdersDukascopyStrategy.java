@@ -28,7 +28,7 @@ public class PushOrdersDukascopyStrategy implements IStrategy {
 
     public void submit(OpenMarketOrder openMarketOrder) throws JFException {
         engine.submitOrder(openMarketOrder.getLabel(),
-                           Instrument.fromString(openMarketOrder.getSymbol()),
+                           Instrument.valueOf(openMarketOrder.getSymbol()),
                            IEngine.OrderCommand.BUY,
                            openMarketOrder.getVolume());
     }
