@@ -97,6 +97,10 @@ public class RSIStrategy extends BaseTradeStrategy {
         }
 
         private CloseMarketOrder closeOrder() {
+            if (!this.isOpened) {
+                throw new IllegalStateException("Can't close unopened position");
+            }
+
             this.isOpened = false;
             return new CloseMarketOrder(label);
         }
