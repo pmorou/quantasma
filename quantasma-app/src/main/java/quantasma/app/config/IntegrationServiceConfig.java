@@ -5,18 +5,12 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Profile;
-import quantasma.app.config.service.integration.DukascopyLiveDataConfig;
 import quantasma.core.Context;
-import quantasma.core.OrderService;
 import quantasma.core.StrategyControl;
 import quantasma.core.TradeStrategy;
 import quantasma.core.analysis.parametrize.Values;
 import quantasma.examples.RSIStrategy;
 import quantasma.integrations.data.provider.LiveDataProvider;
-import quantasma.integrations.data.provider.dukascopy.DukascopyApiClient;
-import quantasma.integrations.data.provider.dukascopy.DukascopyLiveDataProvider;
-import quantasma.integrations.data.provider.dukascopy.DukascopyOrderService;
 import quantasma.integrations.event.EventPublisher;
 
 @Configuration
@@ -36,29 +30,10 @@ public class IntegrationServiceConfig {
         return strategy;
     }
 
-    @Bean
-    @Profile("dukascopy")
-    public DukascopyApiClient dukascopyClient(DukascopyLiveDataConfig liveDataConfig) {
-        return new DukascopyApiClient(liveDataConfig.getUrl(),
-                                      liveDataConfig.getUserName(),
-                                      liveDataConfig.getPassword());
-    }
 
     @Bean
     public EventPublisher eventPublisher() {
         return EventPublisher.instance();
-    }
-
-    @Bean
-    @Profile("dukascopy")
-    public LiveDataProvider dukascopyLiveDataProvider(DukascopyApiClient dukascopyClient, EventPublisher eventPublisher) {
-        return new DukascopyLiveDataProvider(dukascopyClient, eventPublisher);
-    }
-
-    @Bean
-    @Profile("dukascopy")
-    public OrderService dukascopyOrderService(DukascopyApiClient dukascopyApiClient) {
-        return new DukascopyOrderService(dukascopyApiClient);
     }
 
     @Autowired
