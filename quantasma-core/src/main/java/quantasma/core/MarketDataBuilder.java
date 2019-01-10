@@ -3,7 +3,7 @@ package quantasma.core;
 import quantasma.core.timeseries.BaseMultipleTimeSeries;
 import quantasma.core.timeseries.MultipleTimeSeries;
 import quantasma.core.timeseries.TimeSeriesDefinition;
-import quantasma.core.timeseries.UniversalTimeSeries;
+import quantasma.core.timeseries.GenericTimeSeries;
 import quantasma.core.timeseries.bar.BarFactory;
 import quantasma.core.timeseries.bar.OneSidedBar;
 
@@ -22,7 +22,7 @@ public class MarketDataBuilder<B extends OneSidedBar> {
     private final Set<String> symbols = new HashSet<>();
 
     private BarFactory<B> barFactory;
-    private UnaryOperator<UniversalTimeSeries<B>> wrapper = timeSeries -> timeSeries;
+    private UnaryOperator<GenericTimeSeries<B>> wrapper = timeSeries -> timeSeries;
 
     private MarketDataBuilder(StructureDefinition<B> structure) {
         this.barFactory = structure.getModel().getBarFactory();
@@ -43,7 +43,7 @@ public class MarketDataBuilder<B extends OneSidedBar> {
         return this;
     }
 
-    public MarketDataBuilder<B> wrap(UnaryOperator<UniversalTimeSeries<B>> wrapper) {
+    public MarketDataBuilder<B> wrap(UnaryOperator<GenericTimeSeries<B>> wrapper) {
         this.wrapper = wrapper;
         return this;
     }

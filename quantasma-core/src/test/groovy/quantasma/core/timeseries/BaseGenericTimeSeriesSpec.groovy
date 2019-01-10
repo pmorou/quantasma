@@ -10,13 +10,13 @@ import spock.lang.Specification
 import java.time.Duration
 import java.time.ZonedDateTime
 
-class BaseUniversalTimeSeriesSpec extends Specification {
+class BaseGenericTimeSeriesSpec extends Specification {
 
     def time = ZonedDateTime.now()
 
     def "given time series limited to 2 bars when added 3 bars should return NaN for first one only"() {
         given:
-        def timeseries = new BaseUniversalTimeSeries.Builder("symbol", BarPeriod.M1).withMaxBarCount(2).build()
+        def timeseries = new BaseGenericTimeSeries.Builder("symbol", BarPeriod.M1).withMaxBarCount(2).build()
 
         when:
         3.times {
@@ -30,7 +30,7 @@ class BaseUniversalTimeSeriesSpec extends Specification {
         timeseries.getBar(2).getClosePrice().doubleValue() == 2
     }
 
-    private OneSidedBar bar(BaseUniversalTimeSeries timeseries, Integer number) {
+    private OneSidedBar bar(BaseGenericTimeSeries timeseries, Integer number) {
         BaseOneSidedBar.GenericConstructor.from(timeseries.function(), Argument.ofInteger()).create(
                 Duration.ofMinutes(1),
                 time.plusMinutes(number),

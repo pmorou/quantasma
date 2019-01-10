@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Function;
 
-public class BaseUniversalTimeSeries<B extends OneSidedBar> implements UniversalTimeSeries<B> {
+public class BaseGenericTimeSeries<B extends OneSidedBar> implements GenericTimeSeries<B> {
     private final TimeSeries timeSeries;
     @Getter
     private final BarFactory<B> barFactory;
@@ -25,7 +25,7 @@ public class BaseUniversalTimeSeries<B extends OneSidedBar> implements Universal
     @Getter
     private final BarPeriod barPeriod;
 
-    protected BaseUniversalTimeSeries(Builder<?, ?> builder) {
+    protected BaseGenericTimeSeries(Builder<?, ?> builder) {
         this.timeSeries = new BaseTimeSeries.SeriesBuilder()
                       .withName(builder.getName())
                       .withBars(builder.getBars())
@@ -120,7 +120,7 @@ public class BaseUniversalTimeSeries<B extends OneSidedBar> implements Universal
      * @param <R> {@code build()} return type
      */
     @Getter(value = AccessLevel.PROTECTED)
-    public static class Builder<T extends Builder<T, R>, R extends BaseUniversalTimeSeries> {
+    public static class Builder<T extends Builder<T, R>, R extends BaseGenericTimeSeries> {
         private final String symbol;
         private final BarPeriod barPeriod;
 
@@ -176,7 +176,7 @@ public class BaseUniversalTimeSeries<B extends OneSidedBar> implements Universal
          * Every builder subclass should implement this method
          */
         public R build() {
-            return (R) new BaseUniversalTimeSeries(this);
+            return (R) new BaseGenericTimeSeries(this);
         }
 
     }

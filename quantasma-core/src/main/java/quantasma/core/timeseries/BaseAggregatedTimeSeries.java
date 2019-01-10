@@ -5,7 +5,7 @@ import lombok.Getter;
 import quantasma.core.BarPeriod;
 import quantasma.core.timeseries.bar.OneSidedBar;
 
-public class BaseAggregatedTimeSeries<B extends OneSidedBar> extends BaseUniversalTimeSeries<B> implements AggregatedTimeSeries<B> {
+public class BaseAggregatedTimeSeries<B extends OneSidedBar> extends BaseGenericTimeSeries<B> implements AggregatedTimeSeries<B> {
     @Getter
     private final MainTimeSeries mainTimeSeries;
 
@@ -41,7 +41,7 @@ public class BaseAggregatedTimeSeries<B extends OneSidedBar> extends BaseUnivers
         return getBarFactory().getNaNBar();
     }
 
-    public static class Builder<T extends Builder<T, R>, R extends BaseAggregatedTimeSeries> extends BaseUniversalTimeSeries.Builder<T, R> {
+    public static class Builder<T extends Builder<T, R>, R extends BaseAggregatedTimeSeries> extends BaseGenericTimeSeries.Builder<T, R> {
         @Getter(value = AccessLevel.PROTECTED)
         private final MainTimeSeries mainTimeSeries;
 

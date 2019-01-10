@@ -1,6 +1,6 @@
 package quantasma.core
 
-import quantasma.core.timeseries.UniversalTimeSeries
+import quantasma.core.timeseries.GenericTimeSeries
 import quantasma.core.timeseries.bar.OneSidedBar
 
 import java.time.LocalDateTime
@@ -9,7 +9,7 @@ import java.time.ZonedDateTime
 
 abstract class Utils {
 
-    static OneSidedBar nanBar(UniversalTimeSeries timeSeries) {
+    static OneSidedBar nanBar(GenericTimeSeries timeSeries) {
         return timeSeries.getBarFactory().getNaNBar()
     }
 

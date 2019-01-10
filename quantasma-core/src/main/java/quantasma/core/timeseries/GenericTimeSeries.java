@@ -10,7 +10,7 @@ import java.math.BigDecimal;
 import java.time.format.DateTimeFormatter;
 import java.util.function.Function;
 
-public interface UniversalTimeSeries<B extends OneSidedBar> {
+public interface GenericTimeSeries<B extends OneSidedBar> {
 
     /**
      * Returns unmodifiable view of plain {@link org.ta4j.core.TimeSeries} based on {@link org.ta4j.core.Bar}.

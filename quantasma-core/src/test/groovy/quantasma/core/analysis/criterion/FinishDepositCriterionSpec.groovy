@@ -4,8 +4,8 @@ import org.ta4j.core.BaseTradingRecord
 import org.ta4j.core.Order
 import org.ta4j.core.num.PrecisionNum
 import quantasma.core.BarPeriod
-import quantasma.core.timeseries.BaseUniversalTimeSeries
-import quantasma.core.timeseries.UniversalTimeSeries
+import quantasma.core.timeseries.BaseGenericTimeSeries
+import quantasma.core.timeseries.GenericTimeSeries
 import quantasma.core.timeseries.bar.BaseOneSidedBar
 import quantasma.core.timeseries.bar.OneSidedBar
 import spock.lang.Specification
@@ -42,8 +42,8 @@ class FinishDepositCriterionSpec extends Specification {
         10      || 1000.002
     }
 
-    private static BaseUniversalTimeSeries createTimeSeriesWithBars() {
-        final BaseUniversalTimeSeries timeSeries = new BaseUniversalTimeSeries.Builder("symbol", BarPeriod.M1)
+    private static BaseGenericTimeSeries createTimeSeriesWithBars() {
+        final BaseGenericTimeSeries timeSeries = new BaseGenericTimeSeries.Builder("symbol", BarPeriod.M1)
                 .withNumTypeOf(NUM_FUNC)
                 .build()
 
@@ -58,7 +58,7 @@ class FinishDepositCriterionSpec extends Specification {
         return timeSeries
     }
 
-    private static void addM1Bar(int rollMinutes, String closePrice, UniversalTimeSeries timeSeries) {
+    private static void addM1Bar(int rollMinutes, String closePrice, GenericTimeSeries timeSeries) {
         final OneSidedBar bar = new BaseOneSidedBar(BarPeriod.M1.getPeriod(), TIME.plusMinutes(rollMinutes), NUM_FUNC)
         bar.addPrice(NUM_FUNC.apply(new BigDecimal(closePrice)))
         timeSeries.addBar(bar)

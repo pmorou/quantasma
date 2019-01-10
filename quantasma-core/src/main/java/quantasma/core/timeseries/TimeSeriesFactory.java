@@ -3,7 +3,7 @@ package quantasma.core.timeseries;
 import java.util.function.Function;
 
 @FunctionalInterface
-public interface TimeSeriesFactory<T extends UniversalTimeSeries> {
+public interface TimeSeriesFactory<T extends GenericTimeSeries> {
 
     Function<TimeSeriesDefinition, T> function();
 

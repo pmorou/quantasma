@@ -1,7 +1,7 @@
 package quantasma.core;
 
 import quantasma.core.timeseries.MultipleTimeSeries;
-import quantasma.core.timeseries.UniversalTimeSeries;
+import quantasma.core.timeseries.GenericTimeSeries;
 import quantasma.core.timeseries.bar.OneSidedBar;
 
 import java.time.ZonedDateTime;
@@ -21,7 +21,7 @@ public class MarketData<B extends OneSidedBar> {
         }
     }
 
-    public List<UniversalTimeSeries<B>> allTimeSeries() {
+    public List<GenericTimeSeries<B>> allTimeSeries() {
         return multipleTimeSeriesMap.entrySet().stream()
                                     .flatMap(entry -> entry.getValue().getTimeSeries().stream())
                                     .collect(Collectors.toList());

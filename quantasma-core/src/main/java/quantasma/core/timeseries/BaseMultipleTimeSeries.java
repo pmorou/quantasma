@@ -23,11 +23,11 @@ public class BaseMultipleTimeSeries<B extends OneSidedBar> implements MultipleTi
     @Getter
     private final MainTimeSeries<B> mainTimeSeries;
 
-    private final Map<BarPeriod, UniversalTimeSeries<B>> periodTimeSeriesMap;
+    private final Map<BarPeriod, GenericTimeSeries<B>> periodTimeSeriesMap;
     private final BarFactory<B> barFactory;
-    private final UnaryOperator<UniversalTimeSeries<B>> wrapper;
+    private final UnaryOperator<GenericTimeSeries<B>> wrapper;
 
-    private BaseMultipleTimeSeries(String symbol, TimeSeriesDefinition timeSeriesDefinition, BarFactory<B> barFactory, UnaryOperator<UniversalTimeSeries<B>> wrapper) {
+    private BaseMultipleTimeSeries(String symbol, TimeSeriesDefinition timeSeriesDefinition, BarFactory<B> barFactory, UnaryOperator<GenericTimeSeries<B>> wrapper) {
         this.symbol = symbol;
         this.barFactory = barFactory;
         this.wrapper = wrapper;
@@ -35,7 +35,7 @@ public class BaseMultipleTimeSeries<B extends OneSidedBar> implements MultipleTi
         this.periodTimeSeriesMap = createPeriodTimeSeriesMap(timeSeriesDefinition.getBarPeriod());
     }
 
-    public static <B extends OneSidedBar> BaseMultipleTimeSeries<B> create(String symbol, TimeSeriesDefinition timeSeriesDefinition, BarFactory<B> barFactory, UnaryOperator<UniversalTimeSeries<B>> wrapper) {
+    public static <B extends OneSidedBar> BaseMultipleTimeSeries<B> create(String symbol, TimeSeriesDefinition timeSeriesDefinition, BarFactory<B> barFactory, UnaryOperator<GenericTimeSeries<B>> wrapper) {
         return new BaseMultipleTimeSeries<>(symbol, timeSeriesDefinition, barFactory, wrapper);
     }
 
@@ -43,8 +43,8 @@ public class BaseMultipleTimeSeries<B extends OneSidedBar> implements MultipleTi
         return create(symbol, timeSeriesDefinition, barFactory, UnaryOperator.identity());
     }
 
-    private Map<BarPeriod, UniversalTimeSeries<B>> createPeriodTimeSeriesMap(BarPeriod barPeriod) {
-        final Map<BarPeriod, UniversalTimeSeries<B>> timeSeriesMap = new TreeMap<>(Comparator.comparing(BarPeriod::getPeriod)); // first period should save value first
+    private Map<BarPeriod, GenericTimeSeries<B>> createPeriodTimeSeriesMap(BarPeriod barPeriod) {
+        final Map<BarPeriod, GenericTimeSeries<B>> timeSeriesMap = new TreeMap<>(Comparator.comparing(BarPeriod::getPeriod)); // first period should save value first
         timeSeriesMap.put(barPeriod, wrap(mainTimeSeries));
         return timeSeriesMap;
     }
@@ -56,7 +56,7 @@ public class BaseMultipleTimeSeries<B extends OneSidedBar> implements MultipleTi
         return this;
     }
 
-    private UniversalTimeSeries<B> wrap(UniversalTimeSeries<B> timeSeries) {
+    private GenericTimeSeries<B> wrap(GenericTimeSeries<B> timeSeries) {
         return wrapper.apply(timeSeries);
     }
 
@@ -82,21 +82,21 @@ public class BaseMultipleTimeSeries<B extends OneSidedBar> implements MultipleTi
         });
     }
 
-    private boolean empty(UniversalTimeSeries timeSeries) {
+    private boolean empty(GenericTimeSeries timeSeries) {
         return timeSeries.getBarCount() == 0;
     }
 
-    private void insertNewBar(ZonedDateTime priceDate, BarPeriod barPeriod, UniversalTimeSeries<? super B> timeSeries) {
+    private void insertNewBar(ZonedDateTime priceDate, BarPeriod barPeriod, GenericTimeSeries<? super B> timeSeries) {
         timeSeries.addBar(createBar(barPeriod, priceDate, timeSeries));
     }
 
-    private void insertNewBarWithLastPrice(ZonedDateTime priceDate, BarPeriod barPeriod, UniversalTimeSeries<? super B> timeSeries) {
+    private void insertNewBarWithLastPrice(ZonedDateTime priceDate, BarPeriod barPeriod, GenericTimeSeries<? super B> timeSeries) {
         final Num lastPrice = timeSeries.getLastBar().getClosePrice();
         timeSeries.addBar(createBar(barPeriod, priceDate, timeSeries));
         timeSeries.addPrice(lastPrice);
     }
 
-    private B createBar(BarPeriod barPeriod, ZonedDateTime endDate, UniversalTimeSeries<? super B> timeSeries) {
+    private B createBar(BarPeriod barPeriod, ZonedDateTime endDate, GenericTimeSeries<? super B> timeSeries) {
         return barFactory.create(barPeriod, timeSeries.function(), endDate);
     }
 
@@ -115,12 +115,12 @@ public class BaseMultipleTimeSeries<B extends OneSidedBar> implements MultipleTi
     }
 
     @Override
-    public UniversalTimeSeries<B> getTimeSeries(BarPeriod period) {
+    public GenericTimeSeries<B> getTimeSeries(BarPeriod period) {
         return periodTimeSeriesMap.get(period);
     }
 
     @Override
-    public List<UniversalTimeSeries<B>> getTimeSeries() {
+    public List<GenericTimeSeries<B>> getTimeSeries() {
         return new ArrayList<>(periodTimeSeriesMap.values());
     }
 

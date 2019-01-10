@@ -128,15 +128,15 @@ class BaseAggregatedTimeSeriesSpec extends Specification {
         return new BaseAggregatedTimeSeries.Builder<?, ?>("symbol", BarPeriod.M5, mainTimeSeries).build()
     }
 
-    private static void createM1Bar(int minutesOffset, UniversalTimeSeries timeSeries) {
+    private static void createM1Bar(int minutesOffset, GenericTimeSeries timeSeries) {
         timeSeries.addBar(createBar(minutesOffset, timeSeries, BarPeriod.M1))
     }
 
-    private static void createM5Bar(int minutesOffset, UniversalTimeSeries timeSeries) {
+    private static void createM5Bar(int minutesOffset, GenericTimeSeries timeSeries) {
         timeSeries.addBar(createBar(minutesOffset, timeSeries, BarPeriod.M5))
     }
 
-    private static OneSidedBar createBar(int minutesOffset, UniversalTimeSeries timeSeries, BarPeriod period) {
+    private static OneSidedBar createBar(int minutesOffset, GenericTimeSeries timeSeries, BarPeriod period) {
         return new BaseOneSidedBar(
                 period.getPeriod(),
                 DateUtils.createEndDate(MIDNIGHT.plus(minutesOffset, ChronoUnit.MINUTES), period),

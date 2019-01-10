@@ -11,15 +11,15 @@ import java.lang.reflect.Field;
 import java.util.function.Function;
 
 public final class ReflectionManualIndexTimeSeries<B extends OneSidedBar> implements ManualIndexTimeSeries<B> {
-    protected final UniversalTimeSeries<B> timeSeries;
+    protected final GenericTimeSeries<B> timeSeries;
 
     private boolean isIndexModified;
 
-    private ReflectionManualIndexTimeSeries(UniversalTimeSeries<B> timeSeries) {
+    private ReflectionManualIndexTimeSeries(GenericTimeSeries<B> timeSeries) {
         this.timeSeries = timeSeries;
     }
 
-    public static <B extends OneSidedBar> ReflectionManualIndexTimeSeries wrap(UniversalTimeSeries<B> timeSeries) {
+    public static <B extends OneSidedBar> ReflectionManualIndexTimeSeries wrap(GenericTimeSeries<B> timeSeries) {
         return new ReflectionManualIndexTimeSeries<>(timeSeries);
     }
 

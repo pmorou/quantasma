@@ -4,7 +4,7 @@ import quantasma.core.BarPeriod;
 import quantasma.core.timeseries.bar.BarFactory;
 import quantasma.core.timeseries.bar.OneSidedBar;
 
-public class BaseMainTimeSeries<B extends OneSidedBar> extends BaseUniversalTimeSeries<B> implements MainTimeSeries<B> {
+public class BaseMainTimeSeries<B extends OneSidedBar> extends BaseGenericTimeSeries<B> implements MainTimeSeries<B> {
 
     protected BaseMainTimeSeries(Builder builder) {
         super(builder);
@@ -36,7 +36,7 @@ public class BaseMainTimeSeries<B extends OneSidedBar> extends BaseUniversalTime
      * @param <T> Builder type
      * @param <R> {@code build()} return type
      */
-    public static class Builder<T extends Builder<T, R>, R extends BaseMainTimeSeries> extends BaseUniversalTimeSeries.Builder<T, R> {
+    public static class Builder<T extends Builder<T, R>, R extends BaseMainTimeSeries> extends BaseGenericTimeSeries.Builder<T, R> {
 
         public Builder(String symbol, BarPeriod barPeriod) {
             super(symbol, barPeriod);

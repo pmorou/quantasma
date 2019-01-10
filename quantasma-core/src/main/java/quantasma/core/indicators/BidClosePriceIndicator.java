@@ -2,14 +2,14 @@ package quantasma.core.indicators;
 
 import org.ta4j.core.indicators.CachedIndicator;
 import org.ta4j.core.num.Num;
-import quantasma.core.timeseries.UniversalTimeSeries;
+import quantasma.core.timeseries.GenericTimeSeries;
 import quantasma.core.timeseries.bar.BidAskBar;
 
 public class BidClosePriceIndicator extends CachedIndicator<Num> {
 
-    private final UniversalTimeSeries<BidAskBar> timeSeries;
+    private final GenericTimeSeries<BidAskBar> timeSeries;
 
-    public BidClosePriceIndicator(UniversalTimeSeries<BidAskBar> timeSeries) {
+    public BidClosePriceIndicator(GenericTimeSeries<BidAskBar> timeSeries) {
         super(timeSeries.plainTimeSeries());
         this.timeSeries = timeSeries;
     }

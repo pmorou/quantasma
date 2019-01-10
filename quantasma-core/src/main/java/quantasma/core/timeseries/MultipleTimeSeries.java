@@ -19,9 +19,9 @@ public interface MultipleTimeSeries<B extends OneSidedBar> extends Serializable 
 
     String getSymbol();
 
-    UniversalTimeSeries<B> getTimeSeries(BarPeriod period);
+    GenericTimeSeries<B> getTimeSeries(BarPeriod period);
 
-    List<UniversalTimeSeries<B>> getTimeSeries();
+    List<GenericTimeSeries<B>> getTimeSeries();
 
     MainTimeSeries<B> getMainTimeSeries();
 }
