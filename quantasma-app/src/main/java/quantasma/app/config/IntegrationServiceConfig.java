@@ -12,7 +12,6 @@ import quantasma.integrations.event.EventPublisher;
 @Slf4j
 public class IntegrationServiceConfig {
 
-
     @Bean
     public EventPublisher eventPublisher() {
         return EventPublisher.instance();
@@ -25,4 +24,5 @@ public class IntegrationServiceConfig {
             liveDataProvider.run();
         }
     }
+
 }
