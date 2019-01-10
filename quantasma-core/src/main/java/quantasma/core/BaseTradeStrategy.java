@@ -71,9 +71,11 @@ public class BaseTradeStrategy extends BaseStrategy implements TradeStrategy {
     }
 
     public void stop() {
+        throw new UnsupportedOperationException("Not yet implemented");
     }
 
     public void start() {
+        throw new UnsupportedOperationException("Not yet implemented");
     }
 
     protected OrderService getOrderService() {
