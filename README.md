@@ -32,9 +32,7 @@ Maven repository support soon. Right now fork/clone this repository and start us
 
 ## Requirements
 
-&gt;= Java 10
-
-Upgrade to Java 11 is coming soon.
+&gt;= Java 11
 
 Before project compilation few dependencies must be installed, it can be done through the script.
 
