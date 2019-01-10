@@ -16,10 +16,10 @@ import quantasma.integrations.event.EventPublisher;
 public class DukascopyConfig {
 
     @Bean
-    public DukascopyApiClient dukascopyClient(@Value("${live.data.provider.userName}") String userName,
-                                              @Value("${live.data.provider.password}") String password,
-                                              @Value("${live.data.provider.url}") String url) {
-        return new DukascopyApiClient(userName, password, url);
+    public DukascopyApiClient dukascopyClient(@Value("${live.data.provider.url}") String url,
+                                              @Value("${live.data.provider.userName}") String userName,
+                                              @Value("${live.data.provider.password}") String password) {
+        return new DukascopyApiClient(url, userName, password);
     }
 
     @Bean
