@@ -1,5 +1,7 @@
 package quantasma.examples;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.ta4j.core.Rule;
 import org.ta4j.core.TimeSeries;
@@ -31,7 +33,7 @@ public class RSIStrategy extends BaseTradeStrategy {
 
     @Override
     public boolean shouldEnter(int index, TradingRecord tradingRecord) {
-        if (super.shouldEnter(index, tradingRecord) && !position.isOpened()) {
+        if (super.shouldEnter(index, tradingRecord) && !position.isOpened) {
             getOrderService().execute(position.openOrder(1));
             return true;
         }
@@ -40,7 +42,7 @@ public class RSIStrategy extends BaseTradeStrategy {
 
     @Override
     public boolean shouldExit(int index, TradingRecord tradingRecord) {
-        if (super.shouldExit(index, tradingRecord) && position.isOpened()) {
+        if (super.shouldExit(index, tradingRecord) && position.isOpened) {
             getOrderService().execute(position.closeOrder());
             return true;
         }
@@ -81,25 +83,21 @@ public class RSIStrategy extends BaseTradeStrategy {
         return Parameter.values();
     }
 
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
     private class Position {
+        private String symbol = getTradeSymbol();
         private String label;
-        private String symbol;
-
-        private Position() {
-            this.symbol = getTradeSymbol();
-        }
-
-        private boolean isOpened() {
-            return label != null;
-        }
+        private boolean isOpened;
 
         private OpenMarketOrder openOrder(double orderAmount) {
             setAmount(getNumFunction().apply(orderAmount));
             this.label = getClass().getSimpleName() + "_" + ZonedDateTime.now(ZoneOffset.UTC) + "_" + symbol + "_" + orderAmount;
+            this.isOpened = true;
             return new OpenMarketOrder(label, orderAmount, symbol);
         }
 
         private CloseMarketOrder closeOrder() {
+            this.isOpened = false;
             return new CloseMarketOrder(label);
         }
     }
