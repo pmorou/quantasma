@@ -1,10 +1,12 @@
 package quantasma.integrations.event;
 
+import lombok.extern.slf4j.Slf4j;
 import quantasma.core.Quote;
 import quantasma.core.TradeEngine;
 
 import java.util.concurrent.Flow;
 
+@Slf4j
 public class QuoteEventSubscriber implements Flow.Subscriber<Event> {
 
     private final TradeEngine tradeEngine;
@@ -15,7 +17,7 @@ public class QuoteEventSubscriber implements Flow.Subscriber<Event> {
 
     @Override
     public void onSubscribe(Flow.Subscription subscription) {
-        // ignore
+        log.info("Subscribed to events");
     }
 
     @Override
@@ -27,11 +29,11 @@ public class QuoteEventSubscriber implements Flow.Subscriber<Event> {
 
     @Override
     public void onError(Throwable throwable) {
-        // ignore
+        log.error("Exception occurred", throwable);
     }
 
     @Override
     public void onComplete() {
-        // ignore
+        log.info("Event stream completed");
     }
 }
