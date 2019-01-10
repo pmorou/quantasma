@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Profile;
 import quantasma.app.config.service.integration.DukascopyLiveDataConfig;
 import quantasma.core.Context;
 import quantasma.core.StrategyControl;
-import quantasma.core.TradeEngine;
 import quantasma.core.TradeStrategy;
 import quantasma.core.analysis.parametrize.Values;
 import quantasma.examples.RSIStrategy;
@@ -50,8 +49,8 @@ public class IntegrationServiceConfig {
 
     @Bean
     @Profile("dukascopy")
-    public LiveDataProvider dukascopyLiveDataProvider(DukascopyApiClient dukascopyClient, TradeEngine tradeEngine, EventPublisher eventPublisher) {
-        return new DukascopyLiveDataApiProvider(tradeEngine, dukascopyClient, eventPublisher);
+    public LiveDataProvider dukascopyLiveDataProvider(DukascopyApiClient dukascopyClient, EventPublisher eventPublisher) {
+        return new DukascopyLiveDataApiProvider(dukascopyClient, eventPublisher);
     }
 
     @Autowired
