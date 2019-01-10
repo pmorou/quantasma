@@ -6,6 +6,7 @@ import org.ta4j.core.trading.rules.IsEqualRule
 import org.ta4j.core.trading.rules.OverIndicatorRule
 import quantasma.core.timeseries.TimeSeriesDefinition
 import quantasma.core.timeseries.UniversalTimeSeries
+import quantasma.core.timeseries.bar.BidAskBarFactory
 import spock.lang.Specification
 import spock.lang.Unroll
 
@@ -163,9 +164,11 @@ class MarketDataSpec extends Specification {
     }
 
     private static MarketData createTimeSeriesFor(String... symbols) {
-        return MarketDataBuilder.basedOn(TimeSeriesDefinition.limited(ONE_MINUTE_PERIOD, 2))
-                        .symbols(symbols)
-                        .build()
+        return MarketDataBuilder.basedOn(
+                StructureDefinition.model(new BidAskBarFactory())
+                        .resolution(TimeSeriesDefinition.limited(ONE_MINUTE_PERIOD, 2)))
+                .symbols(symbols)
+                .build()
     }
 
     @Unroll
@@ -246,8 +249,10 @@ class MarketDataSpec extends Specification {
     }
 
     private static MarketData createTwoSymbolMarketData(int oneMinutePeriod) {
-        return MarketDataBuilder.basedOn(TimeSeriesDefinition.limited(ONE_MINUTE_PERIOD, oneMinutePeriod))
-                        .symbols("symbol1", "symbol2")
-                        .build()
+        return MarketDataBuilder.basedOn(
+                StructureDefinition.model(new BidAskBarFactory())
+                        .resolution(TimeSeriesDefinition.limited(ONE_MINUTE_PERIOD, oneMinutePeriod)))
+                .symbols("symbol1", "symbol2")
+                .build()
     }
 }
