@@ -103,7 +103,7 @@ public class DataUpdateListener implements IStrategy {
                              tick.getBid(),
                              tick.getAsk())));
 
-        onAccount(account); // trigger account-related events
+        triggerAccountRelatedEvents();
     }
 
     private static String symbol(Instrument instrument) {
@@ -112,6 +112,10 @@ public class DataUpdateListener implements IStrategy {
 
     private static ZonedDateTime time(ITick tick) {
         return Instant.ofEpochMilli(tick.getTime()).atZone(ZoneOffset.UTC);
+    }
+
+    private void triggerAccountRelatedEvents() throws JFException {
+        onAccount(account);
     }
 
     @Override
