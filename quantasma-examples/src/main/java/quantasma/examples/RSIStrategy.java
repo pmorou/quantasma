@@ -18,8 +18,7 @@ import quantasma.core.analysis.parametrize.Values;
 import quantasma.core.order.CloseMarketOrder;
 import quantasma.core.order.OpenMarketOrder;
 
-import java.time.ZoneOffset;
-import java.time.ZonedDateTime;
+import java.time.Instant;
 import java.util.function.UnaryOperator;
 
 @Slf4j
@@ -93,7 +92,7 @@ public class RSIStrategy extends BaseTradeStrategy {
 
         private OpenMarketOrder openOrder(double orderAmount) {
             setAmount(getNumFunction().apply(orderAmount));
-            this.label = getClass().getSimpleName() + "_" + ZonedDateTime.now(ZoneOffset.UTC) + "_" + symbol + "_" + orderAmount;
+            this.label = getClass().getSimpleName() + "_" + Instant.now().toEpochMilli() + "_" + symbol + "_" + orderAmount;
             this.isOpened = true;
             return new OpenMarketOrder(label, orderAmount, symbol);
         }
