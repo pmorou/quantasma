@@ -19,7 +19,7 @@ public class DukascopyOrderService implements OrderService {
 
     @Override
     public void execute(OpenMarketOrder openMarketOrder) {
-        log.info("Executing {}", openMarketOrder);
+        logExecuting(openMarketOrder);
         try {
             orderPublisher.submit(openMarketOrder);
         } catch (JFException e) {
@@ -29,12 +29,16 @@ public class DukascopyOrderService implements OrderService {
 
     @Override
     public void execute(CloseMarketOrder closeMarkerOrder) {
-        log.info("Executing {}", closeMarkerOrder);
+        logExecuting(closeMarkerOrder);
         try {
             orderPublisher.submit(closeMarkerOrder);
         } catch (JFException e) {
             logSubmitError(closeMarkerOrder, e);
         }
+    }
+
+    private void logExecuting(MarketOrder openMarketOrder) {
+        log.info("Executing {}", openMarketOrder);
     }
 
     private void logSubmitError(MarketOrder marketOrder, JFException e) {
