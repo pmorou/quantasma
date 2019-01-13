@@ -23,7 +23,7 @@ public class DukascopyOrderService implements OrderService {
         try {
             orderPublisher.submit(openMarketOrder);
         } catch (JFException e) {
-            logSubmitError(openMarketOrder, e);
+            logFailedExecution(openMarketOrder, e);
         }
     }
 
@@ -33,15 +33,15 @@ public class DukascopyOrderService implements OrderService {
         try {
             orderPublisher.submit(closeMarkerOrder);
         } catch (JFException e) {
-            logSubmitError(closeMarkerOrder, e);
+            logFailedExecution(closeMarkerOrder, e);
         }
     }
 
     private void logExecuting(MarketOrder openMarketOrder) {
-        log.info("Executing {}", openMarketOrder);
+        log.info("Executing [{}]", openMarketOrder);
     }
 
-    private void logSubmitError(MarketOrder marketOrder, JFException e) {
-        log.error("Couldn't submit [" + marketOrder + "]", e);
+    private void logFailedExecution(MarketOrder marketOrder, JFException e) {
+        log.error("Failed execution of [" + marketOrder + "]", e);
     }
 }
