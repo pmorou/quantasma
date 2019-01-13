@@ -22,7 +22,7 @@ public class OrderPublisher implements IStrategy {
 
     @Override
     public void onStart(IContext context) {
-        log.info("Starting push orders dukascopy strategy");
+        log.info("Starting {} dukascopy strategy", getClass().getSimpleName());
         engine = context.getEngine();
     }
 

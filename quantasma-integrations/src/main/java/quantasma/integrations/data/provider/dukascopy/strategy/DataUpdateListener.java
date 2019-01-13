@@ -42,7 +42,7 @@ public class DataUpdateListener implements IStrategy {
 
     @Override
     public void onStart(IContext context) {
-        log.info("Starting pull data dukascopy strategy");
+        log.info("Starting {} dukascopy strategy", getClass().getSimpleName());
         engine = context.getEngine();
         history = context.getHistory();
         account = context.getAccount();
