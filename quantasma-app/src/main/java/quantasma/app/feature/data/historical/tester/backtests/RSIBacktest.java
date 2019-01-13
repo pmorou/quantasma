@@ -6,14 +6,13 @@ import org.springframework.stereotype.Component;
 import org.ta4j.core.AnalysisCriterion;
 import org.ta4j.core.Order;
 import quantasma.app.config.service.backtest.CriterionsFactory;
-import quantasma.app.model.OhlcvBar;
+import quantasma.app.feature.data.historical.tester.TestModeExtractorBidAsk;
 import quantasma.app.service.HistoricalDataService;
 import quantasma.core.BarPeriod;
 import quantasma.core.BaseContext;
 import quantasma.core.Context;
 import quantasma.core.MarketData;
 import quantasma.core.MarketDataBuilder;
-import quantasma.core.Quote;
 import quantasma.core.StructureDefinition;
 import quantasma.core.TestManager;
 import quantasma.core.TradeStrategy;
@@ -36,7 +35,6 @@ import java.time.temporal.TemporalAmount;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.function.Consumer;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -82,9 +80,11 @@ public class RSIBacktest implements StrategyBacktest {
             return RSIStrategy.buildBullish(context, var.getParameterValues());
         };
 
-        // TODO: implement data strategies: close, open, 4 ticks ohlc
+        final TestModeExtractorBidAsk testModeExtractor = new TestModeExtractorBidAsk();
         historicalDataService.findBySymbolAndDateBetweenOrderByDate(SYMBOL, fromDate.toInstant(ZoneOffset.UTC), timeWindow)
-                             .forEach(loadBars(marketData));
+                             .stream()
+                             .flatMap(testModeExtractor.openHighLowClosePrices())
+                             .forEach(marketData::add);
 
         final TestManager testManager = new TestManager<>(marketData);
 
@@ -123,14 +123,6 @@ public class RSIBacktest implements StrategyBacktest {
                                                                tradeStrategy.getParameterValues(),
                                                                testManager.run(tradeStrategy, Order.OrderType.BUY)))
                        .collect(Collectors.toList());
-    }
-
-    private static Consumer<OhlcvBar> loadBars(MarketData marketData) {
-        return ohlcvBar -> marketData.add(
-                Quote.bidAsk(ohlcvBar.getSymbol(),
-                             ohlcvBar.getDate().atZone(ZoneOffset.UTC),
-                             ohlcvBar.getBidClose(),
-                             ohlcvBar.getAskClose()));
     }
 
     private static MarketData<BidAskBar> createMarketData() {
