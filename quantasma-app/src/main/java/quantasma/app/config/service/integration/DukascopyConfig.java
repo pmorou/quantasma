@@ -1,11 +1,14 @@
 package quantasma.app.config.service.integration;
 
+import javassist.CannotCompileException;
+import javassist.NotFoundException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
 import quantasma.core.OrderService;
 import quantasma.integrations.data.provider.LiveDataProvider;
+import quantasma.integrations.data.provider.dukascopy.PermitAllThreadsFromOrderPipeline;
 import quantasma.integrations.data.provider.dukascopy.DukascopyApiClient;
 import quantasma.integrations.data.provider.dukascopy.DukascopyLiveDataProvider;
 import quantasma.integrations.data.provider.dukascopy.DukascopyOrderService;
@@ -14,6 +17,10 @@ import quantasma.integrations.event.EventPublisher;
 @Configuration
 @Profile("dukascopy")
 public class DukascopyConfig {
+
+    public DukascopyConfig() throws CannotCompileException, NotFoundException {
+        PermitAllThreadsFromOrderPipeline.initialize();
+    }
 
     @Bean
     public DukascopyApiClient dukascopyClient(@Value("${live.data.provider.url}") String url,
