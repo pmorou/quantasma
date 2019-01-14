@@ -9,9 +9,11 @@ import java.util.Calendar;
 import java.util.Collection;
 import java.util.stream.DoubleStream;
 
-public class Util {
+public final class Util {
+    private Util() {
+    }
 
-    private final static ZoneId DEFAULT_ZONE_ID = ZoneOffset.UTC;
+    private static final ZoneId DEFAULT_ZONE_ID = ZoneOffset.UTC;
 
     public static ZonedDateTime convertToZonedDateTime(Calendar date) {
         return date.toInstant().atZone(DEFAULT_ZONE_ID);

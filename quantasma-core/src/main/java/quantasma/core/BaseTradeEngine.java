@@ -1,7 +1,5 @@
 package quantasma.core;
 
-import java.time.ZonedDateTime;
-
 public class BaseTradeEngine implements TradeEngine {
 
     private final StrategyControl strategyControl;
@@ -19,27 +17,8 @@ public class BaseTradeEngine implements TradeEngine {
     }
 
     @Override
-    public void process(String symbol, ZonedDateTime date, double price) {
-        dataService.getMarketData().add(symbol, date, price);
-        final int latestBarIndex = dataService.getMarketData().lastBarIndex();
-        strategyControl.activeStrategies().forEach(strategy -> {
-            if (!strategy.shouldEnter(latestBarIndex))
-                strategy.shouldExit(latestBarIndex);
-        });
-    }
-
-    @Override
-    public void process(String symbol, ZonedDateTime date, double bid, double ask) {
-        dataService.getMarketData().add(symbol, date, bid, ask);
-        final int latestBarIndex = dataService.getMarketData().lastBarIndex();
-        strategyControl.activeStrategies().forEach(strategy -> {
-            if (!strategy.shouldEnter(latestBarIndex))
-                strategy.shouldExit(latestBarIndex);
-        });
-    }
-
-    @Override
     public void process(Quote quote) {
-        process(quote.getSymbol(), quote.getTime(), quote.getBid(), quote.getAsk());
+        dataService.getMarketData().add(quote);
+        strategyControl.activeStrategies().forEach(TradeStrategy::perform);
     }
 }

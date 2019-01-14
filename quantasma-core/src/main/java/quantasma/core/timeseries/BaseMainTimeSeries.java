@@ -1,22 +1,32 @@
 package quantasma.core.timeseries;
 
 import quantasma.core.BarPeriod;
+import quantasma.core.timeseries.bar.BarFactory;
+import quantasma.core.timeseries.bar.OneSidedBar;
 
-public class BaseMainTimeSeries extends BaseSymbolTimeSeries implements MainTimeSeries {
+public class BaseMainTimeSeries<B extends OneSidedBar> extends BaseGenericTimeSeries<B> implements MainTimeSeries<B> {
 
     protected BaseMainTimeSeries(Builder builder) {
         super(builder);
     }
 
-    public static MainTimeSeries create(TimeSeriesDefinition timeSeriesDefinition, String symbol) {
+    public static <B extends OneSidedBar> MainTimeSeries<B> create(TimeSeriesDefinition timeSeriesDefinition, String symbol) {
         return new BaseMainTimeSeries.Builder<>(symbol, timeSeriesDefinition.getBarPeriod())
                 .withName(timeSeriesDefinition.getBarPeriod().getPeriodCode())
                 .withMaxBarCount(timeSeriesDefinition.getMaxBarCount())
                 .build();
     }
 
+    public static <B extends OneSidedBar> MainTimeSeries<B> create(TimeSeriesDefinition timeSeriesDefinition, String symbol, BarFactory<B> barFactory) {
+        return new BaseMainTimeSeries.Builder<>(symbol, timeSeriesDefinition.getBarPeriod())
+                .withName(timeSeriesDefinition.getBarPeriod().getPeriodCode())
+                .withMaxBarCount(timeSeriesDefinition.getMaxBarCount())
+                .withBarFactory(barFactory)
+                .build();
+    }
+
     @Override
-    public AggregatedTimeSeries aggregate(TimeSeriesDefinition timeSeriesDefinition) {
+    public AggregatedTimeSeries<B> aggregate(TimeSeriesDefinition timeSeriesDefinition) {
         return AggregatedTimeSeriesFactory.from(this).createInstance(timeSeriesDefinition);
     }
 
@@ -26,7 +36,7 @@ public class BaseMainTimeSeries extends BaseSymbolTimeSeries implements MainTime
      * @param <T> Builder type
      * @param <R> {@code build()} return type
      */
-    public static class Builder<T extends Builder<T, R>, R extends BaseMainTimeSeries> extends BaseSymbolTimeSeries.Builder<T, R> {
+    public static class Builder<T extends Builder<T, R>, R extends BaseMainTimeSeries> extends BaseGenericTimeSeries.Builder<T, R> {
 
         public Builder(String symbol, BarPeriod barPeriod) {
             super(symbol, barPeriod);
@@ -37,6 +47,7 @@ public class BaseMainTimeSeries extends BaseSymbolTimeSeries implements MainTime
             return (T) this;
         }
 
+        @Override
         public R build() {
             return (R) new BaseMainTimeSeries(this);
         }

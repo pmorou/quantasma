@@ -1,14 +1,16 @@
 package quantasma.examples.builders;
 
 import quantasma.core.BarPeriod;
+import quantasma.core.timeseries.BaseGenericTimeSeries;
+import quantasma.core.timeseries.bar.OneSidedBar;
 
-public class BaseMainTimeSeriesGrandChild extends BaseMainTimeSeriesChild {
+public class BaseMainTimeSeriesGrandChild<B extends OneSidedBar> extends BaseMainTimeSeriesChild<B> {
     protected BaseMainTimeSeriesGrandChild(Builder builder) {
         super(builder);
     }
 
     /**
-     * @see quantasma.core.timeseries.BaseSymbolTimeSeries.Builder
+     * @see BaseGenericTimeSeries.Builder
      */
     public static class Builder<T extends Builder<T, R>, R extends BaseMainTimeSeriesGrandChild> extends BaseMainTimeSeriesChild.Builder<T, R> {
 

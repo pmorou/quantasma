@@ -9,35 +9,47 @@
 
 = Quantasma image:{travisCi}.svg?branch=master["Build Status", link="{travisCi}"]
 
-All-in-one algorithmic trading platform. Build your own backtested-strategy using Java, and execute along with support of continuous track and optimization modules.
+All-in-one algorithmic trading platform. Build your own backtested-strategy using Java, and execute along with support of continuous track and optimization mechanics.
 
-Modules short-description:
+Modules:
 
 * link:{quantasma-app/}[quantasma-app]: ready-to-use application based on below modules
 * link:{quantasma-core/}[quantasma-core]: trading library providing core mechanics
 * link:{quantasma-examples/}[quantasma-examples]: example usages
 * link:{quantasma-integrations/}[quantasma-integrations]: integrations with 3rd party APIs
 
-*NOTE: All modules are still in development. Use at your own risk.*
+This solution at its core stands on top of the modern technical analysis library link:{ta4jLink}[ta4j] extending and providing many additional features as:
 
-Platform stands on top of link:{ta4jLink}[ta4j] providing additional features as:
-
-* bid and ask prices
-* multi-period time series
-* market-aware strategies
-* parametrized backtests
-
-You can use above platform or build your own based on link:{quantasma-core/}[quantasma-core] library.
+* generic bar implementations, eg. BID and ASK prices
+* user-defined multi-period time series
+* flexible market-aware strategies with implicit unstable period
+* programmable parametrized backtests
 
 The aim is to provide any needed functionality to follow the ever-changing markets in the most efficient way.
 
+*NOTE: Provided modules might solve your problems, however, they are still in development. Use at your own risk.*
+
 = Getting Started
+
+Maven repository support soon. Right now fork/clone this repository and start using anything you need.
 
 == Requirements
 
->= Java 8
+>= Java 11
 
-Java 9 is comming shortly. The main goal is to migrate to Java 11 step by step.
+Before project compilation few dependencies must be installed, it can be done through the script.
+
+[source]
+----
+./scripts/install_dependencies.sh
+----
+
+Compilation should run now smoothly.
+
+[source]
+----
+mvn clean compile
+----
 
 == Example Usage
 

@@ -7,8 +7,8 @@ import org.ta4j.core.analysis.criteria.AbstractAnalysisCriterion;
 import org.ta4j.core.num.Num;
 
 public class ProfitLossCriterion extends AbstractAnalysisCriterion {
-    private final static int STANDARD_LOT_SIZE = 100_000;
-    private final static int STANDARD_LOT_PROFIT = 10;
+    private static final int STANDARD_LOT_SIZE = 100_000;
+    private static final int STANDARD_LOT_PROFIT = 10;
 
     private final ProfitLossPipsCriterion pipsCriterion;
 

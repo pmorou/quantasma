@@ -1,23 +1,22 @@
 package quantasma.core
 
-import org.ta4j.core.TimeSeries
 import org.ta4j.core.indicators.RSIIndicator
 import org.ta4j.core.indicators.helpers.ClosePriceIndicator
 import org.ta4j.core.trading.rules.IsEqualRule
 import org.ta4j.core.trading.rules.OverIndicatorRule
-import quantasma.core.timeseries.MultipleTimeSeriesBuilder
 import quantasma.core.timeseries.TimeSeriesDefinition
+import quantasma.core.timeseries.GenericTimeSeries
+import quantasma.core.timeseries.bar.BidAskBarFactory
 import spock.lang.Specification
 import spock.lang.Unroll
 
 import java.time.LocalDateTime
-import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
 
 class MarketDataSpec extends Specification {
 
-    private static final ZonedDateTime MIDNIGHT = utc(LocalDateTime.of(2018, 11, 20, 0, 0))
+    private static final ZonedDateTime MIDNIGHT = Utils.utc(LocalDateTime.of(2018, 11, 20, 0, 0))
     private static final BarPeriod ONE_MINUTE_PERIOD = BarPeriod.M1
 
     private static List<ZonedDateTime> 'minutes possibilities from 0:00 to 0:05'() {
@@ -33,7 +32,7 @@ class MarketDataSpec extends Specification {
 
         when:
         barsToAdd.times {
-            marketData.add("symbol1", addMinutes(time, it), 1 + it)
+            marketData.add(Quote.bidAsk("symbol1", addMinutes(time, it), 1 + it, 1 + it))
         }
 
         then:
@@ -42,6 +41,7 @@ class MarketDataSpec extends Specification {
 
         where:
         time                    | barsToAdd || expectedBarCount
+        //=====================================================
         MIDNIGHT                | 0         || 0
         MIDNIGHT.plusMinutes(1) | 0         || 0
         MIDNIGHT.plusMinutes(2) | 0         || 0
@@ -76,17 +76,17 @@ class MarketDataSpec extends Specification {
         given:
         def marketData = createTimeSeriesFor("targetSymbol", "symbol2")
         def targetTimeSeries = marketData.of("targetSymbol").getTimeSeries(ONE_MINUTE_PERIOD)
-        def targetClosePriceIndicator = new ClosePriceIndicator(targetTimeSeries)
+        def targetClosePriceIndicator = new ClosePriceIndicator(targetTimeSeries.plainTimeSeries())
         def isEqualToOneRule = new IsEqualRule(targetClosePriceIndicator, 1)
 
         and:
-        marketData.add("targetSymbol", time, 0.5)
+        marketData.add(Quote.bidAsk("targetSymbol", time, 0.5, 0.5))
         assert !isEqualToOneRule.isSatisfied(0)
-        marketData.add("targetSymbol", addMinutes(time, 1), 1)
+        marketData.add(Quote.bidAsk("targetSymbol", addMinutes(time, 1), 1, 1))
         assert isEqualToOneRule.isSatisfied(1)
 
         when:
-        marketData.add("symbol2", addMinutes(time, 2), 0)
+        marketData.add(Quote.bidAsk("symbol2", addMinutes(time, 2), 0, 0))
 
         then:
         isEqualToOneRule.isSatisfied(targetTimeSeries.getEndIndex())
@@ -101,31 +101,31 @@ class MarketDataSpec extends Specification {
         def marketData = createTimeSeriesFor("referenceSymbol", "targetSymbol")
         def referenceTimeSeries = marketData.of("referenceSymbol").getTimeSeries(ONE_MINUTE_PERIOD)
         def targetTimeSeries = marketData.of("targetSymbol").getTimeSeries(ONE_MINUTE_PERIOD)
-        def rule1 = new OverIndicatorRule(new RSIIndicator(new ClosePriceIndicator(referenceTimeSeries), 2), 70)
-        def rule2 = new OverIndicatorRule(new RSIIndicator(new ClosePriceIndicator(targetTimeSeries), 2), 70)
+        def rule1 = new OverIndicatorRule(new RSIIndicator(new ClosePriceIndicator(referenceTimeSeries.plainTimeSeries()), 2), 70)
+        def rule2 = new OverIndicatorRule(new RSIIndicator(new ClosePriceIndicator(targetTimeSeries.plainTimeSeries()), 2), 70)
 
         and:
-        marketData.add("referenceSymbol", time, 0)
-        marketData.add("targetSymbol", time, 0)
+        marketData.add(Quote.bidAsk("referenceSymbol", time, 0, 0))
+        marketData.add(Quote.bidAsk("targetSymbol", time, 0, 0))
         assert !rule1.isSatisfied(referenceTimeSeries.getEndIndex())
         assert !rule2.isSatisfied(targetTimeSeries.getEndIndex())
 
         when:
-        marketData.add("referenceSymbol", addMinutes(time, 1), 1)
+        marketData.add(Quote.bidAsk("referenceSymbol", addMinutes(time, 1), 1, 1))
 
         then:
         rule1.isSatisfied(referenceTimeSeries.getEndIndex())
         !rule2.isSatisfied(targetTimeSeries.getEndIndex())
 
         and:
-        marketData.add("referenceSymbol", addMinutes(time, 2), 0.9)
-        marketData.add("targetSymbol", addMinutes(time, 2), 1)
+        marketData.add(Quote.bidAsk("referenceSymbol", addMinutes(time, 2), 0.9, 0.9))
+        marketData.add(Quote.bidAsk("targetSymbol", addMinutes(time, 2), 1, 1))
         rule1.isSatisfied(referenceTimeSeries.getEndIndex())
         rule2.isSatisfied(targetTimeSeries.getEndIndex())
 
         and:
-        marketData.add("referenceSymbol", addMinutes(time, 3), 0.8)
-        marketData.add("targetSymbol", addMinutes(time, 3), 0.9)
+        marketData.add(Quote.bidAsk("referenceSymbol", addMinutes(time, 3), 0.8, 0.8))
+        marketData.add(Quote.bidAsk("targetSymbol", addMinutes(time, 3), 0.9, 0.9))
         !rule1.isSatisfied(referenceTimeSeries.getEndIndex())
         rule2.isSatisfied(targetTimeSeries.getEndIndex())
 
@@ -139,7 +139,7 @@ class MarketDataSpec extends Specification {
         def marketData = createTimeSeriesFor("knownSymbol")
 
         when:
-        marketData.add("unknownSymbol", time, 1.0)
+        marketData.add(Quote.bidAsk("unknownSymbol", time, 1.0, 1.0))
 
         then:
         marketData.of('knownSymbol').getMainTimeSeries().getBarCount() == 0
@@ -164,10 +164,11 @@ class MarketDataSpec extends Specification {
     }
 
     private static MarketData createTimeSeriesFor(String... symbols) {
-        return new MarketData(
-                MultipleTimeSeriesBuilder.basedOn(TimeSeriesDefinition.limited(ONE_MINUTE_PERIOD, 2))
-                        .symbols(symbols)
-                        .build())
+        return MarketDataBuilder.basedOn(
+                StructureDefinition.model(new BidAskBarFactory())
+                        .resolution(TimeSeriesDefinition.limited(ONE_MINUTE_PERIOD, 2)))
+                .symbols(symbols)
+                .build()
     }
 
     @Unroll
@@ -179,7 +180,7 @@ class MarketDataSpec extends Specification {
 
         when:
         barsToAdd.times {
-            marketData.add("symbol1", addMinutes(time, it), it)
+            marketData.add(Quote.bidAsk("symbol1", addMinutes(time, it), it, it))
         }
 
         then:
@@ -195,6 +196,7 @@ class MarketDataSpec extends Specification {
 
         where:
         time                    | timeSeriesLimit | barsToAdd || expectedBarCount | expectedValues
+        //========================================================================================
         MIDNIGHT                | 12              | 12        || 12               | [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
         MIDNIGHT.plusMinutes(1) | 12              | 12        || 12               | [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
         MIDNIGHT.plusMinutes(2) | 12              | 12        || 12               | [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11]
@@ -238,7 +240,7 @@ class MarketDataSpec extends Specification {
         MIDNIGHT.plusMinutes(5) | 11              | 17        || 11               | [6, 6, 6, 6, 6, 6, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16]
     }
 
-    private static void assertNaNClosedPrices(TimeSeries m1TimeSeries, int m1BarsCount) {
+    private static void assertNaNClosedPrices(GenericTimeSeries m1TimeSeries, int m1BarsCount) {
         m1TimeSeries.getBarCount() == m1BarsCount
         final int latestIndex = m1TimeSeries.getEndIndex()
         for (int i = 0; i <= latestIndex; i++) {
@@ -246,15 +248,11 @@ class MarketDataSpec extends Specification {
         }
     }
 
-    private MarketData createTwoSymbolMarketData(int oneMinutePeriod) {
-        return new MarketData(
-                MultipleTimeSeriesBuilder.basedOn(TimeSeriesDefinition.limited(ONE_MINUTE_PERIOD, oneMinutePeriod))
-                        .symbols("symbol1", "symbol2")
-                        .build())
+    private static MarketData createTwoSymbolMarketData(int oneMinutePeriod) {
+        return MarketDataBuilder.basedOn(
+                StructureDefinition.model(new BidAskBarFactory())
+                        .resolution(TimeSeriesDefinition.limited(ONE_MINUTE_PERIOD, oneMinutePeriod)))
+                .symbols("symbol1", "symbol2")
+                .build()
     }
-
-    private static ZonedDateTime utc(LocalDateTime localDateTime) {
-        return ZonedDateTime.of(localDateTime, ZoneOffset.UTC)
-    }
-
 }

@@ -1,6 +1,8 @@
 package quantasma.core.timeseries;
 
-public interface MainTimeSeries extends SymbolTimeSeries {
+import quantasma.core.timeseries.bar.OneSidedBar;
+
+public interface MainTimeSeries<B extends OneSidedBar> extends GenericTimeSeries<B> {
 
     AggregatedTimeSeries aggregate(TimeSeriesDefinition timeSeriesDefinition);
 }

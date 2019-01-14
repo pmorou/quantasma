@@ -1,17 +1,17 @@
 package quantasma.app.repository;
 
 import quantasma.app.model.HistoricalDataSummary;
-import quantasma.app.model.PersistentOhlcvTick;
+import quantasma.app.model.MongoOhlcvBar;
 
 import java.time.Instant;
 import java.util.List;
 
 public interface HistoricalDataRepository {
-    List<PersistentOhlcvTick> findBySymbolAndDateBetweenOrderByDate(String symbol, Instant timeGTE, Instant timeLS);
+    List<MongoOhlcvBar> findBySymbolAndDateBetweenOrderByDate(String symbol, Instant timeGTE, Instant timeLS);
 
-    PersistentOhlcvTick insert(PersistentOhlcvTick ohlcvTick);
+    MongoOhlcvBar insert(MongoOhlcvBar ohlcvBar);
 
     long countBySymbol(String symbol);
 
-    List<HistoricalDataSummary> symbolsTickSummary();
+    List<HistoricalDataSummary> dataSummary();
 }

@@ -1,11 +1,9 @@
 package quantasma.core.timeseries;
 
-import org.ta4j.core.TimeSeries;
-
 import java.util.function.Function;
 
 @FunctionalInterface
-public interface TimeSeriesFactory<T extends TimeSeries> {
+public interface TimeSeriesFactory<T extends GenericTimeSeries> {
 
     Function<TimeSeriesDefinition, T> function();
 

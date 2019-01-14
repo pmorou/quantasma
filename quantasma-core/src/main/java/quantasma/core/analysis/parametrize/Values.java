@@ -20,13 +20,13 @@ public class Values<P extends Enum & Parameterizable> {
         return new Values<>(parameterClazz);
     }
 
-    public Values<P> add(P key, Object value) {
+    public Values<P> set(P key, Object value) {
         valuesByParameter.put(key, value);
         return this;
     }
 
-    public Values<P> add(String key, Object value) {
-        add(getEnum(key), value);
+    public Values<P> set(String key, Object value) {
+        set(getEnum(key), value);
         return this;
     }
 
@@ -34,7 +34,7 @@ public class Values<P extends Enum & Parameterizable> {
         return (P) Enum.valueOf(parameterClazz, key);
     }
 
-    public Values<P> addAll(Values<P> values) {
+    public Values<P> setAll(Values<P> values) {
         this.valuesByParameter.putAll(values.getValuesByParameter());
         return this;
     }

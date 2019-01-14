@@ -1,14 +1,16 @@
 package quantasma.core;
 
 import quantasma.core.order.OpenMarketOrder;
-import quantasma.core.order.CloseMarkerOrder;
+import quantasma.core.order.CloseMarketOrder;
 
 public class NullOrderService implements OrderService {
     @Override
-    public void openPosition(OpenMarketOrder openMarketOrder) {
+    public void execute(OpenMarketOrder openMarketOrder) {
+        // ignore
     }
 
     @Override
-    public void closePosition(CloseMarkerOrder closeMarkerOrder) {
+    public void execute(CloseMarketOrder closeMarkerOrder) {
+        // ignore
     }
 }

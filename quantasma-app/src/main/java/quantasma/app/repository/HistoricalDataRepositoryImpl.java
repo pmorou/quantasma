@@ -7,8 +7,8 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 import quantasma.app.config.service.historical.HistoricalDataServiceProperties;
-import quantasma.app.model.PersistentOhlcvTick;
 import quantasma.app.model.HistoricalDataSummary;
+import quantasma.app.model.MongoOhlcvBar;
 
 import java.time.Instant;
 import java.util.List;
@@ -26,17 +26,16 @@ public class HistoricalDataRepositoryImpl implements HistoricalDataRepository {
     }
 
     @Override
-    public List<PersistentOhlcvTick> findBySymbolAndDateBetweenOrderByDate(String symbol, Instant timeGTE, Instant timeLS) {
+    public List<MongoOhlcvBar> findBySymbolAndDateBetweenOrderByDate(String symbol, Instant timeGTE, Instant timeLS) {
         return mongoTemplate.find(Query.query(Criteria.where("symbol").is(symbol)
                                                       .and("date").gte(timeGTE).lt(timeLS)),
-                                  PersistentOhlcvTick.class,
+                                  MongoOhlcvBar.class,
                                   properties.collectionName());
     }
 
     @Override
-    public PersistentOhlcvTick insert(PersistentOhlcvTick candlestick) {
-        mongoTemplate.insert(candlestick, properties.collectionName());
-        return null;
+    public MongoOhlcvBar insert(MongoOhlcvBar ohlcvBar) {
+        return mongoTemplate.insert(ohlcvBar, properties.collectionName());
     }
 
     @Override
@@ -46,7 +45,7 @@ public class HistoricalDataRepositoryImpl implements HistoricalDataRepository {
     }
 
     @Override
-    public List<HistoricalDataSummary> symbolsTickSummary() {
+    public List<HistoricalDataSummary> dataSummary() {
         final Aggregation aggregation = Aggregation.newAggregation(
                 Aggregation.group("symbol", "period")
                            .first("symbol").as("symbol")
@@ -54,6 +53,7 @@ public class HistoricalDataRepositoryImpl implements HistoricalDataRepository {
                            .min("date").as("fromDate")
                            .max("date").as("toDate")
                            .count().as("barCount"));
+
         return mongoTemplate.aggregate(aggregation,
                                        properties.collectionName(),
                                        HistoricalDataSummary.class)

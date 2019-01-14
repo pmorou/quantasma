@@ -1,0 +1,34 @@
+// README source file
+
+***
+
+= Quantasma application
+
+== Compilation
+
+Follow parent link:{../README.md}[README].
+
+== Before first run
+
+Application requires MongoDB service for history data.
+
+[source]
+----
+./src/main/resources/scripts/install_service.sh
+----
+
+== Start application
+
+Run services.
+
+[source]
+----
+./src/main/resources/scripts/start_service.sh
+----
+
+All dependencies are in the place. Next step is application itself. Pick the right spring profile and run jar file, eg.
+
+[source]
+----
+java -jar -Dspring.profiles.active=dukascopy quantasma-app-0.0.1-SNAPSHOT.jar
+----

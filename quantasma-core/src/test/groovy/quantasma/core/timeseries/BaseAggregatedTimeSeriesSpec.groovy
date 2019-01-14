@@ -1,21 +1,20 @@
 package quantasma.core.timeseries
 
-import org.ta4j.core.BaseBar
-import org.ta4j.core.TimeSeries
 import quantasma.core.BarPeriod
 import quantasma.core.DateUtils
-import quantasma.core.timeseries.bar.NaNBar
+import quantasma.core.Utils
+import quantasma.core.timeseries.bar.BaseOneSidedBar
+import quantasma.core.timeseries.bar.OneSidedBar
 import spock.lang.Specification
 import spock.lang.Unroll
 
 import java.time.LocalDateTime
-import java.time.ZoneOffset
 import java.time.ZonedDateTime
 import java.time.temporal.ChronoUnit
 
 class BaseAggregatedTimeSeriesSpec extends Specification {
 
-    private static final ZonedDateTime MIDNIGHT = utc(LocalDateTime.of(2018, 11, 20, 0, 0))
+    private static final ZonedDateTime MIDNIGHT = Utils.utc(LocalDateTime.of(2018, 11, 20, 0, 0))
 
     private static List<ZonedDateTime> 'minutes possibilities from 0:00 to 0:05'() {
         (0..5).collect({ MIDNIGHT.plusMinutes(it) })
@@ -57,7 +56,7 @@ class BaseAggregatedTimeSeriesSpec extends Specification {
         def resultAtIndex1 = aggregatedTimeSeries.getBar(1)
 
         then:
-        resultAtIndex0 == NaNBar.NaN
+        resultAtIndex0 == Utils.nanBar(mainTimeSeries)
         resultAtIndex1.getClosePrice().doubleValue() == 1
 
         where:
@@ -80,10 +79,10 @@ class BaseAggregatedTimeSeriesSpec extends Specification {
 
         expect:
         verifyAll(aggregatedTimeSeries) {
-            getBar(0) == NaNBar.NaN
-            getBar(1) == NaNBar.NaN
-            getBar(2) == NaNBar.NaN
-            getBar(3) == NaNBar.NaN
+            getBar(0) == Utils.nanBar(aggregatedTimeSeries)
+            getBar(1) == Utils.nanBar(aggregatedTimeSeries)
+            getBar(2) == Utils.nanBar(aggregatedTimeSeries)
+            getBar(3) == Utils.nanBar(aggregatedTimeSeries)
             getBar(4).getClosePrice().doubleValue() == 4
             getBar(5).getClosePrice().doubleValue() == 5
         }
@@ -129,19 +128,20 @@ class BaseAggregatedTimeSeriesSpec extends Specification {
         return new BaseAggregatedTimeSeries.Builder<?, ?>("symbol", BarPeriod.M5, mainTimeSeries).build()
     }
 
-    private void createM1Bar(int minutesOffset, TimeSeries timeSeries) {
+    private static void createM1Bar(int minutesOffset, GenericTimeSeries timeSeries) {
         timeSeries.addBar(createBar(minutesOffset, timeSeries, BarPeriod.M1))
     }
 
-    private void createM5Bar(int minutesOffset, TimeSeries timeSeries) {
+    private static void createM5Bar(int minutesOffset, GenericTimeSeries timeSeries) {
         timeSeries.addBar(createBar(minutesOffset, timeSeries, BarPeriod.M5))
     }
 
-    private BaseBar createBar(int minutesOffset, TimeSeries timeSeries, BarPeriod period) {
-        return new BaseBar(period.getPeriod(), DateUtils.createEndDate(MIDNIGHT.plus(minutesOffset, ChronoUnit.MINUTES), period), timeSeries.function())
+    private static OneSidedBar createBar(int minutesOffset, GenericTimeSeries timeSeries, BarPeriod period) {
+        return new BaseOneSidedBar(
+                period.getPeriod(),
+                DateUtils.createEndDate(MIDNIGHT.plus(minutesOffset, ChronoUnit.MINUTES), period),
+                timeSeries.function())
     }
 
-    private static ZonedDateTime utc(LocalDateTime localDateTime) {
-        return ZonedDateTime.of(localDateTime, ZoneOffset.UTC)
-    }
+
 }

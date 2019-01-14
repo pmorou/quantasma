@@ -1,6 +1,5 @@
 package quantasma.core
 
-import org.ta4j.core.Bar
 import org.ta4j.core.Order
 import org.ta4j.core.TradingRecord
 import org.ta4j.core.num.DoubleNum
@@ -8,6 +7,7 @@ import org.ta4j.core.num.PrecisionNum
 import quantasma.core.timeseries.MainTimeSeries
 import quantasma.core.timeseries.ManualIndexTimeSeries
 import quantasma.core.timeseries.MultipleTimeSeries
+import quantasma.core.timeseries.bar.OneSidedBar
 import spock.lang.Specification
 
 class TestManagerSpec extends Specification {
@@ -16,7 +16,7 @@ class TestManagerSpec extends Specification {
     private def bar
     private def mainTimeSeries
     private def multipleTimeSeries
-    private def testMarketData
+    private def marketData
 
     def setup() {
         tradeStrategy = Mock(TradeStrategy, {
@@ -25,7 +25,7 @@ class TestManagerSpec extends Specification {
             getAmount() >> PrecisionNum.valueOf(Math.random()) // unique values imitating possibility of changing an amount between trades
         })
 
-        bar = Stub(Bar, {
+        bar = Stub(OneSidedBar, {
             getClosePrice() >>> [DoubleNum.valueOf(0), DoubleNum.valueOf(1), DoubleNum.valueOf(2)]
         })
 
@@ -39,7 +39,7 @@ class TestManagerSpec extends Specification {
             getMainTimeSeries() >> mainTimeSeries
         })
 
-        testMarketData = Stub(TestMarketData, {
+        marketData = Stub(MarketData, {
             of("symbol") >> multipleTimeSeries
             manualIndexTimeSeres() >> [Stub(ManualIndexTimeSeries)]
         })
@@ -47,7 +47,7 @@ class TestManagerSpec extends Specification {
 
     def 'given 3 bars should check strategy 3 times and have both finish and unfinished trades with different amount objects'() {
         given:
-        def testManager = new TestManager(testMarketData)
+        def testManager = new TestManager(marketData)
 
         when:
         def result = testManager.run(tradeStrategy, Order.OrderType.BUY)

@@ -31,8 +31,8 @@ public interface Producer<T> {
 
         @Override
         public Iterator<T> iterator() {
-            return new Iterator<T>() {
-                final private Variables<P> variables = new Variables<>();
+            return new Iterator<>() {
+                private final Variables<P> variables = new Variables<>();
 
                 private boolean isIterating;
 

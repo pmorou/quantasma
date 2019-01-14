@@ -11,17 +11,22 @@ import quantasma.core.analysis.parametrize.Parameterizable;
 import quantasma.core.analysis.parametrize.Values;
 import quantasma.core.timeseries.MainTimeSeries;
 import quantasma.core.timeseries.ManualIndexTimeSeries;
+import quantasma.core.timeseries.bar.OneSidedBar;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 @Slf4j
-public class TestManager {
+public class TestManager<B extends OneSidedBar> {
     private final Set<ManualIndexTimeSeries> manualIndexTimeSeriesSet;
-    private final TestMarketData testMarketData;
+    private final MarketData<B> marketData;
 
-    public TestManager(TestMarketData testMarketData) {
-        this.testMarketData = testMarketData;
-        this.manualIndexTimeSeriesSet = testMarketData.manualIndexTimeSeres();
+    public TestManager(MarketData<B> marketData) {
+        this.marketData = marketData;
+        this.manualIndexTimeSeriesSet = marketData.allTimeSeries()
+                                                      .stream()
+                                                      .map(o -> (ManualIndexTimeSeries) o)
+                                                      .collect(Collectors.toSet());
     }
 
     public TradingRecord run(TradeStrategy tradeStrategy, Order.OrderType orderType) {
@@ -29,7 +34,7 @@ public class TestManager {
     }
 
     public MainTimeSeries getMainTimeSeries(TradeStrategy tradeStrategy) {
-        return testMarketData.of(tradeStrategy.getTradeSymbol()).getMainTimeSeries();
+        return marketData.of(tradeStrategy.getTradeSymbol()).getMainTimeSeries();
     }
 
     private TradingRecord run(TradeStrategy tradeStrategy, Order.OrderType orderType, int startIndex, int finishIndex) {
@@ -54,7 +59,7 @@ public class TestManager {
         }
 
         if (!tradingRecord.isClosed()) {
-            final int seriesMaxSize = Math.max(mainTimeSeries.getEndIndex() + 1, mainTimeSeries.getBarData().size());
+            final int seriesMaxSize = Math.max(mainTimeSeries.getEndIndex() + 1, mainTimeSeries.getBarCount());
             for (int i = runEndIndex + 1; i < seriesMaxSize; i++) {
                 if (tradeStrategy.shouldOperate(i, tradingRecord)) {
                     tradingRecord.operate(i, mainTimeSeries.getBar(i).getClosePrice(), tradeStrategy.getAmount());
@@ -122,6 +127,11 @@ public class TestManager {
         @Override
         public Parameterizable[] parameterizables() {
             return new Parameterizable[0];
+        }
+
+        @Override
+        public void perform() {
+            strategy.perform();
         }
 
         @Override

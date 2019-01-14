@@ -71,9 +71,11 @@ public class BaseTradeStrategy extends BaseStrategy implements TradeStrategy {
     }
 
     public void stop() {
+        throw new UnsupportedOperationException("Not yet implemented");
     }
 
     public void start() {
+        throw new UnsupportedOperationException("Not yet implemented");
     }
 
     protected OrderService getOrderService() {
@@ -106,6 +108,13 @@ public class BaseTradeStrategy extends BaseStrategy implements TradeStrategy {
     @Override
     public Parameterizable[] parameterizables() {
         return new Parameterizable[0];
+    }
+
+    @Override
+    public void perform() {
+        final int lastBarIndex = getMarketData().lastBarIndex(); // TODO: cache or calculate once
+        if (!shouldEnter(lastBarIndex))
+            shouldExit(lastBarIndex);
     }
 
     protected Function<Number, Num> getNumFunction() {

@@ -2,11 +2,10 @@ package quantasma.core.timeseries;
 
 import lombok.AccessLevel;
 import lombok.Getter;
-import org.ta4j.core.Bar;
 import quantasma.core.BarPeriod;
-import quantasma.core.timeseries.bar.NaNBar;
+import quantasma.core.timeseries.bar.OneSidedBar;
 
-public class BaseAggregatedTimeSeries extends BaseSymbolTimeSeries implements AggregatedTimeSeries {
+public class BaseAggregatedTimeSeries<B extends OneSidedBar> extends BaseGenericTimeSeries<B> implements AggregatedTimeSeries<B> {
     @Getter
     private final MainTimeSeries mainTimeSeries;
 
@@ -16,24 +15,19 @@ public class BaseAggregatedTimeSeries extends BaseSymbolTimeSeries implements Ag
     }
 
     @Override
-    public void addBar(Bar bar, boolean replace) {
-        super.addBar(bar, replace);
-    }
-
-    @Override
-    public Bar getFirstBar() {
+    public B getFirstBar() {
         // avoid index manipulation
         return super.getBar(getBeginIndex());
     }
 
     @Override
-    public Bar getLastBar() {
+    public B getLastBar() {
         // avoid index manipulation
         return super.getBar(getEndIndex());
     }
 
     @Override
-    public Bar getBar(int index) {
+    public B getBar(int index) {
         if (index == mainTimeSeries.getEndIndex()) {
             return getLastBar();
         }
@@ -44,10 +38,10 @@ public class BaseAggregatedTimeSeries extends BaseSymbolTimeSeries implements Ag
             return super.getBar(getEndIndex() - nthOldElement);
         }
 
-        return NaNBar.NaN;
+        return getBarFactory().getNaNBar();
     }
 
-    public static class Builder<T extends Builder<T, R>, R extends BaseAggregatedTimeSeries> extends BaseSymbolTimeSeries.Builder<T, R> {
+    public static class Builder<T extends Builder<T, R>, R extends BaseAggregatedTimeSeries> extends BaseGenericTimeSeries.Builder<T, R> {
         @Getter(value = AccessLevel.PROTECTED)
         private final MainTimeSeries mainTimeSeries;
 

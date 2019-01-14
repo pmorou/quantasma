@@ -3,9 +3,9 @@ package quantasma.app.service;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import quantasma.app.event.EventBuffer;
-import quantasma.core.TradeEngine;
+import quantasma.app.event.EventPublisherAdapter;
 import quantasma.integrations.event.AccountStateEvent;
+import quantasma.integrations.event.EventPublisher;
 import quantasma.integrations.event.OpenedPositionsEvent;
 import quantasma.integrations.event.QuoteEvent;
 import reactor.core.publisher.Flux;
@@ -14,45 +14,26 @@ import reactor.core.publisher.Flux;
 @Slf4j
 public class EventsServiceImpl implements EventsService {
 
-    private final EventBuffer<QuoteEvent> quoteEventBuffer = EventBuffer.instance(QuoteEvent.class);
-    private final EventBuffer<AccountStateEvent> accountStateEventBuffer = EventBuffer.instance(AccountStateEvent.class);
-    private final EventBuffer<OpenedPositionsEvent> openedPositionsEventBuffer = EventBuffer.instance(OpenedPositionsEvent.class);
-
-    private final TradeEngine tradeEngine;
+    private final EventPublisher eventPublisher;
 
     @Autowired
-    public EventsServiceImpl(TradeEngine tradeEngine) {
-        this.tradeEngine = tradeEngine;
+    public EventsServiceImpl(EventPublisher eventPublisher) {
+        this.eventPublisher = eventPublisher;
     }
 
     @Override
     public Flux<QuoteEvent> quote() {
-        return Flux.from(quoteEventBuffer.publisher());
-    }
-
-    public void publish(QuoteEvent quoteEvent) {
-        tradeEngine.process(quoteEvent.data());
-        quoteEventBuffer.setNext(quoteEvent);
+        return EventPublisherAdapter.toFlux(eventPublisher, QuoteEvent.class);
     }
 
     @Override
     public Flux<AccountStateEvent> accountState() {
-        return Flux.from(accountStateEventBuffer.publisher());
-    }
-
-    @Override
-    public void publish(AccountStateEvent accountStateEvent) {
-        accountStateEventBuffer.setNext(accountStateEvent);
+        return EventPublisherAdapter.toFlux(eventPublisher, AccountStateEvent.class);
     }
 
     @Override
     public Flux<OpenedPositionsEvent> openedPositions() {
-        return Flux.from(openedPositionsEventBuffer.publisher());
-    }
-
-    @Override
-    public void publish(OpenedPositionsEvent openedPositionsEvent) {
-        openedPositionsEventBuffer.setNext(openedPositionsEvent);
+        return EventPublisherAdapter.toFlux(eventPublisher, OpenedPositionsEvent.class);
     }
 
 }

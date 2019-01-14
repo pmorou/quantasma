@@ -4,6 +4,7 @@ import lombok.Getter;
 
 import java.time.Duration;
 import java.util.Arrays;
+import java.util.StringJoiner;
 
 public enum BarPeriod {
     M1("m1", Duration.ofMinutes(1)),
@@ -32,5 +33,13 @@ public enum BarPeriod {
 
     public Duration getPeriod() {
         return duration;
+    }
+
+    @Override
+    public String toString() {
+        return new StringJoiner(", ", BarPeriod.class.getSimpleName() + "[", "]")
+                .add("periodCode='" + periodCode + "'")
+                .add("duration=" + duration)
+                .toString();
     }
 }

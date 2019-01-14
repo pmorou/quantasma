@@ -1,31 +1,30 @@
 package quantasma.core.timeseries;
 
-import org.ta4j.core.Bar;
 import org.ta4j.core.BaseTimeSeries;
 import org.ta4j.core.TimeSeries;
 import org.ta4j.core.num.Num;
+import quantasma.core.BarPeriod;
+import quantasma.core.timeseries.bar.OneSidedBar;
+import quantasma.core.timeseries.bar.BarFactory;
 
 import java.lang.reflect.Field;
-import java.time.Duration;
-import java.time.ZonedDateTime;
-import java.util.List;
 import java.util.function.Function;
 
-public class ReflectionManualIndexTimeSeries implements ManualIndexTimeSeries {
-    protected final TimeSeries timeSeries;
+public final class ReflectionManualIndexTimeSeries<B extends OneSidedBar> implements ManualIndexTimeSeries<B> {
+    protected final GenericTimeSeries<B> timeSeries;
 
-    protected ReflectionManualIndexTimeSeries(TimeSeries timeSeries) {
+    private boolean isIndexModified;
+
+    private ReflectionManualIndexTimeSeries(GenericTimeSeries<B> timeSeries) {
         this.timeSeries = timeSeries;
     }
 
-    public static ReflectionManualIndexTimeSeries wrap(TimeSeries timeSeries) {
-        return new ReflectionManualIndexTimeSeries(timeSeries);
+    public static <B extends OneSidedBar> ReflectionManualIndexTimeSeries wrap(GenericTimeSeries<B> timeSeries) {
+        return new ReflectionManualIndexTimeSeries<>(timeSeries);
     }
 
-    protected boolean isIndexModified;
-
     @Override
-    public void addBar(Bar bar, boolean replace) {
+    public void addBar(B bar, boolean replace) {
         if (isIndexModified) {
             throw new RuntimeException("Cannot add bars as indexes are already manipulated");
         }
@@ -59,7 +58,7 @@ public class ReflectionManualIndexTimeSeries implements ManualIndexTimeSeries {
     }
 
     protected int totalBarsCount() {
-        return getBarData().size();
+        return timeSeries.plainTimeSeries().getBarData().size();
     }
 
     protected int stealBeginIndex() {
@@ -79,33 +78,51 @@ public class ReflectionManualIndexTimeSeries implements ManualIndexTimeSeries {
     }
 
     private Object getField(String fieldName) {
+        TimeSeries target = timeSeries.plainTimeSeries();
+        if (isForwardingTimeSeries(target)) {
+            target = getDelegate(target);
+        }
+        Class<?> clazz = getBaseTimeSeriesClassRef(target);
+
         try {
-            Class<?> clazz = getBaseTimeSeriesClassRef();
             final Field field = clazz.getDeclaredField(fieldName);
             field.setAccessible(true);
-            return field.get(timeSeries);
+            return field.get(target);
         } catch (NoSuchFieldException | IllegalAccessException e) {
             throw new RuntimeException("Checked exception", e);
         }
     }
 
     private void setField(String fieldName, Object value) {
+        TimeSeries target = timeSeries.plainTimeSeries();
+        if (isForwardingTimeSeries(target)) {
+            target = getDelegate(target);
+        }
+        Class<?> clazz = getBaseTimeSeriesClassRef(target);
+
         try {
-            Class<?> clazz = getBaseTimeSeriesClassRef();
             final Field field = clazz.getDeclaredField(fieldName);
             field.setAccessible(true);
-            field.set(timeSeries, value);
+            field.set(target, value);
         } catch (NoSuchFieldException | IllegalAccessException e) {
             throw new RuntimeException("Checked exception", e);
         }
     }
 
-    private Class<?> getBaseTimeSeriesClassRef() {
-        Class<?> clazz = timeSeries.getClass();
+    private boolean isForwardingTimeSeries(TimeSeries target) {
+        return target instanceof ForwardingTimeSeries;
+    }
+
+    private TimeSeries getDelegate(TimeSeries target) {
+        return ((ForwardingTimeSeries) target).delegate();
+    }
+
+    private Class<?> getBaseTimeSeriesClassRef(TimeSeries target) {
+        Class<?> clazz = target.getClass();
         while (clazz != BaseTimeSeries.class) {
             clazz = clazz.getSuperclass();
             if (clazz == Object.class) {
-                throw new RuntimeException();
+                throw new RuntimeException(String.format("Wrapped time series [%s] aren't related to BaseTimeSeries", target));
             }
         }
         return clazz;
@@ -119,18 +136,33 @@ public class ReflectionManualIndexTimeSeries implements ManualIndexTimeSeries {
     }
 
     @Override
-    public Bar getBar(int i) {
+    public TimeSeries plainTimeSeries() {
+        return timeSeries.plainTimeSeries();
+    }
+
+    @Override
+    public BarPeriod getBarPeriod() {
+        return timeSeries.getBarPeriod();
+    }
+
+    @Override
+    public String getSymbol() {
+        return timeSeries.getSymbol();
+    }
+
+    @Override
+    public BarFactory<B> getBarFactory() {
+        return timeSeries.getBarFactory();
+    }
+
+    @Override
+    public B getBar(int i) {
         return timeSeries.getBar(i);
     }
 
     @Override
     public int getBarCount() {
         return timeSeries.getBarCount();
-    }
-
-    @Override
-    public List<Bar> getBarData() {
-        return timeSeries.getBarData();
     }
 
     @Override
@@ -159,23 +191,8 @@ public class ReflectionManualIndexTimeSeries implements ManualIndexTimeSeries {
     }
 
     @Override
-    public void addBar(Duration timePeriod, ZonedDateTime endTime) {
-        timeSeries.addBar(timePeriod, endTime);
-    }
-
-    @Override
-    public void addBar(ZonedDateTime endTime, Num openPrice, Num highPrice, Num lowPrice, Num closePrice, Num volume, Num amount) {
-        timeSeries.addBar(endTime, openPrice, highPrice, lowPrice, closePrice, volume, amount);
-    }
-
-    @Override
-    public void addBar(Duration timePeriod, ZonedDateTime endTime, Num openPrice, Num highPrice, Num lowPrice, Num closePrice, Num volume) {
-        timeSeries.addBar(timePeriod, endTime, openPrice, highPrice, lowPrice, closePrice, volume);
-    }
-
-    @Override
-    public void addBar(Duration timePeriod, ZonedDateTime endTime, Num openPrice, Num highPrice, Num lowPrice, Num closePrice, Num volume, Num amount) {
-        timeSeries.addBar(timePeriod, endTime, openPrice, highPrice, lowPrice, closePrice, volume, amount);
+    public void addBar() {
+        timeSeries.addBar();
     }
 
     @Override
@@ -189,11 +206,6 @@ public class ReflectionManualIndexTimeSeries implements ManualIndexTimeSeries {
     }
 
     @Override
-    public TimeSeries getSubSeries(int startIndex, int endIndex) {
-        return timeSeries.getSubSeries(startIndex, endIndex);
-    }
-
-    @Override
     public Num numOf(Number number) {
         return timeSeries.numOf(number);
     }
@@ -204,12 +216,12 @@ public class ReflectionManualIndexTimeSeries implements ManualIndexTimeSeries {
     }
 
     @Override
-    public Bar getFirstBar() {
+    public B getFirstBar() {
         return timeSeries.getFirstBar();
     }
 
     @Override
-    public Bar getLastBar() {
+    public B getLastBar() {
         return timeSeries.getLastBar();
     }
 

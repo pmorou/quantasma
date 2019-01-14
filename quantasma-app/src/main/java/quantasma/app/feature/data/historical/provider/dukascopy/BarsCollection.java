@@ -2,7 +2,7 @@ package quantasma.app.feature.data.historical.provider.dukascopy;
 
 import com.dukascopy.api.IBar;
 import lombok.Getter;
-import quantasma.app.model.OhlcvTick;
+import quantasma.app.model.OhlcvBar;
 import quantasma.core.BarPeriod;
 
 import java.time.Instant;
@@ -16,25 +16,22 @@ class BarsCollection {
     private final BarPeriod barPeriod;
 
     class Bar {
-        private final String _symbol = symbol;
-        private final BarPeriod _barPeriod = barPeriod;
-
         private IBar bidBar;
         private IBar askBar;
 
-        OhlcvTick toOhlcv() {
-            return new OhlcvTick(_barPeriod,
-                                 Instant.ofEpochMilli(bidBar.getTime()),
-                                 _symbol,
-                                 bidBar.getOpen(),
-                                 bidBar.getLow(),
-                                 bidBar.getHigh(),
-                                 bidBar.getClose(),
-                                 askBar.getOpen(),
-                                 askBar.getLow(),
-                                 askBar.getHigh(),
-                                 askBar.getClose(),
-                                 (int) (bidBar.getVolume() + askBar.getVolume()));
+        OhlcvBar toOhlcv() {
+            return new OhlcvBar(barPeriod,
+                                Instant.ofEpochMilli(bidBar.getTime()),
+                                symbol,
+                                bidBar.getOpen(),
+                                bidBar.getLow(),
+                                bidBar.getHigh(),
+                                bidBar.getClose(),
+                                askBar.getOpen(),
+                                askBar.getLow(),
+                                askBar.getHigh(),
+                                askBar.getClose(),
+                                (int) (bidBar.getVolume() + askBar.getVolume()));
         }
     }
 

@@ -1,5 +1,7 @@
 package quantasma.examples;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.ta4j.core.Rule;
 import org.ta4j.core.TimeSeries;
@@ -13,17 +15,16 @@ import quantasma.core.BaseTradeStrategy;
 import quantasma.core.Context;
 import quantasma.core.analysis.parametrize.Parameterizable;
 import quantasma.core.analysis.parametrize.Values;
-import quantasma.core.order.CloseMarkerOrder;
+import quantasma.core.order.CloseMarketOrder;
 import quantasma.core.order.OpenMarketOrder;
 
+import java.time.Instant;
 import java.util.function.UnaryOperator;
 
 @Slf4j
 public class RSIStrategy extends BaseTradeStrategy {
 
-    private static final int MAX_NUMBER_OF_POSITIONS = 1;
-
-    private int openedPositionsCounter = 0;
+    private final Position position = new Position();
 
     protected RSIStrategy(Builder builder) {
         super(builder);
@@ -31,33 +32,25 @@ public class RSIStrategy extends BaseTradeStrategy {
 
     @Override
     public boolean shouldEnter(int index, TradingRecord tradingRecord) {
-        if (super.shouldEnter(index, tradingRecord) && shouldOpenPosition()) {
-            openedPositionsCounter++;
-            getOrderService().openPosition(new OpenMarketOrder(1, getTradeSymbol()));
+        if (super.shouldEnter(index, tradingRecord) && !position.isOpened) {
+            log.info("Opening position");
+            getOrderService().execute(position.openOrder(1));
             return true;
         }
         return false;
-    }
-
-    private boolean shouldOpenPosition() {
-        return openedPositionsCounter < MAX_NUMBER_OF_POSITIONS;
     }
 
     @Override
     public boolean shouldExit(int index, TradingRecord tradingRecord) {
-        if (super.shouldExit(index, tradingRecord) && hasOpenedPosition()) {
-            openedPositionsCounter--;
-            getOrderService().closePosition(new CloseMarkerOrder());
+        if (super.shouldExit(index, tradingRecord) && position.isOpened) {
+            log.info("Closing position");
+            getOrderService().execute(position.closeOrder());
             return true;
         }
         return false;
     }
 
-    private boolean hasOpenedPosition() {
-        return openedPositionsCounter > 0;
-    }
-
-    public static RSIStrategy buildBullish(Context context, Values<Parameter> parameterValues)  {
+    public static RSIStrategy buildBullish(Context context, Values<Parameter> parameterValues) {
         final Number rsiLowerBound = (Number) parameterValues.get(Parameter.RSI_LOWER_BOUND);
         final Number rsiUpperBound = (Number) parameterValues.get(Parameter.RSI_UPPER_BOUND);
         final RSIIndicator rsi = createRSIIndicator(context, parameterValues);
@@ -80,7 +73,8 @@ public class RSIStrategy extends BaseTradeStrategy {
     private static RSIIndicator createRSIIndicator(Context context, Values<Parameter> parameterValues) {
         final TimeSeries timeSeries = context.getDataService().getMarketData()
                                              .of((String) parameterValues.get(Parameter.TRADE_SYMBOL))
-                                             .getTimeSeries(BarPeriod.M1);
+                                             .getTimeSeries(BarPeriod.M1)
+                                             .plainTimeSeries();
         final ClosePriceIndicator closePrice = new ClosePriceIndicator(timeSeries);
         return new RSIIndicator(closePrice, (Integer) parameterValues.get(Parameter.RSI_PERIOD));
     }
@@ -88,6 +82,32 @@ public class RSIStrategy extends BaseTradeStrategy {
     @Override
     public Parameterizable[] parameterizables() {
         return Parameter.values();
+    }
+
+    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    private class Position {
+        private String symbol = getTradeSymbol();
+        private String label;
+        private boolean isOpened;
+
+        private OpenMarketOrder openOrder(double orderAmount) {
+            setAmount(getNumFunction().apply(orderAmount));
+            this.label = RSIStrategy.class.getSimpleName()
+                         + "_" + Instant.now().toEpochMilli()
+                         + "_" + symbol
+                         + "_" + String.valueOf(orderAmount).replace(".", "_");
+            this.isOpened = true;
+            return new OpenMarketOrder(label, orderAmount, symbol);
+        }
+
+        private CloseMarketOrder closeOrder() {
+            if (!this.isOpened) {
+                throw new IllegalStateException("Can't close unopened position");
+            }
+
+            this.isOpened = false;
+            return new CloseMarketOrder(label);
+        }
     }
 
     /**

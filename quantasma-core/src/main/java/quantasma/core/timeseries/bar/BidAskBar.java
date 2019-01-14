@@ -1,37 +1,32 @@
 package quantasma.core.timeseries.bar;
 
-import org.ta4j.core.Bar;
-import org.ta4j.core.Order;
 import org.ta4j.core.num.Num;
+import quantasma.core.Quote;
 
-import java.math.BigDecimal;
 import java.util.function.Function;
 
-public interface BidAskBar extends Bar {
+public interface BidAskBar extends OneSidedBar {
 
-    default Num getOpenPrice() {
-        return getBidOpenPrice();
+    @Override
+    default void updateBar(Quote quote, Function<Number, Num> numFunction) {
+        addPrice(numFunction.apply(quote.getBid()), numFunction.apply(quote.getAsk()));
     }
 
-    default Num getMinPrice() {
-        return getBidMinPrice();
+    default Num getBidOpenPrice() {
+        return getOpenPrice();
     }
 
-    default Num getMaxPrice() {
-        return getBidMaxPrice();
+    default Num getBidMinPrice() {
+        return getMinPrice();
     }
 
-    default Num getClosePrice() {
-        return getBidClosePrice();
+    default Num getBidMaxPrice() {
+        return getMaxPrice();
     }
 
-    Num getBidOpenPrice();
-
-    Num getBidMinPrice();
-
-    Num getBidMaxPrice();
-
-    Num getBidClosePrice();
+    default Num getBidClosePrice() {
+        return getClosePrice();
+    }
 
     Num getAskOpenPrice();
 
@@ -40,16 +35,6 @@ public interface BidAskBar extends Bar {
     Num getAskMaxPrice();
 
     Num getAskClosePrice();
-
-    void addTrade(Num volume, Num bid, Num ask, Order.OrderType orderType);
-
-    default void addPrice(String bid, String ask, Function<Number, Num> numFunction) {
-        addPrice(numFunction.apply(new BigDecimal(bid)), numFunction.apply(new BigDecimal(ask)));
-    }
-
-    default void addPrice(Number bid, Number ask, Function<Number, Num> numFunction) {
-        addPrice(numFunction.apply(bid), numFunction.apply(ask));
-    }
 
     void addPrice(Num bid, Num ask);
 }

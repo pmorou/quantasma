@@ -36,11 +36,13 @@ public class Variable<T> {
         return this;
     }
 
-    public Variable<T> with(T... values) {
+    @SafeVarargs
+    public final Variable<T> with(T... values) {
         return values(values);
     }
 
-    public Variable<T> values(T... values) {
+    @SafeVarargs
+    public final Variable<T> values(T... values) {
         if (isAlreadyIterating()) {
             return this;
         }

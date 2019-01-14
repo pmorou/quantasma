@@ -1,8 +1,10 @@
 package quantasma.core.timeseries;
 
+import quantasma.core.timeseries.bar.OneSidedBar;
+
 import java.util.function.Function;
 
-public class AggregatedTimeSeriesFactory implements TimeSeriesFactory<AggregatedTimeSeries> {
+public class AggregatedTimeSeriesFactory<B extends OneSidedBar> implements TimeSeriesFactory<AggregatedTimeSeries<B>> {
 
     private final MainTimeSeries mainTimeSeries;
 
@@ -10,15 +12,18 @@ public class AggregatedTimeSeriesFactory implements TimeSeriesFactory<Aggregated
         this.mainTimeSeries = mainTimeSeries;
     }
 
-    public static AggregatedTimeSeriesFactory from(MainTimeSeries timeSeries) {
-        return new AggregatedTimeSeriesFactory(timeSeries);
+    public static <B extends OneSidedBar> AggregatedTimeSeriesFactory<B> from(MainTimeSeries<B> timeSeries) {
+        return new AggregatedTimeSeriesFactory<>(timeSeries);
     }
 
     @Override
-    public Function<TimeSeriesDefinition, AggregatedTimeSeries> function() {
-        return timeSeriesDefinition -> new BaseAggregatedTimeSeries.Builder<>(mainTimeSeries.getSymbol(), timeSeriesDefinition.getBarPeriod(), mainTimeSeries)
+    public Function<TimeSeriesDefinition, AggregatedTimeSeries<B>> function() {
+        return timeSeriesDefinition -> new BaseAggregatedTimeSeries.Builder<>(mainTimeSeries.getSymbol(),
+                                                                              timeSeriesDefinition.getBarPeriod(),
+                                                                              mainTimeSeries)
                 .withMaxBarCount(timeSeriesDefinition.getMaxBarCount())
                 .withName(timeSeriesDefinition.getBarPeriod().getPeriodCode())
+                .withBarFactory(mainTimeSeries.getBarFactory())
                 .build();
     }
 }

@@ -94,8 +94,8 @@ public class Variables<P extends Enum & Parameterizable> {
         return variablesByLabel.entrySet()
                                .stream()
                                .reduce(Values.of((Class<P>) parameterClass),
-                                       (p, entry) -> p.add(entry.getKey(), entry.getValue().value()),
-                                       Values::addAll);
+                                       (p, entry) -> p.set(entry.getKey(), entry.getValue().value()),
+                                       Values::setAll);
     }
 
     public static <P extends Enum & Parameterizable> void addValues(Variables<P> var, P parameter, Object[] values) {

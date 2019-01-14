@@ -8,8 +8,10 @@ import com.oanda.v20.pricing.PricingGetRequest;
 import com.oanda.v20.pricing.PricingGetResponse;
 import com.oanda.v20.primitives.DateTime;
 import lombok.extern.slf4j.Slf4j;
-import quantasma.integrations.data.provider.AbstractLiveDataProvider;
-import quantasma.core.TradeEngine;
+import quantasma.core.Quote;
+import quantasma.integrations.data.provider.LiveDataProvider;
+import quantasma.integrations.event.Event;
+import quantasma.integrations.event.EventPublisher;
 
 import java.time.ZonedDateTime;
 import java.util.ArrayList;
@@ -18,20 +20,21 @@ import java.util.List;
 import java.util.concurrent.CompletableFuture;
 
 @Slf4j
-public class OandaLiveDataProvider extends AbstractLiveDataProvider {
+public class OandaLiveDataProvider implements LiveDataProvider {
 
     private final String url;
     private final String token;
     private final String accountId;
+    private final EventPublisher eventPublisher;
 
     private boolean isRunning = false;
     private CompletableFuture<Void> fetchingData;
 
-    public OandaLiveDataProvider(String url, String token, String accountId, TradeEngine strategyRegister) {
-        super(strategyRegister);
+    public OandaLiveDataProvider(String url, String token, String accountId, EventPublisher eventPublisher) {
         this.url = url;
         this.token = token;
         this.accountId = accountId;
+        this.eventPublisher = eventPublisher;
     }
 
     private void fetchData() {
@@ -60,10 +63,13 @@ public class OandaLiveDataProvider extends AbstractLiveDataProvider {
                 for (ClientPrice price : resp.getPrices()) {
                     log.info("Oanda API: {}", price);
 
-                    tradeEngine.process(price.getInstrument().toString().replace("_", ""),
-                                        ZonedDateTime.parse(price.getTime()),
-                                        price.getBids().get(0).getPrice().doubleValue(),
-                                        price.getAsks().get(0).getPrice().doubleValue());
+                    eventPublisher.publish(Event.quote(
+                            Quote.bidAsk(
+                                    price.getInstrument().toString().replace("_", ""),
+                                    ZonedDateTime.parse(price.getTime()),
+                                    price.getBids().get(0).getPrice().doubleValue(),
+                                    price.getAsks().get(0).getPrice().doubleValue()))
+                    );
                 }
                 since = resp.getTime();
 

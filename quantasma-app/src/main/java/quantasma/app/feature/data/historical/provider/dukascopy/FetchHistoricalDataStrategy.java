@@ -33,6 +33,7 @@ public class FetchHistoricalDataStrategy implements IStrategy {
         this.feedBarsSettings = feedBarsSettings;
     }
 
+    @Override
     public void onStart(IContext context) throws JFException {
         log.info("Strategy started");
         this.history = context.getHistory();
@@ -56,7 +57,7 @@ public class FetchHistoricalDataStrategy implements IStrategy {
             bars.verifyIntegrity();
             bars.getBars().forEach((key, value) -> historicalDataService.insertSkipDuplicates(value.toOhlcv()));
 
-            if (bidBars.size() == 0 || askBars.size() == 0) {
+            if (bidBars.isEmpty() || askBars.isEmpty()) {
                 log.info("No bar found for given date range, stopping fetch");
                 break;
             }
@@ -108,20 +109,29 @@ public class FetchHistoricalDataStrategy implements IStrategy {
         return isDone;
     }
 
+    @Override
     public void onAccount(IAccount account) {
+        // ignore
     }
 
+    @Override
     public void onMessage(IMessage message) {
+        // ignore
     }
 
+    @Override
     public void onStop() {
         log.info("Strategy stopped");
     }
 
+    @Override
     public void onTick(Instrument instrument, ITick tick) {
+        // ignore
     }
 
+    @Override
     public void onBar(Instrument instrument, Period period, IBar askBar, IBar bidBar) {
+        // ignore
     }
 
 }
