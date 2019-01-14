@@ -28,9 +28,9 @@ public class OrderPublisher implements IStrategy {
 
     public void submit(OpenMarketOrder openMarketOrder) throws JFException {
         final IOrder executedOrder = engine.submitOrder(openMarketOrder.getLabel(),
-                                                 Instrument.valueOf(openMarketOrder.getSymbol()),
-                                                 IEngine.OrderCommand.BUY,
-                                                 openMarketOrder.getVolume());
+                                                        Instrument.valueOf(openMarketOrder.getSymbol()),
+                                                        IEngine.OrderCommand.BUY,
+                                                        openMarketOrder.getVolume());
         if (executedOrder == null) {
             throw new IllegalStateException(String.format("Order [%s] not executed", openMarketOrder));
         }
@@ -68,4 +68,5 @@ public class OrderPublisher implements IStrategy {
     public void onBar(Instrument instrument, Period period, IBar askBar, IBar bidBar) {
         // ignore
     }
+
 }
