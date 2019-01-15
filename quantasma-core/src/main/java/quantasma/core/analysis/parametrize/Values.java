@@ -47,6 +47,14 @@ public class Values<P extends Enum & Parameterizable> {
         return valuesByParameter.get(parameter);
     }
 
+    public Integer getInteger(P parameter) {
+        return (Integer) valuesByParameter.get(parameter);
+    }
+
+    public String getString(P parameter) {
+        return (String) valuesByParameter.get(parameter);
+    }
+
     public Object get(String key) {
         return valuesByParameter.get(getEnum(key));
     }
