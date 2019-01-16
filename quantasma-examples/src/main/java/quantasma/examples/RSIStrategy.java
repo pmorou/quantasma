@@ -59,10 +59,14 @@ public class RSIStrategy extends BaseTradeStrategy {
                              new CrossedUpIndicatorRule(rsi, rsiLowerBound),
                              new CrossedDownIndicatorRule(rsi, rsiUpperBound),
                              parameterValues)
-                .withName(String.format("bullish_rsi_strategy_%s-%s", rsiLowerBound, rsiUpperBound))
+                .withName(createName(rsiLowerBound, rsiUpperBound))
                 .withUnstablePeriod((Integer) parameterValues.get(Parameter.RSI_PERIOD))
                 .withAmount(1000)
                 .build();
+    }
+
+    private static String createName(Number rsiLowerBound, Number rsiUpperBound) {
+        return String.format("%s_bullish_%s-%s", RSIStrategy.class.getSimpleName(), rsiLowerBound, rsiUpperBound);
     }
 
     public static RSIStrategy buildBullish(Context context, UnaryOperator<Values<Parameter>> parameterValuesBuilder) {
