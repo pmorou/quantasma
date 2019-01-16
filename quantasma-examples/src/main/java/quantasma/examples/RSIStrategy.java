@@ -4,7 +4,6 @@ import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.ta4j.core.Rule;
-import org.ta4j.core.TimeSeries;
 import org.ta4j.core.TradingRecord;
 import org.ta4j.core.indicators.RSIIndicator;
 import org.ta4j.core.indicators.helpers.ClosePriceIndicator;
@@ -51,16 +50,16 @@ public class RSIStrategy extends BaseTradeStrategy {
     }
 
     public static RSIStrategy buildBullish(Context context, Values<Parameter> parameterValues) {
-        final Number rsiLowerBound = (Number) parameterValues.get(Parameter.RSI_LOWER_BOUND);
-        final Number rsiUpperBound = (Number) parameterValues.get(Parameter.RSI_UPPER_BOUND);
-        final RSIIndicator rsi = createRSIIndicator(context, parameterValues);
+        var rsiLowerBound = parameterValues.getInteger(Parameter.RSI_LOWER_BOUND);
+        var rsiUpperBound = parameterValues.getInteger(Parameter.RSI_UPPER_BOUND);
+        var rsiIndicator = createRSIIndicator(context, parameterValues);
         return new Builder<>(context,
-                             (String) parameterValues.get(Parameter.TRADE_SYMBOL),
-                             new CrossedUpIndicatorRule(rsi, rsiLowerBound),
-                             new CrossedDownIndicatorRule(rsi, rsiUpperBound),
+                             parameterValues.getString(Parameter.TRADE_SYMBOL),
+                             new CrossedUpIndicatorRule(rsiIndicator, rsiLowerBound),
+                             new CrossedDownIndicatorRule(rsiIndicator, rsiUpperBound),
                              parameterValues)
-                .withName(createName(rsiLowerBound, rsiUpperBound))
-                .withUnstablePeriod((Integer) parameterValues.get(Parameter.RSI_PERIOD))
+                .withName(createName("bullish", rsiLowerBound, rsiUpperBound))
+                .withUnstablePeriod(parameterValues.getInteger(Parameter.RSI_PERIOD))
                 .withAmount(1000)
                 .build();
     }
@@ -70,17 +69,18 @@ public class RSIStrategy extends BaseTradeStrategy {
     }
 
     public static RSIStrategy buildBullish(Context context, UnaryOperator<Values<Parameter>> parameterValuesBuilder) {
-        final Values<Parameter> parameterValues = parameterValuesBuilder.apply(Values.of(Parameter.class));
+        var parameterValues = parameterValuesBuilder.apply(Values.of(Parameter.class));
         return buildBullish(context, parameterValues);
     }
 
     private static RSIIndicator createRSIIndicator(Context context, Values<Parameter> parameterValues) {
-        final TimeSeries timeSeries = context.getDataService().getMarketData()
-                                             .of((String) parameterValues.get(Parameter.TRADE_SYMBOL))
-                                             .getTimeSeries(BarPeriod.M1)
-                                             .plainTimeSeries();
-        final ClosePriceIndicator closePrice = new ClosePriceIndicator(timeSeries);
-        return new RSIIndicator(closePrice, (Integer) parameterValues.get(Parameter.RSI_PERIOD));
+        var timeSeries = context.getDataService()
+                                .getMarketData()
+                                .of(parameterValues.getString(Parameter.TRADE_SYMBOL))
+                                .getTimeSeries(BarPeriod.M1)
+                                .plainTimeSeries();
+        var closePriceIndicator = new ClosePriceIndicator(timeSeries);
+        return new RSIIndicator(closePriceIndicator, parameterValues.getInteger(Parameter.RSI_PERIOD));
     }
 
     @Override
