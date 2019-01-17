@@ -26,6 +26,7 @@ import quantasma.core.timeseries.ReflectionManualIndexTimeSeries;
 import quantasma.core.timeseries.TimeSeriesDefinition;
 import quantasma.core.timeseries.bar.BidAskBar;
 import quantasma.core.timeseries.bar.BidAskBarFactory;
+import quantasma.examples.RSIBullishStrategy;
 import quantasma.examples.RSIStrategy;
 import quantasma.examples.RSIStrategy.Parameter;
 
@@ -40,7 +41,7 @@ import java.util.stream.Collectors;
 
 @Component
 @Slf4j
-public class RSIBacktest implements StrategyBacktest {
+public class RSIBullishBacktest implements StrategyBacktest {
 
     private static final String SYMBOL = "EURUSD";
     private static final BarPeriod BASE_PERIOD = BarPeriod.M1;
@@ -49,14 +50,14 @@ public class RSIBacktest implements StrategyBacktest {
     private final CriterionsFactory criterionsFactory;
 
     @Autowired
-    public RSIBacktest(HistoricalDataService historicalDataService, CriterionsFactory criterionsFactory) {
+    public RSIBullishBacktest(HistoricalDataService historicalDataService, CriterionsFactory criterionsFactory) {
         this.historicalDataService = historicalDataService;
         this.criterionsFactory = criterionsFactory;
     }
 
     @Override
     public Class<? extends TradeStrategy> strategy() {
-        return RSIStrategy.class;
+        return RSIBullishStrategy.class;
     }
 
     @Override
@@ -77,7 +78,7 @@ public class RSIBacktest implements StrategyBacktest {
                                                Variables.addValues(var,
                                                                    Parameter.valueOf(key),
                                                                    value));
-            return RSIStrategy.buildBullish(context, var.getParameterValues());
+            return RSIBullishStrategy.build(context, var.getParameterValues());
         };
 
         final TestModeExtractorBidAsk testModeExtractor = new TestModeExtractorBidAsk();

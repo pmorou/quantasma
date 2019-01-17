@@ -1,14 +1,12 @@
 package quantasma.examples;
 
 import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.ta4j.core.Rule;
 import org.ta4j.core.TradingRecord;
 import org.ta4j.core.indicators.RSIIndicator;
 import org.ta4j.core.indicators.helpers.ClosePriceIndicator;
-import org.ta4j.core.trading.rules.CrossedDownIndicatorRule;
-import org.ta4j.core.trading.rules.CrossedUpIndicatorRule;
 import quantasma.core.BarPeriod;
 import quantasma.core.BaseTradeStrategy;
 import quantasma.core.Context;
@@ -18,12 +16,11 @@ import quantasma.core.order.CloseMarketOrder;
 import quantasma.core.order.OpenMarketOrder;
 
 import java.time.Instant;
-import java.util.function.UnaryOperator;
 
 @Slf4j
-public class RSIStrategy extends BaseTradeStrategy {
+public abstract class RSIStrategy extends BaseTradeStrategy {
 
-    private final Position position = new Position();
+    private final Position position = new Position(selfClass());
 
     protected RSIStrategy(Builder builder) {
         super(builder);
@@ -32,8 +29,8 @@ public class RSIStrategy extends BaseTradeStrategy {
     @Override
     public boolean shouldEnter(int index, TradingRecord tradingRecord) {
         if (super.shouldEnter(index, tradingRecord) && !position.isOpened) {
-            log.info("Opening position");
-            getOrderService().execute(position.openOrder(1));
+            log.info("{} opening position", selfClass());
+            getOrderService().execute(position.openOrder(0.01));
             return true;
         }
         return false;
@@ -42,38 +39,14 @@ public class RSIStrategy extends BaseTradeStrategy {
     @Override
     public boolean shouldExit(int index, TradingRecord tradingRecord) {
         if (super.shouldExit(index, tradingRecord) && position.isOpened) {
-            log.info("Closing position");
+            log.info("{} closing position", selfClass());
             getOrderService().execute(position.closeOrder());
             return true;
         }
         return false;
     }
 
-    public static RSIStrategy buildBullish(Context context, Values<Parameter> parameterValues) {
-        var rsiLowerBound = parameterValues.getInteger(Parameter.RSI_LOWER_BOUND);
-        var rsiUpperBound = parameterValues.getInteger(Parameter.RSI_UPPER_BOUND);
-        var rsiIndicator = createRSIIndicator(context, parameterValues);
-        return new Builder<>(context,
-                             parameterValues.getString(Parameter.TRADE_SYMBOL),
-                             new CrossedUpIndicatorRule(rsiIndicator, rsiLowerBound),
-                             new CrossedDownIndicatorRule(rsiIndicator, rsiUpperBound),
-                             parameterValues)
-                .withName(createName("bullish", rsiLowerBound, rsiUpperBound))
-                .withUnstablePeriod(parameterValues.getInteger(Parameter.RSI_PERIOD))
-                .withAmount(1000)
-                .build();
-    }
-
-    private static String createName(Number rsiLowerBound, Number rsiUpperBound) {
-        return String.format("%s_bullish_%s-%s", RSIStrategy.class.getSimpleName(), rsiLowerBound, rsiUpperBound);
-    }
-
-    public static RSIStrategy buildBullish(Context context, UnaryOperator<Values<Parameter>> parameterValuesBuilder) {
-        var parameterValues = parameterValuesBuilder.apply(Values.of(Parameter.class));
-        return buildBullish(context, parameterValues);
-    }
-
-    private static RSIIndicator createRSIIndicator(Context context, Values<Parameter> parameterValues) {
+    protected static RSIIndicator createRSIIndicator(Context context, Values<Parameter> parameterValues) {
         var timeSeries = context.getDataService()
                                 .getMarketData()
                                 .of(parameterValues.getString(Parameter.TRADE_SYMBOL))
@@ -83,13 +56,22 @@ public class RSIStrategy extends BaseTradeStrategy {
         return new RSIIndicator(closePriceIndicator, parameterValues.getInteger(Parameter.RSI_PERIOD));
     }
 
+    @SuppressWarnings("FinalStaticMethod")
+    protected static final String createName(Class<?> clazz, Number rsiLowerBound, Number rsiUpperBound) {
+        return String.format("%s_%s-%s", clazz.getSimpleName(), rsiLowerBound, rsiUpperBound);
+    }
+
     @Override
     public Parameterizable[] parameterizables() {
         return Parameter.values();
     }
 
-    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    protected abstract Class<?> selfClass();
+
+    @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
     private class Position {
+        private final Class<?> clazz;
+
         private String symbol = getTradeSymbol();
         private String label;
         private boolean isOpened;
@@ -117,7 +99,7 @@ public class RSIStrategy extends BaseTradeStrategy {
     /**
      * @see quantasma.core.BaseTradeStrategy.Builder
      */
-    protected static class Builder<T extends Builder<T, R>, R extends RSIStrategy> extends BaseTradeStrategy.Builder<T, R> {
+    protected abstract static class Builder<T extends Builder<T, R>, R extends RSIStrategy> extends BaseTradeStrategy.Builder<T, R> {
 
         protected Builder(Context context, String tradeSymbol, Rule entryRule, Rule exitRule, Values<?> parameterValues) {
             super(context, tradeSymbol, entryRule, exitRule, parameterValues);
@@ -126,14 +108,10 @@ public class RSIStrategy extends BaseTradeStrategy {
         // New methods can be added here
 
         @Override
-        protected T self() {
-            return (T) this;
-        }
+        protected abstract T self();
 
         @Override
-        public R build() {
-            return (R) new RSIStrategy(this);
-        }
+        public abstract R build();
     }
 
     /**

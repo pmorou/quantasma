@@ -41,7 +41,7 @@ public class TradeAppExample {
                 .withOrderService(new NullOrderService())
                 .build();
 
-        final TradeStrategy rsiStrategy = RSIStrategy.buildBullish(context,
+        final TradeStrategy rsiStrategy = RSIBullishStrategy.build(context,
                                                                    values -> values
                                                                            // String or Enum (for safety) is allowed
                                                                            .set(Parameter.TRADE_SYMBOL, "EURUSD")

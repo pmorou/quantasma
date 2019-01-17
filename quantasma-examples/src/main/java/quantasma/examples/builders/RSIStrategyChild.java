@@ -13,6 +13,11 @@ public class RSIStrategyChild extends RSIStrategy {
         super(builder);
     }
 
+    @Override
+    protected Class<?> selfClass() {
+        return RSIStrategyChild.class;
+    }
+
     /**
      * @see quantasma.core.BaseTradeStrategy.Builder
      */
