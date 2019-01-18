@@ -97,6 +97,7 @@ public class DukascopyApiClient {
                     Thread.sleep(millis);
                 } catch (InterruptedException e) {
                     log.error("Sleep interrupted", e);
+                    Thread.currentThread().interrupt();
                 }
             }
         };
