@@ -12,6 +12,7 @@ import com.dukascopy.api.Instrument;
 import com.dukascopy.api.JFException;
 import com.dukascopy.api.Period;
 import lombok.extern.slf4j.Slf4j;
+import org.ta4j.core.Order;
 import quantasma.core.order.CloseMarketOrder;
 import quantasma.core.order.OpenMarketOrder;
 
@@ -29,11 +30,21 @@ public class OrderPublisher implements IStrategy {
     public void submit(OpenMarketOrder openMarketOrder) throws JFException {
         final IOrder executedOrder = engine.submitOrder(openMarketOrder.getLabel(),
                                                         Instrument.valueOf(openMarketOrder.getSymbol()),
-                                                        IEngine.OrderCommand.BUY,
+                                                        resolveOrderCommand(openMarketOrder.getOrderType()),
                                                         openMarketOrder.getVolume());
         if (executedOrder == null) {
             throw new IllegalStateException(String.format("Order [%s] not executed", openMarketOrder));
         }
+    }
+
+    private static IEngine.OrderCommand resolveOrderCommand(Order.OrderType orderType) {
+        switch (orderType) {
+            case BUY:
+                return IEngine.OrderCommand.BUY;
+            case SELL:
+                return IEngine.OrderCommand.SELL;
+        }
+        throw new IllegalArgumentException(String.format("Unknown order type [%s]", orderType));
     }
 
     public void submit(CloseMarketOrder closeMarkerOrder) throws JFException {

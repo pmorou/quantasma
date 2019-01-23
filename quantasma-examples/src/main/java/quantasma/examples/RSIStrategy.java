@@ -3,6 +3,7 @@ package quantasma.examples;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.ta4j.core.Order;
 import org.ta4j.core.Rule;
 import org.ta4j.core.TradingRecord;
 import org.ta4j.core.indicators.RSIIndicator;
@@ -30,7 +31,7 @@ public abstract class RSIStrategy extends BaseTradeStrategy {
     public boolean shouldEnter(int index, TradingRecord tradingRecord) {
         if (super.shouldEnter(index, tradingRecord) && !position.isOpened) {
             log.info("{} opening position", selfClass());
-            getOrderService().execute(position.openOrder(0.01));
+            getOrderService().execute(position.openOrder(0.01, orderType()));
             return true;
         }
         return false;
@@ -68,6 +69,8 @@ public abstract class RSIStrategy extends BaseTradeStrategy {
 
     protected abstract Class<?> selfClass();
 
+    protected abstract Order.OrderType orderType();
+
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
     private class Position {
         private final Class<?> clazz;
@@ -76,14 +79,14 @@ public abstract class RSIStrategy extends BaseTradeStrategy {
         private String label;
         private boolean isOpened;
 
-        private OpenMarketOrder openOrder(double orderAmount) {
+        private OpenMarketOrder openOrder(double orderAmount, Order.OrderType orderType) {
             setAmount(getNumFunction().apply(orderAmount));
             this.label = RSIStrategy.class.getSimpleName()
                          + "_" + Instant.now().toEpochMilli()
                          + "_" + symbol
                          + "_" + String.valueOf(orderAmount).replace(".", "_");
             this.isOpened = true;
-            return new OpenMarketOrder(label, orderAmount, symbol);
+            return new OpenMarketOrder(label, orderAmount, symbol, orderType);
         }
 
         private CloseMarketOrder closeOrder() {

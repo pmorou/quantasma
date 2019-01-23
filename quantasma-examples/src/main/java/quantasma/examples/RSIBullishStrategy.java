@@ -1,5 +1,6 @@
 package quantasma.examples;
 
+import org.ta4j.core.Order;
 import org.ta4j.core.Rule;
 import org.ta4j.core.trading.rules.CrossedDownIndicatorRule;
 import org.ta4j.core.trading.rules.CrossedUpIndicatorRule;
@@ -17,6 +18,11 @@ public class RSIBullishStrategy extends RSIStrategy {
     @Override
     protected Class<?> selfClass() {
         return getClass();
+    }
+
+    @Override
+    protected Order.OrderType orderType() {
+        return Order.OrderType.BUY;
     }
 
     public static RSIBullishStrategy build(Context context, Values<Parameter> parameterValues) {
