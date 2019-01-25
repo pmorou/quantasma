@@ -30,7 +30,7 @@ public abstract class RSIStrategy extends BaseTradeStrategy {
     @Override
     public boolean shouldEnter(int index, TradingRecord tradingRecord) {
         if (super.shouldEnter(index, tradingRecord) && !position.isOpened) {
-            log.info("{} opening position", selfClass());
+            log.info("{} opening position", selfClass().getSimpleName());
             getOrderService().execute(position.openOrder(0.01, orderType()));
             return true;
         }
@@ -40,7 +40,7 @@ public abstract class RSIStrategy extends BaseTradeStrategy {
     @Override
     public boolean shouldExit(int index, TradingRecord tradingRecord) {
         if (super.shouldExit(index, tradingRecord) && position.isOpened) {
-            log.info("{} closing position", selfClass());
+            log.info("{} closing position", selfClass().getSimpleName());
             getOrderService().execute(position.closeOrder());
             return true;
         }
