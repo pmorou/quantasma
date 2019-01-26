@@ -81,7 +81,7 @@ public abstract class RSIStrategy extends BaseTradeStrategy {
 
         private OpenMarketOrder openOrder(double orderAmount, Order.OrderType orderType) {
             setAmount(getNumFunction().apply(orderAmount));
-            this.label = RSIStrategy.class.getSimpleName()
+            this.label = clazz.getSimpleName()
                          + "_" + Instant.now().toEpochMilli()
                          + "_" + symbol
                          + "_" + String.valueOf(orderAmount).replace(".", "_");
