@@ -48,7 +48,7 @@ public class ParametrizedBacktestExample {
 
         // Feed historical data by calling marketData.add()
 
-        final TestManager testManager = new TestManager<>(marketData);
+        final TestManager<BidAskBar> testManager = new TestManager<>(marketData);
         Producer.from(recipe)
                 .stream()
                 .forEach(tradeStrategy -> {
