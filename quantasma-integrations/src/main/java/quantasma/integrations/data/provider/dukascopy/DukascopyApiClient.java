@@ -88,16 +88,14 @@ public class DukascopyApiClient {
                     } catch (Exception e) {
                         log.error("Reconnecting failed", e);
                     }
-                    sleep(60 * 1000);
-                }
-            }
 
-            private void sleep(long millis) {
-                try {
-                    Thread.sleep(millis);
-                } catch (InterruptedException e) {
-                    log.error("Sleep interrupted", e);
-                    Thread.currentThread().interrupt();
+                    try {
+                        Thread.sleep((long) (60 * 1000));
+                    } catch (InterruptedException e) {
+                        log.error("Sleep interrupted", e);
+                        Thread.currentThread().interrupt();
+                        break;
+                    }
                 }
             }
         };
