@@ -71,31 +71,28 @@ public class DukascopyApiClient {
 
     private void tryToReconnect() {
         log.info("Connecting...");
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                while (!client.isConnected()) {
-                    try {
-                        if (lightReconnects > 0 && client.isReconnectAllowed()) {
-                            client.reconnect();
-                            --lightReconnects;
-                        } else {
-                            tryToConnect();
-                        }
-                        if (client.isConnected()) {
-                            break;
-                        }
-                    } catch (Exception e) {
-                        log.error("Reconnecting failed", e);
+        Runnable runnable = () -> {
+            while (!client.isConnected()) {
+                try {
+                    if (lightReconnects > 0 && client.isReconnectAllowed()) {
+                        client.reconnect();
+                        --lightReconnects;
+                    } else {
+                        tryToConnect();
                     }
-
-                    try {
-                        Thread.sleep((long) (60 * 1000));
-                    } catch (InterruptedException e) {
-                        log.error("Sleep interrupted", e);
-                        Thread.currentThread().interrupt();
+                    if (client.isConnected()) {
                         break;
                     }
+                } catch (Exception e) {
+                    log.error("Reconnecting failed", e);
+                }
+
+                try {
+                    Thread.sleep((long) (60 * 1000));
+                } catch (InterruptedException e) {
+                    log.error("Sleep interrupted", e);
+                    Thread.currentThread().interrupt();
+                    break;
                 }
             }
         };
