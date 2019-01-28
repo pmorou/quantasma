@@ -80,19 +80,16 @@ public class DukascopyApiClient {
                     } else {
                         tryToConnect();
                     }
-                    if (client.isConnected()) {
-                        break;
-                    }
-                } catch (Exception e) {
-                    log.error("Reconnecting failed", e);
-                }
 
-                try {
-                    Thread.sleep((long) (60 * 1000));
+                    if (!client.isConnected()) {
+                        Thread.sleep((long) (60 * 1000));
+                    }
                 } catch (InterruptedException e) {
-                    log.error("Sleep interrupted", e);
+                    log.error("Thread interrupted", e);
                     Thread.currentThread().interrupt();
                     break;
+                } catch (Exception e) {
+                    log.error("Reconnecting failed", e);
                 }
             }
         };
