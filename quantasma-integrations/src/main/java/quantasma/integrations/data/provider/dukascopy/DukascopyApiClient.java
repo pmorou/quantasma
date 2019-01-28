@@ -97,9 +97,9 @@ public class DukascopyApiClient {
     }
 
     private void subscribeToInstruments() {
-        log.info("Subscribing instruments...");
         Set<Instrument> instruments = new HashSet<>();
         instruments.add(Instrument.EURUSD);
+        log.info("Subscribing to instruments: {}", instruments);
         client.setSubscribedInstruments(instruments);
     }
 
