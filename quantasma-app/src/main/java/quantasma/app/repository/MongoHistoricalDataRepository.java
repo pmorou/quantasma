@@ -14,13 +14,13 @@ import java.time.Instant;
 import java.util.List;
 
 @Repository
-public class HistoricalDataRepositoryImpl implements HistoricalDataRepository {
+public class MongoHistoricalDataRepository implements HistoricalDataRepository {
 
     private final HistoricalDataServiceProperties properties;
     private final MongoTemplate mongoTemplate;
 
     @Autowired
-    public HistoricalDataRepositoryImpl(HistoricalDataServiceProperties properties, MongoTemplate mongoTemplate) {
+    public MongoHistoricalDataRepository(HistoricalDataServiceProperties properties, MongoTemplate mongoTemplate) {
         this.properties = properties;
         this.mongoTemplate = mongoTemplate;
     }
