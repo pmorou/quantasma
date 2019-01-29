@@ -6,7 +6,7 @@ import org.springframework.data.mongodb.core.aggregation.Aggregation;
 import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
-import quantasma.app.config.service.historical.HistoricalDataServiceProperties;
+import quantasma.app.config.service.historical.MongoProperties;
 import quantasma.app.model.HistoricalDataSummary;
 import quantasma.app.model.MongoOhlcvBar;
 
@@ -16,11 +16,11 @@ import java.util.List;
 @Repository
 public class MongoHistoricalDataRepository implements HistoricalDataRepository {
 
-    private final HistoricalDataServiceProperties properties;
+    private final MongoProperties properties;
     private final MongoTemplate mongoTemplate;
 
     @Autowired
-    public MongoHistoricalDataRepository(HistoricalDataServiceProperties properties, MongoTemplate mongoTemplate) {
+    public MongoHistoricalDataRepository(MongoProperties properties, MongoTemplate mongoTemplate) {
         this.properties = properties;
         this.mongoTemplate = mongoTemplate;
     }
