@@ -1,0 +1,21 @@
+version: '3'
+
+services:
+
+  historical-data-mongo-db:
+    image: mongo
+    volumes:
+      - historical-mongo-db-vol:/app
+    ports:
+      - 27017:27017
+    restart: always
+
+  quantasma-app:
+    build: .
+    ports:
+      - 8080:8080
+    depends_on:
+      - historical-data-mongo-db
+
+volumes:
+  historical-mongo-db-vol:
