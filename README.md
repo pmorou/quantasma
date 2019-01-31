@@ -40,7 +40,7 @@ Before project compilation few dependencies must be installed, it can be done th
 
 Compilation should run now smoothly.
 
-    mvn clean compile
+    mvn clean package
 
 ## Example Usage
 

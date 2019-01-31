@@ -14,7 +14,7 @@
         <module>quantasma-core</module>
         <module>quantasma-examples</module>
         <module>quantasma-integrations</module>
-        <module>quantasma-app</module>
+        <module>quantasma-app/backend</module>
     </modules>
 
     <properties>
@@ -71,6 +71,7 @@
                     </execution>
                 </executions>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -82,6 +83,7 @@
                     </includes>
                 </configuration>
             </plugin>
+
             <plugin>
                 <artifactId>exec-maven-plugin</artifactId>
                 <groupId>org.codehaus.mojo</groupId>
