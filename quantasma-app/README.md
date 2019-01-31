@@ -4,18 +4,10 @@
 
 Follow parent [README]({../README.md}).
 
-## Before first run
-
-Application requires MongoDB service for history data.
-
-    ./src/main/resources/scripts/install_service.sh
-
 ## Start application
 
-Run services.
+Before starting make sure JAR file with the application was already generated.
 
-    ./src/main/resources/scripts/start_service.sh
+Docker compose is being used for managing services. Simply run command below to start up everything.
 
-All dependencies are in the place. Next step is application itself. Pick the right spring profile and run jar file, eg.
-
-    java -jar -Dspring.profiles.active=dukascopy quantasma-app-0.0.1-SNAPSHOT.jar
+    docker-compose up
