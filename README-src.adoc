@@ -48,7 +48,7 @@ Compilation should run now smoothly.
 
 [source]
 ----
-mvn clean compile
+mvn clean package
 ----
 
 == Example Usage
