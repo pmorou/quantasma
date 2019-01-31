@@ -14,11 +14,11 @@ import org.springframework.data.mongodb.core.index.IndexDefinition;
 @Profile("!mock")
 public class MongoConfig {
 
-    private final MongoProperties properties;
+    private final MongoProperties mongoProperties;
 
     @Autowired
-    public MongoConfig(MongoProperties historicalDataServiceProperties) {
-        this.properties = historicalDataServiceProperties;
+    public MongoConfig(MongoProperties mongoProperties) {
+        this.mongoProperties = mongoProperties;
     }
 
     @Autowired
@@ -28,8 +28,8 @@ public class MongoConfig {
                 .append("symbol", 1)
                 .append("period", 1);
         final IndexDefinition compoundIndexDefinition = new CompoundIndexDefinition(doc).unique();
-        log.info("Ensuring [{}] index on the [{}] collection.", compoundIndexDefinition, properties.collectionName());
-        mongoOperations.indexOps(properties.collectionName()).ensureIndex(compoundIndexDefinition);
+        log.info("Ensuring [{}] index on the [{}] collection.", compoundIndexDefinition, mongoProperties.collectionName());
+        mongoOperations.indexOps(mongoProperties.collectionName()).ensureIndex(compoundIndexDefinition);
     }
 
 }
