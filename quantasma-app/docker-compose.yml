@@ -15,6 +15,9 @@ services:
       - 8080:8080
     environment:
       - SPRING_PROFILES_ACTIVE=dukascopy
+      - HISTORICAL_DATA_MONGO_DB_HOST=historical-data-mongo-db
+      - HISTORICAL_DATA_MONGO_DB_PORT=27017
+      - HISTORICAL_DATA_MONGO_DB_NAME=historical
     depends_on:
       - historical-data-mongo-db
 

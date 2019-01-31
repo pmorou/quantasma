@@ -13,9 +13,9 @@ service:
 spring:
   data:
     mongodb:
-      host: 172.17.0.2
-      port: 27017
-      database: historical
+      host: ${HISTORICAL_DATA_MONGO_DB_HOST:nonEmpty}
+      port: ${HISTORICAL_DATA_MONGO_DB_PORT:12345}
+      database: ${HISTORICAL_DATA_MONGO_DB_NAME:nonEmpty}
   profiles:
     active: mock
 
