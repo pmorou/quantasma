@@ -13,7 +13,7 @@ service:
 spring:
   data:
     mongodb:
-      host: ${HISTORICAL_DATA_MONGO_DB_HOST:nonEmpty}
+      host: ${HISTORICAL_DATA_MONGO_DB_HOST:localhost}
       port: ${HISTORICAL_DATA_MONGO_DB_PORT:12345}
       database: ${HISTORICAL_DATA_MONGO_DB_NAME:nonEmpty}
   profiles:
