@@ -1,0 +1,36 @@
+version: '3'
+
+services:
+  historical-data-mongo-db:
+    image: mongo
+    volumes:
+      - historical-mongo-db-vol:/app
+    ports:
+      - 27017:27017
+    restart: always
+
+  backend-service:
+    build: ./backend
+    ports:
+      - 8080:8080
+    environment:
+      - SPRING_PROFILES_ACTIVE=dukascopy
+      - HISTORICAL_DATA_MONGO_DB_HOST=historical-data-mongo-db
+      - HISTORICAL_DATA_MONGO_DB_PORT=27017
+      - HISTORICAL_DATA_MONGO_DB_NAME=historical
+    depends_on:
+      - historical-data-mongo-db
+
+  frontend-service:
+    build:
+      context: ./frontend
+      args:
+        - BACKEND_SERVICE_HOST=backend-service
+        - BACKEND_SERVICE_PORT=8080
+    ports:
+      - 80:80
+    depends_on:
+      - backend-service
+
+volumes:
+  historical-mongo-db-vol:

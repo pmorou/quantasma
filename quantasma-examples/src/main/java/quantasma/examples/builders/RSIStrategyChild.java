@@ -1,5 +1,6 @@
 package quantasma.examples.builders;
 
+import org.ta4j.core.Order;
 import org.ta4j.core.Rule;
 import org.ta4j.core.TradingRecord;
 import quantasma.core.BaseContext;
@@ -11,6 +12,16 @@ import quantasma.examples.RSIStrategy;
 public class RSIStrategyChild extends RSIStrategy {
     protected RSIStrategyChild(Builder builder) {
         super(builder);
+    }
+
+    @Override
+    protected Class<?> selfClass() {
+        return RSIStrategyChild.class;
+    }
+
+    @Override
+    protected Order.OrderType orderType() {
+        return Order.OrderType.BUY;
     }
 
     /**

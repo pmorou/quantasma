@@ -4,7 +4,7 @@ All-in-one algorithmic trading platform. Build your own backtested-strategy usin
 
 Modules:
 
--   [quantasma-app]({quantasma-app/}): ready-to-use application based on below modules
+-   [quantasma-app]({quantasma-app/}): ready-to-use dockerized application
 
 -   [quantasma-core]({quantasma-core/}): trading library providing core mechanics
 
@@ -40,7 +40,7 @@ Before project compilation few dependencies must be installed, it can be done th
 
 Compilation should run now smoothly.
 
-    mvn clean compile
+    mvn clean package
 
 ## Example Usage
 
@@ -67,7 +67,7 @@ final Context context = new BaseContext.Builder()
         .withOrderService(new NullOrderService())
         .build();
 
-final TradeStrategy rsiStrategy = RSIStrategy.buildBullish(context,
+final TradeStrategy rsiStrategy = RSIBullishStrategy.build(context,
                                                            values -> values
                                                                    // String or Enum (for safety) is allowed
                                                                    .set(Parameter.TRADE_SYMBOL, "EURUSD")
@@ -114,12 +114,12 @@ final Function<Variables<Parameter>, TradeStrategy> recipe = var -> {
     var._int(Parameter.RSI_LOWER_BOUND).with(range(10, 40, 10));
     var._int(Parameter.RSI_UPPER_BOUND).with(range(90, 60, 10));
     var._String(Parameter.TRADE_SYMBOL).with("EURUSD");
-    return RSIStrategy.buildBullish(context, var.getParameterValues());
+    return RSIBullishStrategy.build(context, var.getParameterValues());
 };
 
 // Feed historical data by calling marketData.add()
 
-final TestManager testManager = new TestManager<>(marketData);
+final TestManager<BidAskBar> testManager = new TestManager<>(marketData);
 Producer.from(recipe)
         .stream()
         .forEach(tradeStrategy -> {

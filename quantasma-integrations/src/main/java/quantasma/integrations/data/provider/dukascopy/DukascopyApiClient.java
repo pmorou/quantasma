@@ -62,41 +62,34 @@ public class DukascopyApiClient {
     private void tryToConnect() throws Exception {
         client.connect(jnlpUrl, userName, password);
 
-        int i = 10;
-        while (i > 0 && !client.isConnected()) {
+        for (int i = 10;
+             i > 0 && !client.isConnected();
+             i--) {
             Thread.sleep(1000);
-            i--;
         }
     }
 
     private void tryToReconnect() {
         log.info("Connecting...");
-        Runnable runnable = new Runnable() {
-            @Override
-            public void run() {
-                while (!client.isConnected()) {
-                    try {
-                        if (lightReconnects > 0 && client.isReconnectAllowed()) {
-                            client.reconnect();
-                            --lightReconnects;
-                        } else {
-                            tryToConnect();
-                        }
-                        if (client.isConnected()) {
-                            break;
-                        }
-                    } catch (Exception e) {
-                        log.error("Reconnecting failed", e);
-                    }
-                    sleep(60 * 1000);
-                }
-            }
-
-            private void sleep(long millis) {
+        Runnable runnable = () -> {
+            while (!client.isConnected()) {
                 try {
-                    Thread.sleep(millis);
+                    if (lightReconnects > 0 && client.isReconnectAllowed()) {
+                        client.reconnect();
+                        --lightReconnects;
+                    } else {
+                        tryToConnect();
+                    }
+
+                    if (!client.isConnected()) {
+                        Thread.sleep((long) (60 * 1000));
+                    }
                 } catch (InterruptedException e) {
-                    log.error("Sleep interrupted", e);
+                    log.error("Thread interrupted", e);
+                    Thread.currentThread().interrupt();
+                    break;
+                } catch (Exception e) {
+                    log.error("Reconnecting failed", e);
                 }
             }
         };
@@ -104,9 +97,9 @@ public class DukascopyApiClient {
     }
 
     private void subscribeToInstruments() {
-        log.info("Subscribing instruments...");
         Set<Instrument> instruments = new HashSet<>();
         instruments.add(Instrument.EURUSD);
+        log.info("Subscribing to instruments: {}", instruments);
         client.setSubscribedInstruments(instruments);
     }
 

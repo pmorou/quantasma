@@ -1,0 +1,42 @@
+server:
+  port: 8080
+
+service:
+  historical-data:
+    enabled: false
+    prefix: mock
+  live-data:
+    enabled: false
+  backtest:
+    enabled: false
+
+spring:
+  data:
+    mongodb:
+      host: ${HISTORICAL_DATA_MONGO_DB_HOST:localhost}
+      port: ${HISTORICAL_DATA_MONGO_DB_PORT:12345}
+      database: ${HISTORICAL_DATA_MONGO_DB_NAME:nonEmpty}
+  profiles:
+    active: mock
+
+---
+
+spring:
+  profiles: mock
+service:
+  historical-data:
+    prefix: mock
+
+---
+
+spring:
+  profiles: dukascopy
+service:
+  historical-data:
+    prefix: dukascopy
+live:
+  data:
+    provider:
+      url: =PLATFORM_URL=
+      userName: =YOUR_USER_NAME=
+      password: =YOUR_PASSWORD=

@@ -15,6 +15,7 @@
         <module>quantasma-examples</module>
         <module>quantasma-integrations</module>
         <module>quantasma-app</module>
+        <module>quantasma-app/backend</module>
     </modules>
 
     <properties>
@@ -71,6 +72,7 @@
                     </execution>
                 </executions>
             </plugin>
+
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-surefire-plugin</artifactId>
@@ -82,12 +84,13 @@
                     </includes>
                 </configuration>
             </plugin>
+
             <plugin>
                 <artifactId>exec-maven-plugin</artifactId>
                 <groupId>org.codehaus.mojo</groupId>
                 <executions>
                     <execution>
-                        <id>Converting README-src.adoc to README.md</id>
+                        <id>Convert README-src.adoc to README.md</id>
                         <phase>generate-sources</phase>
                         <goals>
                             <goal>exec</goal>

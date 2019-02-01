@@ -1,15 +1,13 @@
 package quantasma.examples;
 
 import lombok.AccessLevel;
-import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.ta4j.core.Order;
 import org.ta4j.core.Rule;
-import org.ta4j.core.TimeSeries;
 import org.ta4j.core.TradingRecord;
 import org.ta4j.core.indicators.RSIIndicator;
 import org.ta4j.core.indicators.helpers.ClosePriceIndicator;
-import org.ta4j.core.trading.rules.CrossedDownIndicatorRule;
-import org.ta4j.core.trading.rules.CrossedUpIndicatorRule;
 import quantasma.core.BarPeriod;
 import quantasma.core.BaseTradeStrategy;
 import quantasma.core.Context;
@@ -19,12 +17,11 @@ import quantasma.core.order.CloseMarketOrder;
 import quantasma.core.order.OpenMarketOrder;
 
 import java.time.Instant;
-import java.util.function.UnaryOperator;
 
 @Slf4j
-public class RSIStrategy extends BaseTradeStrategy {
+public abstract class RSIStrategy extends BaseTradeStrategy {
 
-    private final Position position = new Position();
+    private final Position position = new Position(selfClass());
 
     protected RSIStrategy(Builder builder) {
         super(builder);
@@ -33,8 +30,8 @@ public class RSIStrategy extends BaseTradeStrategy {
     @Override
     public boolean shouldEnter(int index, TradingRecord tradingRecord) {
         if (super.shouldEnter(index, tradingRecord) && !position.isOpened) {
-            log.info("Opening position");
-            getOrderService().execute(position.openOrder(1));
+            log.info("{} opening position", selfClass().getSimpleName());
+            getOrderService().execute(position.openOrder(0.01, orderType()));
             return true;
         }
         return false;
@@ -43,40 +40,26 @@ public class RSIStrategy extends BaseTradeStrategy {
     @Override
     public boolean shouldExit(int index, TradingRecord tradingRecord) {
         if (super.shouldExit(index, tradingRecord) && position.isOpened) {
-            log.info("Closing position");
+            log.info("{} closing position", selfClass().getSimpleName());
             getOrderService().execute(position.closeOrder());
             return true;
         }
         return false;
     }
 
-    public static RSIStrategy buildBullish(Context context, Values<Parameter> parameterValues) {
-        final Number rsiLowerBound = (Number) parameterValues.get(Parameter.RSI_LOWER_BOUND);
-        final Number rsiUpperBound = (Number) parameterValues.get(Parameter.RSI_UPPER_BOUND);
-        final RSIIndicator rsi = createRSIIndicator(context, parameterValues);
-        return new Builder<>(context,
-                             (String) parameterValues.get(Parameter.TRADE_SYMBOL),
-                             new CrossedUpIndicatorRule(rsi, rsiLowerBound),
-                             new CrossedDownIndicatorRule(rsi, rsiUpperBound),
-                             parameterValues)
-                .withName(String.format("bullish_rsi_strategy_%s-%s", rsiLowerBound, rsiUpperBound))
-                .withUnstablePeriod((Integer) parameterValues.get(Parameter.RSI_PERIOD))
-                .withAmount(1000)
-                .build();
+    protected static RSIIndicator createRSIIndicator(Context context, Values<Parameter> parameterValues) {
+        var timeSeries = context.getDataService()
+                                .getMarketData()
+                                .of(parameterValues.getString(Parameter.TRADE_SYMBOL))
+                                .getTimeSeries(BarPeriod.M1)
+                                .plainTimeSeries();
+        var closePriceIndicator = new ClosePriceIndicator(timeSeries);
+        return new RSIIndicator(closePriceIndicator, parameterValues.getInteger(Parameter.RSI_PERIOD));
     }
 
-    public static RSIStrategy buildBullish(Context context, UnaryOperator<Values<Parameter>> parameterValuesBuilder) {
-        final Values<Parameter> parameterValues = parameterValuesBuilder.apply(Values.of(Parameter.class));
-        return buildBullish(context, parameterValues);
-    }
-
-    private static RSIIndicator createRSIIndicator(Context context, Values<Parameter> parameterValues) {
-        final TimeSeries timeSeries = context.getDataService().getMarketData()
-                                             .of((String) parameterValues.get(Parameter.TRADE_SYMBOL))
-                                             .getTimeSeries(BarPeriod.M1)
-                                             .plainTimeSeries();
-        final ClosePriceIndicator closePrice = new ClosePriceIndicator(timeSeries);
-        return new RSIIndicator(closePrice, (Integer) parameterValues.get(Parameter.RSI_PERIOD));
+    @SuppressWarnings("FinalStaticMethod")
+    protected static final String createName(Class<?> clazz, Number rsiLowerBound, Number rsiUpperBound) {
+        return String.format("%s_%s-%s", clazz.getSimpleName(), rsiLowerBound, rsiUpperBound);
     }
 
     @Override
@@ -84,20 +67,26 @@ public class RSIStrategy extends BaseTradeStrategy {
         return Parameter.values();
     }
 
-    @NoArgsConstructor(access = AccessLevel.PRIVATE)
+    protected abstract Class<?> selfClass();
+
+    protected abstract Order.OrderType orderType();
+
+    @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
     private class Position {
+        private final Class<?> clazz;
+
         private String symbol = getTradeSymbol();
         private String label;
         private boolean isOpened;
 
-        private OpenMarketOrder openOrder(double orderAmount) {
+        private OpenMarketOrder openOrder(double orderAmount, Order.OrderType orderType) {
             setAmount(getNumFunction().apply(orderAmount));
-            this.label = RSIStrategy.class.getSimpleName()
+            this.label = clazz.getSimpleName()
                          + "_" + Instant.now().toEpochMilli()
                          + "_" + symbol
                          + "_" + String.valueOf(orderAmount).replace(".", "_");
             this.isOpened = true;
-            return new OpenMarketOrder(label, orderAmount, symbol);
+            return new OpenMarketOrder(label, orderAmount, symbol, orderType);
         }
 
         private CloseMarketOrder closeOrder() {
@@ -113,7 +102,7 @@ public class RSIStrategy extends BaseTradeStrategy {
     /**
      * @see quantasma.core.BaseTradeStrategy.Builder
      */
-    protected static class Builder<T extends Builder<T, R>, R extends RSIStrategy> extends BaseTradeStrategy.Builder<T, R> {
+    protected abstract static class Builder<T extends Builder<T, R>, R extends RSIStrategy> extends BaseTradeStrategy.Builder<T, R> {
 
         protected Builder(Context context, String tradeSymbol, Rule entryRule, Rule exitRule, Values<?> parameterValues) {
             super(context, tradeSymbol, entryRule, exitRule, parameterValues);
@@ -122,14 +111,10 @@ public class RSIStrategy extends BaseTradeStrategy {
         // New methods can be added here
 
         @Override
-        protected T self() {
-            return (T) this;
-        }
+        protected abstract T self();
 
         @Override
-        public R build() {
-            return (R) new RSIStrategy(this);
-        }
+        public abstract R build();
     }
 
     /**

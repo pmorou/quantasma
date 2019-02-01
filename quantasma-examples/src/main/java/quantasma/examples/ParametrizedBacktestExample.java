@@ -43,12 +43,12 @@ public class ParametrizedBacktestExample {
             var._int(Parameter.RSI_LOWER_BOUND).with(range(10, 40, 10));
             var._int(Parameter.RSI_UPPER_BOUND).with(range(90, 60, 10));
             var._String(Parameter.TRADE_SYMBOL).with("EURUSD");
-            return RSIStrategy.buildBullish(context, var.getParameterValues());
+            return RSIBullishStrategy.build(context, var.getParameterValues());
         };
 
         // Feed historical data by calling marketData.add()
 
-        final TestManager testManager = new TestManager<>(marketData);
+        final TestManager<BidAskBar> testManager = new TestManager<>(marketData);
         Producer.from(recipe)
                 .stream()
                 .forEach(tradeStrategy -> {
