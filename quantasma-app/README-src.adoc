@@ -4,6 +4,16 @@
 
 = Quantasma application
 
+== Architecture
+
+Currently application consists of three separate services:
+
+* frontend - nginx running angular 6
+* backend - Spring Boot 2 publishing API endpoints
+* database - MongoDB storing historical data for backtests
+
+*NOTE: It is not a final setup, more services coming soon.*
+
 == Compilation
 
 Follow parent link:{../README.md}[README].
