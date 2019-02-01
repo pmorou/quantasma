@@ -10,9 +10,9 @@ Follow parent link:{../README.md}[README].
 
 == Start application
 
-Before starting make sure JAR file with the application was already generated.
+After the whole project was compiled all distribution files including frontend and backend should be generated.
 
-Docker compose is being used for managing services. Simply run command below to start up everything.
+Docker compose is being used to manage the application services, simply run command below to start up everything.
 
 [source]
 ----
