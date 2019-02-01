@@ -28,7 +28,7 @@ services:
         - BACKEND_SERVICE_HOST=backend-service
         - BACKEND_SERVICE_PORT=8080
     ports:
-      - 3000:80
+      - 80:80
     depends_on:
       - backend-service
 
