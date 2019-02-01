@@ -1,7 +1,7 @@
 ### compiled output ###
-*/target/
+**/target/
 **/resources/public/
-*/dist
+**/dist
 */tmp
 */out-tsc
 
