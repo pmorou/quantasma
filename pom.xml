@@ -100,7 +100,7 @@
                     </execution>
 
                     <execution>
-                        <id>Converting README-src.adoc to README.md</id>
+                        <id>Convert README-src.adoc to README.md</id>
                         <phase>generate-sources</phase>
                         <goals>
                             <goal>exec</goal>
