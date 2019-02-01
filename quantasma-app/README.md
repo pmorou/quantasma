@@ -23,3 +23,5 @@ After the whole project was compiled all distribution files including frontend a
 Docker compose is being used to manage the application services, simply run command below to start up everything.
 
     docker-compose up
+
+After some time an app should be now available at `http://localhost/`.
