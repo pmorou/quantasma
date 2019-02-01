@@ -28,3 +28,5 @@ Docker compose is being used to manage the application services, simply run comm
 ----
 docker-compose up
 ----
+
+After some time an app should be now available at `http://localhost/`.
