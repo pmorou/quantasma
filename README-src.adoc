@@ -13,7 +13,7 @@ All-in-one algorithmic trading platform. Build your own backtested-strategy usin
 
 Modules:
 
-* link:{quantasma-app/}[quantasma-app]: ready-to-use application based on below modules
+* link:{quantasma-app/}[quantasma-app]: ready-to-use dockerized application
 * link:{quantasma-core/}[quantasma-core]: trading library providing core mechanics
 * link:{quantasma-examples/}[quantasma-examples]: example usages
 * link:{quantasma-integrations/}[quantasma-integrations]: integrations with 3rd party APIs
