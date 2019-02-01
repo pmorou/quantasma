@@ -9,8 +9,8 @@ services:
       - 27017:27017
     restart: always
 
-  quantasma-app:
-    build: .
+  backend-service:
+    build: ./backend
     ports:
       - 8080:8080
     environment:
