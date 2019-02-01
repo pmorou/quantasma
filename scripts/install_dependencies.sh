@@ -8,6 +8,7 @@ main() {
   update_packages_list
   install_asciidoctor
   install_pandoc
+  install_node_modules
 
   echo "Done! Finished setting up dependencies."
 }
@@ -37,6 +38,14 @@ install_pandoc() {
   rm -f "$TEMP_DEB"
 
   echo "Pandoc installed."
+}
+
+install_node_modules() {
+  echo "Installing node modules..."
+
+  npm --prefix ./quantasma-app/frontend/resources install
+
+  echo "Node modules installed."
 }
 
 main
