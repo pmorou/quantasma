@@ -1,6 +1,5 @@
 before_install:
   - ./scripts/install_dependencies.sh
-  - ./quantasma-app/src/main/resources/scripts/install_services.sh
 language: java
 jdk:
   - openjdk11
