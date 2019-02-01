@@ -10,7 +10,7 @@
         <version>0.0.1-SNAPSHOT</version>
     </parent>
 
-    <artifactId>quantasma-app</artifactId>
+    <artifactId>quantasma-app-backend</artifactId>
 
     <properties>
         <spring-boot.version>2.1.1.RELEASE</spring-boot.version>
