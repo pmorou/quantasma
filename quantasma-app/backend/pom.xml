@@ -8,6 +8,7 @@
         <groupId>quantasma</groupId>
         <artifactId>quantasma-parent</artifactId>
         <version>0.0.1-SNAPSHOT</version>
+        <relativePath>../../pom.xml</relativePath>
     </parent>
 
     <artifactId>quantasma-app-backend</artifactId>
