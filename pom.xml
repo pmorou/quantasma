@@ -90,17 +90,6 @@
                 <groupId>org.codehaus.mojo</groupId>
                 <executions>
                     <execution>
-                        <id>Build frontend distribution</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <executable>./scripts/build_frontend.sh</executable>
-                        </configuration>
-                    </execution>
-
-                    <execution>
                         <id>Convert README-src.adoc to README.md</id>
                         <phase>generate-sources</phase>
                         <goals>
