@@ -21,5 +21,16 @@ services:
     depends_on:
       - historical-data-mongo-db
 
+  frontend-service:
+    build:
+      context: ./frontend
+      args:
+        - BACKEND_SERVICE_HOST=backend-service
+        - BACKEND_SERVICE_PORT=8080
+    ports:
+      - 3000:80
+    depends_on:
+      - backend-service
+
 volumes:
   historical-mongo-db-vol:
