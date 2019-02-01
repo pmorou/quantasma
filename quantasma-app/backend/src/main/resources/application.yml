@@ -4,7 +4,7 @@ server:
 service:
   historical-data:
     enabled: false
-    prefix: dukascopy
+    prefix: mock
   live-data:
     enabled: false
   backtest:
