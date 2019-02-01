@@ -4,13 +4,13 @@ All-in-one algorithmic trading platform. Build your own backtested-strategy usin
 
 Modules:
 
--   [quantasma-app]({quantasma-app/}): ready-to-use dockerized application
+-   [quantasma-app](quantasma-app): ready-to-use dockerized application
 
--   [quantasma-core]({quantasma-core/}): trading library providing core mechanics
+-   [quantasma-core](quantasma-core): trading library providing core mechanics
 
--   [quantasma-examples]({quantasma-examples/}): example usages
+-   [quantasma-examples](quantasma-examples): example usages
 
--   [quantasma-integrations]({quantasma-integrations/}): integrations with 3rd party APIs
+-   [quantasma-integrations](quantasma-integrations): integrations with 3rd party APIs
 
 This solution at its core stands on top of the modern technical analysis library [ta4j](https://github.com/ta4j/ta4j) extending and providing many additional features as:
 
