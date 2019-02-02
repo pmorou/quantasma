@@ -30,3 +30,27 @@ docker-compose up
 ----
 
 After some time an app should be now available at `http://localhost/`.
+
+== Developing
+
+In order to see changes done within angular project a watch mode has to be enabled.
+
+[source]
+----
+cd frontend/resources && sudo ng build --watch
+----
+
+Run containers with additional dev enhancements like directory sharing.
+
+[source]
+----
+docker-compose -f docker-compose.yml -f docker-compose-dev.yml up
+----
+
+If you have made changes to the immutable part of the images you can put them down and remove in order to rebuild them from the ground up.
+
+[source]
+----
+docker-compose down --rmi local
+----
+
