@@ -6,7 +6,7 @@ Currently application consists of three separate services:
 
 -   frontend - nginx running angular 6
 
--   backend - Spring Boot 2 publishing API endpoints
+-   backend - Spring Boot 2 publishing API endpoints and handling 3rd party communications
 
 -   database - MongoDB storing historical data for backtests
 
@@ -25,3 +25,17 @@ Docker compose is being used to manage the application services, simply run comm
     docker-compose up
 
 After some time an app should be now available at `http://localhost/`.
+
+## Developing
+
+In order to see changes done within angular project a watch mode has to be enabled.
+
+    cd frontend/resources && sudo ng build --watch
+
+Run containers with additional dev enhancements like directory sharing.
+
+    docker-compose -f docker-compose.yml -f docker-compose-dev.yml up
+
+If you have made changes to the immutable part of the images you can put them down and remove in order to rebuild them from the ground up.
+
+    docker-compose down --rmi local
