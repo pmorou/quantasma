@@ -70,7 +70,7 @@ public class DukascopyApiClient {
     }
 
     private void tryToReconnect() {
-        log.info("Connecting...");
+        log.info("Reconnecting...");
         Runnable runnable = () -> {
             while (!client.isConnected()) {
                 try {
