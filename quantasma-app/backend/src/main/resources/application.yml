@@ -18,6 +18,9 @@ spring:
       database: ${HISTORICAL_DATA_MONGO_DB_NAME:nonEmpty}
   profiles:
     active: mock
+  devtools:
+    remote:
+      secret: =YOUR_SECRET=
 
 ---
 
