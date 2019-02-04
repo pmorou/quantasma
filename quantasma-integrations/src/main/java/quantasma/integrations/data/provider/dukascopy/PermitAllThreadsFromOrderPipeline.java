@@ -9,6 +9,7 @@ import javassist.NotFoundException;
 import lombok.extern.slf4j.Slf4j;
 import quantasma.integrations.data.provider.dukascopy.strategy.OrderPublisher;
 
+import java.util.Arrays;
 import java.util.function.Predicate;
 
 /**
@@ -41,8 +42,12 @@ public interface PermitAllThreadsFromOrderPipeline {
     }
 
     static void initialize() throws CannotCompileException, NotFoundException {
+        if (isInterfaceAlreadyAdded()) {
+            return;
+        }
+
         final ClassPool classPool = ClassPool.getDefault();
-        final CtClass strategyTaskManager = classPool.get("com.dukascopy.api.impl.connect.StrategyTaskManager");
+        final CtClass strategyTaskManager = getStrategyTaskManager(classPool);
         strategyTaskManager.addInterface(classPool.get(PermitAllThreadsFromOrderPipeline.class.getTypeName()));
         final CtMethod isThreadOk = CtNewMethod.make("public boolean isThreadOk(long id) {\n"
                                                      + "  boolean isOrder = " + PermitAllThreadsFromOrderPipeline.class.getTypeName() + ".super.isThreadOk(id);\n"
@@ -53,6 +58,17 @@ public interface PermitAllThreadsFromOrderPipeline {
                                                      + "}", strategyTaskManager);
         strategyTaskManager.addMethod(isThreadOk);
         classPool.toClass(strategyTaskManager);
+    }
+
+    private static boolean isInterfaceAlreadyAdded() throws NotFoundException {
+        return Arrays.stream(getStrategyTaskManager(ClassPool.getDefault())
+                                     .getInterfaces())
+                     .anyMatch(ctClass -> ctClass.getName()
+                                                 .equals(PermitAllThreadsFromOrderPipeline.class.getTypeName()));
+    }
+
+    private static CtClass getStrategyTaskManager(ClassPool classPool) throws NotFoundException {
+        return classPool.get("com.dukascopy.api.impl.connect.StrategyTaskManager");
     }
 
     @Slf4j
