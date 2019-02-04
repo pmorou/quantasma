@@ -62,7 +62,7 @@ public class DukascopyApiClient {
     private void tryToConnect() throws Exception {
         for (int i = 1;
              i <= 10 && !client.isConnected();
-             i--) {
+             i++) {
             log.info("Connecting... attempt {}/10", i);
             client.connect(jnlpUrl, userName, password);
             Thread.sleep(1000);
