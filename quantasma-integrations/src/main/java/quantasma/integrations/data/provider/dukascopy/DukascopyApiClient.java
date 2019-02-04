@@ -70,8 +70,8 @@ public class DukascopyApiClient {
     }
 
     private void tryToReconnect() {
-        log.info("Reconnecting...");
-        Runnable runnable = () -> {
+        new Thread(() -> {
+            log.info("Reconnecting...");
             while (!client.isConnected()) {
                 try {
                     if (lightReconnects > 0 && client.isReconnectAllowed()) {
@@ -92,8 +92,7 @@ public class DukascopyApiClient {
                     log.error("Reconnecting failed", e);
                 }
             }
-        };
-        new Thread(runnable).start();
+        }).start();
     }
 
     private void subscribeToInstruments() {
