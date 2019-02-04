@@ -5,14 +5,14 @@ services:
     image: mongo:4.1.7
     volumes:
       - historical-mongo-db-vol:/app
-    ports:
-      - 27017:27017
+    expose:
+      - 27017
     restart: always
 
   backend-service:
     build: ./backend
-    ports:
-      - 8080:8080
+    expose:
+      - 8080
     environment:
       - SPRING_PROFILES_ACTIVE=dukascopy
       - HISTORICAL_DATA_MONGO_DB_HOST=historical-data-mongo-db
