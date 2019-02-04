@@ -40,7 +40,7 @@ In order to see changes done within angular project a watch mode has to be enabl
 cd frontend/resources && sudo ng build --watch
 ----
 
-Run containers with additional dev enhancements like directory sharing.
+Run containers with additional dev enhancements like directory sharing and port publishing.
 
 [source]
 ----
