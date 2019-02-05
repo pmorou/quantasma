@@ -32,7 +32,15 @@ In order to see changes done within angular project a watch mode has to be enabl
 
     cd frontend/resources && sudo ng build --watch
 
-Run containers with additional dev enhancements like directory sharing.
+Live reload for spring boot service can be triggered through remote connection. Run project with the following configuration:
+
+-   **Main class:** org.springframework.boot.devtools.RemoteSpringApplication
+
+-   **Program arguments:** <http://localhost:8080>
+
+-   **Use classpath of module:** quantasma-app-backend
+
+Run containers with additional dev enhancements like directory sharing and port publishing.
 
     docker-compose -f docker-compose.yml -f docker-compose-dev.yml up
 
