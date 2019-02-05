@@ -10,3 +10,5 @@ RUN sed -i "s/replecable_backend_address/${BACKEND_ADDRESS}/g" /etc/nginx/nginx.
 WORKDIR /usr/share/nginx/html
 
 COPY dist/ .
+
+EXPOSE 80

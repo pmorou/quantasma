@@ -28,6 +28,7 @@
         <lombok.version>1.18.4</lombok.version>
         <groovy.version>2.5.4</groovy.version>
         <spock.version>1.2-groovy-2.5</spock.version>
+        <objenesis.version>3.0.1</objenesis.version>
         <cglib.version>3.2.9</cglib.version>
     </properties>
 
@@ -41,19 +42,6 @@
             <groupId>org.ta4j</groupId>
             <artifactId>ta4j-core</artifactId>
             <version>${ta4j.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>junit</groupId>
-            <artifactId>junit</artifactId>
-            <version>4.12</version>
-            <scope>test</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.assertj</groupId>
-            <artifactId>assertj-core</artifactId>
-            <version>3.11.1</version>
-            <scope>test</scope>
         </dependency>
     </dependencies>
 

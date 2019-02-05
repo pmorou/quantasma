@@ -60,18 +60,18 @@ public class DukascopyApiClient {
     }
 
     private void tryToConnect() throws Exception {
-        client.connect(jnlpUrl, userName, password);
-
-        for (int i = 10;
-             i > 0 && !client.isConnected();
-             i--) {
+        for (int i = 1;
+             !(i > 10 || client.isConnected());
+             i++) {
+            log.info("Connecting... attempt {}/10", i);
+            client.connect(jnlpUrl, userName, password);
             Thread.sleep(1000);
         }
     }
 
     private void tryToReconnect() {
-        log.info("Connecting...");
-        Runnable runnable = () -> {
+        new Thread(() -> {
+            log.info("Reconnecting...");
             while (!client.isConnected()) {
                 try {
                     if (lightReconnects > 0 && client.isReconnectAllowed()) {
@@ -92,8 +92,7 @@ public class DukascopyApiClient {
                     log.error("Reconnecting failed", e);
                 }
             }
-        };
-        new Thread(runnable).start();
+        }).start();
     }
 
     private void subscribeToInstruments() {

@@ -1,0 +1,10 @@
+version: '3'
+
+services:
+  backend-service:
+    ports:
+      - 8080:8080
+
+  frontend-service:
+    volumes:
+      - ./frontend/dist:/usr/share/nginx/html
