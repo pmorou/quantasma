@@ -1,0 +1,9 @@
+version: '3'
+
+services:
+  backend-service:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile-debug
+    ports:
+      - 8080:8080
