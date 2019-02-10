@@ -4,4 +4,4 @@ language: java
 jdk:
   - openjdk11
   - oraclejdk11
-script: mvn test -B
+script: mvn test -B -Pprod
