@@ -16,7 +16,12 @@ Currently application consists of three separate services:
 
 == Compilation
 
-Follow parent link:{../README.md}[README].
+Two maven profiles are available:
+
+* dev - enables dev tools
+* prod - disables dev tools
+
+For more follow parent link:{../README.md}[README].
 
 == Start application
 
