@@ -60,3 +60,13 @@ If you have made changes to the immutable part of the images you can put them do
 docker-compose down --rmi local
 ----
 
+== Debugging
+
+To enable debugging Java process has to be started with different parameters as defined in another dockerfile named `Dockerfile-debug`.
+
+Debug mode can be enabled in conjunction with docker's developer mode but it is not mandatory.
+
+[source]
+----
+docker-compose -f docker-compose.yml -f docker-compose-dev.yml -f docker-compose-debug.yml up
+----
