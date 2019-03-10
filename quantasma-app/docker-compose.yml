@@ -36,6 +36,7 @@ services:
       - GENERAL_DATA_PG_USER=postgres
     depends_on:
       - historical-data-mongo-db
+      - general-data-postgres-db
     restart: always
 
   frontend-service:
