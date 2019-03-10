@@ -15,6 +15,7 @@
 
     <properties>
         <spring-boot.version>2.1.1.RELEASE</spring-boot.version>
+        <postgres.version>42.2.5</postgres.version>
     </properties>
 
     <dependencyManagement>
@@ -79,6 +80,7 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
+            <version>${postgres.version}</version>
             <scope>runtime</scope>
         </dependency>
         <dependency>
