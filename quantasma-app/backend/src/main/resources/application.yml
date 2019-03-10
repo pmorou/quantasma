@@ -36,6 +36,7 @@ spring:
     url: jdbc:h2:mem:test
     name: test
     username: test
+    initialization-mode: never
 service:
   historical-data:
     prefix: mock
