@@ -25,7 +25,7 @@ CREATE TABLE strategies (
   deleted TIMESTAMP,
 
   CONSTRAINT pk_t_strategies PRIMARY KEY(id)
-)
+);
 
 CREATE TABLE orders (
   id BIGSERIAL,
@@ -42,7 +42,7 @@ CREATE TABLE orders (
 CREATE TABLE transactions (
   id BIGINT,
   open_ts TIMESTAMP,
-  close_ts TIMESTAMP
+  close_ts TIMESTAMP,
   open_order_id BIGINT,
   close_order_id BIGINT,
   pips_profit DECIMAL,
