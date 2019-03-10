@@ -32,6 +32,10 @@ spring:
 
 spring:
   profiles: mock
+  datasource:
+    url: jdbc:h2:mem:test
+    name: test
+    username: test
 service:
   historical-data:
     prefix: mock
