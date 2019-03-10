@@ -21,6 +21,12 @@ spring:
   devtools:
     remote:
       secret: =YOUR_SECRET=
+  datasource:
+    url: jdbc:postgresql://${GENERAL_DATA_PG_HOST:}:${GENERAL_DATA_PG_PORT:}/
+    name: ${GENERAL_DATA_PG_DB_NAME:}
+    username: ${GENERAL_DATA_PG_USER:}
+    password:
+    initialization-mode: always
 
 ---
 
