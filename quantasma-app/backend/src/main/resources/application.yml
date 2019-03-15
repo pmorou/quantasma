@@ -27,30 +27,3 @@ spring:
     username: ${GENERAL_DATA_PG_USER:}
     password:
     initialization-mode: always
-
----
-
-spring:
-  profiles: mock
-  datasource:
-    url: jdbc:h2:mem:test
-    name: test
-    username: test
-    initialization-mode: never
-service:
-  historical-data:
-    prefix: mock
-
----
-
-spring:
-  profiles: dukascopy
-service:
-  historical-data:
-    prefix: dukascopy
-live:
-  data:
-    provider:
-      url: =PLATFORM_URL=
-      userName: =YOUR_USER_NAME=
-      password: =YOUR_PASSWORD=

@@ -1,0 +1,11 @@
+spring:
+  profiles: dukascopy
+service:
+  historical-data:
+    prefix: dukascopy
+live:
+  data:
+    provider:
+      url: =PLATFORM_URL=
+      userName: =YOUR_USER_NAME=
+      password: =YOUR_PASSWORD=
