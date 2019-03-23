@@ -43,8 +43,8 @@ CREATE TABLE orders (
 
 CREATE TABLE transactions (
   id BIGINT,
-  open_ts TIMESTAMP NOT NULL,
-  close_ts TIMESTAMP,
+  open_on TIMESTAMP NOT NULL,
+  close_on TIMESTAMP,
   open_order_id BIGINT NOT NULL,
   close_order_id BIGINT,
   pips_profit DECIMAL,
