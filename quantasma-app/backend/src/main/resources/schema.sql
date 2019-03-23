@@ -6,9 +6,11 @@ DROP TABLE IF EXISTS transactions;
 CREATE TABLE instruments (
   id BIGSERIAL,
   name VARCHAR(255),
+  precision SMALLINT,
 
   x_created_on TIMESTAMP,
   x_updated_on TIMESTAMP,
+  x_deleted_on TIMESTAMP,
 
   CONSTRAINT pk_t_instruments PRIMARY KEY(id)
 );
