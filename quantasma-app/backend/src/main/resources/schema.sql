@@ -7,8 +7,8 @@ CREATE TABLE instruments (
   id BIGSERIAL,
   name VARCHAR(255),
 
-  created TIMESTAMP,
-  updated TIMESTAMP,
+  x_created_on TIMESTAMP,
+  x_updated_on TIMESTAMP,
 
   CONSTRAINT pk_t_instruments PRIMARY KEY(id)
 );
@@ -20,9 +20,9 @@ CREATE TABLE strategies (
   checksum VARCHAR(255),
   active BOOLEAN,
 
-  created TIMESTAMP,
-  updated TIMESTAMP,
-  deleted TIMESTAMP,
+  x_created_on TIMESTAMP,
+  x_updated_on TIMESTAMP,
+  x_deleted_on TIMESTAMP,
 
   CONSTRAINT pk_t_strategies PRIMARY KEY(id)
 );
@@ -34,7 +34,7 @@ CREATE TABLE orders (
   amount BIGINT,
   price DECIMAL,
 
-  created TIMESTAMP,
+  x_created_on TIMESTAMP,
 
   CONSTRAINT pk_t_orders PRIMARY KEY(id)
 );
@@ -48,8 +48,8 @@ CREATE TABLE transactions (
   pips_profit DECIMAL,
   strategy_id BIGINT,
 
-  created TIMESTAMP,
-  updated TIMESTAMP,
+  x_created_on TIMESTAMP,
+  x_updated_on TIMESTAMP,
 
   CONSTRAINT pk_t_transactions PRIMARY KEY(id)
 );
