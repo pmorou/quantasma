@@ -1,9 +1,4 @@
 DROP TABLE IF EXISTS instruments;
-DROP TABLE IF EXISTS strategies;
-DROP TABLE IF EXISTS orders;
-DROP TABLE IF EXISTS transactions;
-DROP TABLE IF EXISTS brokers;
-
 CREATE TABLE instruments (
   id BIGSERIAL NOT NULL,
   name VARCHAR(255) NOT NULL,
@@ -16,6 +11,7 @@ CREATE TABLE instruments (
   CONSTRAINT instruments_pk_id PRIMARY KEY(id)
 );
 
+DROP TABLE IF EXISTS strategies;
 CREATE TABLE strategies (
   id BIGSERIAL NOT NULL,
   name VARCHAR(255) NOT NULL,
@@ -31,6 +27,7 @@ CREATE TABLE strategies (
   CONSTRAINT strategies_pk_id PRIMARY KEY(id)
 );
 
+DROP TABLE IF EXISTS orders;
 CREATE TABLE orders (
   id BIGSERIAL NOT NULL,
   instrument_id BIGINT NOT NULL,
@@ -46,6 +43,7 @@ CREATE TABLE orders (
   CONSTRAINT orders_fk_instrument_id FOREIGN KEY (instrument_id) REFERENCES instruments (id)
 );
 
+DROP TABLE IF EXISTS transactions;
 CREATE TABLE transactions (
   id BIGSERIAL NOT NULL,
   broker_id BIGINT NOT NULL,
@@ -67,6 +65,7 @@ CREATE TABLE transactions (
   CONSTRAINT transactions_fk_strategy_id FOREIGN KEY (strategy_id) REFERENCES strategies (id)
 );
 
+DROP TABLE IF EXISTS brokers;
 CREATE TABLE brokers (
   id BIGSERIAL NOT NULL,
   name VARCHAR(255) NOT NULL,
