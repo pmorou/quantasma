@@ -13,7 +13,7 @@ CREATE TABLE instruments (
   x_updated_on TIMESTAMP,
   x_deleted_on TIMESTAMP,
 
-  CONSTRAINT pk_t_instruments PRIMARY KEY(id)
+  CONSTRAINT instruments_pk_id PRIMARY KEY(id)
 );
 
 CREATE TABLE strategies (
@@ -28,7 +28,7 @@ CREATE TABLE strategies (
   x_updated_on TIMESTAMP,
   x_deleted_on TIMESTAMP,
 
-  CONSTRAINT pk_t_strategies PRIMARY KEY(id)
+  CONSTRAINT strategies_pk_id PRIMARY KEY(id)
 );
 
 CREATE TABLE orders (
@@ -42,7 +42,7 @@ CREATE TABLE orders (
   x_created_on TIMESTAMP NOT NULL,
   x_updated_on TIMESTAMP,
 
-  CONSTRAINT pk_t_orders PRIMARY KEY(id)
+  CONSTRAINT orders_pk_id PRIMARY KEY(id)
 );
 
 CREATE TABLE transactions (
@@ -59,7 +59,7 @@ CREATE TABLE transactions (
   x_created_on TIMESTAMP NOT NULL,
   x_updated_on TIMESTAMP,
 
-  CONSTRAINT pk_t_transactions PRIMARY KEY(id)
+  CONSTRAINT transactions_pk_id PRIMARY KEY(id)
 );
 
 CREATE TABLE brokers (
@@ -70,5 +70,5 @@ CREATE TABLE brokers (
   x_updated_on TIMESTAMP,
   x_deleted_on TIMESTAMP,
 
-  CONSTRAINT pk_t_brokers PRIMARY KEY(id)
-)
+  CONSTRAINT brokers_pk_id PRIMARY KEY(id)
+);
