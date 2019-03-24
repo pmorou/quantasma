@@ -5,7 +5,7 @@ DROP TABLE IF EXISTS transactions;
 DROP TABLE IF EXISTS brokers;
 
 CREATE TABLE instruments (
-  id BIGSERIAL,
+  id BIGSERIAL NOT NULL,
   name VARCHAR(255) NOT NULL,
   precision SMALLINT NOT NULL,
 
@@ -17,7 +17,7 @@ CREATE TABLE instruments (
 );
 
 CREATE TABLE strategies (
-  id BIGSERIAL,
+  id BIGSERIAL NOT NULL,
   name VARCHAR(255) NOT NULL,
   class VARCHAR(255) NOT NULL,
   checksum VARCHAR(255) NOT NULL,
@@ -32,7 +32,7 @@ CREATE TABLE strategies (
 );
 
 CREATE TABLE orders (
-  id BIGSERIAL,
+  id BIGSERIAL NOT NULL,
   instrument_id BIGINT NOT NULL,
   side VARCHAR(4) NOT NULL,
   amount BIGINT NOT NULL,
@@ -46,7 +46,7 @@ CREATE TABLE orders (
 );
 
 CREATE TABLE transactions (
-  id BIGSERIAL,
+  id BIGSERIAL NOT NULL,
   broker_id BIGINT NOT NULL,
   open_on TIMESTAMP NOT NULL,
   close_on TIMESTAMP,
@@ -63,7 +63,7 @@ CREATE TABLE transactions (
 );
 
 CREATE TABLE brokers (
-  id BIGSERIAL,
+  id BIGSERIAL NOT NULL,
   name VARCHAR(255) NOT NULL,
 
   x_created_on TIMESTAMP NOT NULL,
