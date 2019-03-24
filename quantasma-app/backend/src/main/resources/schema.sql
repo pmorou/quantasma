@@ -22,6 +22,7 @@ CREATE TABLE strategies (
   class VARCHAR(255) NOT NULL,
   checksum VARCHAR(255) NOT NULL,
   active BOOLEAN NOT NULL,
+  status VARCHAR(16) NOT NULL,
 
   x_created_on TIMESTAMP NOT NULL,
   x_updated_on TIMESTAMP,
@@ -36,6 +37,7 @@ CREATE TABLE orders (
   side VARCHAR(4) NOT NULL,
   amount BIGINT NOT NULL,
   price DECIMAL NOT NULL,
+  status VARCHAR(16) NOT NULL,
 
   x_created_on TIMESTAMP NOT NULL,
 
@@ -50,6 +52,7 @@ CREATE TABLE transactions (
   close_order_id BIGINT,
   pips_profit DECIMAL,
   strategy_id BIGINT NOT NULL,
+  status VARCHAR(16) NOT NULL,
 
   x_created_on TIMESTAMP NOT NULL,
   x_updated_on TIMESTAMP,
