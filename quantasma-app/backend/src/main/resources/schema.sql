@@ -14,6 +14,12 @@ CREATE TABLE instruments (
 CREATE UNIQUE INDEX instruments_uq_name ON instruments (name);
 
 
+CREATE TYPE strategy_status AS ENUM (
+  'ACTIVE',
+  'INACTIVE',
+  'BLOCKED'
+);
+
 DROP TABLE IF EXISTS strategies;
 CREATE TABLE strategies (
   id BIGSERIAL NOT NULL,
@@ -21,7 +27,7 @@ CREATE TABLE strategies (
   class VARCHAR(255) NOT NULL,
   checksum VARCHAR(255) NOT NULL,
   active BOOLEAN NOT NULL,
-  status VARCHAR(16) NOT NULL,
+  status strategy_status NOT NULL,
 
   x_created_on TIMESTAMP NOT NULL,
   x_updated_on TIMESTAMP,
@@ -33,6 +39,13 @@ CREATE TABLE strategies (
 CREATE UNIQUE INDEX strategies_uq_name ON strategies (name);
 
 
+CREATE TYPE order_status AS ENUM (
+  'PENDING',
+  'ACCEPTED',
+  'REJECTED',
+  'ERROR'
+);
+
 DROP TABLE IF EXISTS orders;
 CREATE TABLE orders (
   id BIGSERIAL NOT NULL,
@@ -40,7 +53,7 @@ CREATE TABLE orders (
   side VARCHAR(4) NOT NULL,
   amount BIGINT NOT NULL,
   price DECIMAL NOT NULL,
-  status VARCHAR(16) NOT NULL,
+  status order_status NOT NULL,
 
   x_created_on TIMESTAMP NOT NULL,
   x_updated_on TIMESTAMP,
@@ -49,6 +62,13 @@ CREATE TABLE orders (
   CONSTRAINT orders_fk_instrument_id FOREIGN KEY (instrument_id) REFERENCES instruments (id)
 );
 
+
+CREATE TYPE transaction_status AS ENUM (
+  'PENDING',
+  'OPENED',
+  'CLOSED',
+  'ERROR'
+);
 
 DROP TABLE IF EXISTS transactions;
 CREATE TABLE transactions (
@@ -60,7 +80,7 @@ CREATE TABLE transactions (
   close_order_id BIGINT,
   pips_profit DECIMAL,
   strategy_id BIGINT NOT NULL,
-  status VARCHAR(16) NOT NULL,
+  status transaction_status NOT NULL,
 
   x_created_on TIMESTAMP NOT NULL,
   x_updated_on TIMESTAMP,
