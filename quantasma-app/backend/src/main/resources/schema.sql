@@ -40,6 +40,7 @@ CREATE TABLE orders (
   status VARCHAR(16) NOT NULL,
 
   x_created_on TIMESTAMP NOT NULL,
+  x_updated_on TIMESTAMP,
 
   CONSTRAINT pk_t_orders PRIMARY KEY(id)
 );
