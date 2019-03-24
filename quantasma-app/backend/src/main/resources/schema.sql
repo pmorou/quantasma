@@ -47,6 +47,7 @@ CREATE TABLE orders (
 
 CREATE TABLE transactions (
   id BIGSERIAL,
+  broker_id BIGINT NOT NULL,
   open_on TIMESTAMP NOT NULL,
   close_on TIMESTAMP,
   open_order_id BIGINT NOT NULL,
