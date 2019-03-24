@@ -4,7 +4,7 @@ CREATE TABLE instruments (
   name VARCHAR(255) NOT NULL,
   precision SMALLINT NOT NULL,
 
-  x_created_on TIMESTAMP NOT NULL,
+  x_created_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   x_updated_on TIMESTAMP,
   x_deleted_on TIMESTAMP,
 
@@ -29,7 +29,7 @@ CREATE TABLE strategies (
   active BOOLEAN NOT NULL,
   status strategy_status NOT NULL,
 
-  x_created_on TIMESTAMP NOT NULL,
+  x_created_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   x_updated_on TIMESTAMP,
   x_deleted_on TIMESTAMP,
 
@@ -55,7 +55,7 @@ CREATE TABLE orders (
   price DECIMAL NOT NULL,
   status order_status NOT NULL,
 
-  x_created_on TIMESTAMP NOT NULL,
+  x_created_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   x_updated_on TIMESTAMP,
 
   CONSTRAINT orders_pk_id PRIMARY KEY(id),
@@ -82,7 +82,7 @@ CREATE TABLE transactions (
   strategy_id BIGINT NOT NULL,
   status transaction_status NOT NULL,
 
-  x_created_on TIMESTAMP NOT NULL,
+  x_created_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   x_updated_on TIMESTAMP,
 
   CONSTRAINT transactions_pk_id PRIMARY KEY(id),
@@ -104,7 +104,7 @@ CREATE TABLE brokers (
   id BIGSERIAL NOT NULL,
   name VARCHAR(255) NOT NULL,
 
-  x_created_on TIMESTAMP NOT NULL,
+  x_created_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   x_updated_on TIMESTAMP,
   x_deleted_on TIMESTAMP,
 
