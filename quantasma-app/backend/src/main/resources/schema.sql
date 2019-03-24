@@ -2,6 +2,7 @@ DROP TABLE IF EXISTS instruments;
 DROP TABLE IF EXISTS strategies;
 DROP TABLE IF EXISTS orders;
 DROP TABLE IF EXISTS transactions;
+DROP TABLE IF EXISTS brokers;
 
 CREATE TABLE instruments (
   id BIGSERIAL,
@@ -55,3 +56,14 @@ CREATE TABLE transactions (
 
   CONSTRAINT pk_t_transactions PRIMARY KEY(id)
 );
+
+CREATE TABLE brokers (
+  id BIGSERIAL,
+  name VARCHAR(255) NOT NULL,
+
+  x_created_on TIMESTAMP NOT NULL,
+  x_updated_on TIMESTAMP,
+  x_deleted_on TIMESTAMP,
+
+  CONSTRAINT pk_t_brokers PRIMARY KEY(id)
+)
