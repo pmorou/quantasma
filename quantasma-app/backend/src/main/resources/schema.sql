@@ -11,6 +11,9 @@ CREATE TABLE instruments (
   CONSTRAINT instruments_pk_id PRIMARY KEY(id)
 );
 
+CREATE UNIQUE INDEX instruments_uq_name ON instruments (name);
+
+
 DROP TABLE IF EXISTS strategies;
 CREATE TABLE strategies (
   id BIGSERIAL NOT NULL,
@@ -27,6 +30,9 @@ CREATE TABLE strategies (
   CONSTRAINT strategies_pk_id PRIMARY KEY(id)
 );
 
+CREATE UNIQUE INDEX strategies_uq_name ON strategies (name);
+
+
 DROP TABLE IF EXISTS orders;
 CREATE TABLE orders (
   id BIGSERIAL NOT NULL,
@@ -42,6 +48,7 @@ CREATE TABLE orders (
   CONSTRAINT orders_pk_id PRIMARY KEY(id),
   CONSTRAINT orders_fk_instrument_id FOREIGN KEY (instrument_id) REFERENCES instruments (id)
 );
+
 
 DROP TABLE IF EXISTS transactions;
 CREATE TABLE transactions (
@@ -65,6 +72,13 @@ CREATE TABLE transactions (
   CONSTRAINT transactions_fk_strategy_id FOREIGN KEY (strategy_id) REFERENCES strategies (id)
 );
 
+CREATE INDEX transactions_idx_open_order_id ON transactions (open_order_id)
+  WHERE open_order_id IS NOT NULL AND close_order_id IS NULL;
+CREATE INDEX transactions_idx_open_order_id_close_order_id ON transactions (open_order_id, close_order_id);
+  WHERE open_order_id IS NOT NULL AND close_order_id IS NOT NULL;
+CREATE INDEX transactions_idx_strategy_id ON transactions (strategy_id);
+
+
 DROP TABLE IF EXISTS brokers;
 CREATE TABLE brokers (
   id BIGSERIAL NOT NULL,
@@ -76,3 +90,5 @@ CREATE TABLE brokers (
 
   CONSTRAINT brokers_pk_id PRIMARY KEY(id)
 );
+
+CREATE UNIQUE INDEX brokers_uq_name ON brokers (name);
