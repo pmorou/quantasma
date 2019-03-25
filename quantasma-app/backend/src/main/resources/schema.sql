@@ -7,11 +7,12 @@ CREATE TABLE instruments (
   x_created_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   x_updated_on TIMESTAMP,
   x_deleted_on TIMESTAMP,
+  x_active BOOLEAN DEFAULT TRUE,
 
   CONSTRAINT instruments_pk_id PRIMARY KEY(id)
 );
 
-CREATE UNIQUE INDEX instruments_uq_name ON instruments (name);
+CREATE UNIQUE INDEX instruments_uq_name ON instruments (name) WHERE x_active IS TRUE;
 
 
 CREATE TYPE strategy_status AS ENUM (
@@ -32,11 +33,12 @@ CREATE TABLE strategies (
   x_created_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   x_updated_on TIMESTAMP,
   x_deleted_on TIMESTAMP,
+  x_active BOOLEAN DEFAULT TRUE,
 
   CONSTRAINT strategies_pk_id PRIMARY KEY(id)
 );
 
-CREATE UNIQUE INDEX strategies_uq_name ON strategies (name);
+CREATE UNIQUE INDEX strategies_uq_name ON strategies (name) WHERE x_active IS TRUE;
 
 
 CREATE TYPE order_status AS ENUM (
@@ -57,6 +59,7 @@ CREATE TABLE orders (
 
   x_created_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   x_updated_on TIMESTAMP,
+  x_active BOOLEAN DEFAULT TRUE,
 
   CONSTRAINT orders_pk_id PRIMARY KEY(id),
   CONSTRAINT orders_fk_instrument_id FOREIGN KEY (instrument_id) REFERENCES instruments (id)
@@ -84,6 +87,7 @@ CREATE TABLE transactions (
 
   x_created_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   x_updated_on TIMESTAMP,
+  x_active BOOLEAN DEFAULT TRUE,
 
   CONSTRAINT transactions_pk_id PRIMARY KEY(id),
   CONSTRAINT transactions_fk_broker_id FOREIGN KEY (broker_id) REFERENCES brokers (id),
@@ -93,10 +97,13 @@ CREATE TABLE transactions (
 );
 
 CREATE INDEX transactions_idx_open_order_id ON transactions (open_order_id)
-  WHERE open_order_id IS NOT NULL AND close_order_id IS NULL;
+  WHERE open_order_id IS NOT NULL AND close_order_id IS NULL
+    AND x_active IS TRUE;
 CREATE INDEX transactions_idx_open_order_id_close_order_id ON transactions (open_order_id, close_order_id);
-  WHERE open_order_id IS NOT NULL AND close_order_id IS NOT NULL;
-CREATE INDEX transactions_idx_strategy_id ON transactions (strategy_id);
+  WHERE open_order_id IS NOT NULL AND close_order_id IS NOT NULL
+    AND x_active IS TRUE;
+CREATE INDEX transactions_idx_strategy_id ON transactions (strategy_id)
+  WHERE x_active IS TRUE;
 
 
 DROP TABLE IF EXISTS brokers;
@@ -107,8 +114,9 @@ CREATE TABLE brokers (
   x_created_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   x_updated_on TIMESTAMP,
   x_deleted_on TIMESTAMP,
+  x_active BOOLEAN DEFAULT TRUE,
 
   CONSTRAINT brokers_pk_id PRIMARY KEY(id)
 );
 
-CREATE UNIQUE INDEX brokers_uq_name ON brokers (name);
+CREATE UNIQUE INDEX brokers_uq_name ON brokers (name) WHERE x_active IS TRUE;
