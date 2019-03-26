@@ -69,6 +69,22 @@ CREATE TABLE orders (
 );
 
 
+DROP TABLE IF EXISTS brokers;
+CREATE TABLE brokers (
+  id BIGSERIAL NOT NULL,
+  name VARCHAR(255) NOT NULL,
+
+  x_created_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  x_updated_on TIMESTAMP,
+  x_deleted_on TIMESTAMP,
+  x_active BOOLEAN DEFAULT TRUE,
+
+  CONSTRAINT brokers_pk_id PRIMARY KEY(id)
+);
+
+CREATE UNIQUE INDEX brokers_uq_name ON brokers (name) WHERE x_active IS TRUE;
+
+
 CREATE TYPE transaction_status AS ENUM (
   'PENDING',
   'OPENED',
@@ -108,19 +124,3 @@ CREATE INDEX transactions_idx_open_order_id_close_order_id ON transactions (open
     AND x_active IS TRUE;
 CREATE INDEX transactions_idx_strategy_id ON transactions (strategy_id)
   WHERE x_active IS TRUE;
-
-
-DROP TABLE IF EXISTS brokers;
-CREATE TABLE brokers (
-  id BIGSERIAL NOT NULL,
-  name VARCHAR(255) NOT NULL,
-
-  x_created_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  x_updated_on TIMESTAMP,
-  x_deleted_on TIMESTAMP,
-  x_active BOOLEAN DEFAULT TRUE,
-
-  CONSTRAINT brokers_pk_id PRIMARY KEY(id)
-);
-
-CREATE UNIQUE INDEX brokers_uq_name ON brokers (name) WHERE x_active IS TRUE;
