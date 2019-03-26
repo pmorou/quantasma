@@ -119,7 +119,7 @@ CREATE TABLE transactions (
 CREATE INDEX transactions_idx_open_order_id ON transactions (open_order_id)
   WHERE open_order_id IS NOT NULL AND close_order_id IS NULL
     AND x_active IS TRUE;
-CREATE INDEX transactions_idx_open_order_id_close_order_id ON transactions (open_order_id, close_order_id);
+CREATE INDEX transactions_idx_open_order_id_close_order_id ON transactions (open_order_id, close_order_id)
   WHERE open_order_id IS NOT NULL AND close_order_id IS NOT NULL
     AND x_active IS TRUE;
 CREATE INDEX transactions_idx_strategy_id ON transactions (strategy_id)
