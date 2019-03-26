@@ -59,6 +59,7 @@ CREATE TABLE orders (
 
   x_created_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   x_updated_on TIMESTAMP,
+  x_deleted_on TIMESTAMP,
   x_active BOOLEAN DEFAULT TRUE,
 
   CONSTRAINT orders_pk_id PRIMARY KEY(id),
@@ -87,6 +88,7 @@ CREATE TABLE transactions (
 
   x_created_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   x_updated_on TIMESTAMP,
+  x_deleted_on TIMESTAMP,
   x_active BOOLEAN DEFAULT TRUE,
 
   CONSTRAINT transactions_pk_id PRIMARY KEY(id),
