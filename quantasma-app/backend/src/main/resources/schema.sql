@@ -44,7 +44,9 @@ CREATE UNIQUE INDEX strategies_uq_name ON strategies (name) WHERE x_active IS TR
 CREATE TYPE order_status AS ENUM (
   'PENDING',
   'ACCEPTED',
+  'CORRECTED',
   'REJECTED',
+  'ABORTED',
   'ERROR'
 );
 
