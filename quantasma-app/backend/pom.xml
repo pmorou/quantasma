@@ -238,34 +238,40 @@
                         <goals>
                             <goal>generate</goal>
                         </goals>
-                        <configuration>
-                            <jdbc>
-                                <driver>org.postgresql.Driver</driver>
-                                <url>${spring.datasource.url}</url>
-                                <user>${spring.datasource.username}</user>
-                                <password>${spring.datasource.password}</password>
-                            </jdbc>
-                            <generator>
-                                <database>
-                                    <name>org.jooq.meta.postgres.PostgresDatabase</name>
-                                    <includes>.*</includes>
-                                    <excludes></excludes>
-                                    <dateAsTimestamp>true</dateAsTimestamp>
-                                    <inputSchema>public</inputSchema>
-                                </database>
-                                <generate>
-                                    <deprecated>false</deprecated>
-                                    <instanceFields>true</instanceFields>
-                                    <pojos>true</pojos>
-                                </generate>
-                                <target>
-                                    <packageName>org.jooq.db</packageName>
-                                    <directory>target/generated-sources/jooq</directory>
-                                </target>
-                            </generator>
-                        </configuration>
                     </execution>
                 </executions>
+
+                <configuration>
+                    <jdbc>
+                        <driver>org.postgresql.Driver</driver>
+                        <url>${jooq.gen-container.url}</url>
+                        <user>${jooq.gen-container.username}</user>
+                        <password>${jooq.gen-container.password}</password>
+                    </jdbc>
+                    <generator>
+                        <database>
+                            <name>org.jooq.meta.postgres.PostgresDatabase</name>
+                            <includes>.*</includes>
+                            <excludes></excludes>
+                            <inputSchema>public</inputSchema>
+                        </database>
+                        <generate>
+                            <deprecated>false</deprecated>
+                            <javaTimeTypes>true</javaTimeTypes>
+                            <daos>true</daos>
+                            <pojos>true</pojos>
+                            <interfaces>true</interfaces>
+                            <relations>true</relations>
+                            <jpaAnnotations>true</jpaAnnotations>
+                            <jpaVersion>true</jpaVersion>
+                            <validationAnnotations>true</validationAnnotations>
+                        </generate>
+                        <target>
+                            <packageName>quantasma.app.db</packageName>
+                            <directory>${project.build.directory}/generated-sources/jooq/</directory>
+                        </target>
+                    </generator>
+                </configuration>
 
                 <dependencies>
                     <dependency>

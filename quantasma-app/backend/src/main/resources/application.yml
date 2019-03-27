@@ -10,6 +10,12 @@ service:
   backtest:
     enabled: false
 
+jooq:
+  gen-container:
+    url: jdbc:postgresql://localhost:5432/
+    username: postgres
+    password: postgres
+
 spring:
   data:
     mongodb:
