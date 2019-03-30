@@ -21,6 +21,11 @@ CREATE TYPE strategy_status AS ENUM (
   'BLOCKED'
 );
 
+CREATE TYPE strategy_type AS ENUM (
+  'TECHNICAL',
+  'EVENT'
+);
+
 DROP TABLE IF EXISTS strategies;
 CREATE TABLE strategies (
   id BIGSERIAL NOT NULL,
@@ -29,6 +34,7 @@ CREATE TABLE strategies (
   checksum VARCHAR(255) NOT NULL,
   active BOOLEAN NOT NULL,
   status strategy_status NOT NULL,
+  type strategy_type[] NOT NULL,
 
   x_created_on TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
   x_updated_on TIMESTAMP,
