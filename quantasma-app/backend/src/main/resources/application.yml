@@ -10,6 +10,11 @@ service:
   backtest:
     enabled: false
 
+logging:
+  level:
+    root: INFO
+    org.jooq: DEBUG
+
 jooq:
   gen-container:
     url: jdbc:postgresql://localhost:5432/
