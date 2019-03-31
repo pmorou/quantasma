@@ -37,4 +37,3 @@ spring:
     name: ${GENERAL_DATA_PG_DB_NAME:}
     username: ${GENERAL_DATA_PG_USER:}
     password:
-    initialization-mode: always
