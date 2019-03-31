@@ -2,19 +2,27 @@
 
 ## Architecture
 
-Currently application consists of three separate services:
+Currently application consists of following services:
 
 -   frontend - nginx running angular 6
 
 -   backend - Spring Boot 2 publishing API endpoints and handling 3rd party communications
 
--   database - MongoDB storing historical data for backtests
+-   historical data database - MongoDB storing historical data for backtests
+
+-   general database - PostgreSQL as general purpose database
 
 **NOTE: It is not a final setup, more services coming soon.**
 
 ## Compilation
 
-Follow parent [README]({../README.md}).
+Two maven profiles are available:
+
+-   dev - enables dev tools
+
+-   prod - disables dev tools
+
+For more follow parent [README]({../README.md}).
 
 ## Start application
 
