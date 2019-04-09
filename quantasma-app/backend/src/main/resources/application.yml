@@ -10,6 +10,17 @@ service:
   backtest:
     enabled: false
 
+logging:
+  level:
+    root: INFO
+    org.jooq: DEBUG
+
+jooq:
+  gen-container:
+    url: jdbc:postgresql://localhost:5432/
+    username: postgres
+    password: postgres
+
 spring:
   data:
     mongodb:
@@ -21,25 +32,8 @@ spring:
   devtools:
     remote:
       secret: =YOUR_SECRET=
-
----
-
-spring:
-  profiles: mock
-service:
-  historical-data:
-    prefix: mock
-
----
-
-spring:
-  profiles: dukascopy
-service:
-  historical-data:
-    prefix: dukascopy
-live:
-  data:
-    provider:
-      url: =PLATFORM_URL=
-      userName: =YOUR_USER_NAME=
-      password: =YOUR_PASSWORD=
+  datasource:
+    url: jdbc:postgresql://${GENERAL_DATA_PG_HOST:}:${GENERAL_DATA_PG_PORT:}/
+    name: ${GENERAL_DATA_PG_DB_NAME:}
+    username: ${GENERAL_DATA_PG_USER:}
+    password:

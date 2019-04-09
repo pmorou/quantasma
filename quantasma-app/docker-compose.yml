@@ -9,6 +9,18 @@ services:
       - 27017
     restart: always
 
+  general-data-postgres-db:
+    image: postgres:11.2
+    environment:
+      - POSTGRES_DB=postgres
+      - POSTGRES_USER=postgres
+    volumes:
+      - general-postgres-vol
+    expose:
+      - 5432
+    restart:
+      always
+
   backend-service:
     build: ./backend
     expose:
@@ -18,8 +30,13 @@ services:
       - HISTORICAL_DATA_MONGO_DB_HOST=historical-data-mongo-db
       - HISTORICAL_DATA_MONGO_DB_PORT=27017
       - HISTORICAL_DATA_MONGO_DB_NAME=historical
+      - GENERAL_DATA_PG_HOST=general-data-postgres-db
+      - GENERAL_DATA_PG_PORT=5432
+      - GENERAL_DATA_PG_DB_NAME=postgres
+      - GENERAL_DATA_PG_USER=postgres
     depends_on:
       - historical-data-mongo-db
+      - general-data-postgres-db
     restart: always
 
   frontend-service:
@@ -36,3 +53,4 @@ services:
 
 volumes:
   historical-mongo-db-vol:
+  general-postgres-vol:
