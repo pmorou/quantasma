@@ -40,7 +40,7 @@ Before project compilation few dependencies must be installed, it can be done th
 
 Compilation should run now smoothly.
 
-    ./build -Pprod
+    ./build.sh -Pprod
 
 ## Example Usage
 
@@ -48,32 +48,32 @@ In case you decide to create your own trading application its as simple as the f
 
 ``` java
 final MarketData<BidAskBar> marketData =
-        MarketDataBuilder.basedOn(StructureDefinition
-                                          // Global Bar implementation factory
-                                          .model(new BidAskBarFactory())
-                                          // Smallest accessible bar resolution for all defined below symbols
-                                          .resolution(TimeSeriesDefinition.limited(BarPeriod.M1, 100)))
-                         .symbols("EURUSD", "EURGBP")
-                         // You can define any number of additional bars resolutions for above symbols
-                         .aggregate(TimeSeriesDefinition.Group.of("EURUSD")
-                                                              .add(TimeSeriesDefinition.limited(BarPeriod.M5, 100))
-                                                              .add(TimeSeriesDefinition.limited(BarPeriod.M30, 100)))
-                         .build();
+    MarketDataBuilder.basedOn(StructureDefinition
+        // Global Bar implementation factory
+        .model(new BidAskBarFactory())
+        // Smallest accessible bar resolution for all defined below symbols
+        .resolution(TimeSeriesDefinition.limited(BarPeriod.M1, 100)))
+        .symbols("EURUSD", "EURGBP")
+        // You can define any number of additional bars resolutions for above symbols
+        .aggregate(TimeSeriesDefinition.Group.of("EURUSD")
+            .add(TimeSeriesDefinition.limited(BarPeriod.M5, 100))
+            .add(TimeSeriesDefinition.limited(BarPeriod.M30, 100)))
+        .build();
 
 // Any strategy based on TradeStrategy interface needs a Context object
 final Context context = new BaseContext.Builder()
-        .withMarketData(marketData)
-        // OrderService implementations integrate an app with external APIs
-        .withOrderService(new NullOrderService())
-        .build();
+    .withMarketData(marketData)
+    // OrderService implementations integrate an app with external APIs
+    .withOrderService(new NoOpOrderService())
+    .build();
 
 final TradeStrategy rsiStrategy = RSIBullishStrategy.build(context,
-                                                           values -> values
-                                                                   // String or Enum (for safety) is allowed
-                                                                   .set(Parameter.TRADE_SYMBOL, "EURUSD")
-                                                                   .set(Parameter.RSI_PERIOD, 14)
-                                                                   .set(Parameter.RSI_LOWER_BOUND, 30)
-                                                                   .set(Parameter.RSI_UPPER_BOUND, 70));
+    values -> values
+        // String or Enum (for safety) is allowed
+        .set(Parameter.TRADE_SYMBOL, "EURUSD")
+        .set(Parameter.RSI_PERIOD, 14)
+        .set(Parameter.RSI_LOWER_BOUND, 30)
+        .set(Parameter.RSI_UPPER_BOUND, 70));
 
 // Only registered strategies are given market data
 context.getStrategyControl().register(rsiStrategy);
@@ -82,32 +82,32 @@ final TradeEngine tradeEngine = BaseTradeEngine.create(context);
 
 // Example call on market data change
 tradeEngine.process(Quote.bidAsk("EURUSD",
-                                 ZonedDateTime.now(),
-                                 1.13757,
-                                 1.13767));
+    ZonedDateTime.now(),
+    1.13757,
+    1.13767));
 
 // Fails silently because the symbol wasn't registered within time series definitions
 tradeEngine.process(Quote.bidAsk("EURJPY",
-                                 ZonedDateTime.now(),
-                                 129.653,
-                                 129.663));
+    ZonedDateTime.now(),
+    129.653,
+    129.663));
 ```
 
 Backtest parametrization:
 
 ``` java
 final MarketData<BidAskBar> marketData =
-        MarketDataBuilder.basedOn(StructureDefinition.model(new BidAskBarFactory())
-                                                     .resolution(TimeSeriesDefinition.unlimited(BarPeriod.M1)))
-                         .symbols("EURUSD")
-                         .aggregate(TimeSeriesDefinition.Group.of("EURUSD")
-                                                              .add(TimeSeriesDefinition.unlimited(BarPeriod.M5)))
-                         .wrap(ReflectionManualIndexTimeSeries::wrap)
-                         .build();
+    MarketDataBuilder.basedOn(StructureDefinition.model(new BidAskBarFactory())
+        .resolution(TimeSeriesDefinition.unlimited(BarPeriod.M1)))
+        .symbols("EURUSD")
+        .aggregate(TimeSeriesDefinition.Group.of("EURUSD")
+            .add(TimeSeriesDefinition.unlimited(BarPeriod.M5)))
+        .wrap(ReflectionManualIndexTimeSeries::wrap)
+        .build();
 
 final Context context = new BaseContext.Builder()
-        .withMarketData(marketData)
-        .build();
+    .withMarketData(marketData)
+    .build();
 
 final Function<Variables<Parameter>, TradeStrategy> recipe = var -> {
     var._int(Parameter.RSI_PERIOD).values(10, 14);
@@ -121,9 +121,9 @@ final Function<Variables<Parameter>, TradeStrategy> recipe = var -> {
 
 final TestManager<BidAskBar> testManager = new TestManager<>(marketData);
 Producer.from(recipe)
-        .stream()
-        .forEach(tradeStrategy -> {
-            final TradingRecord result = testManager.run(tradeStrategy, Order.OrderType.BUY);
-            // Proper criterion can be used now on the result
-        });
+    .stream()
+    .forEach(tradeStrategy -> {
+        final TradingRecord result = testManager.run(tradeStrategy, Order.OrderType.BUY);
+        // Proper criterion can be used now on the result
+    });
 ```
