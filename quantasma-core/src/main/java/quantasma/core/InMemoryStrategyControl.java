@@ -24,10 +24,10 @@ public class InMemoryStrategyControl implements StrategyControl {
 
     private boolean isAlreadyRegistered(TradeStrategy strategy) {
         return strategies.entrySet()
-                         .stream()
-                         .anyMatch(entry -> entry.getValue()
-                                                 .getStrategy()
-                                                 .equals(strategy));
+            .stream()
+            .anyMatch(entry -> entry.getValue()
+                .getStrategy()
+                .equals(strategy));
     }
 
     private static long generateId() {
@@ -37,33 +37,33 @@ public class InMemoryStrategyControl implements StrategyControl {
     @Override
     public Set<StrategyDescription> registeredStrategies() {
         return strategies.entrySet()
-                         .stream()
-                         .map(entry -> new StrategyDescription(entry.getKey(),
-                                                               entry.getValue().getStrategy().getName(),
-                                                               entry.getValue().isActive(),
-                                                               getParameters(entry.getValue().getStrategy())))
-                         .collect(Collectors.toSet());
+            .stream()
+            .map(entry -> new StrategyDescription(entry.getKey(),
+                entry.getValue().getStrategy().getName(),
+                entry.getValue().isActive(),
+                getParameters(entry.getValue().getStrategy())))
+            .collect(Collectors.toSet());
     }
 
     private static List<StrategyDescription.Parameter> getParameters(TradeStrategy strategy) {
         return strategy.getParameterValues()
-                       .getValuesByParameter()
-                       .entrySet()
-                       .stream()
-                       .map(entry -> new StrategyDescription.Parameter(
-                               entry.getKey().name(),
-                               entry.getKey().clazz().getSimpleName(),
-                               entry.getValue()))
-                       .collect(Collectors.toList());
+            .getValuesByParameter()
+            .entrySet()
+            .stream()
+            .map(entry -> new StrategyDescription.Parameter(
+                entry.getKey().name(),
+                entry.getKey().clazz().getSimpleName(),
+                entry.getValue()))
+            .collect(Collectors.toList());
     }
 
     @Override
     public Set<TradeStrategy> activeStrategies() {
         return strategies.entrySet()
-                         .stream()
-                         .filter(entry -> entry.getValue().isActive())
-                         .map(entry -> entry.getValue().getStrategy())
-                         .collect(Collectors.toSet());
+            .stream()
+            .filter(entry -> entry.getValue().isActive())
+            .map(entry -> entry.getValue().getStrategy())
+            .collect(Collectors.toSet());
     }
 
     @Override

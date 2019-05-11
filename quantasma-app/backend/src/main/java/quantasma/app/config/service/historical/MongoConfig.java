@@ -24,9 +24,9 @@ public class MongoConfig {
     @Autowired
     public void ensureIndexes(MongoOperations mongoOperations) {
         final Document doc = new Document()
-                .append("date", 1)
-                .append("symbol", 1)
-                .append("period", 1);
+            .append("date", 1)
+            .append("symbol", 1)
+            .append("period", 1);
         final IndexDefinition compoundIndexDefinition = new CompoundIndexDefinition(doc).unique();
         log.info("Ensuring [{}] index on the [{}] collection.", compoundIndexDefinition, mongoProperties.collectionName());
         mongoOperations.indexOps(mongoProperties.collectionName()).ensureIndex(compoundIndexDefinition);

@@ -40,31 +40,31 @@ public class MongoOhlcvBar {
 
     public static MongoOhlcvBar from(OhlcvBar ohlcvBar) {
         return new MongoOhlcvBar(ohlcvBar.getPeriod(),
-                                 ohlcvBar.getDate(),
-                                 ohlcvBar.getSymbol(),
-                                 ohlcvBar.getBidOpen(),
-                                 ohlcvBar.getBidLow(),
-                                 ohlcvBar.getBidHigh(),
-                                 ohlcvBar.getBidClose(),
-                                 ohlcvBar.getAskOpen(),
-                                 ohlcvBar.getAskLow(),
-                                 ohlcvBar.getAskHigh(),
-                                 ohlcvBar.getAskClose(),
-                                 ohlcvBar.getVolume());
+            ohlcvBar.getDate(),
+            ohlcvBar.getSymbol(),
+            ohlcvBar.getBidOpen(),
+            ohlcvBar.getBidLow(),
+            ohlcvBar.getBidHigh(),
+            ohlcvBar.getBidClose(),
+            ohlcvBar.getAskOpen(),
+            ohlcvBar.getAskLow(),
+            ohlcvBar.getAskHigh(),
+            ohlcvBar.getAskClose(),
+            ohlcvBar.getVolume());
     }
 
     public OhlcvBar toOhlcvBar() {
         return new OhlcvBar(getPeriod(),
-                            getDate(),
-                            getSymbol(),
-                            getBidOpen(),
-                            getBidLow(),
-                            getBidHigh(),
-                            getBidClose(),
-                            getAskOpen(),
-                            getAskLow(),
-                            getAskHigh(),
-                            getAskClose(),
-                            getVolume());
+            getDate(),
+            getSymbol(),
+            getBidOpen(),
+            getBidLow(),
+            getBidHigh(),
+            getBidClose(),
+            getAskOpen(),
+            getAskLow(),
+            getAskHigh(),
+            getAskClose(),
+            getVolume());
     }
 }

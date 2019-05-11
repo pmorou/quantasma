@@ -34,34 +34,34 @@ public class BacktestRequest {
     public Map<String, Object[]> parameters(Parameterizable[] referenceParameters) {
         if (parameters.size() != referenceParameters.length) {
             throw new IllegalArgumentException(String.format("Parameters number doesn't match - provided [%s], requiring [%s]",
-                                                             parameters.size(), referenceParameters.length));
+                parameters.size(), referenceParameters.length));
         }
 
         final Map<String, String> mappedInputs = parameters.stream()
-                                                           .collect(Collectors.toMap(
-                                                                   Parameter::getName, Parameter::getValue));
+            .collect(Collectors.toMap(
+                Parameter::getName, Parameter::getValue));
 
         return Arrays.stream(referenceParameters)
-                     .collect(Collectors.toMap(
-                             getVerifiedName(mappedInputs),
-                             getTypedValues(mappedInputs)));
+            .collect(Collectors.toMap(
+                getVerifiedName(mappedInputs),
+                getTypedValues(mappedInputs)));
     }
 
     private Function<Parameterizable, Object[]> getTypedValues(Map<String, String> mappedInputs) {
         return parameter -> {
             final String values = mappedInputs.get(parameter.name());
             return Arrays.stream(values.split(","))
-                         .map(String::trim)
-                         .map(value -> {
-                             if (parameter.clazz() == String.class) {
-                                 return value;
-                             } else if (parameter.clazz() == Integer.class) {
-                                 return Integer.parseInt(value);
-                             } else {
-                                 throw new IllegalArgumentException(String.format("Unsupported type for parameter [%s]", value));
-                             }
-                         })
-                         .toArray();
+                .map(String::trim)
+                .map(value -> {
+                    if (parameter.clazz() == String.class) {
+                        return value;
+                    } else if (parameter.clazz() == Integer.class) {
+                        return Integer.parseInt(value);
+                    } else {
+                        throw new IllegalArgumentException(String.format("Unsupported type for parameter [%s]", value));
+                    }
+                })
+                .toArray();
         };
     }
 
@@ -76,9 +76,9 @@ public class BacktestRequest {
 
     public List<String> criterionNames() {
         return getCriterions()
-                .stream()
-                .map(Criterion::getName)
-                .collect(Collectors.toList());
+            .stream()
+            .map(Criterion::getName)
+            .collect(Collectors.toList());
     }
 
     @Getter

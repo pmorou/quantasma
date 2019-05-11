@@ -15,10 +15,10 @@ public interface SseEvent<D> extends Event<D> {
 
     default ServerSentEvent<D> sse() {
         return ServerSentEvent.<D>builder()
-                .id(id())
-                .event(name())
-                .data(data())
-                .build();
+            .id(id())
+            .event(name())
+            .data(data())
+            .build();
     }
 
     static <D> Function<Event<D>, ServerSentEvent<D>> buildSse() {

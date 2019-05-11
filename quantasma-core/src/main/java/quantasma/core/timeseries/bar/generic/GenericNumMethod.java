@@ -15,8 +15,8 @@ public abstract class GenericNumMethod<T> {
 
     protected final Num transform(T value) {
         return context.getToNumber()
-                      .andThen(numFunction)
-                      .apply(value);
+            .andThen(numFunction)
+            .apply(value);
     }
 
 }

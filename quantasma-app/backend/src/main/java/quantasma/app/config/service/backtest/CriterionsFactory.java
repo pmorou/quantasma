@@ -16,8 +16,9 @@ public class CriterionsFactory {
     @Autowired
     public CriterionsFactory(Set<AnalysisCriterion> criterions) {
         criterionMap = criterions.stream()
-                                 .collect(Collectors.toMap(criterion -> criterion.getClass().getSimpleName(),
-                                                           criterion -> criterion));
+            .collect(Collectors.toMap(
+                criterion -> criterion.getClass().getSimpleName(),
+                criterion -> criterion));
     }
 
     public Set<String> available() {

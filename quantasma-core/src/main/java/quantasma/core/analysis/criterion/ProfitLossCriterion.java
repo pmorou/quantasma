@@ -23,17 +23,17 @@ public class ProfitLossCriterion extends AbstractAnalysisCriterion {
 
     private static Num toRealUnit(TimeSeries timeSeries, Trade trade, Num pips) {
         return trade.getExit().getAmount()
-                    .dividedBy(timeSeries.numOf(STANDARD_LOT_SIZE))
-                    .multipliedBy(timeSeries.numOf(STANDARD_LOT_PROFIT))
-                    .multipliedBy(pips);
+            .dividedBy(timeSeries.numOf(STANDARD_LOT_SIZE))
+            .multipliedBy(timeSeries.numOf(STANDARD_LOT_PROFIT))
+            .multipliedBy(pips);
     }
 
     @Override
     public Num calculate(TimeSeries series, TradingRecord tradingRecord) {
         return tradingRecord.getTrades()
-                            .stream()
-                            .map(trade -> calculate(series, trade))
-                            .reduce(series.numOf(0), Num::plus);
+            .stream()
+            .map(trade -> calculate(series, trade))
+            .reduce(series.numOf(0), Num::plus);
     }
 
     @Override

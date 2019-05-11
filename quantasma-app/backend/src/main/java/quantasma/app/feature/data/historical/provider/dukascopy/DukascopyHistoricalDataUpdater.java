@@ -27,7 +27,7 @@ public class DukascopyHistoricalDataUpdater implements HistoricalDataUpdater {
     @Override
     public void update(FeedBarsSettings feedBarsSettings) {
         final long processId = dukascopyClient.runStrategy(
-                new FetchHistoricalDataStrategy(historicalDataService, feedBarsSettings));
+            new FetchHistoricalDataStrategy(historicalDataService, feedBarsSettings));
         dukascopyClient.stopStrategy(processId);
     }
 }

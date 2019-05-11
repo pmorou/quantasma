@@ -36,8 +36,8 @@ public class BaseMainTimeSeriesChild<B extends OneSidedBar> extends BaseMainTime
 
     public static void main(String[] args) {
         final BaseMainTimeSeriesChild example = new Builder<>("example", BarPeriod.M1)
-                .withName("from mother of all builders")
-                .withChild() // Current builder, type preserved
-                .build();
+            .withName("from mother of all builders")
+            .withChild() // Current builder, type preserved
+            .build();
     }
 }

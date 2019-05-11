@@ -23,9 +23,10 @@ public class FinishDepositCriterion extends AbstractAnalysisCriterion {
 
     @Override
     public Num calculate(TimeSeries series, TradingRecord tradingRecord) {
-        return tradingRecord.getTrades().stream()
-                            .map(trade -> profitLossPipsCalculator.calculate(series, trade))
-                            .reduce(series.numOf(initialDeposit), Num::plus);
+        return tradingRecord.getTrades()
+            .stream()
+            .map(trade -> profitLossPipsCalculator.calculate(series, trade))
+            .reduce(series.numOf(initialDeposit), Num::plus);
     }
 
     @Override

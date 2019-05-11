@@ -72,13 +72,13 @@ public class FetchHistoricalDataStrategy implements IStrategy {
 
     private Instant rollWindow(Instant fetchTo) {
         return Instant.ofEpochMilli(Math.max(feedBarsSettings.getFromDate().toEpochMilli(),
-                                             fetchTo.minus(60, ChronoUnit.DAYS).toEpochMilli()));
+            fetchTo.minus(60, ChronoUnit.DAYS).toEpochMilli()));
     }
 
     private Instant getValidFetchTo() throws JFException {
         final long latestPossibleBar = history.getStartTimeOfCurrentBar(resolveInstrument(), resolvePeriod());
         return Instant.ofEpochMilli(Math.min(latestPossibleBar,
-                                             feedBarsSettings.getToDate().toEpochMilli()));
+            feedBarsSettings.getToDate().toEpochMilli()));
     }
 
     private Period resolvePeriod() {

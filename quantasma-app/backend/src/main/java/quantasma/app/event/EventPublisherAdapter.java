@@ -12,6 +12,6 @@ public final class EventPublisherAdapter {
     @SuppressWarnings("uncheck")
     public static <T extends Event> Flux<T> toFlux(EventPublisher eventPublisher, Class<T> filterEvents) {
         return (Flux<T>) JdkFlowAdapter.flowPublisherToFlux(eventPublisher)
-                                       .filter(filterEvents::isInstance);
+            .filter(filterEvents::isInstance);
     }
 }

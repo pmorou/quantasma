@@ -26,17 +26,17 @@ public class ParametrizedBacktestExample {
     public static void main(String[] args) {
         // tag::parametrizedBacktestExample[]
         final MarketData<BidAskBar> marketData =
-                MarketDataBuilder.basedOn(StructureDefinition.model(new BidAskBarFactory())
-                                                             .resolution(TimeSeriesDefinition.unlimited(BarPeriod.M1)))
-                                 .symbols("EURUSD")
-                                 .aggregate(TimeSeriesDefinition.Group.of("EURUSD")
-                                                                      .add(TimeSeriesDefinition.unlimited(BarPeriod.M5)))
-                                 .wrap(ReflectionManualIndexTimeSeries::wrap)
-                                 .build();
+            MarketDataBuilder.basedOn(StructureDefinition.model(new BidAskBarFactory())
+                .resolution(TimeSeriesDefinition.unlimited(BarPeriod.M1)))
+                .symbols("EURUSD")
+                .aggregate(TimeSeriesDefinition.Group.of("EURUSD")
+                    .add(TimeSeriesDefinition.unlimited(BarPeriod.M5)))
+                .wrap(ReflectionManualIndexTimeSeries::wrap)
+                .build();
 
         final Context context = new BaseContext.Builder()
-                .withMarketData(marketData)
-                .build();
+            .withMarketData(marketData)
+            .build();
 
         final Function<Variables<Parameter>, TradeStrategy> recipe = var -> {
             var._int(Parameter.RSI_PERIOD).values(10, 14);
@@ -50,11 +50,11 @@ public class ParametrizedBacktestExample {
 
         final TestManager<BidAskBar> testManager = new TestManager<>(marketData);
         Producer.from(recipe)
-                .stream()
-                .forEach(tradeStrategy -> {
-                    final TradingRecord result = testManager.run(tradeStrategy, Order.OrderType.BUY);
-                    // Proper criterion can be used now on the result
-                });
+            .stream()
+            .forEach(tradeStrategy -> {
+                final TradingRecord result = testManager.run(tradeStrategy, Order.OrderType.BUY);
+                // Proper criterion can be used now on the result
+            });
         // end::parametrizedBacktestExample[]
     }
 }

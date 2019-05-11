@@ -30,14 +30,14 @@ public class RSIBullishStrategy extends RSIStrategy {
         var rsiUpperBound = parameterValues.getInteger(Parameter.RSI_UPPER_BOUND);
         var rsiIndicator = createRSIIndicator(context, parameterValues);
         return new Builder<>(context,
-                             parameterValues.getString(Parameter.TRADE_SYMBOL),
-                             new CrossedUpIndicatorRule(rsiIndicator, rsiLowerBound),
-                             new CrossedDownIndicatorRule(rsiIndicator, rsiUpperBound),
-                             parameterValues)
-                .withName(createName(RSIBullishStrategy.class, rsiLowerBound, rsiUpperBound))
-                .withUnstablePeriod(parameterValues.getInteger(Parameter.RSI_PERIOD))
-                .withAmount(1000)
-                .build();
+            parameterValues.getString(Parameter.TRADE_SYMBOL),
+            new CrossedUpIndicatorRule(rsiIndicator, rsiLowerBound),
+            new CrossedDownIndicatorRule(rsiIndicator, rsiUpperBound),
+            parameterValues)
+            .withName(createName(RSIBullishStrategy.class, rsiLowerBound, rsiUpperBound))
+            .withUnstablePeriod(parameterValues.getInteger(Parameter.RSI_PERIOD))
+            .withAmount(1000)
+            .build();
     }
 
     public static RSIBullishStrategy build(Context context, UnaryOperator<Values<Parameter>> parameterValuesBuilder) {

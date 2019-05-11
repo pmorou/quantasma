@@ -25,10 +25,10 @@ public class BaseContext implements Context {
             orderService = new NullOrderService();
             strategyControl = new InMemoryStrategyControl();
             dataService = new BaseDataService(
-                    MarketDataBuilder.basedOn(StructureDefinition.model(new OneSidedBarFactory())
-                                                                 .resolution(TimeSeriesDefinition.unlimited(BarPeriod.M1)))
-                                     .symbols("EURUSD")
-                                     .build());
+                MarketDataBuilder.basedOn(StructureDefinition.model(new OneSidedBarFactory())
+                    .resolution(TimeSeriesDefinition.unlimited(BarPeriod.M1)))
+                    .symbols("EURUSD")
+                    .build());
         }
 
         public static Builder builder() {

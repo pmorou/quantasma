@@ -33,41 +33,41 @@ public class BaseTradeStrategy extends BaseStrategy implements TradeStrategy {
     @Override
     public TradeStrategy opposite() {
         return new Builder<>(context, tradeSymbol, getExitRule(), getEntryRule(), parameterValues)
-                .withName("opposite(" + getName() + ")")
-                .withUnstablePeriod(getUnstablePeriod())
-                .build();
+            .withName("opposite(" + getName() + ")")
+            .withUnstablePeriod(getUnstablePeriod())
+            .build();
     }
 
     @Override
     public TradeStrategy and(Strategy strategy) {
         return new Builder<>(context, tradeSymbol, getEntryRule().and(strategy.getEntryRule()), getExitRule().and(strategy.getExitRule()), parameterValues)
-                .withName("and(" + getName() + "," + strategy.getName() + ")")
-                .withUnstablePeriod(Math.max(getUnstablePeriod(), strategy.getUnstablePeriod()))
-                .build();
+            .withName("and(" + getName() + "," + strategy.getName() + ")")
+            .withUnstablePeriod(Math.max(getUnstablePeriod(), strategy.getUnstablePeriod()))
+            .build();
     }
 
     @Override
     public TradeStrategy and(String name, Strategy strategy, int unstablePeriod) {
         return new Builder<>(context, tradeSymbol, getEntryRule().and(strategy.getEntryRule()), getExitRule().and(strategy.getExitRule()), parameterValues)
-                .withName(name)
-                .withUnstablePeriod(unstablePeriod)
-                .build();
+            .withName(name)
+            .withUnstablePeriod(unstablePeriod)
+            .build();
     }
 
     @Override
     public TradeStrategy or(Strategy strategy) {
         return new Builder<>(context, tradeSymbol, getEntryRule().or(strategy.getEntryRule()), getExitRule().or(strategy.getExitRule()), parameterValues)
-                .withName("or(" + getName() + "," + strategy.getName() + ")")
-                .withUnstablePeriod(Math.max(getUnstablePeriod(), strategy.getUnstablePeriod()))
-                .build();
+            .withName("or(" + getName() + "," + strategy.getName() + ")")
+            .withUnstablePeriod(Math.max(getUnstablePeriod(), strategy.getUnstablePeriod()))
+            .build();
     }
 
     @Override
     public TradeStrategy or(String name, Strategy strategy, int unstablePeriod) {
         return new Builder<>(context, tradeSymbol, getEntryRule().or(strategy.getEntryRule()), getExitRule().or(strategy.getExitRule()), parameterValues)
-                .withName(name)
-                .withUnstablePeriod(unstablePeriod)
-                .build();
+            .withName(name)
+            .withUnstablePeriod(unstablePeriod)
+            .build();
     }
 
     public void stop() {

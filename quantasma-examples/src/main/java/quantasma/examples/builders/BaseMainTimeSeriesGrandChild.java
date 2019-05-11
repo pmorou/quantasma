@@ -35,9 +35,9 @@ public class BaseMainTimeSeriesGrandChild<B extends OneSidedBar> extends BaseMai
 
     public static void main(String[] args) {
         final BaseMainTimeSeriesGrandChild example = new Builder<>("example", BarPeriod.M1)
-                .withName("from mother of all builders")
-                .withChild() // Nearest extended builder
-                .withGrandChild() // Current builder, type preserved
-                .build();
+            .withName("from mother of all builders")
+            .withChild() // Nearest extended builder
+            .withGrandChild() // Current builder, type preserved
+            .build();
     }
 }

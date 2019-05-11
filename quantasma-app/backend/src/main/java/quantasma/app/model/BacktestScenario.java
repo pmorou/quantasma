@@ -15,10 +15,10 @@ public class BacktestScenario {
 
     public static BacktestScenario from(StrategyBacktest strategyBacktest) {
         return new BacktestScenario(
-                strategyBacktest.getClass().getSimpleName(),
-                strategyBacktest.strategy().getSimpleName(),
-                Arrays.stream(strategyBacktest.parameterizables())
-                      .map(parameter -> new ParameterDescription(parameter.name(), parameter.clazz().getSimpleName()))
-                      .collect(Collectors.toList()));
+            strategyBacktest.getClass().getSimpleName(),
+            strategyBacktest.strategy().getSimpleName(),
+            Arrays.stream(strategyBacktest.parameterizables())
+                .map(parameter -> new ParameterDescription(parameter.name(), parameter.clazz().getSimpleName()))
+                .collect(Collectors.toList()));
     }
 }

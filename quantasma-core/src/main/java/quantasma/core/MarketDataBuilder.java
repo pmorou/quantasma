@@ -50,24 +50,24 @@ public class MarketDataBuilder<B extends OneSidedBar> {
 
     public MarketData<B> build() {
         final Map<String, MultipleTimeSeries<B>> baseTimeSeries =
-                symbols.stream()
-                       .map(symbol -> BaseMultipleTimeSeries.create(symbol, baseTimeSeriesDefinition, barFactory, wrapper))
-                       .collect(Collectors.toMap(BaseMultipleTimeSeries::getSymbol, Function.identity()));
+            symbols.stream()
+                .map(symbol -> BaseMultipleTimeSeries.create(symbol, baseTimeSeriesDefinition, barFactory, wrapper))
+                .collect(Collectors.toMap(BaseMultipleTimeSeries::getSymbol, Function.identity()));
 
         for (TimeSeriesDefinition.Group groupDefinition : aggregatedTimeSeriesDefinitions) {
             for (String symbol : groupDefinition.getSymbols()) {
                 for (TimeSeriesDefinition timeSeriesDefinition : groupDefinition.getTimeSeriesDefinitions()) {
                     if (isLteBaseBarPeriod(timeSeriesDefinition.getBarPeriod())) {
                         throw new IllegalArgumentException(String.format("[%s] bar period for symbol [%s] =< base [%s]",
-                                                                         timeSeriesDefinition,
-                                                                         symbol,
-                                                                         baseTimeSeriesDefinition));
+                            timeSeriesDefinition,
+                            symbol,
+                            baseTimeSeriesDefinition));
                     }
                     if (!baseTimeSeries.containsKey(symbol)) {
                         throw new IllegalArgumentException(String.format("Cannot aggregate undefined symbol [%s]", symbol));
                     }
                     baseTimeSeries.compute(symbol,
-                                           (ignored, multipleTimeSeries) -> multipleTimeSeries.aggregate(timeSeriesDefinition));
+                        (ignored, multipleTimeSeries) -> multipleTimeSeries.aggregate(timeSeriesDefinition));
                 }
             }
         }

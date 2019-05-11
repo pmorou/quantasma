@@ -15,9 +15,8 @@ public interface GenericTimeSeries<B extends OneSidedBar> {
     /**
      * Returns unmodifiable view of plain {@link org.ta4j.core.TimeSeries} based on {@link org.ta4j.core.Bar}.
      *
-     * @implSpec Any mutation or replace action on inner objects (eg. {@code Bar}) will result in {@code UnsupportedOperationException}
-     *
      * @return TimeSeries
+     * @implSpec Any mutation or replace action on inner objects (eg. {@code Bar}) will result in {@code UnsupportedOperationException}
      */
     TimeSeries plainTimeSeries();
 
@@ -85,8 +84,8 @@ public interface GenericTimeSeries<B extends OneSidedBar> {
             OneSidedBar firstBar = getFirstBar();
             OneSidedBar lastBar = getLastBar();
             sb.append(firstBar.getEndTime().format(DateTimeFormatter.ISO_DATE_TIME))
-              .append(" - ")
-              .append(lastBar.getEndTime().format(DateTimeFormatter.ISO_DATE_TIME));
+                .append(" - ")
+                .append(lastBar.getEndTime().format(DateTimeFormatter.ISO_DATE_TIME));
         }
         return sb.toString();
     }

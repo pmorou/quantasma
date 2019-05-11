@@ -39,12 +39,12 @@ public class OandaLiveDataProvider implements LiveDataProvider {
 
     private void fetchData() {
         final Context ctx = new ContextBuilder(url)
-                .setToken(token)
-                .setApplication("PricePolling")
-                .build();
+            .setToken(token)
+            .setApplication("PricePolling")
+            .build();
 
         final List<String> instruments = new ArrayList<>(
-                Arrays.asList("EUR_USD")
+            Arrays.asList("EUR_USD")
         );
 
         try {
@@ -64,11 +64,11 @@ public class OandaLiveDataProvider implements LiveDataProvider {
                     log.info("Oanda API: {}", price);
 
                     eventPublisher.publish(Event.quote(
-                            Quote.bidAsk(
-                                    price.getInstrument().toString().replace("_", ""),
-                                    ZonedDateTime.parse(price.getTime()),
-                                    price.getBids().get(0).getPrice().doubleValue(),
-                                    price.getAsks().get(0).getPrice().doubleValue()))
+                        Quote.bidAsk(
+                            price.getInstrument().toString().replace("_", ""),
+                            ZonedDateTime.parse(price.getTime()),
+                            price.getBids().get(0).getPrice().doubleValue(),
+                            price.getAsks().get(0).getPrice().doubleValue()))
                     );
                 }
                 since = resp.getTime();

@@ -60,10 +60,10 @@ public final class UnmodifiableTimeSeries extends ForwardingTimeSeries {
     @Override
     public List<Bar> getBarData() {
         return delegate().getBarData()
-                         .stream()
-                         .map(UnmodifiableBar::new)
-                         .collect(Collectors.collectingAndThen(Collectors.toList(),
-                                                               Collections::unmodifiableList));
+            .stream()
+            .map(UnmodifiableBar::new)
+            .collect(Collectors.collectingAndThen(Collectors.toList(),
+                Collections::unmodifiableList));
     }
 
     @Override

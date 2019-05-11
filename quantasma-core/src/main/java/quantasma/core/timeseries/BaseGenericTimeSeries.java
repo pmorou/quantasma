@@ -27,11 +27,11 @@ public class BaseGenericTimeSeries<B extends OneSidedBar> implements GenericTime
 
     protected BaseGenericTimeSeries(Builder<?, ?> builder) {
         this.timeSeries = new BaseTimeSeries.SeriesBuilder()
-                      .withName(builder.getName())
-                      .withBars(builder.getBars())
-                      .withNumTypeOf(builder.getNumFunction())
-                      .withMaxBarCount(builder.getMaxBarCount())
-                      .build();
+            .withName(builder.getName())
+            .withBars(builder.getBars())
+            .withNumTypeOf(builder.getNumFunction())
+            .withMaxBarCount(builder.getMaxBarCount())
+            .build();
         this.barFactory = (BarFactory<B>) builder.getBarFactory();
         this.symbol = builder.getSymbol();
         this.barPeriod = builder.getBarPeriod();

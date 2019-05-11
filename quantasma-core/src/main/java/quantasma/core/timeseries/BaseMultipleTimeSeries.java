@@ -67,7 +67,7 @@ public class BaseMultipleTimeSeries<B extends OneSidedBar> implements MultipleTi
                 insertNewBar(quote.getTime(), barPeriod, timeSeries);
             }
             timeSeries.getLastBar()
-                      .updateBar(quote, timeSeries.function());
+                .updateBar(quote, timeSeries.function());
         });
     }
 
@@ -107,11 +107,11 @@ public class BaseMultipleTimeSeries<B extends OneSidedBar> implements MultipleTi
     @Override
     public int lastBarIndex() {
         return periodTimeSeriesMap.entrySet()
-                                  .stream()
-                                  .findFirst()
-                                  .map(entry -> entry.getValue()
-                                                     .getEndIndex())
-                                  .orElse(-1);
+            .stream()
+            .findFirst()
+            .map(entry -> entry.getValue()
+                .getEndIndex())
+            .orElse(-1);
     }
 
     @Override

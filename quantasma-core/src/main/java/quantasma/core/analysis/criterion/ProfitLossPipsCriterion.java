@@ -21,14 +21,14 @@ public class ProfitLossPipsCriterion extends AbstractAnalysisCriterion {
             final Num exitClosePrice = getPrice(series, trade.getExit());
             final Num entryClosePrice = getPrice(series, trade.getEntry());
             return difference(trade, exitClosePrice, entryClosePrice)
-                    .dividedBy(series.numOf(pipResolution));
+                .dividedBy(series.numOf(pipResolution));
         }
         return series.numOf(0);
     }
 
     private static Num getPrice(TimeSeries series, Order exit) {
         return hasPrice(exit) ?
-                exit.getPrice() : series.getBar(exit.getIndex()).getClosePrice();
+            exit.getPrice() : series.getBar(exit.getIndex()).getClosePrice();
     }
 
     private static boolean hasPrice(Order exit) {
@@ -37,15 +37,15 @@ public class ProfitLossPipsCriterion extends AbstractAnalysisCriterion {
 
     private static Num difference(Trade trade, Num exitClosePrice, Num entryClosePrice) {
         return trade.getEntry().isBuy() ?
-                exitClosePrice.minus(entryClosePrice) : entryClosePrice.minus(exitClosePrice);
+            exitClosePrice.minus(entryClosePrice) : entryClosePrice.minus(exitClosePrice);
     }
 
     @Override
     public Num calculate(TimeSeries series, TradingRecord tradingRecord) {
         return tradingRecord.getTrades()
-                            .stream()
-                            .map(trade -> calculate(series, trade))
-                            .reduce(series.numOf(0), Num::plus);
+            .stream()
+            .map(trade -> calculate(series, trade))
+            .reduce(series.numOf(0), Num::plus);
     }
 
     @Override

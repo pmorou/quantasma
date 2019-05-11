@@ -30,7 +30,7 @@ class ProducerSpec extends Specification {
             final Variable<Integer> var1 = var._int("var1").with(1, 2)
             final Variable<String> var2 = var._String("var2").with("9", "8")
             return new TestObject(var1.$(), var2.$(), var1.$())
-         }
+        }
 
         when:
         final Iterator<TestObject> iterator = Producer.from(recipe).iterator()
@@ -113,8 +113,10 @@ class ProducerSpec extends Specification {
     @FailsWith(NoSuchElementException)
     def 'given 2 variables should produce correct objects'() {
         given:
-        final Function<Variables, TestObject> recipe = { var -> new TestObject(var._int("var1").values(1, 3, 5).$(),
-                                                                               var._String("var2").values("a", "b", "c").$()) }
+        final Function<Variables, TestObject> recipe = { var ->
+            new TestObject(var._int("var1").values(1, 3, 5).$(),
+                    var._String("var2").values("a", "b", "c").$())
+        }
 
         when:
         final Iterator<TestObject> iterator = Producer.from(recipe).iterator()
@@ -149,7 +151,7 @@ class ProducerSpec extends Specification {
         final Function<Variables, TestObject> recipe = { var -> new TestObject(var._int("var1").values(1, 3).$()) }
         final Producer producer = Producer.from(recipe)
         final Iterator<TestObject> oldIterator = producer.iterator()
-        with (oldIterator) {
+        with(oldIterator) {
             hasNext()
             next().var1 == 1
             hasNext()
@@ -157,7 +159,7 @@ class ProducerSpec extends Specification {
 
         when:
         final Iterator<TestObject> newIterator = producer.iterator()
-        with (newIterator) {
+        with(newIterator) {
             hasNext()
             next().var1 == 1
             hasNext()
@@ -166,7 +168,7 @@ class ProducerSpec extends Specification {
         }
 
         then:
-        with (oldIterator) {
+        with(oldIterator) {
             hasNext()
             next().var1 == 3
             !hasNext()
@@ -176,15 +178,17 @@ class ProducerSpec extends Specification {
     @FailsWith(NoSuchElementException)
     def 'given 2 variables should produce 12 correct objects'() {
         given:
-        final Function<Variables, TestObject> recipe =  {var -> new TestObject(var._int("var1").values(1, 3).$(),
-                                                                               var._String("var2").values("a", "b", "c").$(),
-                                                                               var._int("var3").values(7, 9).$()) }
+        final Function<Variables, TestObject> recipe = { var ->
+            new TestObject(var._int("var1").values(1, 3).$(),
+                    var._String("var2").values("a", "b", "c").$(),
+                    var._int("var3").values(7, 9).$())
+        }
 
         when:
         final Iterator<TestObject> iterator = Producer.from(recipe).iterator()
 
         then:
-        with (iterator) {
+        with(iterator) {
             hasNext()
             assertFields(next(), 1, "a", 7)
             hasNext()
