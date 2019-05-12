@@ -22,7 +22,7 @@ public class BaseContext implements Context {
         private StrategyControl strategyControl;
 
         public Builder() {
-            orderService = new NullOrderService();
+            orderService = new NoOpOrderService();
             strategyControl = new InMemoryStrategyControl();
             dataService = new BaseDataService(
                 MarketDataBuilder.basedOn(StructureDefinition.model(new OneSidedBarFactory())

@@ -6,7 +6,7 @@ import quantasma.core.BaseTradeEngine;
 import quantasma.core.Context;
 import quantasma.core.MarketData;
 import quantasma.core.MarketDataBuilder;
-import quantasma.core.NullOrderService;
+import quantasma.core.NoOpOrderService;
 import quantasma.core.Quote;
 import quantasma.core.StructureDefinition;
 import quantasma.core.TradeEngine;
@@ -38,7 +38,7 @@ public class TradeAppExample {
         final Context context = new BaseContext.Builder()
             .withMarketData(marketData)
             // OrderService implementations integrate an app with external APIs
-            .withOrderService(new NullOrderService())
+            .withOrderService(new NoOpOrderService())
             .build();
 
         final TradeStrategy rsiStrategy = RSIBullishStrategy.build(context,
