@@ -59,8 +59,8 @@ public final class Util {
 
     public static DoubleStream streamRecentNumbers(Collection<Double> prices, int period, int recentNumberIndex) {
         return prices.stream()
-                     .skip(recentNumberIndex + 1 - period)
-                     .limit(period)
-                     .mapToDouble(Double::doubleValue);
+            .skip(recentNumberIndex + 1 - period)
+            .limit(period)
+            .mapToDouble(Double::doubleValue);
     }
 }

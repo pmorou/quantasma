@@ -49,10 +49,10 @@ public abstract class RSIStrategy extends BaseTradeStrategy {
 
     protected static RSIIndicator createRSIIndicator(Context context, Values<Parameter> parameterValues) {
         var timeSeries = context.getDataService()
-                                .getMarketData()
-                                .of(parameterValues.getString(Parameter.TRADE_SYMBOL))
-                                .getTimeSeries(BarPeriod.M1)
-                                .plainTimeSeries();
+            .getMarketData()
+            .of(parameterValues.getString(Parameter.TRADE_SYMBOL))
+            .getTimeSeries(BarPeriod.M1)
+            .plainTimeSeries();
         var closePriceIndicator = new ClosePriceIndicator(timeSeries);
         return new RSIIndicator(closePriceIndicator, parameterValues.getInteger(Parameter.RSI_PERIOD));
     }

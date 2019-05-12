@@ -39,8 +39,8 @@ public class HistoricalController {
     @GetMapping("data/summary")
     public HistoricalDataSummaryResponse dataSummary() {
         return new HistoricalDataSummaryResponse(historicalDataService.dataSummary()
-                                                                      .stream()
-                                                                      .collect(Collectors.groupingBy(HistoricalDataSummary::getSymbol)));
+            .stream()
+            .collect(Collectors.groupingBy(HistoricalDataSummary::getSymbol)));
     }
 
     @PutMapping("data/feed")
@@ -50,9 +50,9 @@ public class HistoricalController {
             return FeedHistoricalBarsResponse.declined();
         }
         historicalDataUpdater.update(new FeedBarsSettings(request.getSymbol(),
-                                                          request.getBarPeriod(),
-                                                          request.fromDateAsUtc(),
-                                                          request.toDateAsUtc()));
+            request.getBarPeriod(),
+            request.fromDateAsUtc(),
+            request.toDateAsUtc()));
         log.info("Processing by historical service: [{}]", request);
         return FeedHistoricalBarsResponse.accepted();
     }

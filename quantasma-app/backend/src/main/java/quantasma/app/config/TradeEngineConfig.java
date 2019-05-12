@@ -28,13 +28,15 @@ public class TradeEngineConfig {
     @Bean
     public Context context(StrategyControl strategyControl, OrderService orderService) {
         return BaseContext.Builder.builder()
-                                  .withMarketData(MarketDataBuilder.basedOn(StructureDefinition.model(new BidAskBarFactory())
-                                                                                               .resolution(TimeSeriesDefinition.limited(BarPeriod.M1, 100)))
-                                                                   .symbols("EURUSD")
-                                                                   .build())
-                                  .withOrderService(orderService)
-                                  .withStrategyControl(strategyControl)
-                                  .build();
+            .withMarketData(
+                MarketDataBuilder.basedOn(
+                    StructureDefinition.model(new BidAskBarFactory())
+                        .resolution(TimeSeriesDefinition.limited(BarPeriod.M1, 100)))
+                    .symbols("EURUSD")
+                    .build())
+            .withOrderService(orderService)
+            .withStrategyControl(strategyControl)
+            .build();
     }
 
     @Bean

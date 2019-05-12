@@ -28,9 +28,9 @@ public class AverageLastValuesIndicator extends CachedIndicator<Num> {
         }
 
         return IntStream.iterate(index, operand -> --operand)
-                        .mapToObj(indicator::getValue)
-                        .limit(lastValues)
-                        .reduce(getTimeSeries().numOf(0), Num::plus)
-                        .dividedBy(getTimeSeries().numOf(lastValues));
+            .mapToObj(indicator::getValue)
+            .limit(lastValues)
+            .reduce(getTimeSeries().numOf(0), Num::plus)
+            .dividedBy(getTimeSeries().numOf(lastValues));
     }
 }

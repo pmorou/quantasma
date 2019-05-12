@@ -26,9 +26,9 @@ public enum BarPeriod {
 
     public static BarPeriod get(String periodCode) {
         return Arrays.stream(values())
-                     .filter(barPeriod -> barPeriod.getPeriodCode().equalsIgnoreCase(periodCode))
-                     .findFirst()
-                     .orElseThrow(RuntimeException::new);
+            .filter(barPeriod -> barPeriod.getPeriodCode().equalsIgnoreCase(periodCode))
+            .findFirst()
+            .orElseThrow(RuntimeException::new);
     }
 
     public Duration getPeriod() {
@@ -38,8 +38,8 @@ public enum BarPeriod {
     @Override
     public String toString() {
         return new StringJoiner(", ", BarPeriod.class.getSimpleName() + "[", "]")
-                .add("periodCode='" + periodCode + "'")
-                .add("duration=" + duration)
-                .toString();
+            .add("periodCode='" + periodCode + "'")
+            .add("duration=" + duration)
+            .toString();
     }
 }

@@ -11,53 +11,53 @@ public class TestModeExtractorBidAsk implements TestModeExtractor {
     @Override
     public Function<OhlcvBar, Stream<Quote>> closePrices() {
         return ohlcvBar -> Stream.of(
-                prepareClosePrice(ohlcvBar));
+            prepareClosePrice(ohlcvBar));
     }
 
     @Override
     public Function<OhlcvBar, Stream<Quote>> openPrices() {
         return ohlcvBar -> Stream.of(
-                prepareOpenPrice(ohlcvBar));
+            prepareOpenPrice(ohlcvBar));
     }
 
     @Override
     public Function<OhlcvBar, Stream<Quote>> openHighLowClosePrices() {
         return ohlcvBar -> Stream.of(
-                prepareOpenPrice(ohlcvBar),
-                prepareHighPrice(ohlcvBar),
-                prepareLowPrice(ohlcvBar),
-                prepareClosePrice(ohlcvBar));
+            prepareOpenPrice(ohlcvBar),
+            prepareHighPrice(ohlcvBar),
+            prepareLowPrice(ohlcvBar),
+            prepareClosePrice(ohlcvBar));
     }
 
     private static Quote prepareOpenPrice(OhlcvBar ohlcvBar) {
         return Quote.bidAsk(
-                ohlcvBar.getSymbol(),
-                ohlcvBar.getDate().atZone(ZoneOffset.UTC),
-                ohlcvBar.getBidOpen(),
-                ohlcvBar.getAskOpen());
+            ohlcvBar.getSymbol(),
+            ohlcvBar.getDate().atZone(ZoneOffset.UTC),
+            ohlcvBar.getBidOpen(),
+            ohlcvBar.getAskOpen());
     }
 
     private static Quote prepareHighPrice(OhlcvBar ohlcvBar) {
         return Quote.bidAsk(
-                ohlcvBar.getSymbol(),
-                ohlcvBar.getDate().atZone(ZoneOffset.UTC),
-                ohlcvBar.getBidHigh(),
-                ohlcvBar.getAskHigh());
+            ohlcvBar.getSymbol(),
+            ohlcvBar.getDate().atZone(ZoneOffset.UTC),
+            ohlcvBar.getBidHigh(),
+            ohlcvBar.getAskHigh());
     }
 
     private static Quote prepareLowPrice(OhlcvBar ohlcvBar) {
         return Quote.bidAsk(
-                ohlcvBar.getSymbol(),
-                ohlcvBar.getDate().atZone(ZoneOffset.UTC),
-                ohlcvBar.getBidLow(),
-                ohlcvBar.getAskLow());
+            ohlcvBar.getSymbol(),
+            ohlcvBar.getDate().atZone(ZoneOffset.UTC),
+            ohlcvBar.getBidLow(),
+            ohlcvBar.getAskLow());
     }
 
     private static Quote prepareClosePrice(OhlcvBar ohlcvBar) {
         return Quote.bidAsk(
-                ohlcvBar.getSymbol(),
-                ohlcvBar.getDate().atZone(ZoneOffset.UTC),
-                ohlcvBar.getBidClose(),
-                ohlcvBar.getAskClose());
+            ohlcvBar.getSymbol(),
+            ohlcvBar.getDate().atZone(ZoneOffset.UTC),
+            ohlcvBar.getBidClose(),
+            ohlcvBar.getAskClose());
     }
 }

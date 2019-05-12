@@ -25,7 +25,7 @@ public class BacktestServiceImpl implements BacktestService {
 
     @Autowired
     public BacktestServiceImpl(List<StrategyBacktest> backtests,
-                               CriterionsFactory criterionsFactory) {
+        CriterionsFactory criterionsFactory) {
         this.backtests = backtests;
         this.criterionsFactory = criterionsFactory;
     }
@@ -33,17 +33,17 @@ public class BacktestServiceImpl implements BacktestService {
     @Override
     public List<BacktestScenario> all() {
         return backtests.stream()
-                        .map(BacktestScenario::from)
-                        .collect(Collectors.toList());
+            .map(BacktestScenario::from)
+            .collect(Collectors.toList());
     }
 
     @Override
     public BacktestScenario get(String name) {
         return backtests.stream()
-                        .filter(matchBacktest(name))
-                        .map(BacktestScenario::from)
-                        .findFirst()
-                        .orElseThrow(unknownBacktest(name));
+            .filter(matchBacktest(name))
+            .map(BacktestScenario::from)
+            .findFirst()
+            .orElseThrow(unknownBacktest(name));
     }
 
     private Supplier<IllegalArgumentException> unknownBacktest(@PathVariable String name) {
@@ -53,13 +53,13 @@ public class BacktestServiceImpl implements BacktestService {
     @Override
     public List<BacktestResult> test(String name, BacktestRequest request) {
         return backtests.stream()
-                        .filter(matchBacktest(name))
-                        .findFirst()
-                        .map(strategyBacktest -> strategyBacktest.run(request.parameters(strategyBacktest.parameterizables()),
-                                                                      request.criterionNames(),
-                                                                      request.getTime().getFrom().atStartOfDay(),
-                                                                      request.getTime().getWindowAsPeriod()))
-                        .orElseThrow(unknownBacktest(name));
+            .filter(matchBacktest(name))
+            .findFirst()
+            .map(strategyBacktest -> strategyBacktest.run(request.parameters(strategyBacktest.parameterizables()),
+                request.criterionNames(),
+                request.getTime().getFrom().atStartOfDay(),
+                request.getTime().getWindowAsPeriod()))
+            .orElseThrow(unknownBacktest(name));
     }
 
     private static Predicate<StrategyBacktest> matchBacktest(String name) {

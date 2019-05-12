@@ -20,7 +20,7 @@ public class Variables<P extends Enum & Parameterizable> {
         }
         if (parameter.getClass() != parameterClass) {
             throw new IllegalArgumentException(
-                    String.format("Parameter type [%s] doesn't match - required [%s]", parameter.getClass(), parameterClass)); // what result
+                String.format("Parameter type [%s] doesn't match - required [%s]", parameter.getClass(), parameterClass)); // what result
         }
     }
 
@@ -75,9 +75,9 @@ public class Variables<P extends Enum & Parameterizable> {
 
     public Variable<?> firstVariable() {
         return variablesByLabel.entrySet()
-                               .iterator()
-                               .next()
-                               .getValue();
+            .iterator()
+            .next()
+            .getValue();
     }
 
     public <T> T produce(Function<Variables<P>, T> definition) {
@@ -92,10 +92,10 @@ public class Variables<P extends Enum & Parameterizable> {
 
     public Values<P> getParameterValues() {
         return variablesByLabel.entrySet()
-                               .stream()
-                               .reduce(Values.of((Class<P>) parameterClass),
-                                       (p, entry) -> p.set(entry.getKey(), entry.getValue().value()),
-                                       Values::setAll);
+            .stream()
+            .reduce(Values.of((Class<P>) parameterClass),
+                (p, entry) -> p.set(entry.getKey(), entry.getValue().value()),
+                Values::setAll);
     }
 
     public static <P extends Enum & Parameterizable> void addValues(Variables<P> var, P parameter, Object[] values) {
@@ -110,7 +110,7 @@ public class Variables<P extends Enum & Parameterizable> {
 
     private static <T> Set<T> castArray(Object[] value) {
         return Arrays.stream(value)
-                     .map(o -> (T) o)
-                     .collect(Collectors.toSet());
+            .map(o -> (T) o)
+            .collect(Collectors.toSet());
     }
 }

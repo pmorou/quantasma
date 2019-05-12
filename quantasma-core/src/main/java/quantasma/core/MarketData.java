@@ -23,16 +23,16 @@ public class MarketData<B extends OneSidedBar> {
 
     public List<GenericTimeSeries<B>> allTimeSeries() {
         return multipleTimeSeriesMap.entrySet().stream()
-                                    .flatMap(entry -> entry.getValue().getTimeSeries().stream())
-                                    .collect(Collectors.toList());
+            .flatMap(entry -> entry.getValue().getTimeSeries().stream())
+            .collect(Collectors.toList());
     }
 
     public int lastBarIndex() {
         return multipleTimeSeriesMap.entrySet()
-                                    .stream()
-                                    .findFirst()
-                                    .map(entry -> entry.getValue().lastBarIndex())
-                                    .orElseThrow(IllegalStateException::new);
+            .stream()
+            .findFirst()
+            .map(entry -> entry.getValue().lastBarIndex())
+            .orElseThrow(IllegalStateException::new);
     }
 
     public MultipleTimeSeries<B> of(String symbol) {
@@ -57,10 +57,10 @@ public class MarketData<B extends OneSidedBar> {
 
     private void ensureSameBarsNumberOverAllTimeSeries(String skipSymbol, ZonedDateTime dateToBeCoveredByBar) {
         multipleTimeSeriesMap.entrySet()
-                             .stream()
-                             .filter(skipTimeSeriesOf(skipSymbol))
-                             .map(Map.Entry::getValue)
-                             .forEach(multipleTimeSeries -> multipleTimeSeries.createBar(dateToBeCoveredByBar));
+            .stream()
+            .filter(skipTimeSeriesOf(skipSymbol))
+            .map(Map.Entry::getValue)
+            .forEach(multipleTimeSeries -> multipleTimeSeries.createBar(dateToBeCoveredByBar));
     }
 
     private Predicate<Map.Entry<String, MultipleTimeSeries<B>>> skipTimeSeriesOf(String skipSymbol) {

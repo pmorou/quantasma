@@ -70,37 +70,37 @@ public class RSIBullishBacktest implements StrategyBacktest {
         final MarketData<BidAskBar> marketData = createMarketData();
 
         final Context context = new BaseContext.Builder()
-                .withMarketData(marketData)
-                .build();
+            .withMarketData(marketData)
+            .build();
 
         final Function<Variables<Parameter>, TradeStrategy> recipe = var -> {
             backtestParameters.forEach((key, value) ->
-                                               Variables.addValues(var,
-                                                                   Parameter.valueOf(key),
-                                                                   value));
+                Variables.addValues(var,
+                    Parameter.valueOf(key),
+                    value));
             return RSIBullishStrategy.build(context, var.getParameterValues());
         };
 
         final TestModeExtractorBidAsk testModeExtractor = new TestModeExtractorBidAsk();
         historicalDataService.findBySymbolAndDateBetweenOrderByDate(SYMBOL, fromDate.toInstant(ZoneOffset.UTC), timeWindow)
-                             .stream()
-                             .flatMap(testModeExtractor.openHighLowClosePrices())
-                             .forEach(marketData::add);
+            .stream()
+            .flatMap(testModeExtractor.openHighLowClosePrices())
+            .forEach(marketData::add);
 
         final TestManager testManager = new TestManager<>(marketData);
 
         final List<TradeScenario> tradeScenarios = prepareTradeScenarios(recipe, testManager);
 
         return tradeScenarios.stream()
-                             .map(gatherResult(analysisCriterions))
-                             .collect(Collectors.toList());
+            .map(gatherResult(analysisCriterions))
+            .collect(Collectors.toList());
     }
 
     private Function<TradeScenario, BacktestResult> gatherResult(List<String> analysisCriterions) {
         return tradeScenario -> {
             final List<AnalysisCriterion> criterions = analysisCriterions.stream()
-                                                                         .map(criterionsFactory::get)
-                                                                         .collect(Collectors.toList());
+                .map(criterionsFactory::get)
+                .collect(Collectors.toList());
             final Map<String, String> calculatedCriterions = analyze(tradeScenario, criterions);
             return new BacktestResult((Map<Object, Object>) tradeScenario.getValues().getValuesByParameter(), calculatedCriterions);
         };
@@ -110,28 +110,28 @@ public class RSIBullishBacktest implements StrategyBacktest {
         final Map<String, String> calculatedCriterions = new HashMap<>();
         for (AnalysisCriterion criterion : criterions) {
             calculatedCriterions.put(criterion.getClass().getSimpleName(),
-                                     criterion.calculate(tradeScenario.getTimeSeries(),
-                                                         tradeScenario.getTradingRecord())
-                                              .toString());
+                criterion.calculate(tradeScenario.getTimeSeries(),
+                    tradeScenario.getTradingRecord())
+                    .toString());
         }
         return calculatedCriterions;
     }
 
     private static List<TradeScenario> prepareTradeScenarios(Function<Variables<Parameter>, TradeStrategy> recipe, TestManager testManager) {
         return Producer.from(recipe)
-                       .stream()
-                       .map(tradeStrategy -> new TradeScenario(testManager.getMainTimeSeries(tradeStrategy).plainTimeSeries(),
-                                                               tradeStrategy.getParameterValues(),
-                                                               testManager.run(tradeStrategy, Order.OrderType.BUY)))
-                       .collect(Collectors.toList());
+            .stream()
+            .map(tradeStrategy -> new TradeScenario(testManager.getMainTimeSeries(tradeStrategy).plainTimeSeries(),
+                tradeStrategy.getParameterValues(),
+                testManager.run(tradeStrategy, Order.OrderType.BUY)))
+            .collect(Collectors.toList());
     }
 
     private static MarketData<BidAskBar> createMarketData() {
         return MarketDataBuilder.basedOn(StructureDefinition.model(new BidAskBarFactory())
-                                                            .resolution(TimeSeriesDefinition.unlimited(BASE_PERIOD)))
-                                .symbols(SYMBOL)
-                                .wrap(ReflectionManualIndexTimeSeries::wrap)
-                                .build();
+            .resolution(TimeSeriesDefinition.unlimited(BASE_PERIOD)))
+            .symbols(SYMBOL)
+            .wrap(ReflectionManualIndexTimeSeries::wrap)
+            .build();
     }
 
 }

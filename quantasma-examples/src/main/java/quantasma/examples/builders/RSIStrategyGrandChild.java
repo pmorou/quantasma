@@ -38,10 +38,10 @@ public class RSIStrategyGrandChild extends RSIStrategyChild {
         final Context context = new BaseContext.Builder().build();
 
         final RSIStrategyGrandChild example = new RSIStrategyGrandChild.Builder<>(context, "symbol", new EmptyRule(), new EmptyRule(), Values.of(Parameter.class))
-                .withName("from mother of all builders")
-                .withChild() // Current builder, type preserved
-                .withGrandChild()
-                .build();
+            .withName("from mother of all builders")
+            .withChild() // Current builder, type preserved
+            .withGrandChild()
+            .build();
     }
 
 }

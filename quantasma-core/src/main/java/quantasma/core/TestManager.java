@@ -24,9 +24,9 @@ public class TestManager<B extends OneSidedBar> {
     public TestManager(MarketData<B> marketData) {
         this.marketData = marketData;
         this.manualIndexTimeSeriesSet = marketData.allTimeSeries()
-                                                      .stream()
-                                                      .map(o -> (ManualIndexTimeSeries) o)
-                                                      .collect(Collectors.toSet());
+            .stream()
+            .map(o -> (ManualIndexTimeSeries) o)
+            .collect(Collectors.toSet());
     }
 
     public TradingRecord run(TradeStrategy tradeStrategy, Order.OrderType orderType) {

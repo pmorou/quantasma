@@ -21,7 +21,7 @@ public class AvgProfitLossCriterion extends AbstractAnalysisCriterion {
     @Override
     public Num calculate(TimeSeries series, TradingRecord tradingRecord) {
         return profitLossCriterion.calculate(series, tradingRecord)
-                                  .dividedBy(series.numOf(tradingRecord.getTradeCount()));
+            .dividedBy(series.numOf(tradingRecord.getTradeCount()));
     }
 
     @Override

@@ -48,7 +48,7 @@ Compilation should run now smoothly.
 
 [source]
 ----
-./build -Pprod
+./build.sh -Pprod
 ----
 
 == Example Usage

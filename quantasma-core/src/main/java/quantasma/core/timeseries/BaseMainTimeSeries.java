@@ -12,17 +12,17 @@ public class BaseMainTimeSeries<B extends OneSidedBar> extends BaseGenericTimeSe
 
     public static <B extends OneSidedBar> MainTimeSeries<B> create(TimeSeriesDefinition timeSeriesDefinition, String symbol) {
         return new BaseMainTimeSeries.Builder<>(symbol, timeSeriesDefinition.getBarPeriod())
-                .withName(timeSeriesDefinition.getBarPeriod().getPeriodCode())
-                .withMaxBarCount(timeSeriesDefinition.getMaxBarCount())
-                .build();
+            .withName(timeSeriesDefinition.getBarPeriod().getPeriodCode())
+            .withMaxBarCount(timeSeriesDefinition.getMaxBarCount())
+            .build();
     }
 
     public static <B extends OneSidedBar> MainTimeSeries<B> create(TimeSeriesDefinition timeSeriesDefinition, String symbol, BarFactory<B> barFactory) {
         return new BaseMainTimeSeries.Builder<>(symbol, timeSeriesDefinition.getBarPeriod())
-                .withName(timeSeriesDefinition.getBarPeriod().getPeriodCode())
-                .withMaxBarCount(timeSeriesDefinition.getMaxBarCount())
-                .withBarFactory(barFactory)
-                .build();
+            .withName(timeSeriesDefinition.getBarPeriod().getPeriodCode())
+            .withMaxBarCount(timeSeriesDefinition.getMaxBarCount())
+            .withBarFactory(barFactory)
+            .build();
     }
 
     @Override

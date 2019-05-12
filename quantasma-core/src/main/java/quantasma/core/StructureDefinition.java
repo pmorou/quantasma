@@ -26,7 +26,7 @@ public class StructureDefinition<B extends OneSidedBar> {
 
         public StructureDefinition<B> resolution(TimeSeriesDefinition timeSeriesDefinition) {
             return new StructureDefinition<>(new Model<>(barFactory),
-                                             new Resolution(Objects.requireNonNull(timeSeriesDefinition)));
+                new Resolution(Objects.requireNonNull(timeSeriesDefinition)));
         }
     }
 

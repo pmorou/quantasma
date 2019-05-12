@@ -33,8 +33,8 @@ public interface PermitAllThreadsFromOrderPipeline {
 
     private static Boolean isInvokedFromOrderPipeline() {
         return StackWalker.getInstance().walk(
-                frames -> frames.dropWhile(is(OrderPublisher.class).negate())
-                                .anyMatch(is(DukascopyOrderService.class)));
+            frames -> frames.dropWhile(is(OrderPublisher.class).negate())
+                .anyMatch(is(DukascopyOrderService.class)));
     }
 
     private static Predicate<StackWalker.StackFrame> is(Class<?> clazz) {
@@ -62,9 +62,9 @@ public interface PermitAllThreadsFromOrderPipeline {
 
     private static boolean isInterfaceAlreadyAdded() throws NotFoundException {
         return Arrays.stream(getStrategyTaskManager(ClassPool.getDefault())
-                                     .getInterfaces())
-                     .anyMatch(ctClass -> ctClass.getName()
-                                                 .equals(PermitAllThreadsFromOrderPipeline.class.getTypeName()));
+            .getInterfaces())
+            .anyMatch(ctClass -> ctClass.getName()
+                .equals(PermitAllThreadsFromOrderPipeline.class.getTypeName()));
     }
 
     private static CtClass getStrategyTaskManager(ClassPool classPool) throws NotFoundException {

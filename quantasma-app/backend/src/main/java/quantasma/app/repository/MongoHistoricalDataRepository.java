@@ -27,10 +27,12 @@ public class MongoHistoricalDataRepository implements HistoricalDataRepository {
 
     @Override
     public List<MongoOhlcvBar> findBySymbolAndDateBetweenOrderByDate(String symbol, Instant timeGTE, Instant timeLS) {
-        return mongoTemplate.find(Query.query(Criteria.where("symbol").is(symbol)
-                                                      .and("date").gte(timeGTE).lt(timeLS)),
-                                  MongoOhlcvBar.class,
-                                  properties.collectionName());
+        return mongoTemplate.find(
+            Query.query(
+                Criteria.where("symbol").is(symbol)
+                    .and("date").gte(timeGTE).lt(timeLS)),
+            MongoOhlcvBar.class,
+            properties.collectionName());
     }
 
     @Override
@@ -41,23 +43,23 @@ public class MongoHistoricalDataRepository implements HistoricalDataRepository {
     @Override
     public long countBySymbol(String symbol) {
         return mongoTemplate.count(Query.query(Criteria.where("symbol").is(symbol)),
-                                   properties.collectionName());
+            properties.collectionName());
     }
 
     @Override
     public List<HistoricalDataSummary> dataSummary() {
         final Aggregation aggregation = Aggregation.newAggregation(
-                Aggregation.group("symbol", "period")
-                           .first("symbol").as("symbol")
-                           .first("period").as("period")
-                           .min("date").as("fromDate")
-                           .max("date").as("toDate")
-                           .count().as("barCount"));
+            Aggregation.group("symbol", "period")
+                .first("symbol").as("symbol")
+                .first("period").as("period")
+                .min("date").as("fromDate")
+                .max("date").as("toDate")
+                .count().as("barCount"));
 
         return mongoTemplate.aggregate(aggregation,
-                                       properties.collectionName(),
-                                       HistoricalDataSummary.class)
-                            .getMappedResults();
+            properties.collectionName(),
+            HistoricalDataSummary.class)
+            .getMappedResults();
     }
 
 }

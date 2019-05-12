@@ -21,17 +21,17 @@ class BarsCollection {
 
         OhlcvBar toOhlcv() {
             return new OhlcvBar(barPeriod,
-                                Instant.ofEpochMilli(bidBar.getTime()),
-                                symbol,
-                                bidBar.getOpen(),
-                                bidBar.getLow(),
-                                bidBar.getHigh(),
-                                bidBar.getClose(),
-                                askBar.getOpen(),
-                                askBar.getLow(),
-                                askBar.getHigh(),
-                                askBar.getClose(),
-                                (int) (bidBar.getVolume() + askBar.getVolume()));
+                Instant.ofEpochMilli(bidBar.getTime()),
+                symbol,
+                bidBar.getOpen(),
+                bidBar.getLow(),
+                bidBar.getHigh(),
+                bidBar.getClose(),
+                askBar.getOpen(),
+                askBar.getLow(),
+                askBar.getHigh(),
+                askBar.getClose(),
+                (int) (bidBar.getVolume() + askBar.getVolume()));
         }
     }
 

@@ -44,9 +44,9 @@ public class MongoHistoricalDataService implements HistoricalDataService {
     @Override
     public List<OhlcvBar> findBySymbolAndDateBetweenOrderByDate(String symbol, Instant startDate, TemporalAmount window) {
         return historicalDataRepository.findBySymbolAndDateBetweenOrderByDate(symbol, startDate, Util.instantPlusTemporalAmount(startDate, window))
-                                       .stream()
-                                       .map(MongoOhlcvBar::toOhlcvBar)
-                                       .collect(Collectors.toList());
+            .stream()
+            .map(MongoOhlcvBar::toOhlcvBar)
+            .collect(Collectors.toList());
     }
 
     @Override

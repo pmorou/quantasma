@@ -64,25 +64,25 @@ public class DataUpdateListener implements IStrategy {
 
         eventPublisher.publish(Event.openedPositions(openedPositions));
         eventPublisher.publish(Event.accountState(
-                new AccountState(history.getEquity(),
-                                 account.getBalance(),
-                                 MathUtils.round(profitLoss, 2),
-                                 MathUtils.round(totalAmount, 3),
-                                 MathUtils.round(account.getUsedMargin(), 2),
-                                 account.getAccountCurrency().getCurrencyCode(),
-                                 account.getLeverage())));
+            new AccountState(history.getEquity(),
+                account.getBalance(),
+                MathUtils.round(profitLoss, 2),
+                MathUtils.round(totalAmount, 3),
+                MathUtils.round(account.getUsedMargin(), 2),
+                account.getAccountCurrency().getCurrencyCode(),
+                account.getLeverage())));
     }
 
     private static OpenedPosition createOpenedPosition(IOrder order) {
         return new OpenedPosition(
-                order.getInstrument().getName(),
-                order.getOrderCommand().isLong() ? Direction.LONG : Direction.SHORT,
-                order.getAmount(),
-                order.getOpenPrice(),
-                order.getStopLossPrice(),
-                order.getTakeProfitPrice(),
-                order.getProfitLossInPips(),
-                order.getProfitLossInAccountCurrency());
+            order.getInstrument().getName(),
+            order.getOrderCommand().isLong() ? Direction.LONG : Direction.SHORT,
+            order.getAmount(),
+            order.getOpenPrice(),
+            order.getStopLossPrice(),
+            order.getTakeProfitPrice(),
+            order.getProfitLossInPips(),
+            order.getProfitLossInAccountCurrency());
     }
 
     @Override
@@ -98,10 +98,10 @@ public class DataUpdateListener implements IStrategy {
     @Override
     public void onTick(Instrument instrument, ITick tick) throws JFException {
         eventPublisher.publish(Event.quote(
-                Quote.bidAsk(symbol(instrument),
-                             time(tick),
-                             tick.getBid(),
-                             tick.getAsk())));
+            Quote.bidAsk(symbol(instrument),
+                time(tick),
+                tick.getBid(),
+                tick.getAsk())));
 
         triggerAccountRelatedEvents();
     }

@@ -23,9 +23,9 @@ public class BaseBidAskBar extends BaseOneSidedBar implements BidAskBar {
     }
 
     public BaseBidAskBar(Duration timePeriod, ZonedDateTime endTime,
-                         Num bidOpenPrice, Num bidHighPrice, Num bidLowPrice, Num bidClosePrice,
-                         Num askOpenPrice, Num askMaxPrice, Num askMinPrice, Num askClosePrice,
-                         Num volume, Num amount) {
+        Num bidOpenPrice, Num bidHighPrice, Num bidLowPrice, Num bidClosePrice,
+        Num askOpenPrice, Num askMaxPrice, Num askMinPrice, Num askClosePrice,
+        Num volume, Num amount) {
         super(timePeriod, endTime, bidOpenPrice, bidHighPrice, bidLowPrice, bidClosePrice, volume, amount);
         this.askOpenPrice = askOpenPrice;
         this.askMaxPrice = askMaxPrice;
@@ -78,16 +78,16 @@ public class BaseBidAskBar extends BaseOneSidedBar implements BidAskBar {
     public String toString() {
         return String.format("{end time: %1s, bid close price: %2$f, bid open price: %3$f, bid min price: %4$f, bid max price: %5$f, "
                              + "ask close price: %6$f, ask open price: %7$f, ask min price: %8$f, ask max price: %9$f, volume: %10$f}",
-                             getEndTime().withZoneSameInstant(ZoneId.systemDefault()),
-                             getClosePrice().doubleValue(),
-                             getOpenPrice().doubleValue(),
-                             getMinPrice().doubleValue(),
-                             getMaxPrice().doubleValue(),
-                             getAskClosePrice().doubleValue(),
-                             getAskOpenPrice().doubleValue(),
-                             getAskMinPrice().doubleValue(),
-                             getAskMaxPrice().doubleValue(),
-                             getVolume().doubleValue());
+            getEndTime().withZoneSameInstant(ZoneId.systemDefault()),
+            getClosePrice().doubleValue(),
+            getOpenPrice().doubleValue(),
+            getMinPrice().doubleValue(),
+            getMaxPrice().doubleValue(),
+            getAskClosePrice().doubleValue(),
+            getAskOpenPrice().doubleValue(),
+            getAskMinPrice().doubleValue(),
+            getAskMaxPrice().doubleValue(),
+            getVolume().doubleValue());
     }
 
     public static class GenericConstructor<T> extends GenericNumMethod<T> {
@@ -96,13 +96,13 @@ public class BaseBidAskBar extends BaseOneSidedBar implements BidAskBar {
         }
 
         public BaseBidAskBar create(Duration timePeriod, ZonedDateTime endTime,
-                                    T bidOpenPrice, T bidHighPrice, T bidLowPrice, T bidClosePrice,
-                                    T askOpenPrice, T askHighPrice, T askLowPrice, T askClosePrice,
-                                    T volume, T amount) {
+            T bidOpenPrice, T bidHighPrice, T bidLowPrice, T bidClosePrice,
+            T askOpenPrice, T askHighPrice, T askLowPrice, T askClosePrice,
+            T volume, T amount) {
             return new BaseBidAskBar(timePeriod, endTime,
-                                     transform(bidOpenPrice), transform(bidHighPrice), transform(bidLowPrice), transform(bidClosePrice),
-                                     transform(askOpenPrice), transform(askHighPrice), transform(askLowPrice), transform(askClosePrice),
-                                     transform(volume), transform(amount));
+                transform(bidOpenPrice), transform(bidHighPrice), transform(bidLowPrice), transform(bidClosePrice),
+                transform(askOpenPrice), transform(askHighPrice), transform(askLowPrice), transform(askClosePrice),
+                transform(volume), transform(amount));
         }
 
         public static <T> GenericConstructor<T> from(Argument<T> context, Function<Number, Num> numFunction) {

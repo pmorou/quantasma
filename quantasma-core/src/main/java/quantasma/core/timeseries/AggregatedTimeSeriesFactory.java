@@ -21,9 +21,9 @@ public class AggregatedTimeSeriesFactory<B extends OneSidedBar> implements TimeS
         return timeSeriesDefinition -> new BaseAggregatedTimeSeries.Builder<>(mainTimeSeries.getSymbol(),
                                                                               timeSeriesDefinition.getBarPeriod(),
                                                                               mainTimeSeries)
-                .withMaxBarCount(timeSeriesDefinition.getMaxBarCount())
-                .withName(timeSeriesDefinition.getBarPeriod().getPeriodCode())
-                .withBarFactory(mainTimeSeries.getBarFactory())
-                .build();
+            .withMaxBarCount(timeSeriesDefinition.getMaxBarCount())
+            .withName(timeSeriesDefinition.getBarPeriod().getPeriodCode())
+            .withBarFactory(mainTimeSeries.getBarFactory())
+            .build();
     }
 }
