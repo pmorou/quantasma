@@ -1,9 +1,13 @@
 ### compiled output ###
-**/target/
+**/target/*
 **/resources/public/
 **/dist
 */tmp
 */out-tsc
+
+### generated sources ###
+!**/target/generated-sources/
+!**/target/generated-sources/jooq/
 
 ### dependencies ##
 **/node_modules
