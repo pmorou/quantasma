@@ -266,7 +266,7 @@
 
                 <configuration>
                     <jdbc>
-                        <driver>org.postgresql.Driver</driver>
+                        <driver>${spring.datasource.driverClassName}</driver>
                         <url>${jooq.gen-container.url}</url>
                         <user>${jooq.gen-container.username}</user>
                         <password>${jooq.gen-container.password}</password>
