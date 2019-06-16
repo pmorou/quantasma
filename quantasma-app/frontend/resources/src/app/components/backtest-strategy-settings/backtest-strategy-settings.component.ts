@@ -92,4 +92,17 @@ export class BacktestStrategySettingsComponent implements OnInit {
       )
     });
   }
+
+  // Provides valid type for the <input> tag.
+  resolveInputType(javaType: string) {
+    switch (javaType) {
+      case "Integer":
+        return "number";
+      case "String":
+        return "string";
+      default:
+        console.error(`Unsupported parameter type: <${javaType}>`)
+        return "string";
+    }
+  }
 }

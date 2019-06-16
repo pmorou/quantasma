@@ -10,8 +10,8 @@
       <div *ngFor="let item of parameters.controls; let paramIndex=index" [formGroupName]="paramIndex">
         <li *ngFor="let param of availableParameters">
           <div *ngIf="param.name == item.value.name">
-            {{ param.name }} ({{ param.type }})<br />
-            <input formControlName="value"/>
+            {{ param.name }}<br />
+            <input formControlName="value" [type]="resolveInputType(param.type)"/>
           </div>
         </li>
       </div>
