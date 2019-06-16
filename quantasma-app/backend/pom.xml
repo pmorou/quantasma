@@ -181,6 +181,7 @@
 
     <build>
         <plugins>
+            <!-- Builds application archive -->
             <plugin>
                 <artifactId>maven-shade-plugin</artifactId>
                 <executions>
@@ -231,6 +232,7 @@
                 </configuration>
             </plugin>
 
+            <!-- Makes properties from the application.yml file available in the pom.xml -->
             <plugin>
                 <groupId>it.ozimov</groupId>
                 <artifactId>yaml-properties-maven-plugin</artifactId>
@@ -250,6 +252,7 @@
                 </executions>
             </plugin>
 
+            <!-- Generates DAO layer files using postgres db stub -->
             <plugin>
                 <groupId>org.jooq</groupId>
                 <artifactId>jooq-codegen-maven</artifactId>
@@ -305,6 +308,7 @@
                 </dependencies>
             </plugin>
 
+            <!-- Adds DAO layer generated files to the project sources -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>build-helper-maven-plugin</artifactId>
