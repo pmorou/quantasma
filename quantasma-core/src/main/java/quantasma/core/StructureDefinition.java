@@ -1,15 +1,15 @@
 package quantasma.core;
 
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import quantasma.core.timeseries.TimeSeriesDefinition;
 import quantasma.core.timeseries.bar.BarFactory;
 import quantasma.core.timeseries.bar.OneSidedBar;
 
 import java.util.Objects;
 
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 @Getter
 public class StructureDefinition<B extends OneSidedBar> {
     private final Model<B> model;
@@ -19,7 +19,7 @@ public class StructureDefinition<B extends OneSidedBar> {
         return new Model<>(Objects.requireNonNull(barFactory));
     }
 
-    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
     @Getter
     public static class Model<B extends OneSidedBar> {
         private final BarFactory<B> barFactory;
@@ -30,7 +30,7 @@ public class StructureDefinition<B extends OneSidedBar> {
         }
     }
 
-    @AllArgsConstructor(access = AccessLevel.PRIVATE)
+    @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
     @Getter
     public static class Resolution {
         private final TimeSeriesDefinition timeSeriesDefinition;

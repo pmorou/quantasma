@@ -1,13 +1,13 @@
 package quantasma.core;
 
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 import java.time.ZonedDateTime;
 
 @Data
-@AllArgsConstructor(access = AccessLevel.PROTECTED)
+@RequiredArgsConstructor(access = AccessLevel.PROTECTED)
 public class Quote {
     private final String symbol;
     private final ZonedDateTime time;

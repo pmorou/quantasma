@@ -1,13 +1,13 @@
 package quantasma.app.model;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import quantasma.core.BarPeriod;
 
 import java.time.Instant;
 
 @Getter
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class FeedBarsSettings {
     private final String symbol;
     private final BarPeriod barPeriod;

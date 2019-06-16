@@ -1,11 +1,11 @@
 package quantasma.app.model;
 
 import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 
 @Getter
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
+@RequiredArgsConstructor(access = AccessLevel.PRIVATE)
 public class FeedHistoricalBarsResponse {
     private static final FeedHistoricalBarsResponse ACCEPTED = new FeedHistoricalBarsResponse(Status.ACCEPTED);
     private static final FeedHistoricalBarsResponse DECLINED = new FeedHistoricalBarsResponse(Status.DECLINED);

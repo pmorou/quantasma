@@ -1,7 +1,7 @@
 package quantasma.app.event;
 
-import lombok.AllArgsConstructor;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import org.springframework.http.codec.ServerSentEvent;
 import quantasma.integrations.event.Event;
 
@@ -25,7 +25,7 @@ public interface SseEvent<D> extends Event<D> {
         return event -> SseEvent.create(event).sse();
     }
 
-    @AllArgsConstructor
+    @RequiredArgsConstructor
     class EventWrapper<D> implements SseEvent<D> {
         @Getter
         private final Event<D> event;

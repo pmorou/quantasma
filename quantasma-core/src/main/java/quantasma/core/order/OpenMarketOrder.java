@@ -1,11 +1,11 @@
 package quantasma.core.order;
 
-import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 import org.ta4j.core.Order;
 
 @Data
-@AllArgsConstructor
+@RequiredArgsConstructor
 public class OpenMarketOrder implements MarketOrder {
     private final String label;
     private final double volume;
