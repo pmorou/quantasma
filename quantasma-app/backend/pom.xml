@@ -16,7 +16,11 @@
     <properties>
         <spring-boot.version>2.1.1.RELEASE</spring-boot.version>
         <yaml-properties-maven-plugin.version>1.1.3</yaml-properties-maven-plugin.version>
+        <jooq.version>3.11.11</jooq.version>
+        <javax-persistence-api.version>2.2</javax-persistence-api.version>
         <postgres.version>42.2.5</postgres.version>
+        <fakemongo.version>2.1.1</fakemongo.version>
+        <flyway-core.version>5.2.4</flyway-core.version>
     </properties>
 
     <dependencyManagement>
@@ -62,21 +66,21 @@
             <artifactId>spring-boot-starter-jooq</artifactId>
             <exclusions>
                 <exclusion>
-                        <groupId>org.jooq</groupId>
-                        <artifactId>jooq</artifactId>
+                    <groupId>org.jooq</groupId>
+                    <artifactId>jooq</artifactId>
                 </exclusion>
             </exclusions>
         </dependency>
         <dependency>
             <groupId>org.jooq</groupId>
             <artifactId>jooq</artifactId>
-            <version>3.11.11</version>
+            <version>${jooq.version}</version>
             <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>javax.persistence</groupId>
             <artifactId>javax.persistence-api</artifactId>
-            <version>2.2</version>
+            <version>${javax-persistence-api.version}</version>
         </dependency>
 
         <dependency>
@@ -109,12 +113,12 @@
         <dependency>
             <groupId>org.flywaydb</groupId>
             <artifactId>flyway-core</artifactId>
-            <version>5.2.4</version>
+            <version>${flyway-core.version}</version>
         </dependency>
         <dependency>
             <groupId>com.github.fakemongo</groupId>
             <artifactId>fongo</artifactId>
-            <version>2.1.1</version>
+            <version>${fakemongo.version}</version>
         </dependency>
 
 
