@@ -1,5 +1,8 @@
 package quantasma.examples.builders;
 
+import lombok.Getter;
+import lombok.RequiredArgsConstructor;
+import lombok.experimental.Accessors;
 import org.ta4j.core.Order;
 import org.ta4j.core.Rule;
 import org.ta4j.core.TradingRecord;
@@ -48,19 +51,14 @@ public class RSIStrategyChild extends RSIStrategy {
         }
     }
 
+    @RequiredArgsConstructor
+    @Getter
+    @Accessors(fluent = true)
     public enum Parameter implements Parameterizable {
-        UNDEFINED(Object.class);
+        UNDEFINED(Object.class, null);
 
-        private final Class<?> clazz;
-
-        Parameter(Class<?> clazz) {
-            this.clazz = clazz;
-        }
-
-        @Override
-        public Class<?> clazz() {
-            return clazz;
-        }
+        private final Class<?> javaType;
+        private final ParameterDefinition parameterDefinition;
     }
 
     protected static class EmptyRule implements Rule {

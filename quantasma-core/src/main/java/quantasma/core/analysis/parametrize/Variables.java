@@ -99,9 +99,9 @@ public class Variables<P extends Enum & Parameterizable> {
     }
 
     public static <P extends Enum & Parameterizable> void addValues(Variables<P> var, P parameter, Object[] values) {
-        if (parameter.clazz() == String.class) {
+        if (parameter.javaType() == String.class) {
             var._String(parameter).values(castArray(values));
-        } else if (parameter.clazz() == Integer.class) {
+        } else if (parameter.javaType() == Integer.class) {
             var._int(parameter).values(castArray(values));
         } else {
             throw new IllegalArgumentException();

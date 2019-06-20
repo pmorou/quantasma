@@ -1,7 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core';
 import { FormArray, FormBuilder, FormGroup, Validators } from "@angular/forms";
 import { BacktestService } from "../../services/backtest.service";
-import { ParameterDescription } from "../../models/parameter-description.model";
+import { ParameterDefinition, ParameterDescription, ParameterType }  from "../../models/parameter-description.model";
 import { Criterion } from "../../models/criterion.model";
 import { TimeWindow } from "../../models/time-window.model";
 
@@ -21,7 +21,8 @@ export class BacktestStrategySettingsComponent implements OnInit {
   @Output()
   testFinished = new EventEmitter();
 
-  backtestForm: FormGroup = FormGroup.prototype;
+  backtestForm: FormGroup;
+
   status: string = "ready";
   availableTimeWindows: TimeWindow[] = [
     {name: '1 day', value: 'P1D'},
@@ -61,7 +62,10 @@ export class BacktestStrategySettingsComponent implements OnInit {
   }
 
   addParameter(name: string) {
-    this.parameters.push(this.formBuilder.group({name: [name, Validators.required], value: ['', Validators.required]}));
+    this.parameters.push(this.formBuilder.group({
+      name: [name, Validators.required],
+      value: ['', Validators.required]
+    }));
   }
 
   get criterions() {
@@ -69,7 +73,10 @@ export class BacktestStrategySettingsComponent implements OnInit {
   }
 
   addCriterion(name: string) {
-    this.criterions.push(this.formBuilder.group({name: [name, Validators.required], value: ['true', Validators.required]}));
+    this.criterions.push(this.formBuilder.group({
+      name: [name, Validators.required],
+      value: ['true', Validators.required]
+    }));
   }
 
   deleteCriterions(index: number) {
@@ -87,22 +94,37 @@ export class BacktestStrategySettingsComponent implements OnInit {
       ),
       parameters: this.formBuilder.array(
         this.availableParameters
-        .map(param => Object.assign({value: ''}, {name: param.name}))
+        .map(param => ({value: '', name: param.name}))
         .map(obj => this.formBuilder.group(obj))
       )
     });
   }
 
-  // Provides valid type for the <input> tag.
-  resolveInputType(javaType: string) {
-    switch (javaType) {
-      case "Integer":
-        return "number";
-      case "String":
-        return "string";
+  findParameterDefinition(parameterName: string): ParameterDefinition {
+    const parameterDescription:ParameterDescription = this.findParameterDescription(parameterName);
+    return parameterDescription.parameterDefinition || {};
+  }
+
+  /**
+   * Provides nature type of the input component.
+   */
+  resolveType(parameterName: string): ParameterType | undefined {
+    const parameter: ParameterDescription = this.findParameterDescription(parameterName);
+
+    const parameterType: ParameterType | undefined =
+      parameter.parameterDefinition && parameter.parameterDefinition.parameterType;
+
+    switch (parameterType) {
+      case "NUMBER":
+      case "TEXT":
+      case "DICTIONARY":
+        return parameterType;
       default:
-        console.error(`Unsupported parameter type: <${javaType}>`)
-        return "string";
+        return undefined;
     }
+  }
+
+  findParameterDescription(parameterName: string): ParameterDescription {
+    return this.availableParameters.find(p => p.name === parameterName) || {};
   }
 }

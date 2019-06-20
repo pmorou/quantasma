@@ -52,7 +52,7 @@ public class InMemoryStrategyControl implements StrategyControl {
             .stream()
             .map(entry -> new StrategyDescription.Parameter(
                 entry.getKey().name(),
-                entry.getKey().clazz().getSimpleName(),
+                entry.getKey().javaType().getSimpleName(),
                 entry.getValue()))
             .collect(Collectors.toList());
     }

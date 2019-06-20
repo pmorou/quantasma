@@ -18,7 +18,10 @@ public class BacktestScenario {
             strategyBacktest.getClass().getSimpleName(),
             strategyBacktest.strategy().getSimpleName(),
             Arrays.stream(strategyBacktest.parameterizables())
-                .map(parameter -> new ParameterDescription(parameter.name(), parameter.clazz().getSimpleName()))
+                .map(parameter -> new ParameterDescription(
+                    parameter.name(),
+                    parameter.javaType().getSimpleName(),
+                    parameter.parameterDefinition()))
                 .collect(Collectors.toList()));
     }
 }

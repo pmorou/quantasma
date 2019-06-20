@@ -1,4 +1,4 @@
-import {Component, OnInit, ViewChild} from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { ActivatedRoute } from "@angular/router";
 import { BacktestService } from "../../services/backtest.service";
 import { Backtest } from "../../models/backtest.model";
@@ -37,7 +37,7 @@ export class BacktestStrategyViewComponent implements OnInit {
       tap(value => {
         this.availableCriterions = value;
       })
-    ).subscribe(() => !!this.backtestSettings ? this.backtestSettings.renderForm() : {});
+    ).subscribe(() => this.backtestSettings && this.backtestSettings.renderForm());
   }
 
   testFinished($event: any[]) {

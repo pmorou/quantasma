@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 import { Criterion } from "../models/criterion.model";
 import { map } from "rxjs/internal/operators";
-import { Observable } from "rxjs/index";
+import { Observable } from "rxjs";
 import { Backtest } from "../models/backtest.model";
 
 @Injectable({

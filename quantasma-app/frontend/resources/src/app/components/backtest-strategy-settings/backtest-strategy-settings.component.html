@@ -6,16 +6,18 @@
   <p><strong>Parameters:</strong></p>
 
   <div formArrayName="parameters">
-    <ul>
-      <div *ngFor="let item of parameters.controls; let paramIndex=index" [formGroupName]="paramIndex">
-        <li *ngFor="let param of availableParameters">
-          <div *ngIf="param.name == item.value.name">
-            {{ param.name }}<br />
-            <input formControlName="value" [type]="resolveInputType(param.type)"/>
-          </div>
-        </li>
-      </div>
-    </ul>
+    <table>
+      <tr *ngFor="let item of parameters.controls; let paramIndex=index" [formGroupName]="paramIndex">
+        <td>{{ item.value.name }}</td>
+        <td>
+          <input *ngIf="resolveType(item.value.name) === 'TEXT'" type="text" formControlName="value"/>
+          <input *ngIf="resolveType(item.value.name) === 'NUMBER'" type="number"
+                 [min]="findParameterDefinition(item.value.name).min"
+                 [max]="findParameterDefinition(item.value.name).max" formControlName="value"/>
+          <select *ngIf="resolveType(item.value.name) === 'DICTIONARY'" formControlName="value"></select>
+        </td>
+      </tr>
+    </table>
   </div>
 
   <p><strong>Criterions:</strong></p>

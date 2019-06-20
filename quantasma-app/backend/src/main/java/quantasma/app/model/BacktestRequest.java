@@ -53,9 +53,9 @@ public class BacktestRequest {
             return Arrays.stream(values.split(","))
                 .map(String::trim)
                 .map(value -> {
-                    if (parameter.clazz() == String.class) {
+                    if (parameter.javaType() == String.class) {
                         return value;
-                    } else if (parameter.clazz() == Integer.class) {
+                    } else if (parameter.javaType() == Integer.class) {
                         return Integer.parseInt(value);
                     } else {
                         throw new IllegalArgumentException(String.format("Unsupported type for parameter [%s]", value));

@@ -1,7 +1,9 @@
 package quantasma.examples;
 
 import lombok.AccessLevel;
+import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import lombok.experimental.Accessors;
 import lombok.extern.slf4j.Slf4j;
 import org.ta4j.core.Order;
 import org.ta4j.core.Rule;
@@ -120,22 +122,17 @@ public abstract class RSIStrategy extends BaseTradeStrategy {
     /**
      * Allowed parametrization settings
      */
+    @RequiredArgsConstructor
+    @Getter
+    @Accessors(fluent = true)
     public enum Parameter implements Parameterizable {
-        RSI_LOWER_BOUND(Integer.class),
-        RSI_UPPER_BOUND(Integer.class),
-        RSI_PERIOD(Integer.class),
-        TRADE_SYMBOL(String.class);
+        RSI_LOWER_BOUND(Integer.class, Number.builder().min(1).max(100).build()),
+        RSI_UPPER_BOUND(Integer.class, Number.builder().min(1).max(100).build()),
+        RSI_PERIOD(Integer.class, Number.builder().min(1).max(100).build()),
+        TRADE_SYMBOL(String.class, Dictionary.builder().source("INSTRUMENTS").build()); // resolved somehow (store in enum?) or use supplier?
 
-        private final Class<?> clazz;
-
-        Parameter(Class<?> clazz) {
-            this.clazz = clazz;
-        }
-
-        @Override
-        public Class<?> clazz() {
-            return clazz;
-        }
+        private final Class<?> javaType;
+        private final ParameterDefinition parameterDefinition;
     }
 
 }
