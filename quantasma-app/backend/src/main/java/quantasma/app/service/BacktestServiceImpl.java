@@ -46,7 +46,7 @@ public class BacktestServiceImpl implements BacktestService {
             .orElseThrow(unknownBacktest(name));
     }
 
-    private Supplier<IllegalArgumentException> unknownBacktest(@PathVariable String name) {
+    private static Supplier<IllegalArgumentException> unknownBacktest(@PathVariable String name) {
         return () -> new IllegalArgumentException(String.format("Unknown backtest: %s", name));
     }
 
