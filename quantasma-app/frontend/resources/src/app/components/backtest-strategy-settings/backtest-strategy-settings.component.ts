@@ -79,7 +79,7 @@ export class BacktestStrategySettingsComponent implements OnInit {
     }));
   }
 
-  deleteCriterions(index: number) {
+  deleteCriterion(index: number) {
     this.criterions.removeAt(index);
   }
 
