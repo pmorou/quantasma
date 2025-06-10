@@ -21,7 +21,8 @@ public class MockMongoConfig {
 
     @Bean
     public MongoTemplate mongoTemplate() {
-        return new MongoTemplate(new Fongo("mock").getMongo(), "mock");
+        throw new UnsupportedOperationException("Not supported yet.");
+//        return new MongoTemplate(new Fongo("mock").getMongo(), "mock");
     }
 
 }

@@ -15,28 +15,30 @@
     <packaging>pom</packaging>
 
     <properties>
-        <spring-boot.version>2.1.1.RELEASE</spring-boot.version>
+        <spring-boot.version>3.5.0</spring-boot.version>
     </properties>
 
     <build>
         <plugins>
-            <plugin>
-                <artifactId>exec-maven-plugin</artifactId>
-                <groupId>org.codehaus.mojo</groupId>
-                <executions>
-                    <execution>
-                        <id>Build frontend distribution</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>exec</goal>
-                        </goals>
-                        <configuration>
-                            <executable>./build_frontend.sh</executable>
-                            <workingDirectory>frontend/resources</workingDirectory>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
+
+            <!-- disable temporarily -->
+<!--            <plugin>-->
+<!--                <artifactId>exec-maven-plugin</artifactId>-->
+<!--                <groupId>org.codehaus.mojo</groupId>-->
+<!--                <executions>-->
+<!--                    <execution>-->
+<!--                        <id>Build frontend distribution</id>-->
+<!--                        <phase>generate-sources</phase>-->
+<!--                        <goals>-->
+<!--                            <goal>exec</goal>-->
+<!--                        </goals>-->
+<!--                        <configuration>-->
+<!--                            <executable>./build_frontend.sh</executable>-->
+<!--                            <workingDirectory>frontend/resources</workingDirectory>-->
+<!--                        </configuration>-->
+<!--                    </execution>-->
+<!--                </executions>-->
+<!--            </plugin>-->
         </plugins>
     </build>
 </project>
