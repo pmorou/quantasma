@@ -1,44 +1,24 @@
 package quantasma.core.timeseries;
 
 import org.ta4j.core.Bar;
-import org.ta4j.core.TimeSeries;
+import org.ta4j.core.BarBuilder;
+import org.ta4j.core.BarSeries;
 import org.ta4j.core.num.Num;
+import org.ta4j.core.num.NumFactory;
 import quantasma.core.timeseries.bar.UnmodifiableBar;
 
-import java.time.Duration;
-import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 public final class UnmodifiableTimeSeries extends ForwardingTimeSeries {
 
-    public UnmodifiableTimeSeries(TimeSeries timeSeries) {
-        super(timeSeries);
+    public UnmodifiableTimeSeries(BarSeries barSeries) {
+        super(barSeries);
     }
 
     @Override
     public void addBar(Bar bar, boolean replace) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void addBar(Duration timePeriod, ZonedDateTime endTime) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void addBar(ZonedDateTime endTime, Num openPrice, Num highPrice, Num lowPrice, Num closePrice, Num volume, Num amount) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void addBar(Duration timePeriod, ZonedDateTime endTime, Num openPrice, Num highPrice, Num lowPrice, Num closePrice, Num volume) {
-        throw new UnsupportedOperationException();
-    }
-
-    @Override
-    public void addBar(Duration timePeriod, ZonedDateTime endTime, Num openPrice, Num highPrice, Num lowPrice, Num closePrice, Num volume, Num amount) {
         throw new UnsupportedOperationException();
     }
 
@@ -53,7 +33,7 @@ public final class UnmodifiableTimeSeries extends ForwardingTimeSeries {
     }
 
     @Override
-    public TimeSeries getSubSeries(int startIndex, int endIndex) {
+    public BarSeries getSubSeries(int startIndex, int endIndex) {
         return new UnmodifiableTimeSeries(delegate().getSubSeries(startIndex, endIndex));
     }
 
@@ -64,6 +44,16 @@ public final class UnmodifiableTimeSeries extends ForwardingTimeSeries {
             .map(UnmodifiableBar::new)
             .collect(Collectors.collectingAndThen(Collectors.toList(),
                 Collections::unmodifiableList));
+    }
+
+    @Override
+    public NumFactory numFactory() {
+        return delegate().numFactory();
+    }
+
+    @Override
+    public BarBuilder barBuilder() {
+        throw new UnsupportedOperationException();
     }
 
     @Override

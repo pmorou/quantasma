@@ -1,11 +1,7 @@
 package quantasma.core;
 
 import lombok.extern.slf4j.Slf4j;
-import org.ta4j.core.BaseTradingRecord;
-import org.ta4j.core.Order;
-import org.ta4j.core.Rule;
-import org.ta4j.core.Strategy;
-import org.ta4j.core.TradingRecord;
+import org.ta4j.core.*;
 import org.ta4j.core.num.Num;
 import quantasma.core.analysis.parametrize.Parameterizable;
 import quantasma.core.analysis.parametrize.Values;
@@ -29,19 +25,19 @@ public class TestManager<B extends OneSidedBar> {
             .collect(Collectors.toSet());
     }
 
-    public TradingRecord run(TradeStrategy tradeStrategy, Order.OrderType orderType) {
-        return run(tradeStrategy, orderType, getMainTimeSeries(tradeStrategy).getBeginIndex(), getMainTimeSeries(tradeStrategy).getEndIndex());
+    public TradingRecord run(TradeStrategy tradeStrategy, Trade.TradeType tradeType) {
+        return run(tradeStrategy, tradeType, getMainTimeSeries(tradeStrategy).getBeginIndex(), getMainTimeSeries(tradeStrategy).getEndIndex());
     }
 
     public MainTimeSeries getMainTimeSeries(TradeStrategy tradeStrategy) {
         return marketData.of(tradeStrategy.getTradeSymbol()).getMainTimeSeries();
     }
 
-    private TradingRecord run(TradeStrategy tradeStrategy, Order.OrderType orderType, int startIndex, int finishIndex) {
-        return runTest(new IterateOverTimeSeries(tradeStrategy), orderType, startIndex, finishIndex);
+    private TradingRecord run(TradeStrategy tradeStrategy, Trade.TradeType tradeType, int startIndex, int finishIndex) {
+        return runTest(new IterateOverTimeSeries(tradeStrategy), tradeType, startIndex, finishIndex);
     }
 
-    private TradingRecord runTest(TradeStrategy tradeStrategy, Order.OrderType orderType, int startIndex, int finishIndex) {
+    private TradingRecord runTest(TradeStrategy tradeStrategy, Trade.TradeType tradeType, int startIndex, int finishIndex) {
         final MainTimeSeries mainTimeSeries = getMainTimeSeries(tradeStrategy);
         if (mainTimeSeries.isEmpty()) {
             throw new RuntimeException("Empty time series");
@@ -50,8 +46,8 @@ public class TestManager<B extends OneSidedBar> {
         final int runBeginIndex = Math.max(startIndex, mainTimeSeries.getBeginIndex());
         final int runEndIndex = Math.min(finishIndex, mainTimeSeries.getEndIndex());
 
-        log.trace("Running trade strategy (indexes: {} -> {}): {} (starting with {})", runBeginIndex, runEndIndex, tradeStrategy, orderType);
-        final TradingRecord tradingRecord = new BaseTradingRecord(orderType);
+        log.trace("Running trade strategy (indexes: {} -> {}): {} (starting with {})", runBeginIndex, runEndIndex, tradeStrategy, tradeType);
+        final TradingRecord tradingRecord = new BaseTradingRecord(tradeType);
         for (int i = runBeginIndex; i <= runEndIndex; i++) {
             if (tradeStrategy.shouldOperate(i, tradingRecord)) {
                 tradingRecord.operate(i, mainTimeSeries.getBar(i).getClosePrice(), tradeStrategy.getAmount());
@@ -170,13 +166,13 @@ public class TestManager<B extends OneSidedBar> {
         }
 
         @Override
-        public void setUnstablePeriod(int unstablePeriod) {
-            strategy.setUnstablePeriod(unstablePeriod);
+        public void setUnstableBars(int unstableBars) {
+            strategy.setUnstableBars(unstableBars);
         }
 
         @Override
-        public int getUnstablePeriod() {
-            return strategy.getUnstablePeriod();
+        public int getUnstableBars() {
+            return strategy.getUnstableBars();
         }
 
         @Override

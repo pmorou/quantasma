@@ -125,8 +125,8 @@ class BaseOneSidedBarSpec extends Specification {
             beginTime != TIME
             endTime != TIME.plusMinutes(1)
             openPrice.doubleValue() == expectedValue
-            maxPrice.doubleValue() == expectedValue
-            minPrice.doubleValue() == expectedValue
+            highPrice.doubleValue() == expectedValue
+            lowPrice.doubleValue() == expectedValue
             closePrice.doubleValue() == expectedValue
             volume.doubleValue() == expectedValue
             amount.doubleValue() == expectedValue

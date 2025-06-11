@@ -18,4 +18,9 @@ public class BidClosePriceIndicator extends CachedIndicator<Num> {
     protected Num calculate(int index) {
         return timeSeries.getBar(index).getBidClosePrice();
     }
+
+    @Override
+    public int getCountOfUnstableBars() {
+        return 0;
+    }
 }

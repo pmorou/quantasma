@@ -1,12 +1,13 @@
 package quantasma.core.timeseries.bar;
 
 import org.ta4j.core.num.Num;
+import org.ta4j.core.num.NumFactory;
 import quantasma.core.timeseries.bar.generic.Argument;
 import quantasma.core.timeseries.bar.generic.GenericNumMethod;
 
 import java.time.Duration;
+import java.time.Instant;
 import java.time.ZoneId;
-import java.time.ZonedDateTime;
 import java.util.function.Function;
 
 public class BaseBidAskBar extends BaseOneSidedBar implements BidAskBar {
@@ -18,11 +19,11 @@ public class BaseBidAskBar extends BaseOneSidedBar implements BidAskBar {
     private Num askMinPrice;
     private Num askClosePrice;
 
-    public BaseBidAskBar(Duration timePeriod, ZonedDateTime endTime, Function<Number, Num> numFunction) {
-        super(timePeriod, endTime, numFunction);
+    public BaseBidAskBar(Duration timePeriod, Instant endTime, NumFactory numFactory) {
+        super(timePeriod, endTime, numFactory);
     }
 
-    public BaseBidAskBar(Duration timePeriod, ZonedDateTime endTime,
+    public BaseBidAskBar(Duration timePeriod, Instant endTime,
         Num bidOpenPrice, Num bidHighPrice, Num bidLowPrice, Num bidClosePrice,
         Num askOpenPrice, Num askMaxPrice, Num askMinPrice, Num askClosePrice,
         Num volume, Num amount) {
@@ -78,11 +79,11 @@ public class BaseBidAskBar extends BaseOneSidedBar implements BidAskBar {
     public String toString() {
         return String.format("{end time: %1s, bid close price: %2$f, bid open price: %3$f, bid min price: %4$f, bid max price: %5$f, "
                              + "ask close price: %6$f, ask open price: %7$f, ask min price: %8$f, ask max price: %9$f, volume: %10$f}",
-            getEndTime().withZoneSameInstant(ZoneId.systemDefault()),
+            getEndTime().atZone(ZoneId.systemDefault()),
             getClosePrice().doubleValue(),
             getOpenPrice().doubleValue(),
-            getMinPrice().doubleValue(),
-            getMaxPrice().doubleValue(),
+            getLowPrice().doubleValue(),
+            getHighPrice().doubleValue(),
             getAskClosePrice().doubleValue(),
             getAskOpenPrice().doubleValue(),
             getAskMinPrice().doubleValue(),
@@ -95,7 +96,7 @@ public class BaseBidAskBar extends BaseOneSidedBar implements BidAskBar {
             super(numFunction, context);
         }
 
-        public BaseBidAskBar create(Duration timePeriod, ZonedDateTime endTime,
+        public BaseBidAskBar create(Duration timePeriod, Instant endTime,
             T bidOpenPrice, T bidHighPrice, T bidLowPrice, T bidClosePrice,
             T askOpenPrice, T askHighPrice, T askLowPrice, T askClosePrice,
             T volume, T amount) {

@@ -7,12 +7,8 @@ import quantasma.core.Quote;
 import quantasma.core.timeseries.bar.BarFactory;
 import quantasma.core.timeseries.bar.OneSidedBar;
 
-import java.time.ZonedDateTime;
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.time.Instant;
+import java.util.*;
 import java.util.function.UnaryOperator;
 
 public class BaseMultipleTimeSeries<B extends OneSidedBar> implements MultipleTimeSeries<B> {
@@ -67,12 +63,12 @@ public class BaseMultipleTimeSeries<B extends OneSidedBar> implements MultipleTi
                 insertNewBar(quote.getTime(), barPeriod, timeSeries);
             }
             timeSeries.getLastBar()
-                .updateBar(quote, timeSeries.function());
+                .updateBar(quote);
         });
     }
 
     @Override
-    public void createBar(ZonedDateTime priceDate) {
+    public void createBar(Instant priceDate) {
         periodTimeSeriesMap.forEach((barPeriod, timeSeries) -> {
             if (empty(timeSeries)) {
                 insertNewBar(priceDate, barPeriod, timeSeries);
@@ -86,21 +82,21 @@ public class BaseMultipleTimeSeries<B extends OneSidedBar> implements MultipleTi
         return timeSeries.getBarCount() == 0;
     }
 
-    private void insertNewBar(ZonedDateTime priceDate, BarPeriod barPeriod, GenericTimeSeries<? super B> timeSeries) {
+    private void insertNewBar(Instant priceDate, BarPeriod barPeriod, GenericTimeSeries<? super B> timeSeries) {
         timeSeries.addBar(createBar(barPeriod, priceDate, timeSeries));
     }
 
-    private void insertNewBarWithLastPrice(ZonedDateTime priceDate, BarPeriod barPeriod, GenericTimeSeries<? super B> timeSeries) {
+    private void insertNewBarWithLastPrice(Instant priceDate, BarPeriod barPeriod, GenericTimeSeries<? super B> timeSeries) {
         final Num lastPrice = timeSeries.getLastBar().getClosePrice();
         timeSeries.addBar(createBar(barPeriod, priceDate, timeSeries));
         timeSeries.addPrice(lastPrice);
     }
 
-    private B createBar(BarPeriod barPeriod, ZonedDateTime endDate, GenericTimeSeries<? super B> timeSeries) {
-        return barFactory.create(barPeriod, timeSeries.function(), endDate);
+    private B createBar(BarPeriod barPeriod, Instant endDate, GenericTimeSeries<? super B> timeSeries) {
+        return barFactory.create(barPeriod, timeSeries.numFactory(), endDate);
     }
 
-    private static boolean isEqualOrAfter(ZonedDateTime date, ZonedDateTime withThis) {
+    private static boolean isEqualOrAfter(Instant date, Instant withThis) {
         return date.equals(withThis) || date.isAfter(withThis);
     }
 

@@ -1,9 +1,9 @@
 package quantasma.examples;
 
-import org.ta4j.core.Order;
 import org.ta4j.core.Rule;
-import org.ta4j.core.trading.rules.CrossedDownIndicatorRule;
-import org.ta4j.core.trading.rules.CrossedUpIndicatorRule;
+import org.ta4j.core.Trade;
+import org.ta4j.core.rules.CrossedDownIndicatorRule;
+import org.ta4j.core.rules.CrossedUpIndicatorRule;
 import quantasma.core.Context;
 import quantasma.core.analysis.parametrize.Values;
 
@@ -21,8 +21,8 @@ public class RSIBearishStrategy extends RSIStrategy {
     }
 
     @Override
-    protected Order.OrderType orderType() {
-        return Order.OrderType.SELL;
+    protected Trade.TradeType tradeType() {
+        return Trade.TradeType.SELL;
     }
 
     public static RSIBearishStrategy build(Context context, Values<Parameter> parameterValues) {
@@ -35,7 +35,7 @@ public class RSIBearishStrategy extends RSIStrategy {
             new CrossedUpIndicatorRule(rsiIndicator, rsiLowerBound),
             parameterValues)
             .withName(createName(RSIBearishStrategy.class, rsiLowerBound, rsiUpperBound))
-            .withUnstablePeriod(parameterValues.getInteger(Parameter.RSI_PERIOD))
+            .withUnstableBars(parameterValues.getInteger(Parameter.RSI_PERIOD))
             .withAmount(1000)
             .build();
     }

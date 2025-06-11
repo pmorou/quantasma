@@ -4,13 +4,13 @@ import org.ta4j.core.Bar;
 import org.ta4j.core.num.Num;
 
 import java.time.Duration;
-import java.time.ZonedDateTime;
+import java.time.Instant;
 
 public abstract class ForwardingBar implements Bar {
 
     private final Bar bar;
 
-    public ForwardingBar(Bar bar) {
+    ForwardingBar(Bar bar) {
         this.bar = bar;
     }
 
@@ -20,13 +20,13 @@ public abstract class ForwardingBar implements Bar {
     }
 
     @Override
-    public Num getMinPrice() {
-        return bar.getMinPrice();
+    public Num getLowPrice() {
+        return bar.getLowPrice();
     }
 
     @Override
-    public Num getMaxPrice() {
-        return bar.getMaxPrice();
+    public Num getHighPrice() {
+        return bar.getHighPrice();
     }
 
     @Override
@@ -40,7 +40,7 @@ public abstract class ForwardingBar implements Bar {
     }
 
     @Override
-    public int getTrades() {
+    public long getTrades() {
         return bar.getTrades();
     }
 
@@ -55,12 +55,12 @@ public abstract class ForwardingBar implements Bar {
     }
 
     @Override
-    public ZonedDateTime getBeginTime() {
+    public Instant getBeginTime() {
         return bar.getBeginTime();
     }
 
     @Override
-    public ZonedDateTime getEndTime() {
+    public Instant getEndTime() {
         return bar.getEndTime();
     }
 

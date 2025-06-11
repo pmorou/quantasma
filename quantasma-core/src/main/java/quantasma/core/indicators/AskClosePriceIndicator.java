@@ -18,4 +18,9 @@ public class AskClosePriceIndicator extends CachedIndicator<Num> {
     protected Num calculate(int index) {
         return timeSeries.getBar(index).getAskClosePrice();
     }
+
+    @Override
+    public int getCountOfUnstableBars() {
+        return 0;
+    }
 }

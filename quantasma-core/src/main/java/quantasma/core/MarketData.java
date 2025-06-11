@@ -1,10 +1,10 @@
 package quantasma.core;
 
-import quantasma.core.timeseries.MultipleTimeSeries;
 import quantasma.core.timeseries.GenericTimeSeries;
+import quantasma.core.timeseries.MultipleTimeSeries;
 import quantasma.core.timeseries.bar.OneSidedBar;
 
-import java.time.ZonedDateTime;
+import java.time.Instant;
 import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
@@ -55,7 +55,7 @@ public class MarketData<B extends OneSidedBar> {
         return multipleTimeSeries != null;
     }
 
-    private void ensureSameBarsNumberOverAllTimeSeries(String skipSymbol, ZonedDateTime dateToBeCoveredByBar) {
+    private void ensureSameBarsNumberOverAllTimeSeries(String skipSymbol, Instant dateToBeCoveredByBar) {
         multipleTimeSeriesMap.entrySet()
             .stream()
             .filter(skipTimeSeriesOf(skipSymbol))

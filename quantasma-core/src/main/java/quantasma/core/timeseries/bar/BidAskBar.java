@@ -3,13 +3,11 @@ package quantasma.core.timeseries.bar;
 import org.ta4j.core.num.Num;
 import quantasma.core.Quote;
 
-import java.util.function.Function;
-
 public interface BidAskBar extends OneSidedBar {
 
     @Override
-    default void updateBar(Quote quote, Function<Number, Num> numFunction) {
-        addPrice(numFunction.apply(quote.getBid()), numFunction.apply(quote.getAsk()));
+    default void updateBar(Quote quote) {
+        addPrice(quote.getBid(), quote.getAsk());
     }
 
     default Num getBidOpenPrice() {
@@ -17,11 +15,11 @@ public interface BidAskBar extends OneSidedBar {
     }
 
     default Num getBidMinPrice() {
-        return getMinPrice();
+        return getLowPrice();
     }
 
     default Num getBidMaxPrice() {
-        return getMaxPrice();
+        return getHighPrice();
     }
 
     default Num getBidClosePrice() {

@@ -1,12 +1,26 @@
-FROM adoptopenjdk/openjdk11:jdk-11.0.2.9-alpine-slim
+# Starting point
+FROM maven:3.9.4-eclipse-temurin-21 AS builder
 
-ARG APP_DIR=/opt/app
-RUN mkdir ${APP_DIR}
-WORKDIR ${APP_DIR}
+# Set up working directory
+WORKDIR /app
 
-ARG APP_JAR=quantasma-app-backend-0.0.1-SNAPSHOT.jar
-COPY target/${APP_JAR} quantasma-app.jar
+# Copy all project files
+COPY . .
 
-ENTRYPOINT ["java", "-jar", "quantasma-app.jar"]
+# Build an app
+RUN mvn clean package -DskipTests
 
+# JDK 21 ready image
+FROM eclipse-temurin:21-jdk
+
+# Set up working directory
+WORKDIR /app
+
+# Copy .jar from previous phase
+COPY --from=builder /app/target/*.jar app.jar
+
+# Expose port
 EXPOSE 8080
+
+# Default starting commands
+ENTRYPOINT ["java", "-jar", "app.jar"]

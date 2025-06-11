@@ -23,14 +23,19 @@ public class AverageLastValuesIndicator extends CachedIndicator<Num> {
 
     @Override
     protected Num calculate(int index) {
-        if (getTimeSeries().getBarCount() < lastValues) {
+        if (getBarSeries().getBarCount() < lastValues) {
             return NaN.NaN;
         }
 
         return IntStream.iterate(index, operand -> --operand)
             .mapToObj(indicator::getValue)
             .limit(lastValues)
-            .reduce(getTimeSeries().numOf(0), Num::plus)
-            .dividedBy(getTimeSeries().numOf(lastValues));
+            .reduce(getBarSeries().numFactory().zero(), Num::plus)
+            .dividedBy(getBarSeries().numFactory().numOf(lastValues));
+    }
+
+    @Override
+    public int getCountOfUnstableBars() {
+        return 0;
     }
 }

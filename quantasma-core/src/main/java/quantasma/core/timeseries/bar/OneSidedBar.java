@@ -4,21 +4,17 @@ import org.ta4j.core.Bar;
 import org.ta4j.core.num.Num;
 import quantasma.core.Quote;
 
-import java.util.function.Function;
-
 public interface OneSidedBar extends Bar {
 
-    default void updateBar(Quote quote, Function<Number, Num> numFunction) {
-        addPrice(numFunction.apply(quote.getBid()));
+    default void updateBar(Quote quote) {
+        addPrice(quote.getBid());
     }
-
-    Function<Number, Num> function();
 
     Num getOpenPrice();
 
-    Num getMinPrice();
+    Num getLowPrice();
 
-    Num getMaxPrice();
+    Num getHighPrice();
 
     Num getClosePrice();
 }

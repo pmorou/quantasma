@@ -24,7 +24,7 @@
         <maven.compiler.source>${java.version}</maven.compiler.source>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <ta4j.version>0.12</ta4j.version>
+        <ta4j.version>0.18</ta4j.version>
         <lombok.version>1.18.38</lombok.version>
         <groovy.version>3.0.25</groovy.version>
         <spock.version>2.3-groovy-4.0</spock.version>

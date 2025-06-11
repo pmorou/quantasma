@@ -57,10 +57,6 @@
             <artifactId>spring-boot-devtools</artifactId>
             <version>${spring-boot.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.springframework.boot</groupId>
-            <artifactId>spring-boot-starter-jooq</artifactId>
-        </dependency>
 
         <dependency>
             <groupId>quantasma</groupId>
@@ -227,81 +223,6 @@
                             <files>
                                 <file>src/main/resources/application.yml</file>
                             </files>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
-                <groupId>org.jooq</groupId>
-                <artifactId>jooq-codegen-maven</artifactId>
-                <version>3.11.9</version>
-                <executions>
-                    <execution>
-                        <id>generate-dao</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>generate</goal>
-                        </goals>
-                    </execution>
-                </executions>
-
-                <configuration>
-                    <jdbc>
-                        <driver>org.postgresql.Driver</driver>
-                        <url>${jooq.gen-container.url}</url>
-                        <user>${jooq.gen-container.username}</user>
-                        <password>${jooq.gen-container.password}</password>
-                    </jdbc>
-                    <generator>
-                        <database>
-                            <name>org.jooq.meta.postgres.PostgresDatabase</name>
-                            <includes>.*</includes>
-                            <excludes></excludes>
-                            <inputSchema>public</inputSchema>
-                        </database>
-                        <generate>
-                            <deprecated>false</deprecated>
-                            <javaTimeTypes>true</javaTimeTypes>
-                            <daos>true</daos>
-                            <pojos>true</pojos>
-                            <interfaces>true</interfaces>
-                            <relations>true</relations>
-                            <jpaAnnotations>true</jpaAnnotations>
-                            <jpaVersion>true</jpaVersion>
-                            <validationAnnotations>true</validationAnnotations>
-                        </generate>
-                        <target>
-                            <packageName>quantasma.app.db</packageName>
-                            <directory>${project.build.directory}/generated-sources/jooq/</directory>
-                        </target>
-                    </generator>
-                </configuration>
-
-                <dependencies>
-                    <dependency>
-                        <groupId>org.postgresql</groupId>
-                        <artifactId>postgresql</artifactId>
-                        <version>${postgres.version}</version>
-                    </dependency>
-                </dependencies>
-            </plugin>
-
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
-                <version>3.0.0</version>
-                <executions>
-                    <execution>
-                        <id>add-source</id>
-                        <phase>generate-sources</phase>
-                        <goals>
-                            <goal>add-source</goal>
-                        </goals>
-                        <configuration>
-                            <sources>
-                                <source>${project.build.directory}/generated-sources/jooq/</source>
-                            </sources>
                         </configuration>
                     </execution>
                 </executions>

@@ -1,6 +1,6 @@
 package quantasma.examples;
 
-import org.ta4j.core.Order;
+import org.ta4j.core.Trade;
 import org.ta4j.core.TradingRecord;
 import quantasma.core.BarPeriod;
 import quantasma.core.BaseContext;
@@ -42,7 +42,7 @@ public class BacktestExample {
         // Feed historical data by calling marketData.add()
 
         final TestManager manager = new TestManager<>(marketData);
-        final TradingRecord result = manager.run(rsiStrategy, Order.OrderType.BUY);
+        final TradingRecord result = manager.run(rsiStrategy, Trade.TradeType.BUY);
         // Proper criterion can be used now on the result
         // end::BacktestExample[]
     }

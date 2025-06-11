@@ -1,24 +1,25 @@
 package quantasma.core.timeseries;
 
-import org.ta4j.core.TimeSeries;
+import org.ta4j.core.BarSeries;
 import org.ta4j.core.num.Num;
+import org.ta4j.core.num.NumFactory;
 import quantasma.core.BarPeriod;
-import quantasma.core.timeseries.bar.OneSidedBar;
 import quantasma.core.timeseries.bar.BarFactory;
+import quantasma.core.timeseries.bar.OneSidedBar;
 
 import java.math.BigDecimal;
+import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
-import java.util.function.Function;
 
 public interface GenericTimeSeries<B extends OneSidedBar> {
 
     /**
-     * Returns unmodifiable view of plain {@link org.ta4j.core.TimeSeries} based on {@link org.ta4j.core.Bar}.
+     * Returns unmodifiable view of plain {@link org.ta4j.core.BarSeries} based on {@link org.ta4j.core.Bar}.
      *
      * @return TimeSeries
      * @implSpec Any mutation or replace action on inner objects (eg. {@code Bar}) will result in {@code UnsupportedOperationException}
      */
-    TimeSeries plainTimeSeries();
+    BarSeries plainTimeSeries();
 
     BarPeriod getBarPeriod();
 
@@ -37,7 +38,7 @@ public interface GenericTimeSeries<B extends OneSidedBar> {
     }
 
     default void addBar() {
-        addBar(getBarFactory().create(getBarPeriod(), function()));
+        addBar(getBarFactory().create(getBarPeriod(), numFactory()));
     }
 
     default void addBar(B bar) {
@@ -47,11 +48,11 @@ public interface GenericTimeSeries<B extends OneSidedBar> {
     void addBar(B bar, boolean replace);
 
     default void addTrade(Number tradeVolume, Number tradePrice) {
-        addTrade(numOf(tradeVolume), numOf(tradePrice));
+        addTrade(numFactory().numOf(tradeVolume), numFactory().numOf(tradePrice));
     }
 
     default void addTrade(String tradeVolume, String tradePrice) {
-        addTrade(numOf(new BigDecimal(tradeVolume)), numOf(new BigDecimal(tradePrice)));
+        addTrade(numFactory().numOf(new BigDecimal(tradeVolume)), numFactory().numOf(new BigDecimal(tradePrice)));
     }
 
     void addTrade(Num tradeVolume, Num tradePrice);
@@ -63,7 +64,7 @@ public interface GenericTimeSeries<B extends OneSidedBar> {
     }
 
     default void addPrice(Number price) {
-        addPrice(numOf(price));
+        addPrice(numFactory().numOf(price));
     }
 
     String getName();
@@ -83,9 +84,9 @@ public interface GenericTimeSeries<B extends OneSidedBar> {
         if (!isEmpty()) {
             OneSidedBar firstBar = getFirstBar();
             OneSidedBar lastBar = getLastBar();
-            sb.append(firstBar.getEndTime().format(DateTimeFormatter.ISO_DATE_TIME))
+            sb.append(firstBar.getEndTime().atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ISO_DATE_TIME))
                 .append(" - ")
-                .append(lastBar.getEndTime().format(DateTimeFormatter.ISO_DATE_TIME));
+                .append(lastBar.getEndTime().atZone(ZoneId.systemDefault()).format(DateTimeFormatter.ISO_DATE_TIME));
         }
         return sb.toString();
     }
@@ -96,7 +97,5 @@ public interface GenericTimeSeries<B extends OneSidedBar> {
 
     int getRemovedBarsCount();
 
-    Num numOf(Number number);
-
-    Function<Number, Num> function();
+    NumFactory numFactory();
 }

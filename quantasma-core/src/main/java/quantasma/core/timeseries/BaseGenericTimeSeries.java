@@ -3,10 +3,11 @@ package quantasma.core.timeseries;
 import lombok.AccessLevel;
 import lombok.Getter;
 import org.ta4j.core.Bar;
-import org.ta4j.core.BaseTimeSeries;
-import org.ta4j.core.TimeSeries;
+import org.ta4j.core.BarSeries;
+import org.ta4j.core.BaseBarSeriesBuilder;
+import org.ta4j.core.num.DecimalNumFactory;
 import org.ta4j.core.num.Num;
-import org.ta4j.core.num.PrecisionNum;
+import org.ta4j.core.num.NumFactory;
 import quantasma.core.BarPeriod;
 import quantasma.core.timeseries.bar.BarFactory;
 import quantasma.core.timeseries.bar.OneSidedBar;
@@ -14,10 +15,9 @@ import quantasma.core.timeseries.bar.OneSidedBarFactory;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.function.Function;
 
 public class BaseGenericTimeSeries<B extends OneSidedBar> implements GenericTimeSeries<B> {
-    private final TimeSeries timeSeries;
+    private final BarSeries barSeries;
     @Getter
     private final BarFactory<B> barFactory;
     @Getter
@@ -26,10 +26,10 @@ public class BaseGenericTimeSeries<B extends OneSidedBar> implements GenericTime
     private final BarPeriod barPeriod;
 
     protected BaseGenericTimeSeries(Builder<?, ?> builder) {
-        this.timeSeries = new BaseTimeSeries.SeriesBuilder()
+        this.barSeries = new BaseBarSeriesBuilder()
             .withName(builder.getName())
             .withBars(builder.getBars())
-            .withNumTypeOf(builder.getNumFunction())
+            .withNumFactory(builder.getNumFactory())
             .withMaxBarCount(builder.getMaxBarCount())
             .build();
         this.barFactory = (BarFactory<B>) builder.getBarFactory();
@@ -38,8 +38,8 @@ public class BaseGenericTimeSeries<B extends OneSidedBar> implements GenericTime
     }
 
     @Override
-    public TimeSeries plainTimeSeries() {
-        return new UnmodifiableTimeSeries(timeSeries);
+    public BarSeries plainTimeSeries() {
+        return new UnmodifiableTimeSeries(barSeries);
     }
 
     @Override
@@ -47,7 +47,7 @@ public class BaseGenericTimeSeries<B extends OneSidedBar> implements GenericTime
         final int nthOldElement = getEndIndex() - i;
 
         if (nthOldElement < getBarCount()) {
-            return (B) timeSeries.getBar(i);
+            return (B) barSeries.getBar(i);
         }
 
         return barFactory.getNaNBar();
@@ -55,62 +55,57 @@ public class BaseGenericTimeSeries<B extends OneSidedBar> implements GenericTime
 
     @Override
     public void addBar(B bar, boolean replace) {
-        timeSeries.addBar(bar, replace);
+        barSeries.addBar(bar, replace);
     }
 
     @Override
     public void addTrade(Num tradeVolume, Num tradePrice) {
-        timeSeries.addTrade(tradeVolume, tradePrice);
+        barSeries.addTrade(tradeVolume, tradePrice);
     }
 
     @Override
     public void addPrice(Num price) {
-        timeSeries.addPrice(price);
+        barSeries.addPrice(price);
     }
 
     @Override
     public String getName() {
-        return timeSeries.getName();
+        return barSeries.getName();
     }
 
     @Override
     public int getBarCount() {
-        return timeSeries.getBarCount();
+        return barSeries.getBarCount();
     }
 
     @Override
     public int getBeginIndex() {
-        return timeSeries.getBeginIndex();
+        return barSeries.getBeginIndex();
     }
 
     @Override
     public int getEndIndex() {
-        return timeSeries.getEndIndex();
+        return barSeries.getEndIndex();
     }
 
     @Override
     public void setMaximumBarCount(int maximumBarCount) {
-        timeSeries.setMaximumBarCount(maximumBarCount);
+        barSeries.setMaximumBarCount(maximumBarCount);
     }
 
     @Override
     public int getMaximumBarCount() {
-        return timeSeries.getMaximumBarCount();
+        return barSeries.getMaximumBarCount();
     }
 
     @Override
     public int getRemovedBarsCount() {
-        return timeSeries.getRemovedBarsCount();
+        return barSeries.getRemovedBarsCount();
     }
 
     @Override
-    public Num numOf(Number number) {
-        return timeSeries.numOf(number);
-    }
-
-    @Override
-    public Function<Number, Num> function() {
-        return timeSeries.function();
+    public NumFactory numFactory() {
+        return barSeries.numFactory();
     }
 
     /**
@@ -124,11 +119,11 @@ public class BaseGenericTimeSeries<B extends OneSidedBar> implements GenericTime
         private final String symbol;
         private final BarPeriod barPeriod;
 
-        private String name = "unamed_series";
+        private String name = "unnamed_series";
         private List<Bar> bars = new ArrayList<>();
         private int maxBarCount = Integer.MAX_VALUE;
         private BarFactory<?> barFactory = new OneSidedBarFactory();
-        private Function<Number, Num> numFunction = PrecisionNum::valueOf;
+        private NumFactory numFactory = DecimalNumFactory.getInstance();
 
         public Builder(String symbol, BarPeriod barPeriod) {
             this.symbol = symbol;
@@ -140,13 +135,8 @@ public class BaseGenericTimeSeries<B extends OneSidedBar> implements GenericTime
             return self();
         }
 
-        public T withNumTypeOf(Function<Number, Num> numFunction) {
-            this.numFunction = numFunction;
-            return self();
-        }
-
-        public T withNumTypeOf(Num type) {
-            this.numFunction = type.function();
+        public T withNumFactory(NumFactory numFactory) {
+            this.numFactory = numFactory;
             return self();
         }
 

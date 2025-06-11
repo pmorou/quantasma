@@ -1,22 +1,13 @@
 package quantasma.examples;
 
-import quantasma.core.BarPeriod;
-import quantasma.core.BaseContext;
-import quantasma.core.BaseTradeEngine;
-import quantasma.core.Context;
-import quantasma.core.MarketData;
-import quantasma.core.MarketDataBuilder;
-import quantasma.core.NoOpOrderService;
-import quantasma.core.Quote;
-import quantasma.core.StructureDefinition;
-import quantasma.core.TradeEngine;
-import quantasma.core.TradeStrategy;
+import org.ta4j.core.num.DecimalNumFactory;
+import quantasma.core.*;
 import quantasma.core.timeseries.TimeSeriesDefinition;
 import quantasma.core.timeseries.bar.BidAskBar;
 import quantasma.core.timeseries.bar.BidAskBarFactory;
 import quantasma.examples.RSIStrategy.Parameter;
 
-import java.time.ZonedDateTime;
+import java.time.Instant;
 
 public class TradeAppExample {
     public static void main(String[] args) {
@@ -56,15 +47,15 @@ public class TradeAppExample {
 
         // Example call on market data change
         tradeEngine.process(Quote.bidAsk("EURUSD",
-            ZonedDateTime.now(),
-            1.13757,
-            1.13767));
+            Instant.now(),
+            DecimalNumFactory.getInstance().numOf(1.13757),
+            DecimalNumFactory.getInstance().numOf(1.13767)));
 
         // Fails silently because the symbol wasn't registered within time series definitions
         tradeEngine.process(Quote.bidAsk("EURJPY",
-            ZonedDateTime.now(),
-            129.653,
-            129.663));
+            Instant.now(),
+            DecimalNumFactory.getInstance().numOf(129.653),
+            DecimalNumFactory.getInstance().numOf(129.663)));
         // end::tradeAppExample[]
     }
 

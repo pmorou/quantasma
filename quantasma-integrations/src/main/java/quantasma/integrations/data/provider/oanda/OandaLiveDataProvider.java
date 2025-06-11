@@ -66,7 +66,7 @@ public class OandaLiveDataProvider implements LiveDataProvider {
                     eventPublisher.publish(Event.quote(
                         Quote.bidAsk(
                             price.getInstrument().toString().replace("_", ""),
-                            ZonedDateTime.parse(price.getTime()),
+                            ZonedDateTime.parse(price.getTime()).toInstant(),
                             price.getBids().get(0).getPrice().doubleValue(),
                             price.getAsks().get(0).getPrice().doubleValue()))
                     );

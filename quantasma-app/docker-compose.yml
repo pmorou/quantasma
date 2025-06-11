@@ -1,56 +1,65 @@
-version: '3'
+version: '3.8'
 
 services:
-  historical-data-mongo-db:
-    image: mongo:4.1.7
-    volumes:
-      - historical-mongo-db-vol:/app
-    expose:
-      - 27017
-    restart: always
+#  historical-data-mongo-db:
+#    image: mongo:4.1.7
+#    volumes:
+#      - historical-mongo-db-vol:/app
+#    expose:
+#      - 27017
+#    restart: always
 
   general-data-postgres-db:
-    image: postgres:11.2
+    image: postgres:15
     environment:
+      - POSTGRES_DB=quantasma
       - POSTGRES_DB=postgres
       - POSTGRES_USER=postgres
+    ports:
+      - "5432:5432"
     volumes:
       - general-postgres-vol
-    expose:
-      - 5432
-    restart:
-      always
+    networks:
+      - backend
+#    restart:
+#      always
 
   backend-service:
     build: ./backend
     expose:
-      - 8080
+      - "8080:8080"
     environment:
-      - SPRING_PROFILES_ACTIVE=dukascopy
-      - HISTORICAL_DATA_MONGO_DB_HOST=historical-data-mongo-db
-      - HISTORICAL_DATA_MONGO_DB_PORT=27017
-      - HISTORICAL_DATA_MONGO_DB_NAME=historical
+      - SPRING_PROFILES_ACTIVE=dukascopy #change
+#      - HISTORICAL_DATA_MONGO_DB_HOST=historical-data-mongo-db
+#      - HISTORICAL_DATA_MONGO_DB_PORT=27017
+#      - HISTORICAL_DATA_MONGO_DB_NAME=historical
       - GENERAL_DATA_PG_HOST=general-data-postgres-db
       - GENERAL_DATA_PG_PORT=5432
-      - GENERAL_DATA_PG_DB_NAME=postgres
+      - GENERAL_DATA_PG_DB_NAME=quantasma
       - GENERAL_DATA_PG_USER=postgres
+      - GENERAL_DATA_PG_PASS=postgres
     depends_on:
-      - historical-data-mongo-db
+#      - historical-data-mongo-db
       - general-data-postgres-db
+    networks:
+      - backend
     restart: always
 
-  frontend-service:
-    build:
-      context: ./frontend
-      args:
-        - BACKEND_SERVICE_HOST=backend-service
-        - BACKEND_SERVICE_PORT=8080
-    ports:
-      - 80:80
-    depends_on:
-      - backend-service
-    restart: always
+#  frontend-service:
+#    build:
+#      context: ./frontend
+#      args:
+#        - BACKEND_SERVICE_HOST=backend-service
+#        - BACKEND_SERVICE_PORT=8080
+#    ports:
+#      - 80:80
+#    depends_on:
+#      - backend-service
+#    restart: always
 
 volumes:
   historical-mongo-db-vol:
   general-postgres-vol:
+
+networks:
+  backend-service:

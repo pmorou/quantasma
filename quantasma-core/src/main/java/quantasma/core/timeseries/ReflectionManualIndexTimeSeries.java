@@ -1,14 +1,14 @@
 package quantasma.core.timeseries;
 
-import org.ta4j.core.BaseTimeSeries;
-import org.ta4j.core.TimeSeries;
+import org.ta4j.core.BarSeries;
+import org.ta4j.core.BaseBarSeries;
 import org.ta4j.core.num.Num;
+import org.ta4j.core.num.NumFactory;
 import quantasma.core.BarPeriod;
-import quantasma.core.timeseries.bar.OneSidedBar;
 import quantasma.core.timeseries.bar.BarFactory;
+import quantasma.core.timeseries.bar.OneSidedBar;
 
 import java.lang.reflect.Field;
-import java.util.function.Function;
 
 public final class ReflectionManualIndexTimeSeries<B extends OneSidedBar> implements ManualIndexTimeSeries<B> {
     protected final GenericTimeSeries<B> timeSeries;
@@ -78,7 +78,7 @@ public final class ReflectionManualIndexTimeSeries<B extends OneSidedBar> implem
     }
 
     private Object getField(String fieldName) {
-        TimeSeries target = timeSeries.plainTimeSeries();
+        BarSeries target = timeSeries.plainTimeSeries();
         if (isForwardingTimeSeries(target)) {
             target = getDelegate(target);
         }
@@ -94,7 +94,7 @@ public final class ReflectionManualIndexTimeSeries<B extends OneSidedBar> implem
     }
 
     private void setField(String fieldName, Object value) {
-        TimeSeries target = timeSeries.plainTimeSeries();
+        BarSeries target = timeSeries.plainTimeSeries();
         if (isForwardingTimeSeries(target)) {
             target = getDelegate(target);
         }
@@ -109,17 +109,17 @@ public final class ReflectionManualIndexTimeSeries<B extends OneSidedBar> implem
         }
     }
 
-    private boolean isForwardingTimeSeries(TimeSeries target) {
+    private boolean isForwardingTimeSeries(BarSeries target) {
         return target instanceof ForwardingTimeSeries;
     }
 
-    private TimeSeries getDelegate(TimeSeries target) {
+    private BarSeries getDelegate(BarSeries target) {
         return ((ForwardingTimeSeries) target).delegate();
     }
 
-    private Class<?> getBaseTimeSeriesClassRef(TimeSeries target) {
+    private Class<?> getBaseTimeSeriesClassRef(BarSeries target) {
         Class<?> clazz = target.getClass();
-        while (clazz != BaseTimeSeries.class) {
+        while (clazz != BaseBarSeries.class) {
             clazz = clazz.getSuperclass();
             if (clazz == Object.class) {
                 throw new RuntimeException(String.format("Wrapped time series [%s] aren't related to BaseTimeSeries", target));
@@ -136,7 +136,7 @@ public final class ReflectionManualIndexTimeSeries<B extends OneSidedBar> implem
     }
 
     @Override
-    public TimeSeries plainTimeSeries() {
+    public BarSeries plainTimeSeries() {
         return timeSeries.plainTimeSeries();
     }
 
@@ -206,13 +206,8 @@ public final class ReflectionManualIndexTimeSeries<B extends OneSidedBar> implem
     }
 
     @Override
-    public Num numOf(Number number) {
-        return timeSeries.numOf(number);
-    }
-
-    @Override
-    public Function<Number, Num> function() {
-        return timeSeries.function();
+    public NumFactory numFactory() {
+        return timeSeries.numFactory();
     }
 
     @Override

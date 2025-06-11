@@ -3,7 +3,6 @@ package quantasma.app.feature.data.historical.tester;
 import quantasma.app.model.OhlcvBar;
 import quantasma.core.Quote;
 
-import java.time.ZoneOffset;
 import java.util.function.Function;
 import java.util.stream.Stream;
 
@@ -32,7 +31,7 @@ public class TestModeExtractorBidAsk implements TestModeExtractor {
     private static Quote prepareOpenPrice(OhlcvBar ohlcvBar) {
         return Quote.bidAsk(
             ohlcvBar.getSymbol(),
-            ohlcvBar.getDate().atZone(ZoneOffset.UTC),
+            ohlcvBar.getDate(),
             ohlcvBar.getBidOpen(),
             ohlcvBar.getAskOpen());
     }
@@ -40,7 +39,7 @@ public class TestModeExtractorBidAsk implements TestModeExtractor {
     private static Quote prepareHighPrice(OhlcvBar ohlcvBar) {
         return Quote.bidAsk(
             ohlcvBar.getSymbol(),
-            ohlcvBar.getDate().atZone(ZoneOffset.UTC),
+            ohlcvBar.getDate(),
             ohlcvBar.getBidHigh(),
             ohlcvBar.getAskHigh());
     }
@@ -48,7 +47,7 @@ public class TestModeExtractorBidAsk implements TestModeExtractor {
     private static Quote prepareLowPrice(OhlcvBar ohlcvBar) {
         return Quote.bidAsk(
             ohlcvBar.getSymbol(),
-            ohlcvBar.getDate().atZone(ZoneOffset.UTC),
+            ohlcvBar.getDate(),
             ohlcvBar.getBidLow(),
             ohlcvBar.getAskLow());
     }
@@ -56,7 +55,7 @@ public class TestModeExtractorBidAsk implements TestModeExtractor {
     private static Quote prepareClosePrice(OhlcvBar ohlcvBar) {
         return Quote.bidAsk(
             ohlcvBar.getSymbol(),
-            ohlcvBar.getDate().atZone(ZoneOffset.UTC),
+            ohlcvBar.getDate(),
             ohlcvBar.getBidClose(),
             ohlcvBar.getAskClose());
     }

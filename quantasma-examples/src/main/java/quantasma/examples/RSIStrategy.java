@@ -3,8 +3,8 @@ package quantasma.examples;
 import lombok.AccessLevel;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.ta4j.core.Order;
 import org.ta4j.core.Rule;
+import org.ta4j.core.Trade;
 import org.ta4j.core.TradingRecord;
 import org.ta4j.core.indicators.RSIIndicator;
 import org.ta4j.core.indicators.helpers.ClosePriceIndicator;
@@ -31,7 +31,7 @@ public abstract class RSIStrategy extends BaseTradeStrategy {
     public boolean shouldEnter(int index, TradingRecord tradingRecord) {
         if (super.shouldEnter(index, tradingRecord) && !position.isOpened) {
             log.info("{} opening position", selfClass().getSimpleName());
-            getOrderService().execute(position.openOrder(0.01, orderType()));
+            getOrderService().execute(position.openOrder(0.01, tradeType()));
             return true;
         }
         return false;
@@ -69,7 +69,7 @@ public abstract class RSIStrategy extends BaseTradeStrategy {
 
     protected abstract Class<?> selfClass();
 
-    protected abstract Order.OrderType orderType();
+    protected abstract Trade.TradeType tradeType();
 
     @RequiredArgsConstructor(access = AccessLevel.PRIVATE)
     private class Position {
@@ -79,14 +79,14 @@ public abstract class RSIStrategy extends BaseTradeStrategy {
         private String label;
         private boolean isOpened;
 
-        private OpenMarketOrder openOrder(double orderAmount, Order.OrderType orderType) {
-            setAmount(getNumFunction().apply(orderAmount));
+        private OpenMarketOrder openOrder(double orderAmount, Trade.TradeType tradeType) {
+            setAmount(getNumFactory().numOf(orderAmount));
             this.label = clazz.getSimpleName()
                          + "_" + Instant.now().toEpochMilli()
                          + "_" + symbol
                          + "_" + String.valueOf(orderAmount).replace(".", "_");
             this.isOpened = true;
-            return new OpenMarketOrder(label, orderAmount, symbol, orderType);
+            return new OpenMarketOrder(label, orderAmount, symbol, tradeType);
         }
 
         private CloseMarketOrder closeOrder() {

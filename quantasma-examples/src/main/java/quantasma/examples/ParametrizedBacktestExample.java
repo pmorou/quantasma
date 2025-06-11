@@ -1,15 +1,8 @@
 package quantasma.examples;
 
-import org.ta4j.core.Order;
+import org.ta4j.core.Trade;
 import org.ta4j.core.TradingRecord;
-import quantasma.core.BarPeriod;
-import quantasma.core.BaseContext;
-import quantasma.core.Context;
-import quantasma.core.MarketData;
-import quantasma.core.MarketDataBuilder;
-import quantasma.core.StructureDefinition;
-import quantasma.core.TestManager;
-import quantasma.core.TradeStrategy;
+import quantasma.core.*;
 import quantasma.core.analysis.parametrize.Producer;
 import quantasma.core.analysis.parametrize.Variables;
 import quantasma.core.timeseries.ReflectionManualIndexTimeSeries;
@@ -52,7 +45,7 @@ public class ParametrizedBacktestExample {
         Producer.from(recipe)
             .stream()
             .forEach(tradeStrategy -> {
-                final TradingRecord result = testManager.run(tradeStrategy, Order.OrderType.BUY);
+                final TradingRecord result = testManager.run(tradeStrategy, Trade.TradeType.BUY);
                 // Proper criterion can be used now on the result
             });
         // end::parametrizedBacktestExample[]

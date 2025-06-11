@@ -5,7 +5,7 @@ import quantasma.core.Quote;
 import quantasma.core.timeseries.bar.OneSidedBar;
 
 import java.io.Serializable;
-import java.time.ZonedDateTime;
+import java.time.Instant;
 import java.util.List;
 
 public interface MultipleTimeSeries<B extends OneSidedBar> extends Serializable {
@@ -13,7 +13,7 @@ public interface MultipleTimeSeries<B extends OneSidedBar> extends Serializable 
 
     void updateBar(Quote quote);
 
-    void createBar(ZonedDateTime priceDate);
+    void createBar(Instant priceDate);
 
     int lastBarIndex();
 

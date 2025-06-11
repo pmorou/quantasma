@@ -1,10 +1,10 @@
 package quantasma.core.analysis.criterion;
 
-import org.ta4j.core.Order;
-import org.ta4j.core.TimeSeries;
+import org.ta4j.core.BarSeries;
+import org.ta4j.core.Position;
 import org.ta4j.core.Trade;
 import org.ta4j.core.TradingRecord;
-import org.ta4j.core.analysis.criteria.AbstractAnalysisCriterion;
+import org.ta4j.core.criteria.AbstractAnalysisCriterion;
 import org.ta4j.core.num.Num;
 
 public class ProfitLossPipsCriterion extends AbstractAnalysisCriterion {
@@ -15,37 +15,28 @@ public class ProfitLossPipsCriterion extends AbstractAnalysisCriterion {
         this.pipResolution = pipResolution;
     }
 
-    @Override
-    public Num calculate(TimeSeries series, Trade trade) {
-        if (trade.isClosed()) {
-            final Num exitClosePrice = getPrice(series, trade.getExit());
-            final Num entryClosePrice = getPrice(series, trade.getEntry());
-            return difference(trade, exitClosePrice, entryClosePrice)
-                .dividedBy(series.numOf(pipResolution));
-        }
-        return series.numOf(0);
-    }
-
-    private static Num getPrice(TimeSeries series, Order exit) {
-        return hasPrice(exit) ?
-            exit.getPrice() : series.getBar(exit.getIndex()).getClosePrice();
-    }
-
-    private static boolean hasPrice(Order exit) {
-        return !exit.getPrice().isNaN();
-    }
-
-    private static Num difference(Trade trade, Num exitClosePrice, Num entryClosePrice) {
-        return trade.getEntry().isBuy() ?
+    private static Num difference(Position position, Num exitClosePrice, Num entryClosePrice) {
+        return position.getStartingType() == Trade.TradeType.BUY ?
             exitClosePrice.minus(entryClosePrice) : entryClosePrice.minus(exitClosePrice);
     }
 
     @Override
-    public Num calculate(TimeSeries series, TradingRecord tradingRecord) {
+    public Num calculate(BarSeries series, Position position) {
+        if (position.isClosed()) {
+            final Num exitClosePrice = position.getExit().getNetPrice();
+            final Num entryClosePrice = position.getEntry().getNetPrice();
+            return difference(position, exitClosePrice, entryClosePrice)
+              .dividedBy(series.numFactory().numOf(pipResolution));
+        }
+        return series.numFactory().zero();
+    }
+
+    @Override
+    public Num calculate(BarSeries series, TradingRecord tradingRecord) {
         return tradingRecord.getTrades()
             .stream()
-            .map(trade -> calculate(series, trade))
-            .reduce(series.numOf(0), Num::plus);
+            .map(Trade::getNetPrice)
+            .reduce(series.numFactory().zero(), Num::plus);
     }
 
     @Override

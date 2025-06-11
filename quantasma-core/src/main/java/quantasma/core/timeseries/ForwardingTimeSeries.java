@@ -1,118 +1,102 @@
 package quantasma.core.timeseries;
 
 import org.ta4j.core.Bar;
-import org.ta4j.core.TimeSeries;
+import org.ta4j.core.BarBuilder;
+import org.ta4j.core.BarSeries;
 import org.ta4j.core.num.Num;
+import org.ta4j.core.num.NumFactory;
 
-import java.time.Duration;
-import java.time.ZonedDateTime;
 import java.util.List;
-import java.util.function.Function;
 
-public abstract class ForwardingTimeSeries implements TimeSeries {
+public abstract class ForwardingTimeSeries implements BarSeries {
 
-    private final TimeSeries timeSeries;
+    private final BarSeries barSeries;
 
-    protected ForwardingTimeSeries(TimeSeries timeSeries) {
-        this.timeSeries = timeSeries;
+    protected ForwardingTimeSeries(BarSeries timeSeries) {
+        this.barSeries = timeSeries;
     }
 
-    protected TimeSeries delegate() {
-        return timeSeries;
+    protected BarSeries delegate() {
+        return barSeries;
     }
 
     @Override
     public String getName() {
-        return timeSeries.getName();
+        return barSeries.getName();
     }
 
     @Override
     public Bar getBar(int i) {
-        return timeSeries.getBar(i);
+        return barSeries.getBar(i);
     }
 
     @Override
     public int getBarCount() {
-        return timeSeries.getBarCount();
+        return barSeries.getBarCount();
     }
 
     @Override
     public List<Bar> getBarData() {
-        return timeSeries.getBarData();
+        return barSeries.getBarData();
     }
 
     @Override
     public int getBeginIndex() {
-        return timeSeries.getBeginIndex();
+        return barSeries.getBeginIndex();
     }
 
     @Override
     public int getEndIndex() {
-        return timeSeries.getEndIndex();
+        return barSeries.getEndIndex();
     }
 
     @Override
     public void setMaximumBarCount(int maximumBarCount) {
-        timeSeries.setMaximumBarCount(maximumBarCount);
+        barSeries.setMaximumBarCount(maximumBarCount);
     }
 
     @Override
     public int getMaximumBarCount() {
-        return timeSeries.getMaximumBarCount();
+        return barSeries.getMaximumBarCount();
     }
 
     @Override
     public int getRemovedBarsCount() {
-        return timeSeries.getRemovedBarsCount();
+        return barSeries.getRemovedBarsCount();
     }
 
     @Override
     public void addBar(Bar bar, boolean replace) {
-        timeSeries.addBar(bar, replace);
+        barSeries.addBar(bar, replace);
     }
 
     @Override
-    public void addBar(Duration timePeriod, ZonedDateTime endTime) {
-        timeSeries.addBar(timePeriod, endTime);
-    }
-
-    @Override
-    public void addBar(ZonedDateTime endTime, Num openPrice, Num highPrice, Num lowPrice, Num closePrice, Num volume, Num amount) {
-        timeSeries.addBar(endTime, openPrice, highPrice, lowPrice, closePrice, volume, amount);
-    }
-
-    @Override
-    public void addBar(Duration timePeriod, ZonedDateTime endTime, Num openPrice, Num highPrice, Num lowPrice, Num closePrice, Num volume) {
-        timeSeries.addBar(timePeriod, endTime, openPrice, highPrice, lowPrice, closePrice, volume);
-    }
-
-    @Override
-    public void addBar(Duration timePeriod, ZonedDateTime endTime, Num openPrice, Num highPrice, Num lowPrice, Num closePrice, Num volume, Num amount) {
-        timeSeries.addBar(timePeriod, endTime, openPrice, highPrice, lowPrice, closePrice, volume, amount);
+    public void addBar(Bar bar) {
+        barSeries.addBar(bar);
     }
 
     @Override
     public void addTrade(Num tradeVolume, Num tradePrice) {
-        timeSeries.addTrade(tradeVolume, tradePrice);
+        barSeries.addTrade(tradeVolume, tradePrice);
     }
 
     @Override
     public void addPrice(Num price) {
-        timeSeries.addPrice(price);
+        barSeries.addPrice(price);
     }
 
     @Override
-    public TimeSeries getSubSeries(int startIndex, int endIndex) {
-        return timeSeries.getSubSeries(startIndex, endIndex);
+    public BarSeries getSubSeries(int startIndex, int endIndex) {
+        return barSeries.getSubSeries(startIndex, endIndex);
     }
 
     @Override
-    public Num numOf(Number number) {
-        return timeSeries.numOf(number);
+    public NumFactory numFactory() {
+        return barSeries.numFactory();
     }
 
     @Override
-    public Function<Number, Num> function() {
-        return timeSeries.function();
+    public BarBuilder barBuilder() {
+        return barSeries.barBuilder();
     }
 }

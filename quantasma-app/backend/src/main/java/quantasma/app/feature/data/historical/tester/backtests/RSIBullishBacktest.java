@@ -4,18 +4,11 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 import org.ta4j.core.AnalysisCriterion;
-import org.ta4j.core.Order;
+import org.ta4j.core.Trade;
 import quantasma.app.config.service.backtest.CriterionsFactory;
 import quantasma.app.feature.data.historical.tester.TestModeExtractorBidAsk;
 import quantasma.app.service.HistoricalDataService;
-import quantasma.core.BarPeriod;
-import quantasma.core.BaseContext;
-import quantasma.core.Context;
-import quantasma.core.MarketData;
-import quantasma.core.MarketDataBuilder;
-import quantasma.core.StructureDefinition;
-import quantasma.core.TestManager;
-import quantasma.core.TradeStrategy;
+import quantasma.core.*;
 import quantasma.core.analysis.BacktestResult;
 import quantasma.core.analysis.StrategyBacktest;
 import quantasma.core.analysis.TradeScenario;
@@ -122,7 +115,7 @@ public class RSIBullishBacktest implements StrategyBacktest {
             .stream()
             .map(tradeStrategy -> new TradeScenario(testManager.getMainTimeSeries(tradeStrategy).plainTimeSeries(),
                 tradeStrategy.getParameterValues(),
-                testManager.run(tradeStrategy, Order.OrderType.BUY)))
+                testManager.run(tradeStrategy, Trade.TradeType.BUY)))
             .collect(Collectors.toList());
     }
 

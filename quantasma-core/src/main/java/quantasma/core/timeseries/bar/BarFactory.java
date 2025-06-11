@@ -1,16 +1,16 @@
 package quantasma.core.timeseries.bar;
 
-import org.ta4j.core.num.Num;
+import org.ta4j.core.num.NumFactory;
 import quantasma.core.BarPeriod;
 
+import java.time.Instant;
 import java.time.ZonedDateTime;
-import java.util.function.Function;
 
 public interface BarFactory<B extends OneSidedBar> {
 
-    B create(BarPeriod barPeriod, Function<Number, Num> numFunction);
+    B create(BarPeriod barPeriod, NumFactory numFactory);
 
-    B create(BarPeriod barPeriod, Function<Number, Num> numFunction, ZonedDateTime time);
+    B create(BarPeriod barPeriod, NumFactory numFactory, Instant time);
 
     B getNaNBar();
 

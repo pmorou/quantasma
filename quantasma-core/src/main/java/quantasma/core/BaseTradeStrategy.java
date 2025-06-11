@@ -5,17 +5,17 @@ import lombok.Getter;
 import org.ta4j.core.BaseStrategy;
 import org.ta4j.core.Rule;
 import org.ta4j.core.Strategy;
+import org.ta4j.core.num.DecimalNumFactory;
 import org.ta4j.core.num.Num;
-import org.ta4j.core.num.PrecisionNum;
+import org.ta4j.core.num.NumFactory;
 import quantasma.core.analysis.parametrize.Parameterizable;
 import quantasma.core.analysis.parametrize.Values;
 
 import java.util.Objects;
-import java.util.function.Function;
 
 public class BaseTradeStrategy extends BaseStrategy implements TradeStrategy {
     private final Context context;
-    private final Function<Number, Num> numFunction;
+    private final NumFactory numFactory;
     private final Values<?> parameterValues;
 
     private String tradeSymbol;
@@ -25,8 +25,8 @@ public class BaseTradeStrategy extends BaseStrategy implements TradeStrategy {
         super(builder.getName(), builder.getEntryRule(), builder.getExitRule(), builder.getUnstablePeriod());
         this.context = Objects.requireNonNull(builder.getContext());
         this.tradeSymbol = Objects.requireNonNull(builder.getTradeSymbol());
-        this.numFunction = Objects.requireNonNull(builder.getNumFunction());
-        this.amount = numFunction.apply(builder.getAmount());
+        this.numFactory = Objects.requireNonNull(builder.getNumFactory());
+        this.amount = this.numFactory.numOf(builder.getAmount());
         this.parameterValues = builder.getParametersValues();
     }
 
@@ -34,7 +34,7 @@ public class BaseTradeStrategy extends BaseStrategy implements TradeStrategy {
     public TradeStrategy opposite() {
         return new Builder<>(context, tradeSymbol, getExitRule(), getEntryRule(), parameterValues)
             .withName("opposite(" + getName() + ")")
-            .withUnstablePeriod(getUnstablePeriod())
+            .withUnstableBars(getUnstableBars())
             .build();
     }
 
@@ -42,7 +42,7 @@ public class BaseTradeStrategy extends BaseStrategy implements TradeStrategy {
     public TradeStrategy and(Strategy strategy) {
         return new Builder<>(context, tradeSymbol, getEntryRule().and(strategy.getEntryRule()), getExitRule().and(strategy.getExitRule()), parameterValues)
             .withName("and(" + getName() + "," + strategy.getName() + ")")
-            .withUnstablePeriod(Math.max(getUnstablePeriod(), strategy.getUnstablePeriod()))
+            .withUnstableBars(Math.max(getUnstableBars(), strategy.getUnstableBars()))
             .build();
     }
 
@@ -50,7 +50,7 @@ public class BaseTradeStrategy extends BaseStrategy implements TradeStrategy {
     public TradeStrategy and(String name, Strategy strategy, int unstablePeriod) {
         return new Builder<>(context, tradeSymbol, getEntryRule().and(strategy.getEntryRule()), getExitRule().and(strategy.getExitRule()), parameterValues)
             .withName(name)
-            .withUnstablePeriod(unstablePeriod)
+            .withUnstableBars(unstablePeriod)
             .build();
     }
 
@@ -58,7 +58,7 @@ public class BaseTradeStrategy extends BaseStrategy implements TradeStrategy {
     public TradeStrategy or(Strategy strategy) {
         return new Builder<>(context, tradeSymbol, getEntryRule().or(strategy.getEntryRule()), getExitRule().or(strategy.getExitRule()), parameterValues)
             .withName("or(" + getName() + "," + strategy.getName() + ")")
-            .withUnstablePeriod(Math.max(getUnstablePeriod(), strategy.getUnstablePeriod()))
+            .withUnstableBars(Math.max(getUnstableBars(), strategy.getUnstableBars()))
             .build();
     }
 
@@ -66,7 +66,7 @@ public class BaseTradeStrategy extends BaseStrategy implements TradeStrategy {
     public TradeStrategy or(String name, Strategy strategy, int unstablePeriod) {
         return new Builder<>(context, tradeSymbol, getEntryRule().or(strategy.getEntryRule()), getExitRule().or(strategy.getExitRule()), parameterValues)
             .withName(name)
-            .withUnstablePeriod(unstablePeriod)
+            .withUnstableBars(unstablePeriod)
             .build();
     }
 
@@ -117,8 +117,8 @@ public class BaseTradeStrategy extends BaseStrategy implements TradeStrategy {
             shouldExit(lastBarIndex);
     }
 
-    protected Function<Number, Num> getNumFunction() {
-        return numFunction;
+    protected NumFactory getNumFactory() {
+        return numFactory;
     }
 
     /**
@@ -135,9 +135,9 @@ public class BaseTradeStrategy extends BaseStrategy implements TradeStrategy {
         private final Rule exitRule;
         private final Values<?> parametersValues;
 
-        private String name = "unamed_series";
+        private String name = "unnamed_series";
         private int unstablePeriod;
-        private Function<Number, Num> numFunction = PrecisionNum::valueOf;
+        private NumFactory numFactory = DecimalNumFactory.getInstance();
         private int amount = 100;
 
         public Builder(Context context, String tradeSymbol, Rule entryRule, Rule exitRule, Values<?> parameterValues) {
@@ -153,18 +153,13 @@ public class BaseTradeStrategy extends BaseStrategy implements TradeStrategy {
             return self();
         }
 
-        public T withUnstablePeriod(int unstablePeriod) {
+        public T withUnstableBars(int unstablePeriod) {
             this.unstablePeriod = unstablePeriod;
             return self();
         }
 
-        public T withNumTypeOf(Function<Number, Num> numFunction) {
-            this.numFunction = numFunction;
-            return self();
-        }
-
-        public T withNumTypeOf(Num type) {
-            this.numFunction = type.function();
+        public T withNumFactory(NumFactory numFactory) {
+            this.numFactory = numFactory;
             return self();
         }
 
